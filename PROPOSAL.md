@@ -1,3 +1,4 @@
+
 # GROUPE 1 - Idée de projet
 
 ## L'histoire
@@ -5,7 +6,7 @@ Le joueur a été choisi pour aller récupérer une idole volée par X qui s’e
 
 ## But du jeu
 Récupérer l'idole. Pour cela, il va devoir réussir différents donjon avant de trouver l’idole. A chacun, il va passer par différents essais dans un donjon très compliqué où il est obligé de revenir au village pour améliorer son équipement afin de réussir le donjon.  
-Le donjon a une difficulté de base très élevée. Les salles et les niveaux sont générés aléatoirement mais respectant les “codes” du donjon. C’est à dire que le donjon sera globalement toujours le même, mais les monstres et les salles ne seront jamais les même. Il pourra quitter le donjon en milieu de partie afin d’améliorer ses capacités au village.
+Le donjon a une difficulté de base très élevée. Les salles et les niveaux sont générés aléatoirement mais respectant les “codes” du donjon. C’est à dire que le donjon sera globalement toujours le même (l'archétype des salles ainsi que le nombre de monstres et de pièges), les salles ne seront jamais les même. Il pourra quitter le donjon en milieu de partie afin d’améliorer ses capacités au village cela oblige le joueur à perdre sa progression dans le donjon actuel (il peut revenir à la salle où il s’est arrêté moyennant de l’argent).
 
 Une fois le premier donjon, le même schéma se répète pour le second, jusqu'à arriver au dernier donjon.
 
@@ -31,9 +32,12 @@ Exemple de jeu :
 ![alt text](https://images-eu.ssl-images-amazon.com/images/I/A1iJN9BobVL.jpg "Shakes & Fidget")
 >Shakes & Fidget, Jeu-Vidéo, 2009, Exemple de village au sein d'un jeu
 
-* Donjon -> Ici, le joueur doit atteindre la sortie en affrontant des monstres, et en sautant sur des plateformes. Il peut revenir à tout moment au village avec les équipements et l’argent récupérés dans le donjon. Il faut donc que le joueur choisisse le moment idéal pour revenir avec un maximum de ressources pour améliorer son équipement et ainsi réussir la nouvelle tentative du donjon. -> le donjon serait composé d’un nombre de salles aléatoires (le joueur (basées sur des archétypes : le placement des pièges et monstres placés aléatoirement mais position des plateformes fixes). Chaque salle serait plus grande que le viewport du joueur.
+* Donjon : Ici, le joueur doit atteindre la sortie en affrontant des monstres, et en sautant sur des plateformes. Il peut revenir à tout moment au village avec les équipements et l’argent récupérés dans le donjon. Il faut donc que le joueur choisisse le moment idéal pour revenir avec un maximum de ressources pour améliorer son équipement et ainsi réussir la nouvelle tentative du donjon. -> le donjon serait composé d’un nombre de salles aléatoires (le joueur (basées sur des archétypes : le placement des pièges et monstres placés aléatoirement mais position des plateformes fixes). Chaque salle serait plus grande que le viewport du joueur. Lorsque le joueur arrive dans une salle du donjon, il doit récupérer une clé qui est cachée sur l’un des monstres et s’en servir pour ouvrir la porte qui mène à la salle suivante (il ne peut pas faire marche arrière dès qu’il est entré dans une nouvelle salle, il est donc important que le joueur récupère un maximum d’argent dans la salle où il est avant de passer à la salle suivante). L’argent est récupéré en tuant des monstres. Moyennant une certaine somme d’argent, le joueur pourra également revenir à certains points clés de sa progression pour éviter qu’il ait à refaire les salles les plus faciles lorsque ses statistiques seront bien augmentées. 
+Le personnage pourra aussi récupérer de manière plus rare des fragments de clé du boss qui lui permettront une fois tous récupérer d’aller affronter le boss. Attention tout de même, les fragments de clé sont enchantés et de ce fait ceux-ci ne peuvent pas sortir du donjon, le retour au village du personnage entraîne donc la perte de tous les fragments de clé du joueur. 
 
-* Monde de la seconde chance -> Ce monde sera accessible à la mort du joueur et offrira à celui-ci un défi pour essayer de récupérer les fragments de son âme afin de revenir à la vie. Dans ce mode, le joueur incarne une âme errante poursuivie par les fantômes des créatures tuées dans le monde normal (à chaque fois qu’une créature est tuée, un fantôme est généré dans le monde de la seconde chance). Dans ce monde, les déplacements se font dans les 4 directions avec les flèches directionnelles et EGG permet de créer un leurre qui va attirer les fantômes. POP permet au joueur de dasher dans une direction pour échapper aux fantômes, et WIZZ lui permet de canaliser un fragment d’âme pour qu’il rejoigne son corps.
+
+* Monde de la seconde chance : Ce monde sera accessible à la mort du joueur et offrira à celui-ci un défi pour essayer de récupérer les fragments de son âme afin de revenir à la vie. Dans ce mode, le joueur incarne une âme errante poursuivie par les fantômes des créatures tuées dans le monde normal (à chaque fois qu’une créature est tuée, un fantôme est généré dans le monde de la seconde chance). Ce monde est en vu de dessus ou le personnage cherche les fragments de son âme éparpillés sur la map avec des ennemis qui fonce vers le joueur quand celui-ci s’approche d’eux.
+
 
 ## Equipements
 
@@ -45,23 +49,37 @@ Dans le jeux, le joueur aura accès différents type d’objets:
 
 ## Le personnage
 
-Stats : 
+### Stats : 
 1.  Résistance : Attaque Physique/Magique
 2. Vie
 3. Vitesse d'attaque (nb attaque/secondes)
 4. Force
 
-Deux modes pour le personnage:
-- Humain normal (déplacement et saut avec attaque du personnage). Il ne se battra qu'avec un arc. Il se déplace de droite à  gauche avec les touches q et d. 
-Egg : créer une flèche avec son arc (pour attaquer les ennemis) (release click gauche lancer de flèche)
-Pop : sauter (z)
-Wizz : ramasser un objet (clic droit) / activer un levier / manipuler des objets.
+### Automates: A compléter
+### Dans le donjon: A compléter
 
-- Transformation (potentiellement en chauve souris)
-Dans ce mode, le personnage peut accéder à d’autre zones, voir des éléments non-visibles en mode “humain” (pièges, mécanisme), mais il est plus vulnérable et ne peut pas transporter ces affaires. En se transformant, il laisse tout par terre, et peut seulement transporter une objet de petite taille. De plus, certains ennemis ne considèrent pas la chauve souris. Mais d’autres, tel que des chats ou des hiboux se réveillent quand le joueur est en mode chauve-souris. Ils sont autrement des éléments du décors. Le mode chauve-souris peut donc permettre au joueur d’éviter des ennemis. Certains ennemis continuent malgré tout d’attaquer.
-Egg : créer un ultrason pour détecter les ennemis et zones cachés (press click gauche). Immobilise la chauve souris.
-Pop : voler (z)
-Wizz : Porter/Lâcher un seul objet (il peut voler en le portant) (clic droit)
+### Personnage:
+- Déplacement: q et d concerne le déplacement à gauche et à droite
+- Egg : tirer une flèche avec son arc (click & release du clic gauche de la souris)
+- Pop : sauter (z)
+- Wizz : ramasser un objet / activer un levier / manipuler des objets (clic droit)
+
+### Ennemis:
+- Déplacement horizontal des ennemis sur les plateformes (certains ennemis se dirigeront vers le joueur en volant par exemple)
+- Pop : courir vers le joueur (pour certains ennemis)
+- Wizz : attaquer/tirer une boule de feu, etc… (pour certains ennemis)
+
+### Dans le monde de la seconde chance :
+
+#### Personnage :
+- Déplacement : z,q,s,d dans les 4 directions
+- Egg: crée un leurre qui attire les fantômes vers lui et ainsi permet au joueur de se créer un ouverture pour récupérer des fragments d’âme.
+- Pop: dash du joueur dans la direction vers laquelle il s’oriente
+- Wizz: canalisation d’un fragment d’âme pour qu’il rejoigne son corps 
+
+#### Ennemis :
+- Déplacement : déplacement aléatoire
+- Pop : suivre le joueur quand il s’approche trop près
 
 ## Difficulté
 
