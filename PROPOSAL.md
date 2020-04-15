@@ -1,6 +1,4 @@
 
-  
-
 # GROUPE 1 - Idée de projet
 
   
@@ -202,11 +200,11 @@ Dans le jeux, le joueur aura accès différents type d’objets:
 -   Génération des ennemis interagissant avec le joueur. La puissance des ennemis sera croissante en fonction de l’avancement dans le donjon. Il y aura différent types d’ennemis :
 ceux qui peuvent attaquer à distance
 ceux qui attaquent au corps à corps.
-Solution : Classe Ennemi avec des sous-classes par type d’ennemis et automates avec pop (ennemi corps à corps fonce vers le joueur/Se déplacer pour les ennemis à distance) et egg (créer un projectile pour les ennemis à distance)
+  Solution : Classe Ennemi avec des sous-classes par type d’ennemis et automates avec pop (ennemi corps à corps fonce vers le joueur/Se déplacer pour les ennemis à distance) et egg (créer un projectile pour les ennemis à distance)
 -   Construction des automates à partir de l’ast (soit par lecture de champs de l’arbre soit par utilisation des fonctions de Visitor)
- Génération du monde de la seconde chance :
+- Génération du monde de la seconde chance :
  Remplissage du monde au fur et à mesure que le joueur tue des ennemis dans le donjon (les ennemis doivent apparaître aléatoirement dans l’autre monde et se déplace de manière aléatoire tant qu’ils n’ont pas repéré le joueur. Ceux-ci foncent sur lui s’il se rapproche trop). Pour éviter une surcharge du monde (à partir d’un certain nombre, les fantômes “fusionnent” et ainsi génèrent des fantômes plus fort (plus rapide et ayant de nouvelles attaques) (donc le nombres d’entités reste constant à partir d’un certain cap mais les ennemis sont plus fort).
- Solution : Action egg dans le monde de la seconde chance qui crée un fantôme et automate associés à chaque fantôme avec pop (déplacement aléatoire des fantômes) et wizz (les fantômes foncent sur le joueur quand celui-ci se rapproche d’eux) et egg (les fantômes plus fort créent un projectile)
+Solution : Action egg dans le monde de la seconde chance qui crée un fantôme et automate associés à chaque fantôme avec pop (déplacement aléatoire des fantômes) et wizz (les fantômes foncent sur le joueur quand celui-ci se rapproche d’eux) et egg (les fantômes plus fort créent un projectile)
  -   Génération des fragments d’âmes qui apparaissent les uns après les autres sur la map de manière aléatoire.
     
 -   Gestion des “leurres”: le joueur peut créer un leur qu’il peut envoyer la ou il veut afin d’attirer les âmes ennemis. Il en aura 3 en réserve, chaque leurre va rester 2 sec et se recharge sur 7-10 secondes.
@@ -248,3 +246,180 @@ Solution : Classe Ennemi avec des sous-classes par type d’ennemis et automates
 ![alt text](https://i.imgur.com/N5GZQdQ.jpg "Diagramme de Gantt")
 
 >Diagramme de Gantt, Projet Groupe 1
+
+## Automates
+
+``` 
+Player Donjon(Init){
+
+* (Init):
+
+| Key(q) ? Move(W) : (Init)
+
+| Key(d) ? Move(E) : (Init)
+
+| Key(s) ? Wizz : (Init)  //activer un levier ou ramasser un objet
+
+| Key(z) ? 50% Pop / 50% Jump: (Init)  //saut du joueur
+
+| Key(SPACE) ? Egg : (Init)  //tir du joueur
+
+| Cell(H,A) ? Power : (Init)  //Collision et perte de vie
+
+| ! GotPower() ? Explode () : ()  //Mort du joueur
+
+}
+
+Player Esprit(Init){
+
+*(Init):
+
+| Key(z) ? Move(N) : (Diag_N)
+
+| Key(s) ? Move(S) : (Diag_S)
+
+| Key(q) ? Move(W) : (Diag_W)
+
+| Key(d) ? Move(E) : (Diag_E)
+
+| Key(SPACE) ? Egg : (Init)
+
+| Key(a) ? Pop : (Init)  //Dash dans la direction de la souris
+
+| Key(e) ? Wizz : (Init)  //Canalisation de l’âme
+
+| Cell(H,A) ? Power : (Init)  //Collision et perte de vie
+
+*(Diag_N):
+
+| Key(q) ? Move(W) : (Init)
+
+| Key(d) ? Move(E) : (Init)
+
+| True ? (Init)
+
+*(Diag_S):
+
+| Key(q) ? Move(W) : (Init)
+
+| Key(d) ? Move(E) : (Init)
+
+| True ? (Init)
+
+*(Diag_W):
+
+| Key(z) ? Move (N) : (Init)
+
+| Key(s) ? Move(S) : (Init)
+
+| True ? (Init)
+
+*(Diag_E):
+
+| Key(z) ? Move(N) : (Init)
+
+| Key(s) ? Move(S) : (Init)
+
+| True ? (Init)
+
+}
+
+Block (Inactif) {
+
+*(Inactif) :
+
+| True ? (Inactif)
+
+}
+
+  
+
+Flèche (Init) {
+
+*(Init)
+
+| Cell(H,V) ? Move : (Init)
+
+| Cell(H,_) ? Explode : ( )
+
+}
+
+  
+
+Monstre(Init) {
+
+* (Init):
+
+| Closest(L, A) ? Pop(L) : (Init)  //Courir vers le joueur ou tirer en fonction du monstre
+
+| Closest(R, A) ? Pop(R) : (Init)
+
+| Closest(L, O) ? Rotate(R) : (Init) //Si on atteint le bord de la plateforme, on bouge dans l’autre sens (on crée des obstacles invisibles au bout des plateformes qui sont des obstacles uniquement pour les monstres ) on l’utilise pour détecter le bord d’une plateforme et éviter au monstre de tomber
+
+| Closest(R, O) ? Rotate(L) : (Init)
+
+| Cell(H, M) ? Power : (Init)  //Collision et perte de vie
+
+| ! GotPower() ? Explode() : ()
+
+| True ? Move : (Init)
+
+}
+
+  
+  
+  
+
+Fantôme(State1) {
+
+*(State1):
+
+| Closest(N, A) ? Pop(N) : (secondMove) // Pop désigne l’action pour suivre le personnage principal (Move)
+
+| Closest(W, A) ? Pop(W) : (secondMove)
+
+| Closest(S, A) ? Pop(S) : (secondMove)
+
+| Closest(E, A) ? Pop(E) : (secondMove)
+
+  
+
+*(secondMove)
+
+| Closest(N, A)? Pop(N) : (Init) //Cet état gère les déplacements en diagonale
+
+| Closest(W, A) ? Pop(W) : (Init)
+
+| Closest(S, A)? Pop(S) : (Init)
+
+| Closest(E, A) ? Pop(E) : (init)
+
+}
+
+  
+  
+
+Boss (Init) {
+
+* (Init):
+
+| Closest(L, A) ? Rotate(L) : (Action)
+
+| Closest(R, A) ? Rotate(R) : (Action)
+
+  
+
+*(Action):
+
+| True ? 3% Pop / 90% Move / 2% Egg :(Init) //Choix des attaques et mouvements du Boss
+
+| Cell(H, M) ? Power : (Init)  //Collision avec les flèches du joueur
+
+| ! GotPower() ? Explode () : ()
+
+*():
+
+}
+
+```
+
