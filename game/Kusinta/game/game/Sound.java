@@ -1,4 +1,7 @@
 /*
+ * Copyright (C) 2020  Pr. Olivier Gruber
+ * Educational software for a basic game development
+ * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -15,14 +18,28 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game.sound;
+package game;
 
-public interface AudioPlayerListener {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
-  /*
-   * The music that was playing stopped playing, because the player 
-   * reached the end of the music and looping was not requested.
-   */
-  public void endOfPlay(AudioPlayer player, String name);
+import game.graphics.GameCanvas;
 
+public class Sound {
+  GameCanvas m_canvas;
+  String m_name;
+  String m_filename;
+
+  Sound(GameCanvas canvas) {
+    m_canvas = canvas;
+  }
+
+  public void load(String name, String filename, long duration) throws IOException {
+    m_name = name;
+    m_filename = filename;
+    File file = new File(filename);
+    FileInputStream fis = new FileInputStream(file);
+    m_canvas.play(name, fis, duration);
+  }
 }

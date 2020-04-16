@@ -18,7 +18,7 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game;
+package game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,12 +26,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.PrintStream;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import info3.game.graphics.GameCanvas;
+import game.graphics.GameCanvas;
 
 public class Game {
 
@@ -51,13 +50,11 @@ public class Game {
   JLabel m_text;
   GameCanvas m_canvas;
   CanvasListener m_listener;
-  Cowboy m_cowboy;
+  Model m_model;
   Sound m_music;
 
   Game() throws Exception {
-    // creating a cowboy, that would be a model 
-    // in an Model-View-Controller pattern (MVC)
-    m_cowboy = new Cowboy();
+    m_model = new Model();
     // creating a listener for all the events
     // from the game canvas, that would be 
     // the controller in the MVC pattern 
@@ -133,7 +130,7 @@ public class Game {
    */
   void tick(long elapsed) {
     
-    m_cowboy.tick(elapsed);
+    m_model.tick(elapsed);
 
     // Update every second 
     // the text on top of the frame: tick and fps
@@ -168,7 +165,7 @@ public class Game {
     g.fillRect(0, 0, width, height);
 
     // paint
-    m_cowboy.paint(g, width, height);
+    m_model.paint(g, width, height);
   }
 
 }

@@ -18,7 +18,7 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game.graphics;
+package game.graphics;
 
 import java.awt.Graphics;
 import java.awt.event.KeyListener;

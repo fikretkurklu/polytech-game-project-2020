@@ -18,7 +18,7 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game.graphics;
+package game.graphics;
 /*
  * Copyright (C) 2020  Pr. Olivier Gruber
  *
@@ -55,8 +55,8 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import info3.game.sound.AudioPlayer;
-import info3.game.sound.AudioPlayerListener;
+import game.sound.AudioPlayer;
+import game.sound.AudioPlayerListener;
 
 /**
  * A game-oriented canvas. It creates the JFrame in which it will 
@@ -70,7 +70,7 @@ import info3.game.sound.AudioPlayerListener;
  * We also manage an audio player for audio streams in the OGG format.
  * The player is automatically stopped when the window is closed. 
  * 
- * @see info3.game.CanvasListener.GameCanvasListener to know how to get 
+ * @see game.CanvasListener.GameCanvasListener to know how to get 
  *      at the mouse and keyboard events, the timer events,
  *      and the paint requests.
  * 

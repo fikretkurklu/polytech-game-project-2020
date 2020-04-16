@@ -25,7 +25,7 @@
  *  Derived work, March, 2020
  *  Author: Pr. Olivier Gruber
  */
-package info3.game.sound;
+package game.sound;
 
 import java.io.InputStream;
 

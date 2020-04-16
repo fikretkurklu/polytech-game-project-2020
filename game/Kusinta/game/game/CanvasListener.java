@@ -18,13 +18,13 @@
  *  Created on: March, 2020
  *      Author: Pr. Olivier Gruber
  */
-package info3.game;
+package game;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-import info3.game.graphics.GameCanvasListener;
+import game.graphics.GameCanvasListener;
 
 public class CanvasListener implements GameCanvasListener {
   Game m_game;

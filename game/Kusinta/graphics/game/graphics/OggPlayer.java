@@ -41,7 +41,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package info3.game.graphics;
+package game.graphics;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,8 +61,8 @@ import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
 
-import info3.game.sound.AudioPlayer;
-import info3.game.sound.AudioPlayerListener;
+import game.sound.AudioPlayer;
+import game.sound.AudioPlayerListener;
 
 public class OggPlayer extends AudioPlayer implements Runnable {
 
