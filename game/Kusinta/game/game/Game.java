@@ -30,7 +30,7 @@ import java.io.FileInputStream;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import game.graphics.GameCanvas;
+import game.graphics.View;
 
 public class Game {
 
@@ -38,9 +38,7 @@ public class Game {
 
   public static void main(String args[]) throws Exception {
     try {
-      System.out.println("Game starting...");
       game = new Game();
-      System.out.println("Game started.");
     } catch (Throwable th) {
       th.printStackTrace(System.err);
     }
@@ -48,26 +46,19 @@ public class Game {
 
   JFrame m_frame;
   JLabel m_text;
-  GameCanvas m_canvas;
-  CanvasListener m_listener;
+  View m_view;
+  Controller m_controller;
   Model m_model;
   Sound m_music;
 
   Game() throws Exception {
     m_model = new Model();
-    // creating a listener for all the events
-    // from the game canvas, that would be 
-    // the controller in the MVC pattern 
-    m_listener = new CanvasListener(this);
-    // creating the game canvas to render the game,
-    // that would be a part of the view in the MVC pattern
-    m_canvas = new GameCanvas(m_listener);
+    m_controller = new Controller(this);
+    m_view = new View(m_controller);
 
-    System.out.println("  - creating frame...");
+    //creating frame
     Dimension d = new Dimension(1024, 768);
-    m_frame = m_canvas.createFrame(d);
-
-    System.out.println("  - setting up the frame...");
+    m_frame = m_view.createFrame(d);
     setupFrame();
   }
 
@@ -81,7 +72,7 @@ public class Game {
     m_frame.setTitle("Game");
     m_frame.setLayout(new BorderLayout());
 
-    m_frame.add(m_canvas, BorderLayout.CENTER);
+    m_frame.add(m_view, BorderLayout.CENTER);
 
     m_text = new JLabel();
     m_text.setText("Tick: 0ms FPS=0");
@@ -104,14 +95,14 @@ public class Game {
    */
   String m_musicName;
   void loadMusic() {
-    m_canvas.stop(m_musicName);
+    m_view.stop(m_musicName);
     m_musicName = m_musicNames[m_musicIndex];
     String filename = "resources/" + m_musicName + ".ogg";
     m_musicIndex = (m_musicIndex + 1) % m_musicNames.length;
     try {
       File file = new File(filename);
       FileInputStream fis = new FileInputStream(file);
-      m_canvas.play(m_musicName, fis, -1);
+      m_view.play(m_musicName, fis, -1);
     } catch (Throwable th) {
       th.printStackTrace(System.err);
       System.exit(-1);
@@ -137,8 +128,8 @@ public class Game {
     m_textElapsed += elapsed;
     if (m_textElapsed > 1000) {
       m_textElapsed = 0;
-      float period = m_canvas.getTickPeriod();
-      int fps = m_canvas.getFPS();
+      float period = m_view.getTickPeriod();
+      int fps = m_view.getFPS();
 
       String txt = "Tick=" + period + "ms";
       while (txt.length() < 15)
@@ -157,8 +148,8 @@ public class Game {
   void paint(Graphics g) {
 
     // get the size of the canvas
-    int width = m_canvas.getWidth();
-    int height = m_canvas.getHeight();
+    int width = m_view.getWidth();
+    int height = m_view.getHeight();
 
     // erase background
     g.setColor(Color.gray);

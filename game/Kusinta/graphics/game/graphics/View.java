@@ -70,7 +70,7 @@ import game.sound.AudioPlayerListener;
  * We also manage an audio player for audio streams in the OGG format.
  * The player is automatically stopped when the window is closed. 
  * 
- * @see game.CanvasListener.GameCanvasListener to know how to get 
+ * @see game.Controller.GameCanvasListener to know how to get 
  *      at the mouse and keyboard events, the timer events,
  *      and the paint requests.
  * 
@@ -78,7 +78,7 @@ import game.sound.AudioPlayerListener;
  *            you may only want to change the FPS rate (frames per second). 
  *            and the tick period.
  */
-public class GameCanvas extends Canvas {
+public class View extends Canvas {
 
   static final int TICK_PERIOD = 1; // tick every milli-second.
   /*
@@ -89,7 +89,7 @@ public class GameCanvas extends Canvas {
   static final double FPS = 30.0;
   static final int REPAINT_DELAY = (int) (1000.0 / FPS);
 
-  public GameCanvas(GameCanvasListener l) {
+  public View(GameCanvasListener l) {
 
     /*
      * This is ugly, but this is the only way to turn 
@@ -323,7 +323,8 @@ public class GameCanvas extends Canvas {
     }
   }
 
-  public class RunnableEvent extends AWTEvent implements Runnable {
+  @SuppressWarnings("serial")
+public class RunnableEvent extends AWTEvent implements Runnable {
     public static final int EVENT_ID = AWTEvent.RESERVED_ID_MAX + 1;
     Runnable runnable;
 
@@ -356,7 +357,8 @@ public class GameCanvas extends Canvas {
   WindowFrame m_frame;
   java.awt.EventQueue eventQueue;
 
-  class WindowFrame extends JFrame {
+  @SuppressWarnings("serial")
+class WindowFrame extends JFrame {
     WindowFrame() {
       enableEvents(RunnableEvent.EVENT_ID);
     }

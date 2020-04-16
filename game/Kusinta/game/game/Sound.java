@@ -24,14 +24,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import game.graphics.GameCanvas;
+import game.graphics.View;
 
 public class Sound {
-  GameCanvas m_canvas;
+  View m_canvas;
   String m_name;
   String m_filename;
 
-  Sound(GameCanvas canvas) {
+  Sound(View canvas) {
     m_canvas = canvas;
   }
 

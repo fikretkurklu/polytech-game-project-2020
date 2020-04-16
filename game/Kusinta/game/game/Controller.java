@@ -26,10 +26,10 @@ import java.awt.event.MouseEvent;
 
 import game.graphics.GameCanvasListener;
 
-public class CanvasListener implements GameCanvasListener {
+public class Controller implements GameCanvasListener {
   Game m_game;
 
-  CanvasListener(Game game) {
+  Controller(Game game) {
     m_game = game;
   }
 
@@ -110,7 +110,7 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void windowOpened() {
     m_game.loadMusic();
-    m_game.m_canvas.setTimer(6000);
+    m_game.m_view.setTimer(6000);
   }
 
   @Override
@@ -128,7 +128,6 @@ public class CanvasListener implements GameCanvasListener {
   @Override
   public void expired() { 
     // will force a change of music, after 6s of play
-    System.out.println("Forcing an ealy change of music");
     m_expired = true;
     m_game.loadMusic();    
   }
