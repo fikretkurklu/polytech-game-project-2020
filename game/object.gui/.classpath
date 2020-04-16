@@ -2,17 +2,8 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="graphics.public"/>
+	<classpathentry kind="src" path="game"/>
 	<classpathentry kind="src" path="graphics.private"/>
-	<classpathentry kind="src" path="task1"/>
-	<classpathentry kind="src" path="task2"/>
-	<classpathentry kind="src" path="task3"/>
-	<classpathentry kind="src" path="task4"/>
-	<classpathentry kind="src" path="task5"/>
-	<classpathentry kind="src" path="task6"/>
-	<classpathentry kind="src" path="task7"/>
-	<classpathentry kind="src" path="task8"/>
-	<classpathentry kind="src" path="_tests/cursus.tests/src"/>
-	<classpathentry kind="src" path="_tests/src"/>
 	<classpathentry kind="lib" path="/home/alexis/2019/workshops/oop/workspace/object.collections/edu-polytech-ricm-oop-collections.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

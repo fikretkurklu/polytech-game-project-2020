@@ -15,7 +15,9 @@
  *  Created on: November, 2019
  *      Author: Pr. Olivier Gruber <olivier dot gruber at acm dot org>
  */
-package object.gui;
+package object.gui.listener;
+
+import object.gui.Component;
 
 /**
  * This is the mouse listener telling you about what happens

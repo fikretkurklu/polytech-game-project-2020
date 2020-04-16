@@ -3,7 +3,6 @@ package object.gui.widgets;
 import object.gui.Component;
 import object.gui.Container;
 import object.gui.Dimension;
-import object.gui.window.Color;
 import object.gui.window.Font;
 import object.gui.window.Graphics;
 import object.gui.window.Window;
@@ -89,12 +88,11 @@ public class Label extends Component {
    */
   @Override
   public void paint(Graphics g) {
-    int x, y, h, a, d;
+    int x, y, h, d;
     super.paint(g);
     if (m_raised) 
       Util.paintRaisedComponentShadow(g,this);
     g.setFont(m_font);
-    a = m_font.getAscent();
     d = m_font.getDescent();
     h = m_font.getHeight(); // leading + ascent + descent
     // align the text left

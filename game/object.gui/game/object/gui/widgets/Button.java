@@ -3,13 +3,21 @@ package object.gui.widgets;
 import object.gui.Component;
 import object.gui.Container;
 import object.gui.Dimension;
-import object.gui.MouseListener;
+import object.gui.listener.MouseListener;
 import object.gui.window.Font;
 import object.gui.window.Graphics;
 import object.gui.window.Image;
 import object.gui.window.Window;
 
 public class Button extends Component {
+	public interface ButtonListener {
+		void clicked(Button b);
+
+		void pressed(Button b);
+
+		void released(Button b);
+	}
+
 	public static final int DEPRESSED = 0;
 	public static final int RAISED = 1;
 	private int m_border;
@@ -29,9 +37,10 @@ public class Button extends Component {
 	}
 
 	private void computePreferredSize() {
-		Dimension d_txt = new Dimension(m_font.charsWidth(m_label.toCharArray(), 0, m_label.length()), m_font.getHeight());
+		Dimension d_txt = new Dimension(m_font.charsWidth(m_label.toCharArray(), 0, m_label.length()),
+				m_font.getHeight());
 		if (i_depressed != null && i_raised != null) {
-			Dimension d_img ;
+			Dimension d_img;
 			switch (m_state) {
 			case DEPRESSED:
 				d_img = new Dimension(i_depressed.getWidth(), i_depressed.getHeight());
@@ -50,14 +59,14 @@ public class Button extends Component {
 			d_txt.add(2 * m_border, 2 * m_border);
 			setPreferredSize(d_txt);
 		}
-		
+
 	}
 
 	public void setBorder(int border) {
 		this.m_border = border;
 		computePreferredSize();
 	}
-	
+
 	public int getBorder() {
 		return m_border;
 	}
@@ -73,7 +82,7 @@ public class Button extends Component {
 	public ButtonListener getButtonListener() {
 		return m_bl;
 	}
-	
+
 	public void setFont(Font f) {
 		this.m_font = f;
 		computePreferredSize();
@@ -92,7 +101,7 @@ public class Button extends Component {
 
 	@Override
 	public void paint(Graphics g) {
-		int x, y, h, a, d;
+		int x, y, h, d;
 		super.paint(g);
 		switch (m_state) {
 		case RAISED:
@@ -106,7 +115,7 @@ public class Button extends Component {
 			break;
 		}
 		if (i_depressed != null && i_raised != null) {
-			
+
 			switch (m_state) {
 			case RAISED:
 				g.drawImage(i_raised, m_border, m_border, i_raised.getWidth(), i_raised.getHeight());
@@ -121,7 +130,6 @@ public class Button extends Component {
 		}
 		if (m_label != "") {
 			g.setFont(m_font);
-			a = m_font.getAscent();
 			d = m_font.getDescent();
 			h = m_font.getHeight(); // leading + ascent + descent
 			// align the text left
@@ -134,7 +142,6 @@ public class Button extends Component {
 			g.setColor(m_fgColor);
 			g.drawString(m_label.toCharArray(), 0, m_label.length(), x, y);
 		}
-	
 		return;
 	}
 
@@ -148,6 +155,7 @@ public class Button extends Component {
 		@Override
 		public void mouseMoved(Component c, int x, int y) {
 		}
+
 		@Override
 		public void mousePressed(Component c, int x, int y, int buttons) {
 			m_button.m_state = DEPRESSED;
@@ -171,12 +179,12 @@ public class Button extends Component {
 
 		@Override
 		public void mouseEntered(Component c, int x, int y) {
-			
+
 		}
 
 		@Override
 		public void mouseExited(Component c) {
-			m_button.m_state =  RAISED;			
+			m_button.m_state = RAISED;
 		}
 	}
 
