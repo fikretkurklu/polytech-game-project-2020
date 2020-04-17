@@ -1,7 +1,0 @@
-package automaton;
-
-public abstract class Action {
-	
-	boolean abstract apply(Entity e);
-	
-}

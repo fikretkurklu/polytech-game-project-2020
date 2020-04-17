@@ -1,7 +1,0 @@
-package automaton;
-
-public class State {
-
-	String nom_etat;
-	
-}
