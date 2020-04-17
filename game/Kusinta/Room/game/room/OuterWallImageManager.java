@@ -1,8 +1,8 @@
 package game.room;
 
-public class InnerWallImageManager implements ImageManager{
-	
-	public InnerWallImageManager (int ambiance) {
+public class OuterWallImageManager implements ImageManager {
+
+	public OuterWallImageManager (int ambiance) {
 		switch(ambiance) {
 		case(1) :
 			String[] imgDir1_1 = {"","",""};
