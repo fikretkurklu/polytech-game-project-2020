@@ -1,0 +1,10 @@
+package automaton;
+
+public class MySuperAutomate {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

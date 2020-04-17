@@ -1,0 +1,7 @@
+package automaton;
+
+public abstract interface Action {
+	
+	boolean abstract apply(Entity e);
+	
+}

@@ -1,0 +1,24 @@
+package automaton;
+
+public class Block extends Entity {
+	
+	public Block(Automaton automaton) {
+		super(automaton);
+	}
+	
+	@Override
+	public boolean move() {
+		System.out.println("Move Block");
+		System.out.println(this.getCurrentState().getName());
+		return true;
+	}
+
+	@Override
+	public boolean jump() {
+		System.out.println("Jump Block");
+		return true;
+	}
+	
+	
+	
+}

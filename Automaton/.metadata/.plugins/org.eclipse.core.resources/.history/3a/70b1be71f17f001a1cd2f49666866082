@@ -1,0 +1,25 @@
+package automaton;
+
+public abstract class Entity {
+
+	private State m_state;
+	Automaton m_automaton;
+	
+	public Entity(State state, Automaton automaton) {
+		m_state = state;
+		m_automaton = automaton;
+	}
+	
+	public State getCurrentState() {
+		return m_state;
+	}
+	
+	public abstract boolean move();
+	
+//	public abstract pop();
+//	public abstract cell();
+//	public abstract wizz();
+//	public abstract jump();
+	
+	
+}

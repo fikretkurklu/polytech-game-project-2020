@@ -1,0 +1,25 @@
+package automaton;
+
+import java.util.HashMap;
+
+public class Main {
+	
+	public void main(String[] args) {
+		State init = new State("Init");
+		State etat2 = new State("etat2");
+		CondTrue cond1 = new CondTrue();
+		ActionJump action_jump = new ActionJump();
+		ActionMove action_move = new ActionMove(null);
+		Transition[] trans1 = {new Transition(cond1, init, etat2, action_jump)};
+		Transition[] trans2 = {new Transition(cond1, etat2, init, action_move)};
+		HashMap<State,Transition[]> mapTransitions = new HashMap();
+		mapTransitions.put(init, trans1);
+		mapTransitions.put(etat2, trans2);
+		
+		Automaton aut = new Automaton(init, mapTransitions);
+		Block b = new Block(aut);
+		
+		
+	}
+	
+}

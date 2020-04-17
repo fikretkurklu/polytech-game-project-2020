@@ -1,0 +1,12 @@
+package automaton;
+
+public class Block extends Entity {
+	
+	public Block() {}
+	
+	@Override
+	public boolean move() {
+		return false;
+	}
+	
+}

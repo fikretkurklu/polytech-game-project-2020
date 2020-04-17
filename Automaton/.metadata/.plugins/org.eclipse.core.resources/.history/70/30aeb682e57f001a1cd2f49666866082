@@ -1,0 +1,10 @@
+package automaton;
+
+public class Transition {
+
+	Condition m_condition;
+	State initialState;
+	State finalState;
+	Action m_action;
+	
+}

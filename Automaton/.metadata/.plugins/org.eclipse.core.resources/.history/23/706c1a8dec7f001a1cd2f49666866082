@@ -1,0 +1,23 @@
+package automaton;
+
+public class Automaton {
+
+	State initialState;
+	Transition[] transitions;
+	
+	public Automaton(State state, Transition[] transitions) {
+		initialState = state;
+		this.transitions = transitions;
+	}
+	
+	public Void step(Entity e) {
+		if (transitions != null && transitions.length != 0) {
+			for (int i = 0; i < transitions.length; i++) {
+				if (transitions[i].initialState == e.m_state) {
+					e.eval();
+				}
+			}
+		}
+	
+	}
+}

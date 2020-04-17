@@ -1,0 +1,11 @@
+package automaton;
+
+public class CondTrue implements ICondition {
+
+	@Override
+	public boolean eval() {
+		return true;
+	}
+	
+	
+}

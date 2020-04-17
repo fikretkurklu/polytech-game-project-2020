@@ -1,0 +1,11 @@
+package automaton;
+
+public class Direction {
+
+	String m_dir;
+	
+	public Direction(Direction dir) {
+		m_dir = dir;
+	}
+	
+}

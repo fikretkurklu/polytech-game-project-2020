@@ -1,0 +1,17 @@
+package automaton;
+
+public class Automaton {
+
+	State etat_initial;
+	Transition[] tab_transition;
+	
+	public Automaton(State etat, Transition[] tab) {
+		etat_initial = etat;
+		tab_transition = tab;
+	}
+	
+	public Void step(Entity ) {
+		
+	}
+	
+}

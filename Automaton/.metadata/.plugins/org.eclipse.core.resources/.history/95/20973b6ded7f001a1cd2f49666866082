@@ -1,0 +1,21 @@
+package automaton;
+
+public class Transition {
+
+	Condition m_condition;
+	State initialState;
+	State finalState;
+	IAction m_action;
+	
+	public Transition(Condition condition, State initialState, State finalState, IAction action) {
+		m_condition = condition;
+		this.initialState = initialState;
+		this.finalState = finalState;
+		m_action = action;
+	}
+	
+	public void eval() {
+		
+	}
+	
+}

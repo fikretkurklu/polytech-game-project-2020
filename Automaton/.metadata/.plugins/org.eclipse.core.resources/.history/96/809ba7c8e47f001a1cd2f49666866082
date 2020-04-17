@@ -1,0 +1,11 @@
+package automaton;
+
+public class State {
+
+	String nom_etat;
+	
+	public State(String name) {
+		nom_etat = name;
+	}
+	
+}

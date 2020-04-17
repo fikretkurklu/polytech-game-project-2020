@@ -1,0 +1,31 @@
+package automaton;
+
+import java.util.HashMap;
+
+public class Automaton {
+
+	State initialState;
+//	Transition[] transitions;
+	HashMap<State, Transition[]> mapTransitions;
+	
+	
+	public Automaton(State state, HashMap<State, Transition[]> transitions) {
+		initialState = state;
+		mapTransitions = transitions;
+//		this.transitions = transitions;
+	}
+	
+	public void step(Entity e) {
+		Transition[] transitions = mapTransitions.get(e.getCurrentState());
+		if (transitions != null) {
+			for (int i = 0; i < transitions.length; i++) {
+				if (transitions[i].initialState == e.m_state) {
+					if (transitions[i].m_condition.eval()) {
+						transitions[i].m_action.apply(e);
+					}
+				}
+			}
+		}
+	
+	}
+}

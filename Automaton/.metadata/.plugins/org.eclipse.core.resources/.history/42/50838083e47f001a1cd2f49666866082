@@ -1,0 +1,15 @@
+package automaton;
+
+public class Automaton {
+
+	State etat_initial;
+	
+	public Automaton(State etat) {
+		etat_initial = etat;
+	}
+	
+	public Void step(Entity e) {
+		
+	}
+	
+}

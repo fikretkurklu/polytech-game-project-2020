@@ -1,0 +1,10 @@
+package automaton;
+
+public class Transition {
+
+	CondTrue cond;
+	State initial;
+	State fin;
+	ActionMove action;
+	
+}
