@@ -1,6 +1,8 @@
 package playerActions;
 
 import automaton.*;
+import game.Direction;
+import game.Entity;
 
 public class ActionTurn implements IAction {
 

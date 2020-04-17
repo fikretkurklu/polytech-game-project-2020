@@ -1,7 +1,7 @@
 package playerActions;
 
-import automaton.Direction;
-import automaton.Entity;
+import game.Direction;
+import game.Entity;
 
 public class ActionPop implements IAction{
 	

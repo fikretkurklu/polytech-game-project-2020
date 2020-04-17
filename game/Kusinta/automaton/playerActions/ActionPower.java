@@ -1,6 +1,6 @@
 package playerActions;
 
-import automaton.Entity;
+import game.Entity;
 
 public class ActionPower implements IAction {
 

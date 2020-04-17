@@ -1,6 +1,6 @@
 package playerCond;
 
-import automaton.Entity;
+import game.Entity;
 
 public class CondTrue implements ICondition {
 	

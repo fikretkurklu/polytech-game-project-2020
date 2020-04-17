@@ -1,7 +1,7 @@
 package playerActions;
 
 
-import automaton.Entity;
+import game.Entity;
 
 public class ActionJump implements IAction {
 	

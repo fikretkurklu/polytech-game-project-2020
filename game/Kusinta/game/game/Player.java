@@ -4,29 +4,46 @@ import automaton.*;
 
 public class Player extends Entity {
 	
+	int MAX_LIFE = 100;
+	int SPEED_WALK = 5;
+	
 	 int m_x, m_y;
 	 Model m_model;
-	 String direction;
+	 Direction m_direction;
+	 
+	 int life;
 
-	 double speed_x, speed_y;
+	 double SPEED_WALK_x, SPEED_WALK_y;
 
 	 int [] x_hitBox, y_hitBox;
 
 
-	public Player(Automaton automaton, int x, int y) {
+	public Player(Automaton automaton, int x, int y, Direction dir) {
 		super(automaton);
 		
 		 m_x = x;
 		 m_y = y;
+		 m_direction = dir;
+		 
+		 life = MAX_LIFE;
 
 		 x_hitBox = new int[]{m_x-5, m_x-5, m_x+5, m_x+5};
 		 y_hitBox = new int[]{m_y-5, m_y+5, m_y+5, m_y-5};
+		 
 		}
 
 	@Override
 	public boolean move(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
+		if(dir != m_direction) {
+			turn(dir);
+		}
+		if(dir.toString() == "East") {
+			int dx = m_x + SPEED_WALK;
+			
+		} else if(dir.toString() == "West") {
+			int dx = m_x - SPEED_WALK;
+		}
+		return true;
 	}
 
 	@Override
@@ -61,8 +78,9 @@ public class Player extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
+		if(m_direction !=dir)
+			m_direction = dir;
+		return true;
 	}
 
 	@Override
@@ -73,7 +91,10 @@ public class Player extends Entity {
 
 	@Override
 	public boolean explode() {
-		// TODO Auto-generated method stub
+		if(life!=0) {
+			life = 0;
+			return true;
+		}
 		return false;
 	}
 
