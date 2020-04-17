@@ -1,5 +1,7 @@
 package automaton;
 
+import playerCond.*;
+import playerActions.*;
 
 
 public class Transition {

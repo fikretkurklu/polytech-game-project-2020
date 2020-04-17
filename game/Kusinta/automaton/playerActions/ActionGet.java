@@ -1,4 +1,4 @@
-package automaton.playerActions;
+package playerActions;
 
 public class ActionGet {
 

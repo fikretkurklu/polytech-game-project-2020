@@ -1,6 +1,6 @@
-package automaton;
+package playerCond;
 
-
+import automaton.*;
 
 public interface ICondition {
 	

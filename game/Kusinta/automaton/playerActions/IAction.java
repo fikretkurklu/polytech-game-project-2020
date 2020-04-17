@@ -1,4 +1,6 @@
-package automaton;
+package playerActions;
+
+import automaton.*;
 
 public interface IAction {
 	

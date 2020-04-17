@@ -1,6 +1,7 @@
 package automaton;
 
 import java.util.HashMap;
+import playerCond.*;
 
 public class Automaton {
 

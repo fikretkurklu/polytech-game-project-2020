@@ -1,7 +1,6 @@
-package automaton.playerCond;
+package playerCond;
 
-import automaton.Entity;
-import automaton.ICondition;
+import automaton.*;
 
 public class CondCell implements ICondition{
 	

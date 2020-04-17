@@ -1,11 +1,8 @@
 package automaton;
 
-
-
 import java.util.HashMap;
-
-import automaton.playerActions.*;
-import automaton.playerCond.*;
+import playerActions.*;
+import playerCond.*;
 
 public class MySuperAutomate {
 

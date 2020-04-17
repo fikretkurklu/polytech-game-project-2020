@@ -1,15 +1,15 @@
-package automaton.playerActions;
+package playerActions;
 
-import automaton.Entity;
-import automaton.IAction;
+import automaton.*;
 
 public class ActionEgg implements IAction {
 
 	public ActionEgg() {}
 	
+
 	@Override
 	public boolean apply(Entity e) {
 		return e.egg();
-	}	
+	}
 	
 }

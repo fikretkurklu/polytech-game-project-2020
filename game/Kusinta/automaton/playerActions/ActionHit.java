@@ -1,7 +1,6 @@
-package automaton.playerActions;
+package playerActions;
 
 import automaton.Entity;
-import automaton.IAction;
 
 public class ActionHit implements IAction {
 
