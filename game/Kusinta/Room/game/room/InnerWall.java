@@ -6,11 +6,10 @@ public class InnerWall extends Element {
 
 	private static final String image_path="";
 	
+	
 	public InnerWall() throws IOException {
-		super(true);
-		load_image(image_path);
+		super(true, true);
+		loadImage(image_path);
 	}
 
-	
-	
 }
