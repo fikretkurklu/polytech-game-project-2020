@@ -161,10 +161,10 @@ public class Interpretor implements IVisitor {
 		Action action;
 		Condition condition;
 		State target;
+		mapTransitions = new HashMap();
 		while (transition.hasNext()) {
 			tr = transition.next();
-			action = (Action) tr.action.accept(this);
-			//Action action = transition.
+			
 		}
 		return null;
 	}
@@ -207,7 +207,6 @@ public class Interpretor implements IVisitor {
 //	@Override
 	public Object exit(Automaton automaton, Object initial_state, List<Object> modes) {
 		return null;
-		
 	}
 
 	@Override
