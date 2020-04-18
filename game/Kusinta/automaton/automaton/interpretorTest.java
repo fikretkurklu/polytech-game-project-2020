@@ -9,7 +9,7 @@ public class interpretorTest {
 	public static void main(String[] args) {
 		AST ast;
 		try {
-			ast = (AST) AutomataParser.from_file("/home/yael/Documents/groupe1/Automaton/Automate/src/automaton/examples/Block.gal");
+			ast = (AST) AutomataParser.from_file("/home/yael/Documents/groupe1/game/Kusinta/automaton/examples/Block.gal");
 			AstPrinter printer = new AstPrinter();
 			ast.accept(printer);
 		} catch (Exception e) {

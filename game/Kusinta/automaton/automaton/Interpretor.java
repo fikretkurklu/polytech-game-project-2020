@@ -1,7 +1,7 @@
 package automaton;
 
 import java.util.HashMap;
-
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -27,8 +27,14 @@ import automata.ast.Value;
 
 public class Interpretor implements IVisitor {
 
-	String funcName;
+	LinkedList<Automaton> bots;
+	State initialState;
 	HashMap<State, Transition[]> mapTransitions;
+	
+	public Interpretor() {
+		bots = new LinkedList();
+		mapTransitions = new HashMap();
+	}
 
 	@Override
 	public Object visit(Category cat) {
@@ -60,7 +66,6 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public void enter(FunCall funcall) {
-		funcName = funcall.name;
 	}
 
 	@Override
@@ -68,6 +73,9 @@ public class Interpretor implements IVisitor {
 		String name = funcall.name;
 		ListIterator<Object> parameter = parameters.listIterator();
 		switch(name) {
+		
+		// ACTIONS
+		
 		case "Hit":
 			return new ActionHit();
 		case "Egg" :
@@ -93,6 +101,33 @@ public class Interpretor implements IVisitor {
 			return null;
 		case "Wizz" :
 			return new ActionWizz();
+			
+		// CONDITIONS
+			
+		case "True":
+			return new CondTrue();
+		case "Cell" :
+			if (parameter.hasNext())
+				return new CondCell((game.Entity) parameter.next());
+			return null;
+		case "Closest" :
+			if (parameter.hasNext())
+				return new CondClosest((game.Entity) parameter.next());
+			return null;
+		case "GotPower" :
+			return new CondGotPower();
+		case "GotStuff" :
+			return new CondGotStuff();
+		case "Key" :
+			if (parameter.hasNext())
+				return new CondKey((int) parameter.next());
+			return null;
+		case "MyDir" :
+			if (parameter.hasNext())
+				return new CondMyDir((game.Direction) parameter.next());
+			return null;
+			
+			
 		default :
 			return null;
 		}
@@ -117,14 +152,18 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public void enter(Mode mode) {
-		mapTransitions = new HashMap();
 	}
 
 	@Override
 	public Object exit(Mode mode, Object source_state, Object behaviour) {
 		ListIterator<Transition> transition = ((Behaviour)behaviour).transitions.listIterator();
 		Transition tr;
+		Action action;
+		Condition condition;
+		State target;
 		while (transition.hasNext()) {
+			tr = transition.next();
+			action = (Action) tr.action.accept(this);
 			//Action action = transition.
 		}
 		return null;
@@ -137,20 +176,16 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public void enter(Condition condition) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public Object exit(Condition condition, Object expression) {
-		// TODO Auto-generated method stub
-		return null;
+		return expression;
 	}
+		
 
 	@Override
 	public void enter(Action acton) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -161,8 +196,7 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object visit(Transition transition, Object condition, Object action, Object target_state) {
-		// TODO Auto-generated method stub
-		return null;
+		return new automaton.Transition((ICondition) condition, (automaton.State) target_state, (IAction) action);
 	}
 
 //	@Override

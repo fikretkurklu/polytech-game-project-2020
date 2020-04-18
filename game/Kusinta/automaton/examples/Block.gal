@@ -6,6 +6,6 @@ Block (Inactif) {
 Mine(Banzai){
   * (Banzai) 
   | Cell(F,E) ? Explode  :()
-  | True ?               :(Banzai)
+  | True ? 80% Move / Pop / 5% Wizz / Jump : (Banzai)
   * ()
 }
