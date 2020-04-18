@@ -29,11 +29,11 @@ public class Interpretor implements IVisitor {
 
 	LinkedList<Automaton> bots;
 	State initialState;
-	HashMap<State, Transition[]> mapTransitions;
+	HashMap<State, automaton.Transition[]> mapTransitions;
 	
 	public Interpretor() {
-		bots = new LinkedList();
-		mapTransitions = new HashMap();
+		bots = new LinkedList<Automaton>();
+		mapTransitions = new HashMap<automaton.State, automaton.Transition[]>();
 	}
 
 	@Override
@@ -156,17 +156,20 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object exit(Mode mode, Object source_state, Object behaviour) {
-		ListIterator<Transition> transition = ((Behaviour)behaviour).transitions.listIterator();
-		Transition tr;
+		ListIterator<automaton.Transition> transition = ((LinkedList<automaton.Transition>)behaviour).listIterator();
+		automaton.Transition tr;
 		Action action;
 		Condition condition;
 		State target;
-		mapTransitions = new HashMap();
+//		mapTransitions = new HashMap();
+		automaton.Transition[] tmp = new automaton.Transition[64];
+		int i = 0;
 		while (transition.hasNext()) {
 			tr = transition.next();
-			
+			tmp[i++] = tr;
 		}
-		return null;
+		mapTransitions.put((automaton.State)source_state, tmp);
+		return mapTransitions;
 	}
 
 	@Override
@@ -205,8 +208,9 @@ public class Interpretor implements IVisitor {
 	}
 
 //	@Override
+	@SuppressWarnings("unchecked")
 	public Object exit(Automaton automaton, Object initial_state, List<Object> modes) {
-		return null;
+		return new automaton.Automaton((automaton.State)initial_state, (HashMap<State, automaton.Transition[]>) modes);
 	}
 
 	@Override
@@ -222,8 +226,7 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object exit(automata.ast.Automaton automaton, Object initial_state, List<Object> modes) {
-		// TODO Auto-generated method stub
-		return null;
+		return new automaton.Automaton((automaton.State)initial_state, mapTransitions);
 	}
 
 }
