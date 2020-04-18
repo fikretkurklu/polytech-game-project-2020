@@ -29,13 +29,13 @@ public class MySuperAutomate {
 		ActionTurn action_turn = new ActionTurn(null);
 		ActionPick action_pick = new ActionPick();
 		
-		Transition[] trans1 = {new Transition(cond1, init, etat2, action_jump)};
-		Transition[] trans2 = {new Transition(cond1, etat2, etat5, action_move)};
-		Transition trans_1 = new Transition(cond2, etat3, etat2, action_pop);
-		Transition trans_2 = new Transition(cond3, etat3, etat4, action_power);
-		Transition trans_3 = new Transition(cond4, etat3, etat5, action_turn);
+		Transition[] trans1 = {new Transition(cond1, etat2, action_jump)};
+		Transition[] trans2 = {new Transition(cond1, etat5, action_move)};
+		Transition trans_1 = new Transition(cond2, etat2, action_pop);
+		Transition trans_2 = new Transition(cond3, etat4, action_power);
+		Transition trans_3 = new Transition(cond4, etat5, action_turn);
 		Transition[] trans3 = {trans_1, trans_2, trans_3 };
-		Transition[] trans4 = {new Transition(cond5, etat5, etat2, action_pick)};
+		Transition[] trans4 = {new Transition(cond5, etat2, action_pick)};
 		
 		HashMap<State,Transition[]> mapTransitions = new HashMap<State, Transition[]>();
 		mapTransitions.put(init, trans1);
