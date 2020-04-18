@@ -8,6 +8,8 @@ public abstract class Entity {
 	private State m_state;
 	Automaton m_automaton;
 	
+	public Entity() {}
+	
 	public Entity(Automaton automaton) {
 		m_state = automaton.getInitialState();
 		m_automaton = automaton;

@@ -27,12 +27,9 @@ import automata.ast.Value;
 
 public class Interpretor implements IVisitor {
 
-	LinkedList<Automaton> bots;
-	State initialState;
 	HashMap<State, automaton.Transition[]> mapTransitions;
 	
 	public Interpretor() {
-		bots = new LinkedList<Automaton>();
 		mapTransitions = new HashMap<automaton.State, automaton.Transition[]>();
 	}
 
@@ -44,7 +41,17 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object visit(Direction dir) {
-		return new game.Direction(dir.toString());
+		String name = dir.toString();
+		switch(name) {
+			case "N":
+			case "E" :
+			case "W" :
+			case "S" :
+				return new game.Direction(name);
+			// Les entités sont considérées	
+			default :
+				System.out.println("Entity : " + name);
+		}
 	}
 
 	@Override
@@ -107,13 +114,9 @@ public class Interpretor implements IVisitor {
 		case "True":
 			return new CondTrue();
 		case "Cell" :
-			if (parameter.hasNext())
-				return new CondCell((game.Entity) parameter.next());
-			return null;
+			return new CondCell((game.Direction) parameter.next(), (game.Entity) parameter.next());
 		case "Closest" :
-			if (parameter.hasNext())
-				return new CondClosest((game.Entity) parameter.next());
-			return null;
+			return new CondClosest((game.Direction) parameter.next(), (game.Entity) parameter.next());
 		case "GotPower" :
 			return new CondGotPower();
 		case "GotStuff" :
@@ -158,16 +161,14 @@ public class Interpretor implements IVisitor {
 	public Object exit(Mode mode, Object source_state, Object behaviour) {
 		ListIterator<automaton.Transition> transition = ((LinkedList<automaton.Transition>)behaviour).listIterator();
 		automaton.Transition tr;
-		Action action;
-		Condition condition;
-		State target;
-//		mapTransitions = new HashMap();
-		automaton.Transition[] tmp = new automaton.Transition[64];
+		int size = ((LinkedList<automaton.Transition>)behaviour).size();
+		automaton.Transition[] tmp = new automaton.Transition[size];
 		int i = 0;
 		while (transition.hasNext()) {
 			tr = transition.next();
 			tmp[i++] = tr;
 		}
+		
 		mapTransitions.put((automaton.State)source_state, tmp);
 		return mapTransitions;
 	}
@@ -220,8 +221,7 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public void enter(automata.ast.Automaton automaton) {
-		// TODO Auto-generated method stub
-		
+		mapTransitions = new HashMap<automaton.State, automaton.Transition[]>();
 	}
 
 	@Override

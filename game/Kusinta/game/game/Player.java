@@ -16,6 +16,8 @@ public class Player extends Entity {
 	 double SPEED_WALK_x, SPEED_WALK_y;
 
 	 int [] x_hitBox, y_hitBox;
+	 
+	 public Player() {}
 
 
 	public Player(Automaton automaton, int x, int y, Direction dir) {

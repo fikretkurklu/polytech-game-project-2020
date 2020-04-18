@@ -2,10 +2,10 @@ package game;
 
 public class Direction {
 	
-	String EAST = "East";
-	String NORTH = "North";
-	String WEST = "West";
-	String SOUTH = "South";
+//	String E = "East";
+//	String N = "North";
+//	String W = "West";
+//	String S = "South";
 
 	String m_dir;
 	
