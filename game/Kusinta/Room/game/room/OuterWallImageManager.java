@@ -32,14 +32,14 @@ public class OuterWallImageManager extends ImageManager {
 		String[] imgSW;
 		switch(ambiance) {
 		case(1) :
-			imgN = new String[]{"resources/Salle/A1/OuterWallN.png"};
-			imgS = new String[]{"resources/Salle/A1/OuterWallS.png"};
-			imgW = new String[]{"resources/Salle/A1/OuterWallW.png"};
-			imgE = new String[]{"resources/Salle/A1/OuterWallE.png"};
-			imgNE = new String[]{"resources/Salle/A1/OuterWallNE.png"};
-			imgNW = new String[]{"resources/Salle/A1/OuterWallNW.png"};
-			imgSE = new String[]{"resources/Salle/A1/OuterWallSE.png"};
-			imgSW = new String[]{"resources/Salle/A1/OuterWallSW.png"};
+			imgN = new String[]{"resources/Room/A1/OuterWallN.png"};
+			imgS = new String[]{"resources/Room/A1/OuterWallS.png"};
+			imgW = new String[]{"resources/Room/A1/OuterWallW.png"};
+			imgE = new String[]{"resources/Room/A1/OuterWallE.png"};
+			imgNE = new String[]{"resources/Room/A1/OuterWallNE.png"};
+			imgNW = new String[]{"resources/Room/A1/OuterWallNW.png"};
+			imgSE = new String[]{"resources/Room/A1/OuterWallSE.png"};
+			imgSW = new String[]{"resources/Room/A1/OuterWallSW.png"};
 			imageTable.put("N", imgN);
 			imageTable.put("S", imgS);
 			imageTable.put("W", imgW);
@@ -50,14 +50,14 @@ public class OuterWallImageManager extends ImageManager {
 			imageTable.put("SW", imgSW);
 			break;
 		case(2) :
-			imgN = new String[]{"resources/Salle/A2/OuterWallN.png"};
-			imgS = new String[]{"resources/Salle/A2/OuterWallS.png"};
-			imgW = new String[]{"resources/Salle/A2/OuterWallW.png"};
-			imgE = new String[]{"resources/Salle/A2/OuterWallE.png"};
-			imgNE = new String[]{"resources/Salle/A2/OuterWallNE.png"};
-			imgNW = new String[]{"resources/Salle/A2/OuterWallNW.png"};
-			imgSE = new String[]{"resources/Salle/A2/OuterWallSE.png"};
-			imgSW = new String[]{"resources/Salle/A2/OuterWallSW.png"};
+			imgN = new String[]{"resources/Room/A2/OuterWallN.png"};
+			imgS = new String[]{"resources/Room/A2/OuterWallS.png"};
+			imgW = new String[]{"resources/Room/A2/OuterWallW.png"};
+			imgE = new String[]{"resources/Room/A2/OuterWallE.png"};
+			imgNE = new String[]{"resources/Room/A2/OuterWallNE.png"};
+			imgNW = new String[]{"resources/Room/A2/OuterWallNW.png"};
+			imgSE = new String[]{"resources/Room/A2/OuterWallSE.png"};
+			imgSW = new String[]{"resources/Room/A2/OuterWallSW.png"};
 			imageTable.put("N", imgN);
 			imageTable.put("S", imgS);
 			imageTable.put("W", imgW);

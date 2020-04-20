@@ -27,6 +27,7 @@ public abstract class Element {
 	private Coord __coord;
 	boolean __isVisible;
 	boolean __isSolid;
+	ElementImageObserver __imageObserver;
 
 	public Element(boolean isSolid, boolean isVisible) {
 		__coord = new Coord();
@@ -56,11 +57,11 @@ public abstract class Element {
 	}
 	
 	public void paint(Graphics g) {
-		ImageObserver obs = null;
-		Coord coord = this.getCoord();
-		int x = coord.X();
-		int y = coord.Y();
-		g.drawImage(__image, x, y, obs);
+		int x = this.getCoord().X();
+		int y = this.getCoord().Y();
+		__imageObserver.imageUpdate(__image, 0, x, y, SIZE, SIZE);
+		__image = __imageObserver.m_img;
+		g.drawImage(__image, x, y, __imageObserver);
 	}
 
 }
