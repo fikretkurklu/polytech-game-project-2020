@@ -14,7 +14,7 @@ public class Room {
 	int nbCol;
 	String roomFile;
 	Element[] m_elements;
-	int ambiance = 1;
+	int ambiance = 2;
 	OuterWallImageManager OWIM = new OuterWallImageManager(ambiance);
 	InnerWallImageManager IWIM = new InnerWallImageManager(ambiance);
 	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
