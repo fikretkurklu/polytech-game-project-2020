@@ -1,7 +1,5 @@
 package game.room;
 
-import java.io.IOException;
-
 public class EmptySpace extends Element{
 	
 	/*
@@ -11,7 +9,7 @@ public class EmptySpace extends Element{
 	 * 
 	 */
 
-	public EmptySpace(EmptySpaceImageManager ESImageManager) throws IOException {
+	public EmptySpace(EmptySpaceImageManager ESImageManager) throws Exception {
 		super(false, true);
 		String path = ESImageManager.get("", ESImageManager.useImageTable);
 		if (path != null) {
@@ -19,7 +17,7 @@ public class EmptySpace extends Element{
 		}
 	}
 
-	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws IOException {
+	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws Exception {
 		super(false, true, coord);
 		String path = ESImageManager.get("", ESImageManager.useImageTable);
 		if (path != null) {

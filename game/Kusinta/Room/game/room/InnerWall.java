@@ -1,6 +1,5 @@
 package game.room;
 
-import java.io.IOException;
 
 /*
  * 
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 public class InnerWall extends Element {
 	
-	public InnerWall(InnerWallImageManager IWImageManager) throws IOException {
+	public InnerWall(InnerWallImageManager IWImageManager) throws Exception {
 		super(true, true);
 		String path = IWImageManager.get("", IWImageManager.useImageTable);
 		if (path != null) {
@@ -18,7 +17,7 @@ public class InnerWall extends Element {
 		}
 	}
 	
-	public InnerWall(Coord coord, InnerWallImageManager IWImageManager) throws IOException {
+	public InnerWall(Coord coord, InnerWallImageManager IWImageManager) throws Exception {
 		super(true, true, coord);
 		String path = IWImageManager.get("", IWImageManager.useImageTable);
 		if (path != null) {

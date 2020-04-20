@@ -1,6 +1,5 @@
 package game.room;
 
-import java.io.IOException;
 
 
 public class OuterWall extends Element {
@@ -15,7 +14,7 @@ public class OuterWall extends Element {
 	
 	private String m_orientation;
 	
-	public OuterWall(OuterWallImageManager OWImageManager) throws IOException {
+	public OuterWall(OuterWallImageManager OWImageManager) throws Exception {
 		super(true, true);
 		m_orientation = "N";
 		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);
@@ -24,7 +23,7 @@ public class OuterWall extends Element {
 		}
 	}
 	
-	public OuterWall(Coord coord, OuterWallImageManager OWImageManager, String orientation) throws IOException {
+	public OuterWall(Coord coord, OuterWallImageManager OWImageManager, String orientation) throws Exception {
 		super(true, true, coord);
 		m_orientation = orientation;
 		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);
