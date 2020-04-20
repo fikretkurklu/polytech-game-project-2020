@@ -96,5 +96,9 @@ public class Room {
 	public Coord getStartCoord() {
 		return startCoord;
 	}
+	
+	public boolean isBlocked(int x, int y) {
+		return m_elements[(x%nbCol) * nbCol + y %nbRow].__isSolid;
+	}
 
 }

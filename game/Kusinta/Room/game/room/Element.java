@@ -28,7 +28,7 @@ public abstract class Element {
 
 	public Element(boolean isSolid, boolean isVisible) {
 		__coord = new Coord();
-		__isVisible = true;
+		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
 	
