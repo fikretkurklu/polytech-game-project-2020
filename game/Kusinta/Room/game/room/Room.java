@@ -3,9 +3,7 @@ package game.room;
 import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 public class Room {
 
@@ -15,12 +13,15 @@ public class Room {
 	String roomFile;
 	Element[] m_elements;
 	int ambiance = 1;
+	
+	Coord startCoord;
+	
 	OuterWallImageManager OWIM = new OuterWallImageManager(ambiance);
 	InnerWallImageManager IWIM = new InnerWallImageManager(ambiance);
 	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
 
 	public Room() {
-		System.out.println("Test");
+		startCoord = new Coord();
 		BufferedReader f;
 		try {
 			roomFile = "resources/Room/Sample/room1.sample";
@@ -75,7 +76,9 @@ public class Room {
 		} else if (code.equals("ES")) {
 			return new EmptySpace(coord, ESIM);
 		} else if (code.equals("ES_I")) {
+			startCoord = coord;
 			return new EmptySpace(coord, ESIM);
+			
 		} else {
 			System.out.println("Non reach point. Code Error on : " + code);
 		}
@@ -88,6 +91,10 @@ public class Room {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+	}
+	
+	public Coord getStartCoord() {
+		return startCoord;
 	}
 
 }
