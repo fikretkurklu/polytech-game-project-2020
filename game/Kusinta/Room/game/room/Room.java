@@ -40,8 +40,8 @@ public class Room {
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * nbCol * Element.SIZE,
-							i * nbRow * Element.SIZE);;
+					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE,
+							i * Element.SIZE);;
 				}
 			}
 			f.close();
