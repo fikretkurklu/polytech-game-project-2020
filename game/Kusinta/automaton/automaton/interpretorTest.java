@@ -2,9 +2,10 @@ package automaton;
 
 import java.util.List;
 
+
 import automata.ast.AST;
-import automata.ast.AstPrinter;
 import automata.parser.AutomataParser;
+import game.Block;
 
 public class interpretorTest {
 
@@ -15,6 +16,9 @@ public class interpretorTest {
 			ast = (AST) AutomataParser.from_file("/home/yael/Documents/groupe1/game/Kusinta/automaton/examples/Block.gal");
 			Interpretor interpret = new Interpretor();
 			bots = (List<Automaton>) ast.accept(interpret);
+			Automaton test = bots.get(0);
+			Block entity = new Block(test);
+			test.step(entity);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

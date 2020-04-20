@@ -16,7 +16,7 @@ public class Block extends Entity {
 	}
 
 	@Override
-	public boolean jump() {
+	public boolean jump(Direction dir) {
 		System.out.println("Jump Block");
 		System.out.println(this.getCurrentState().getName());
 		return true;
@@ -30,7 +30,7 @@ public class Block extends Entity {
 	}
 
 	@Override
-	public boolean wizz() {
+	public boolean wizz(Direction dir) {
 		System.out.println("Wizz Block");
 		System.out.println(this.getCurrentState().getName());
 		return true;
@@ -44,7 +44,7 @@ public class Block extends Entity {
 	}
 
 	@Override
-	public boolean pick() {
+	public boolean pick(Direction dir) {
 		System.out.println("Pick Block");
 		System.out.println(this.getCurrentState().getName());
 		return true;
@@ -72,14 +72,14 @@ public class Block extends Entity {
 	}
 
 	@Override
-	public boolean egg() {
+	public boolean egg(Direction dir) {
 		System.out.println("Egg Block");
 		System.out.println(this.getCurrentState().getName());
 		return true;
 	}
 
 	@Override
-	public boolean hit() {
+	public boolean hit(Direction dir) {
 		System.out.println("Hit Block");
 		System.out.println(this.getCurrentState().getName());
 		return true;
@@ -118,6 +118,12 @@ public class Block extends Entity {
 	@Override
 	public boolean key(int keyCode) {
 		System.out.println("Cond key");
+		return true;
+	}
+
+	@Override
+	public boolean store() {
+		System.out.println("Cond store");
 		return true;
 	}
 	

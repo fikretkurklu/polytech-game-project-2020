@@ -1,6 +1,7 @@
 package automaton;
 
 import java.util.HashMap;
+import java.util.List;
 
 import game.Entity;
 import playerActions.Action;
@@ -18,9 +19,24 @@ public class Automaton {
 		mapTransitions = transitions;
 	}
 	
-	private Action random(Action actions[]) {
-		
+	private Action randomAction(Action actions[]) {
+		float randomNumber = (float) Math.random() * 100;
+		float sum = 0;
+		Action act;
+		for (int i = 0 ; i < actions.length ; i++) {
+			act = actions[i];
+			sum += act.percentage;
+			if (randomNumber <= sum) {
+				return act;
+			}
+		}
+		return actions[-1];
 	}
+	
+	private State randomState(HashMap<State, Transition[]> t) {
+        int ind = (int)(Math.random() * t.size());
+        return  (State) (t.keySet().toArray())[ind];
+    }
 	
 	public void step(Entity e) {
 		Transition[] transitions = mapTransitions.get(e.getCurrentState());
@@ -31,12 +47,14 @@ public class Automaton {
 					if (actions.length == 1)
 						actions[0].apply(e);
 					else
-						
-					e.setCurrentState(transitions[i].finalState);
+						randomAction(actions).apply(e);
+					if (transitions[i].finalState.getName().equals("_"))
+						e.setCurrentState(randomState(mapTransitions));
+					else
+						e.setCurrentState(transitions[i].finalState);
 				}
 			}
 		}
-	
 	}
 	
 	public State getInitialState() {

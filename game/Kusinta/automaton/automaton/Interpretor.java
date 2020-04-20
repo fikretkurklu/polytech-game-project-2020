@@ -27,6 +27,8 @@ import automata.ast.Value;
 
 public class Interpretor implements IVisitor {
 
+	List<String> statesNames;
+	List<automaton.State> states;
 	HashMap<State, automaton.Transition[]> mapTransitions;
 	
 	public Interpretor() {
@@ -210,7 +212,15 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object visit(automata.ast.State state) {
-		return new State(state.name);
+		// Si un état avec ce nom a déjà été créé, on le renvoie
+		if (statesNames.contains(state.name)) {
+			int index = statesNames.indexOf(state.name);
+			return states.get(index);
+		}
+		statesNames.add(state.name);
+		automaton.State newState = new automaton.State(state.name);
+		states.add(newState);
+		return newState;
 	}
 
 	@Override
@@ -258,15 +268,28 @@ public class Interpretor implements IVisitor {
 		ListIterator<Object> actionIterator = funcalls.listIterator();
 		int size = funcalls.size();
 		int index = 0;
-		int sumPercentage = 0;
-		int noPercentage = 0;
-		int indexNoPercentage[] = new int[size];
+		float sumPercentage = 0;
+		LinkedList<Integer> indexNoPercentage = new LinkedList<Integer>();
 		playerActions.Action actions[] = new playerActions.Action[size];
 		playerActions.Action act;
 		while (actionIterator.hasNext()) {
 			act = (playerActions.Action) actionIterator.next();
+			if (act.percentage != -1) {
+				sumPercentage += act.percentage;
+			} else {
+				indexNoPercentage.add(index);
+			}
 			actions[index] = act;
 			index++;
+		}
+		
+		// Dans le cas où il existe des actions sans pourcentage (= -1), on déduit le pourcentage réel
+		if (indexNoPercentage.size() != 0) {
+			ListIterator<Integer> indexIterator = indexNoPercentage.listIterator();
+			float newPercentage = (100 - sumPercentage) / (float) indexNoPercentage.size();
+			while (indexIterator.hasNext()) {
+				actions[indexIterator.next()].percentage = newPercentage;
+			}
 		}
 		return actions;
 	}
@@ -278,6 +301,8 @@ public class Interpretor implements IVisitor {
 
 //	@Override
 	public void enter(Automaton automaton) {
+		statesNames = new LinkedList<String>();
+		states = new LinkedList<automaton.State>();
 		mapTransitions = new HashMap<automaton.State, automaton.Transition[]>(); 
 	}
 
@@ -293,6 +318,8 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public void enter(automata.ast.Automaton automaton) {
+		statesNames = new LinkedList<String>();
+		states = new LinkedList<automaton.State>();
 		mapTransitions = new HashMap<automaton.State, automaton.Transition[]>();
 	}
 

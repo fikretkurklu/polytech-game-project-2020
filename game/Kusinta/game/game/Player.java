@@ -49,7 +49,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean jump() {
+	public boolean jump(Direction dir) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -61,7 +61,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean wizz() {
+	public boolean wizz(Direction dir) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -73,7 +73,7 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean pick() {
+	public boolean pick(Direction dir) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -101,13 +101,13 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean egg() {
+	public boolean egg(Direction dir) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean hit() {
+	public boolean hit(Direction dir) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -144,6 +144,13 @@ public class Player extends Entity {
 
 	@Override
 	public boolean key(int keyCode) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean store() {
 		// TODO Auto-generated method stub
 		return false;
 	}
