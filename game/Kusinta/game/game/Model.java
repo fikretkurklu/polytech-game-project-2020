@@ -7,18 +7,22 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import game.room.Room;
+
 
 public class Model {
 	int m_x, m_y, m_width, m_height;
+	Room m_room;
 	Model() throws IOException {
-		
+		m_room = new Room();
 	}
 	
 	public void tick(long elapsed) {
 		
 	}
+	
 	public void paint(Graphics g, int width, int height) {
-		
+		m_room.paint(g);
 	}
 	
 	/*
