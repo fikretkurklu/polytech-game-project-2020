@@ -119,13 +119,13 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public boolean cell(Entity collisionEntity) {
+	public boolean cell(Direction direction, Category category) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean closest(Entity closestEnemy) {
+	public boolean closest(Category category, Direction direction) {
 		// TODO Auto-generated method stub
 		return false;
 	}

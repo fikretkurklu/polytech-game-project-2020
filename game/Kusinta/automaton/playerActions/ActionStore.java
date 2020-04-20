@@ -2,15 +2,15 @@ package playerActions;
 
 import game.Entity;
 
-public class ActionGet extends Action {
+public class ActionStore extends Action{
 	
-	public ActionGet(int percentage) {
+	public ActionStore(int percentage) {
 		super(percentage);
 	}
-
+	
 	@Override
 	public boolean apply(Entity e) {
-		return e.get();
+		return e.store();
 	}
 
 }

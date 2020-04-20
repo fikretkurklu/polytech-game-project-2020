@@ -4,13 +4,20 @@ import automaton.*;
 import game.Direction;
 import game.Entity;
 
-public class ActionTurn implements IAction {
+public class ActionTurn extends Action {
 
 	Direction m_dir;
 	
-	public ActionTurn(Direction dir) {
-		m_dir = dir;
+	public ActionTurn(int percentage) {
+		super(percentage);
+		m_dir = new Direction("R");
 	}
+	
+	public ActionTurn(Direction direction, int percentage) {
+		super(percentage);
+		m_dir = direction;
+	}
+	
 	
 	@Override
 	public boolean apply(Entity e) {

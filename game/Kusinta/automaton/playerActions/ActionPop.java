@@ -3,12 +3,18 @@ package playerActions;
 import game.Direction;
 import game.Entity;
 
-public class ActionPop implements IAction{
+public class ActionPop extends Action{
 	
 	Direction m_dir;
-
-	public ActionPop(Direction dir) {
-		m_dir = dir;
+	
+	public ActionPop(int percentage) {
+		super(percentage);
+		m_dir = new Direction("F");
+	}
+	
+	public ActionPop(Direction direction, int percentage) {
+		super(percentage);
+		m_dir = direction;
 	}
 	
 	@Override

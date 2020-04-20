@@ -26,22 +26,23 @@ public abstract class Entity {
 	//Action
 	
 	public abstract boolean move(Direction dir);
-	public abstract boolean jump();
+	public abstract boolean jump(Direction dir);
 	public abstract boolean pop(Direction dir);
-	public abstract boolean wizz();
+	public abstract boolean wizz(Direction dir);
 	public abstract boolean power();
-	public abstract boolean pick();
+	public abstract boolean pick(Direction dir);
 	public abstract boolean turn(Direction dir);
 	public abstract boolean get();
+	public abstract boolean store();
 	public abstract boolean explode();
-	public abstract boolean egg();
-	public abstract boolean hit();
+	public abstract boolean egg(Direction dir);
+	public abstract boolean hit(Direction dir);
 
 	//Conditions
 	
-	public abstract boolean mydir(Direction m_dir);
-	public abstract boolean cell(Entity collisionEntity);
-	public abstract boolean closest(Entity closestEnemy);
+	public abstract boolean mydir(Direction dir);
+	public abstract boolean cell(Direction dir, Category cat);
+	public abstract boolean closest(Category cat, Direction dir);
 	public abstract boolean gotstuff();
 	public abstract boolean gotpower();
 	public abstract boolean key(int keyCode);

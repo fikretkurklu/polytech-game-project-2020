@@ -8,12 +8,12 @@ public class Transition {
 
 	ICondition m_condition;
 	State finalState;
-	IAction m_action;
+	IAction m_actions[];
 	
-	public Transition(ICondition condition, State finalState, IAction action) {
+	public Transition(ICondition condition, State finalState, IAction[] actions) {
 		m_condition = condition;
 		this.finalState = finalState;
-		m_action = action;
+		m_actions = actions;
 	}
 	
 }

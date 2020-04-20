@@ -1,22 +1,23 @@
 package playerCond;
 
+import game.Category;
 import game.Direction;
 import game.Entity;
 
 public class CondClosest implements ICondition{
 
 	Direction direction;
-	Entity closestEnemy;		//A remplacer par un autre champ si besoin
+	Category category;		//A remplacer par un autre champ si besoin
 	
 	
-	public CondClosest(Direction direction, Entity closestEnemy) {
+	public CondClosest(Category category, Direction direction) {
+		this.category = category;
 		this.direction = direction;
-		this.closestEnemy = closestEnemy;
 	}
 
 	@Override
 	public boolean eval(Entity e) {
-		return e.closest(closestEnemy);
+		return e.closest(category, direction);
 	}
 	
 	

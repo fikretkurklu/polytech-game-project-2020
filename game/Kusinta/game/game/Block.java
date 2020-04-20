@@ -92,13 +92,13 @@ public class Block extends Entity {
 	}
 
 	@Override
-	public boolean cell(Entity collisionEntity) {
+	public boolean cell(Direction direction, Category category) {
 		System.out.println("Cond cell");
 		return true;
 	}
 
 	@Override
-	public boolean closest(Entity closestEnemy) {
+	public boolean closest(Category category, Direction direction) {
 		System.out.println("Cond closest");
 		return true;
 	}
