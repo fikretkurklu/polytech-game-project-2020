@@ -5,7 +5,7 @@ import java.util.HashMap;
 public abstract class ImageManager {
 
 	HashMap<String, String[]> imageTable;
-	boolean useImagetable;
+	boolean useImageTable;
 	String[] imgPath;
 	
 	public String[] get(String orientation, boolean useImageTable) {

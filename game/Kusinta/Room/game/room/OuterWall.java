@@ -1,5 +1,7 @@
 package game.room;
 
+import java.awt.Graphics;
+import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 
@@ -7,15 +9,9 @@ public class OuterWall extends Element {
 
 	/*
 	 * 
-	 * Dans la HashMap, voici comment son réparti les différents sprites :
-	 * - 1 est associé au mur Nord
-	 * - 2 est associé au mur Sud
-	 * - 3 est associé au mur West
-	 * - 4 est associé au mur Est
-	 * - 5 est associé à l'angle Nord Est
-	 * - 6 est associé à l'angle Nord West
-	 * - 7 est associé à l'angle Sud Est
-	 * - 8 est associé à l'angle Sud West
+	 * 
+	 * This class represent the outside of the wall, with its sprite and behavior 
+	 * 
 	 * 
 	 */
 	
@@ -23,15 +19,20 @@ public class OuterWall extends Element {
 	
 	public OuterWall(OuterWallImageManager outerWallImageManager) throws IOException {
 		super(true, true);
-		String[] pathTable = outerWallImageManager.get(m_orientation,true);
+		String[] pathTable = outerWallImageManager.get(m_orientation,outerWallImageManager.useImageTable);
 		if (pathTable != null) {
 			int randomNum = (int) (Math.random()*pathTable.length);
 			loadImage(pathTable[randomNum]);
 		}
 	}
 	
-	public OuterWall(Coord coord) throws IOException {
+	public OuterWall(Coord coord, OuterWallImageManager outerWallImageManager) throws IOException {
 		super(true, true, coord);
+		String[] pathTable = outerWallImageManager.get(m_orientation,outerWallImageManager.useImageTable);
+		if (pathTable != null) {
+			int randomNum = (int) (Math.random()*pathTable.length);
+			loadImage(pathTable[randomNum]);
+		}		
 	}
 	
 	public void setOrientation(String orientation) {
@@ -40,6 +41,14 @@ public class OuterWall extends Element {
 	
 	public String getOrientation() {
 		return m_orientation;
+	}
+	
+	public void paint(Graphics g) {
+		ImageObserver obs = null;
+		Coord coord = this.getCoord();
+		int x = coord.X();
+		int y = coord.Y();
+		g.drawImage(__image, x, y, obs);
 	}
 	
 }
