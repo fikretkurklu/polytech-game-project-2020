@@ -30,10 +30,10 @@ public class Model {
 	}
 	
 	public void paint(Graphics g, int width, int height) {
-		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width, m_height);
 		m_width = width;
 		m_height = height;
 		setCenterScreen();
+		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		m_room.paint(gp);
 		gp.dispose();
 	}

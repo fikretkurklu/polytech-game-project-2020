@@ -2,9 +2,7 @@ package game.room;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.ImageObserver;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -21,7 +19,7 @@ import javax.imageio.ImageIO;
 
 public abstract class Element {
 
-	public static final int SIZE = 64;
+	public static final int SIZE = 86;
 
 	Image __image;
 	private Coord __coord;
