@@ -47,6 +47,7 @@ public abstract class Element {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__image = ImageIO.read(imageFile);
+			__image = __image.getScaledInstance(SIZE, SIZE, 0);
 			//__imageObserver.m_img = __image;
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
@@ -66,7 +67,6 @@ public abstract class Element {
 		int y = this.getCoord().Y();
 		//__imageObserver.imageUpdate(__image, 0, x, y, SIZE, SIZE);
 		//__image = __imageObserver.m_img;
-		__image = __image.getScaledInstance(SIZE, SIZE, 0);
 		g.drawImage(__image, x, y, null);
 	}
 

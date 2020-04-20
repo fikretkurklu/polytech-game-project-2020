@@ -20,6 +20,7 @@ public class Room {
 	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
 
 	public Room() {
+		System.out.println("Test");
 		BufferedReader f;
 		try {
 			roomFile = "resources/Room/Sample/room1.sample";
