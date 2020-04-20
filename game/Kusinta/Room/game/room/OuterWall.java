@@ -24,7 +24,7 @@ public class OuterWall extends Element {
 		}
 	}
 	
-	public OuterWall(Coord coord, String orientation, OuterWallImageManager OWImageManager) throws IOException {
+	public OuterWall(Coord coord, OuterWallImageManager OWImageManager, String orientation) throws IOException {
 		super(true, true, coord);
 		m_orientation = orientation;
 		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);

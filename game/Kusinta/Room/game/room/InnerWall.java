@@ -1,7 +1,5 @@
 package game.room;
 
-import java.awt.Graphics;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 /*
@@ -27,13 +25,6 @@ public class InnerWall extends Element {
 			loadImage(path);
 		}
 	}
-	
-	public void paint(Graphics g) {
-		ImageObserver obs = null;
-		Coord coord = this.getCoord();
-		int x = coord.X();
-		int y = coord.Y();
-		g.drawImage(__image, x, y, obs);
-	}
+
 
 }
