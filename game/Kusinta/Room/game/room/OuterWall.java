@@ -1,7 +1,5 @@
 package game.room;
 
-import java.awt.Graphics;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 
@@ -17,21 +15,21 @@ public class OuterWall extends Element {
 	
 	private String m_orientation;
 	
-	public OuterWall(OuterWallImageManager outerWallImageManager) throws IOException {
+	public OuterWall(OuterWallImageManager OWImageManager) throws IOException {
 		super(true, true);
-		String[] pathTable = outerWallImageManager.get(m_orientation,outerWallImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		m_orientation = "N";
+		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}
 	}
 	
-	public OuterWall(Coord coord, OuterWallImageManager outerWallImageManager) throws IOException {
+	public OuterWall(Coord coord, String orientation, OuterWallImageManager OWImageManager) throws IOException {
 		super(true, true, coord);
-		String[] pathTable = outerWallImageManager.get(m_orientation,outerWallImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		m_orientation = orientation;
+		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}		
 	}
 	
@@ -42,13 +40,6 @@ public class OuterWall extends Element {
 	public String getOrientation() {
 		return m_orientation;
 	}
-	
-	public void paint(Graphics g) {
-		ImageObserver obs = null;
-		Coord coord = this.getCoord();
-		int x = coord.X();
-		int y = coord.Y();
-		g.drawImage(__image, x, y, obs);
-	}
+
 	
 }

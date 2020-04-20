@@ -1,7 +1,5 @@
 package game.room;
 
-import java.awt.Graphics;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 public class EmptySpace extends Element{
@@ -13,30 +11,21 @@ public class EmptySpace extends Element{
 	 * 
 	 */
 
-	public EmptySpace(EmptySpaceImageManager emptySpaceImageManager) throws IOException {
+	public EmptySpace(EmptySpaceImageManager ESImageManager) throws IOException {
 		super(false, true);
-		String[] pathTable = emptySpaceImageManager.get("", emptySpaceImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		String path = ESImageManager.get("", ESImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}
 	}
 
-	public EmptySpace(Coord coord, EmptySpaceImageManager emptySpaceImageManager) throws IOException {
+	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws IOException {
 		super(false, true, coord);
-		String[] pathTable = emptySpaceImageManager.get("", emptySpaceImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		String path = ESImageManager.get("", ESImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}
 	}
-	
-	public void paint(Graphics g) {
-		ImageObserver obs = null;
-		Coord coord = this.getCoord();
-		int x = coord.X();
-		int y = coord.Y();
-		g.drawImage(__image, x, y, obs);
-	}
+
 	
 }

@@ -12,21 +12,19 @@ import java.io.IOException;
 
 public class InnerWall extends Element {
 	
-	public InnerWall(InnerWallImageManager innerWallImageManager) throws IOException {
+	public InnerWall(InnerWallImageManager IWImageManager) throws IOException {
 		super(true, true);
-		String[] pathTable = innerWallImageManager.get("", innerWallImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		String path = IWImageManager.get("", IWImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}
 	}
 	
-	public InnerWall(Coord coord, InnerWallImageManager innerWallImageManager) throws IOException {
+	public InnerWall(Coord coord, InnerWallImageManager IWImageManager) throws IOException {
 		super(true, true, coord);
-		String[] pathTable = innerWallImageManager.get("", innerWallImageManager.useImageTable);
-		if (pathTable != null) {
-			int randomNum = (int) (Math.random()*pathTable.length);
-			loadImage(pathTable[randomNum]);
+		String path = IWImageManager.get("", IWImageManager.useImageTable);
+		if (path != null) {
+			loadImage(path);
 		}
 	}
 	

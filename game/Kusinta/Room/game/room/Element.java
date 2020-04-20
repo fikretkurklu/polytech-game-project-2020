@@ -1,6 +1,8 @@
 package game.room;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
@@ -51,6 +53,14 @@ public abstract class Element {
 
 	public Coord getCoord() {
 		return __coord;
+	}
+	
+	public void paint(Graphics g) {
+		ImageObserver obs = null;
+		Coord coord = this.getCoord();
+		int x = coord.X();
+		int y = coord.Y();
+		g.drawImage(__image, x, y, obs);
 	}
 
 }

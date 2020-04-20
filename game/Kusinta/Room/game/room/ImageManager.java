@@ -8,13 +8,16 @@ public abstract class ImageManager {
 	boolean useImageTable;
 	String[] imgPath;
 	
-	public String[] get(String orientation, boolean useImageTable) {
+	public String get(String orientation, boolean useImageTable) {
+		String[] pathTable;
 		if (useImageTable) {
-			String[] path = imageTable.get(orientation);
-			return path;
+			pathTable = imageTable.get(orientation);
 		} else {
-			return imgPath;
+			pathTable = imgPath;
 		}
+		int randomNum = (int) (Math.random()*pathTable.length);
+		String img = pathTable[randomNum];
+		return img;
 	}
 	
 }
