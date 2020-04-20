@@ -76,7 +76,7 @@ public class Room {
 		} else if (code.equals("ES")) {
 			return new EmptySpace(coord, ESIM);
 		} else if (code.equals("ES_I")) {
-			startCoord = coord;
+			startCoord = new Coord(coord);
 			return new EmptySpace(coord, ESIM);
 			
 		} else {

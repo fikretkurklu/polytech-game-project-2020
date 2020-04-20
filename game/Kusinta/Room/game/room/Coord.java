@@ -15,6 +15,11 @@ public class Coord {
 		this.y = y;
 	}
 	
+	public Coord(Coord c) {
+		x = c.X();
+		y = c.Y();
+	}
+	
 	public int X() {
 		return x;
 	}
@@ -39,6 +44,13 @@ public class Coord {
 	public boolean isEqual(Coord c) {
 		return (X() == c.X() && Y() == c.Y());
 	}
+	
+	public void translate(int dx, int dy) {
+		x += dx;
+		y += dy;
+	}
+	
+	
 	
 }
 
