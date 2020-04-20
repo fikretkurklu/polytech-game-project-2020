@@ -36,5 +36,9 @@ public class Coord {
 		this.y = y;
 	}
 	
+	public boolean isEqual(Coord c) {
+		return (X() == c.X() && Y() == c.Y());
+	}
+	
 }
 

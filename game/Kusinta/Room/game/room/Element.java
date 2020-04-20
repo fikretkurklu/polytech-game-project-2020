@@ -43,11 +43,13 @@ public abstract class Element {
 		__imageObserver = new ElementImageObserver(__coord, __image);
 	}
 
-	public void loadImage(String path) throws IOException {
+	public void loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__image = ImageIO.read(imageFile);
 			__imageObserver.m_img = __image;
+		} else {
+			throw new Exception("Error while loading image: path = " + path);
 		}
 	}
 
