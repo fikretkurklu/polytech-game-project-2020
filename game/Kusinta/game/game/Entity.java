@@ -1,4 +1,7 @@
-package automaton;
+package game;
+
+import automaton.Automaton;
+import automaton.State;
 
 public abstract class Entity {
 
@@ -6,7 +9,7 @@ public abstract class Entity {
 	Automaton m_automaton;
 	
 	public Entity(Automaton automaton) {
-		m_state = automaton.initialState;
+		m_state = automaton.getInitialState();
 		m_automaton = automaton;
 	}
 	

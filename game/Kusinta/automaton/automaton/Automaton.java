@@ -1,6 +1,8 @@
 package automaton;
 
 import java.util.HashMap;
+
+import game.Entity;
 import playerCond.*;
 
 public class Automaton {
@@ -25,5 +27,9 @@ public class Automaton {
 			}
 		}
 	
+	}
+	
+	public State getInitialState() {
+		return initialState;
 	}
 }

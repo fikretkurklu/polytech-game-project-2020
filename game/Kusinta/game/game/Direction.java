@@ -1,4 +1,4 @@
-package automaton;
+package game;
 
 public class Direction {
 

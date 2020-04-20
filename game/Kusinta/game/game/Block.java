@@ -1,4 +1,6 @@
-package automaton;
+package game;
+
+import automaton.Automaton;
 
 public class Block extends Entity {
 	
