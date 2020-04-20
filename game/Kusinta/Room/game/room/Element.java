@@ -33,18 +33,21 @@ public abstract class Element {
 		__coord = new Coord();
 		__isVisible = true;
 		__isSolid = isSolid;
+		__imageObserver = new ElementImageObserver(__coord, __image);
 	}
 	
 	public Element(boolean isSolid, boolean isVisible, Coord coord) {
 		__coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
+		__imageObserver = new ElementImageObserver(__coord, __image);
 	}
 
 	public void loadImage(String path) throws IOException {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__image = ImageIO.read(imageFile);
+			__imageObserver.m_img = __image;
 		}
 	}
 
