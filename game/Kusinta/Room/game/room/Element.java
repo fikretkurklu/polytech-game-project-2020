@@ -27,27 +27,27 @@ public abstract class Element {
 	private Coord __coord;
 	boolean __isVisible;
 	boolean __isSolid;
-	ElementImageObserver __imageObserver;
+	//ElementImageObserver __imageObserver;
 
 	public Element(boolean isSolid, boolean isVisible) {
 		__coord = new Coord();
 		__isVisible = true;
 		__isSolid = isSolid;
-		__imageObserver = new ElementImageObserver(__coord, __image);
+		//__imageObserver = new ElementImageObserver(__coord, __image);
 	}
 	
 	public Element(boolean isSolid, boolean isVisible, Coord coord) {
 		__coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
-		__imageObserver = new ElementImageObserver(__coord, __image);
+		//__imageObserver = new ElementImageObserver(__coord, __image);
 	}
 
 	public void loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__image = ImageIO.read(imageFile);
-			__imageObserver.m_img = __image;
+			//__imageObserver.m_img = __image;
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
@@ -64,9 +64,10 @@ public abstract class Element {
 	public void paint(Graphics g) {
 		int x = this.getCoord().X();
 		int y = this.getCoord().Y();
-		__imageObserver.imageUpdate(__image, 0, x, y, SIZE, SIZE);
-		__image = __imageObserver.m_img;
-		g.drawImage(__image, x, y, __imageObserver);
+		//__imageObserver.imageUpdate(__image, 0, x, y, SIZE, SIZE);
+		//__image = __imageObserver.m_img;
+		__image = __image.getScaledInstance(SIZE, SIZE, 0);
+		g.drawImage(__image, x, y, null);
 	}
 
 }
