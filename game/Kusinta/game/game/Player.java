@@ -1,16 +1,24 @@
 package game;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.Timer;
 
 import automaton.*;
 
 public class Player extends Entity {
 	
+	int DIMENSION = 5;
+	
 	double G = 9.81;
 	double ACCELERATION = 0.01;
+	double ACCELERATION_JUMP = 10.5;
+	double ACCELERATION_POP = 11;
 	
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
+	boolean falling, jumping, poping;
 	
 	int MAX_LIFE = 100;
 	int SPEED_WALK = 3;
@@ -23,13 +31,16 @@ public class Player extends Entity {
 	 
 	 int life;
 
-	 int dt_x;
-	 double speed_x;
-	 long m_ratio_x;
+	 int dt_x, dt_y;
+	 double speed_x, speed_y;
+	 long m_ratio_x, m_ratio_y;
+	 
+	 long m_time;
 
 	 int [] x_hitBox, y_hitBox;
 	 
-	 PlayerKeyListener pkl;
+	 PlayerKeyListener m_pkl;
+	 PlayerTimerListener m_tml;
 
 
 	public Player(Automaton automaton, int x, int y, Direction dir) {
@@ -41,10 +52,11 @@ public class Player extends Entity {
 		 
 		 life = MAX_LIFE;
 
-		 x_hitBox = new int[]{m_x-5, m_x-5, m_x+5, m_x+5};
-		 y_hitBox = new int[]{m_y-5, m_y+5, m_y+5, m_y-5};
+		 x_hitBox = new int[]{m_x-DIMENSION, m_x-DIMENSION, m_x+DIMENSION, m_x+DIMENSION};
+		 y_hitBox = new int[]{m_y-DIMENSION, m_y+DIMENSION, m_y+DIMENSION, m_y-DIMENSION};
 		 
-		 pkl = new PlayerKeyListener();
+		 m_pkl = new PlayerKeyListener();
+		 m_tml = new PlayerTimerListener();
 		 
 		}
 	
@@ -58,19 +70,19 @@ public class Player extends Entity {
 			turn(dir);
 		}
 		if(dir.toString() == "East") {
-			//if(m_room.is_blocked(m_x,m_direction){
+			//if(!m_room.is_blocked(m_x + SPEED_WALK, m_y)){
 			dt_x +=m_ratio_x;
 			speed_x  = .5 * ACCELERATION * dt_x * dt_x;
 			if(speed_x>SPEED_WALK)
 				speed_x = SPEED_WALK;
-			m_x+=speed_x;
+			m_x += speed_x;
 		} else if(dir.toString() == "West") {
-			//if(m_room.is_blocked(m_x,m_direction){
+			//if(!m_room.is_blocked(m_x - SPEED_WALK, m_y)){
 			dt_x +=m_ratio_x;
 			speed_x  = .5 * ACCELERATION * dt_x * dt_x;
 			if(speed_x>SPEED_WALK)
 				speed_x = SPEED_WALK;
-			m_x-=speed_x;
+			m_x -= speed_x;
 		}
 		return true;
 	}
@@ -78,13 +90,32 @@ public class Player extends Entity {
 	@Override
 	public boolean jump() {							//sauter
 		// TODO Auto-generated method stub
+		//if(!m_room.is_blocked(m_x, m_y + DIMENSION)){
+		jumping = true;
+		m_time = 0;
 		return false;
 	}
 
 	@Override
 	public boolean pop(Direction dir) {				//sauter
 		// TODO Auto-generated method stub
+		//if(!m_room.is_blocked(m_x, m_y + DIMENSION)){
+		poping = true;
+		m_time = 0;
 		return false;
+	}
+	
+	private void gravity(long t) {
+		// TODO Auto-generated method stub
+		double C;
+		if (jumping) {
+			C = ACCELERATION_JUMP;
+		} else if(poping) {
+			C = ACCELERATION_POP;
+		} else {
+			C = 0;
+		}
+		m_y = (int) ((-0.5 * G * t + C * t) + DIMENSION);
 	}
 
 	@Override
@@ -120,11 +151,7 @@ public class Player extends Entity {
 
 	@Override
 	public boolean explode() {
-		if(life!=0) {
-			life = 0;
 			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -232,5 +259,39 @@ public class Player extends Entity {
 		}
 	}
 	
+private class PlayerTimerListener implements ActionListener{
+		
+		private int tick_time = 10;
+		private long m_last;
+		Timer m_timer;
+		
+		public PlayerTimerListener() {
+			m_timer= new Timer(tick_time, this);
+			m_timer.start();
+		}
+
+		public long getTickTime() {
+			return tick_time;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			long now = System.currentTimeMillis();
+			//if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
+			if(!falling) {
+				m_time=0;
+			} else {
+				m_time += tick_time;
+			}
+			falling = true;
+			gravity(m_time);
+//			} else {
+//			jumping = false;
+//			falling= false;
+			m_timer.restart();
+			m_last = now;
+		}
+
+	}
 
 }
