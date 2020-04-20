@@ -4,12 +4,27 @@ import java.io.IOException;
 
 public class InnerWall extends Element {
 
-	private static final String image_path="";
+	private String m_orientation;
 	
-	
-	public InnerWall() throws IOException {
+	public InnerWall(InnerWallImageManager innerWallImageManager) throws IOException {
 		super(true, true);
-		loadImage(image_path);
+		String[] pathTable = innerWallImageManager.get(m_orientation, false);
+		if (pathTable != null) {
+			int randomNum = (int) (Math.random()*pathTable.length);
+			loadImage(pathTable[randomNum]);
+		}
+	}
+	
+	public InnerWall(Coord coord) throws IOException {
+		super(true, true, coord);
+	}
+	
+	public void setOrientation(String orientation) {
+		m_orientation = orientation;
+	}
+	
+	public String getOrientation() {
+		return m_orientation;
 	}
 
 }
