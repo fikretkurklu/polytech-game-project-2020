@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 
 public abstract class Element {
 
-	public static final int SIZE = 32;
+	public static final int SIZE = 64;
 
 	Image __image;
 	private Coord __coord;

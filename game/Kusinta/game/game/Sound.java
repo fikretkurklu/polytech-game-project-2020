@@ -40,6 +40,6 @@ public class Sound {
     m_filename = filename;
     File file = new File(filename);
     FileInputStream fis = new FileInputStream(file);
-    //m_canvas.play(name, fis, duration);
+    m_canvas.play(name, fis, duration);
   }
 }
