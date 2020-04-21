@@ -60,9 +60,12 @@ public abstract class Element extends Entity{
 	}
 	
 	public void paint(Graphics g) {
-		int x = this.getCoord().X();
-		int y = this.getCoord().Y();
-		g.drawImage(__image, x, y, null);
+		if (__isVisible) {
+			int x = this.getCoord().X();
+			int y = this.getCoord().Y();
+			g.drawImage(__image, x, y, null);
+		}
+		
 	}
 
 }

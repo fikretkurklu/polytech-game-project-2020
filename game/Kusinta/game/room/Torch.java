@@ -1,21 +1,16 @@
 package room;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import automaton.Category;
-import automaton.Direction;
 import game.Coord;
 
 public class Torch extends Decor{
 
 	public Torch(Coord coord) {
 		super(false, true, true, coord);
-		
 		loadImages();
 	}
 	
@@ -57,114 +52,6 @@ public class Torch extends Decor{
 			System.out.println("Erreur while longind torch animation");
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public boolean move(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean jump(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pop(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean wizz(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean power() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean turn(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean get() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean explode() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean egg(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hit(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mydir(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean cell(Direction dir, Category cat) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean closest(Category cat, Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotstuff() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotpower() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean key(int keyCode) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

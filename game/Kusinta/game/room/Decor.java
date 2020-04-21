@@ -5,6 +5,9 @@ import java.awt.Image;
 import game.Coord;
 
 public abstract class Decor extends Element{
+	
+	public static final int NB_DECOR = 4;
+	
 	int m_imageIndex;
 	long m_imageElapsed;
 	boolean isAnimated;
