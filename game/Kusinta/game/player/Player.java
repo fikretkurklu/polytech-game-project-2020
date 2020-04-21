@@ -53,7 +53,7 @@ public class Player extends Character {
 		m_state = IDLE;
 		
 		try {
-			bI = loadSprite("resources/Player/spritePlayer.png", 7, 16);
+			bI = loadSprite("resources/Player/spritePlayer.png", 16, 8);
 		} catch(Exception e){
 			e.printStackTrace();
 		}
