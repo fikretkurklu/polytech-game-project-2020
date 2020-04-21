@@ -48,8 +48,6 @@ public class Model {
 	public void tick(long elapsed) {
 		long ratio = (long)(elapsed / m_view.getTickPeriod() + 1);
 		m_player.setRatio(ratio);
-		
-		
 	}
 	
 	public void paint(Graphics g, int width, int height) {
