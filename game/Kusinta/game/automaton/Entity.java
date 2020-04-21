@@ -25,29 +25,73 @@ public abstract class Entity {
 	
 	//Action
 	
-	public abstract boolean move(Direction dir);
-	public abstract boolean jump(Direction dir);
-	public abstract boolean pop(Direction dir);
-	public abstract boolean wizz(Direction dir);
-	public abstract boolean power();
-	public abstract boolean pick(Direction dir);
-	public abstract boolean throwAction(Direction dir);
-	public abstract boolean turn(Direction dir);
-	public abstract boolean get();
-	public abstract boolean store();
-	public abstract boolean explode();
-	public abstract boolean egg(Direction dir);
-	public abstract boolean hit(Direction dir);
-	public abstract boolean protect(Direction dir);
+	public boolean move(Direction dir) {
+		return false;
+	}
+	public boolean jump(Direction dir){
+		return false;
+	}
 
+	public boolean pop(Direction dir){
+		return false;
+	}
+	public boolean wizz(Direction dir){
+		return false;
+	}
+	public boolean power(){
+		return false;
+	}
+	public boolean pick(Direction dir){
+		return false;
+	}
+	public boolean throwAction(Direction dir){
+		return false;
+	}
+	public boolean turn(Direction dir){
+		return false;
+	}
+	public boolean get(){
+		return false;
+	}
+	public boolean store(){
+		return false;
+	}
+	public boolean explode(){
+		return false;
+	}
+	public boolean egg(Direction dir){
+		return false;
+	}
+	public boolean hit(Direction dir){
+		return false;
+	}
+	public boolean protect(Direction dir){
+		return false;
+	}
+	
+	public boolean waitAction(){
+		return false;
+	}
 	//Conditions
 	
-	public abstract boolean mydir(Direction dir);
-	public abstract boolean cell(Direction dir, Category cat);
-	public abstract boolean closest(Category cat, Direction dir);
-	public abstract boolean gotstuff();
-	public abstract boolean gotpower();
-	public abstract boolean key(int keyCode);
+	public boolean mydir(Direction dir){
+		return false;
+	}
+	public boolean cell(Direction dir, Category cat){
+		return false;
+	}
+	public boolean closest(Category cat, Direction dir){
+		return false;
+	}
+	public boolean gotstuff(){
+		return false;
+	}
+	public boolean gotpower(){
+		return false;
+	}
+	public boolean key(int keyCode){
+		return false;
+	}
 	
 	
 }

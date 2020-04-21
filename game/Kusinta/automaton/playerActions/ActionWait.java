@@ -10,13 +10,7 @@ public class ActionWait extends Action {
 		
 		@Override
 		public boolean apply(Entity e) {
-			 try {
-				e.wait();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			return true;
+			return e.waitAction();
 		}
 		
 }

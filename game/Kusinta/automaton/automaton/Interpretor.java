@@ -69,6 +69,7 @@ public class Interpretor implements IVisitor {
 			case "B" : // Back
 			case "L" : // On my left
 			case "R" : // On my right
+			case "H" : // Here
 				return new automaton.Direction(name);
 				
 			default :
@@ -176,7 +177,18 @@ public class Interpretor implements IVisitor {
 				return new ActionTurn((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionTurn(percent);
-		
+		case "Throw":
+			if (size == 1)
+				return new ActionThrow((automaton.Direction) parameter.next(), percent);
+			else
+				return new ActionThrow(percent);
+		case "Wait" :
+			return new ActionWait(percent);
+		case "Protect" : 
+			if (size == 1)
+				return new ActionProtect((automaton.Direction) parameter.next(), percent);
+			else
+				return new ActionProtect(percent);
 		// CONDITIONS
 			
 		case "True":
