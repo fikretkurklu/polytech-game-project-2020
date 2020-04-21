@@ -10,12 +10,9 @@ public abstract class Decor extends Element{
 	boolean isAnimated;
 	BufferedImage[] m_images;
 	
-	public Decor(boolean isSolid, boolean isVisible) {
-		super(isSolid, isVisible);
-	}
-	
-	public Decor(boolean isSolid, boolean isVisible, Coord coord) {
+	public Decor(boolean isSolid, boolean isVisible, boolean isAnimated, Coord coord) {
 		super(isSolid, isVisible, coord);
+		this.isAnimated = isAnimated;
 	}
 	
 	public abstract void tick(long elapsed);
