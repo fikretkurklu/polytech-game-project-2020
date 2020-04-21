@@ -8,7 +8,6 @@ import automata.parser.AutomataParser;
 //import game.Block;
 
 public class interpretorTest {
-
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		AST ast;
