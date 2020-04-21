@@ -25,7 +25,7 @@ public class Model {
 	Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
 	
-	Player m_player;
+	//Player m_player;
 	View m_view;
 //	Opponent[] m_opponents;
 	
@@ -46,8 +46,9 @@ public class Model {
 	}
 	
 	public void tick(long elapsed) {
-		long ratio = (long)(elapsed / m_view.getTickPeriod() + 1);
-		m_player.setRatio(ratio);
+		/*long ratio = (long)(elapsed / m_view.getTickPeriod() + 1);
+		m_player.setRatio(ratio);*/
+		m_room.tick(elapsed);
 	}
 	
 	public void paint(Graphics g, int width, int height) {

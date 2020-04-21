@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
 import game.Coord;
 
 public class Room {
@@ -14,16 +16,20 @@ public class Room {
 	int nbCol;
 	String roomFile;
 	Element[] m_elements;
+	Decor[] m_decor;
 	int ambiance = 1;
+	boolean isChanged;
 	
 	Coord startCoord;
 	
 	OuterWallImageManager OWIM = new OuterWallImageManager(ambiance);
 	InnerWallImageManager IWIM = new InnerWallImageManager(ambiance);
 	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
-
+	DoorImageManager DIM = new DoorImageManager(ambiance);
+	
 	public Room() {
 		startCoord = new Coord();
+		m_decor = new Decor[0];
 		BufferedReader f;
 		try {
 			roomFile = "resources/Room/Sample/room1.sample";
@@ -77,10 +83,17 @@ public class Room {
 			return new OuterWall(coord, OWIM, "NE");
 		} else if (code.equals("ES")) {
 			return new EmptySpace(coord, ESIM);
+		} else if (code.equals("D")) {
+			return new Door(coord, DIM);
 		} else if (code.equals("ES_I")) {
 			startCoord = new Coord(coord);
 			return new EmptySpace(coord, ESIM);
-			
+		} else if (code.equals("ES_T")) {
+			Decor[] tmp_decor = new Decor[m_decor.length + 1];
+			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
+			tmp_decor[m_decor.length] = new torch(false, true);
+			m_decor = tmp_decor;
+			return new EmptySpace(coord, ESIM);
 		} else {
 			System.out.println("Non reach point. Code Error on : " + code);
 		}
@@ -93,6 +106,9 @@ public class Room {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+		for (int i = 0; i < m_decor.length; i ++) {
+			m_decor[i].paint(g);
+		}
 	}
 	
 	public Coord getStartCoord() {
@@ -101,6 +117,10 @@ public class Room {
 	
 	public boolean isBlocked(int x, int y) {
 		return m_elements[(x%nbCol) * nbCol + y %nbRow].__isSolid;
+	}
+	
+	public void tick(long elapsed) {
+		
 	}
 
 }
