@@ -1,0 +1,59 @@
+
+This code base illustrate the core mechanisms that you will use
+as a foundation for your game, it is not an example of a
+software architecture to use for a game. You game will be 
+architected following the Model-View-Controller pattern,
+this given code is just code to illustrate how to use
+Swing and our GameCanvas, associated with an audio player.
+
+Look at the class info3.game.Game
+This is where the method "main" is, so it is a good starting point.
+To setup the graphical interface, the steps
+are the following: 
+   (1) creates a GameCanvas
+   (2) asks the game canvas to create the Swing JFrame
+   (3) lay out the frame
+
+In our example, the frame layout is pretty simple, it is a border layout, 
+with a simple label to the north and the game canvas to the center.
+
+On the canvas, the code displays and animates a cowboy, playing a
+background music. The music changes after 8 seconds, showing you
+the use of the timer provided by the class GameCanvas.
+
+In the label above, every second, the average tick period is 
+updated along with the number of paints per second, i.e.,
+the frame-per-second rate.
+
+But let's discuss the different parts:
+	- Swing frame
+	- Game Canvas
+	
+Swing Frame:
+------------
+  A Swing frame corresponding to a window on the screen
+	  - with a Swing border layout
+	  - a label, updated every second
+	  - and the game canvas
+  You will change that to suit your needs, adding as many
+  widgets and panels as you feel necessary for the graphical
+  interface of your game.
+  Swing has similar concepts to what you are used to after 
+  the sprint "object.gui". It has components and containers.
+
+  Drawing happens through an object "graphics". You can draw
+  shapes such as lines, rectangles, or polygons. You can also
+  fill those shapes with a color. You can also draw images.
+  	  
+GameCanvas:
+-----------
+  The game canvas is where the game rendering will happen,
+  where the model will be rendered 30 times a second.
+  Our game canvas is based on a regular Swing canvas extended to 
+  be suited for game rendering:
+	  - an efficient double-buffering to avoid flickering
+	  - a tick every millisecond
+	  - a single timer
+	  - a paint at 30 times per second
+	  - the ability to play audio streams in the ogg format
+	
