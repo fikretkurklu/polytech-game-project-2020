@@ -34,10 +34,9 @@ public abstract class Character extends Entity {
 		m_direction = dir;
 
 		m_life = MAX_m_life;
-		bI = loadSprite("ressource/Player/spritePlayer", 7, 16);
 	}
 
-	private BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
+	protected BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
 		// TODO Auto-generated method stub
 		File imageFile = new File(filename);
 		if (imageFile.exists()) {

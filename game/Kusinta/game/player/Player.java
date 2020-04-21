@@ -1,8 +1,6 @@
 package player;
 
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -53,6 +51,12 @@ public class Player extends Character {
 
 		m_imageElapsed = 0;
 		m_state = IDLE;
+		
+		try {
+			bI = loadSprite("resources/Player/spritePlayer.png", 7, 16);
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public void setRatio(long ratio) {
@@ -210,9 +214,11 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
-		BufferedImage img = bI[m_image_index];
-		g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
+		if (bI != null) {
+			BufferedImage img = bI[m_image_index];
+			g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
 				null);
+		}
 	}
 
 }

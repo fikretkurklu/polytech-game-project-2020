@@ -44,7 +44,7 @@ public class Model {
 					.from_file("resources/gal/automata.gal");
 			Interpretor interpret = new Interpretor();
 			bots = (List<Automaton>) ast.accept(interpret);
-			 playerAutomaton = bots.get(3);
+			 playerAutomaton = bots.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
