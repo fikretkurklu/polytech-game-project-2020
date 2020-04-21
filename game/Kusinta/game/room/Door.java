@@ -14,6 +14,7 @@ public class Door extends Decor {
 		}
 	}
 	
+	@Override
 	public boolean activate() {
 		m_room.isChanged = true;
 		return m_room.isChanged;

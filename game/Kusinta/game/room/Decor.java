@@ -16,5 +16,9 @@ public abstract class Decor extends Element{
 	}
 	
 	public abstract void tick(long elapsed);
+	
+	public boolean activate() {
+		return true;
+	}
 
 }
