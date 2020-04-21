@@ -31,12 +31,14 @@ public abstract class Entity {
 	public abstract boolean wizz(Direction dir);
 	public abstract boolean power();
 	public abstract boolean pick(Direction dir);
+	public abstract boolean throwAction(Direction dir);
 	public abstract boolean turn(Direction dir);
 	public abstract boolean get();
 	public abstract boolean store();
 	public abstract boolean explode();
 	public abstract boolean egg(Direction dir);
 	public abstract boolean hit(Direction dir);
+	public abstract boolean protect(Direction dir);
 
 	//Conditions
 	
