@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="automaton"/>
 	<classpathentry kind="src" path="music"/>
 	<classpathentry kind="src" path="game"/>
+	<classpathentry kind="src" path="Room"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

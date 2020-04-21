@@ -13,20 +13,30 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import game.room.Coord;
+import game.room.Room;
+
 
 public class Model {
 	
-	int m_x, m_y, m_width, m_height;
+	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	
-	TimerListener tListener;
+	Room m_room;
+	Coord centerScreen; // position du personnage plus tard;
 	
 	Player m_player;
 //	Opponent[] m_opponents;
 	
 	public Model() throws IOException {
-		tListener = new TimerListener();
+		m_room = new Room();
+		centerScreen = m_room.getStartCoord();
+		setCenterScreen();
 	}
 	
+	public void setCenterScreen() {
+		x_decalage = m_width / 2 - centerScreen.X();
+		y_decalage = m_height / 2 - centerScreen.Y();
+	}
 	public void tick(long elapsed) {
 		long ratio = elapsed / tListener.getTickTime() + 1;
 		m_player.setRatio(ratio);
@@ -34,13 +44,13 @@ public class Model {
 		
 	}
 	
-	public boolean isColliding() {
-		return false;
-	}
-	
-	
 	public void paint(Graphics g, int width, int height) {
-		
+		m_width = width;
+		m_height = height;
+		setCenterScreen();
+		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
+		m_room.paint(gp);
+		gp.dispose();
 	}
 	
 	/*
@@ -66,29 +76,6 @@ public class Model {
 	    return null;
 	  }
 	
-	private class TimerListener implements ActionListener{
-		
-		private int tick_time = 10;
-		private long m_last;
-		Timer t;
-		
-		public TimerListener() {
-			t= new Timer(tick_time, this);
-			t.start();
-		}
-
-		public long getTickTime() {
-			return tick_time;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			long now = System.currentTimeMillis();
-			tick(now - m_last);
-			t.restart();
-			m_last = now;
-		}
-		
-	}
+	
 	
 }

@@ -52,6 +52,7 @@ public class Controller implements GameCanvasListener {
     System.out.println("Mouse released: ("+e.getX()+","+e.getY()+")");
     System.out.println("   modifiers="+e.getModifiersEx());
     System.out.println("   buttons="+e.getButton());
+   
   }
 
   @Override
@@ -85,11 +86,21 @@ public class Controller implements GameCanvasListener {
   @Override
   public void keyTyped(KeyEvent e) {
     System.out.println("Key typed: "+e.getKeyChar()+" code="+e.getKeyCode());
+    
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
     System.out.println("Key pressed: "+e.getKeyChar()+" code="+e.getKeyCode());
+    if (e.getKeyCode() == 37) {
+    	m_game.m_model.centerScreen.translate(-10, 0);
+    } else if (e.getKeyCode() == 38) {
+    	m_game.m_model.centerScreen.translate(0, -10);
+    } else if (e.getKeyCode() == 39) {
+    	m_game.m_model.centerScreen.translate(10, 0);
+    } else if (e.getKeyCode() == 40) {
+    	m_game.m_model.centerScreen.translate(0, 10);
+    }
   }
 
   @Override
@@ -109,8 +120,8 @@ public class Controller implements GameCanvasListener {
 
   @Override
   public void windowOpened() {
-    m_game.loadMusic();
-    m_game.m_view.setTimer(6000);
+    //m_game.loadMusic();
+    //m_game.m_view.setTimer(6000);
   }
 
   @Override
