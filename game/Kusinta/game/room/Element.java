@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import automaton.Entity;
 import game.Coord;
 
 /*
@@ -19,7 +20,7 @@ import game.Coord;
  * 
  */
 
-public abstract class Element {
+public abstract class Element extends Entity{
 
 	public static final int SIZE = 86;
 
