@@ -1,0 +1,42 @@
+Philosopher(Think){
+  * (Think)
+}
+
+Fire(Forward){
+ * (Forward)
+ | Cell(F,V) ? Move(F)    :(Copy)
+ | Cell(F,O) ? Explode(H) :()
+ | True      ?            :()
+
+ * (Copy)
+ | Cell(F,O) ? Explode(H) :()
+ | Cell(B,V) ? Egg(B)     :(Forward) 
+}
+
+PopOrWizz1(Init){
+  * (Init): True ? 49%Pop / 49% Wizz / Power :(Init)
+}
+
+PopOrWizz2(State1){
+  * (State1): True ? Pop  :(_)
+  * (State2): True ? Wizz :(_)
+}
+
+Player(Init){
+  * (Init):
+  | Key(FU) ? Move(N) :(Init)
+  | Key(FD) ? Move(S) :(Init)
+  | Key(FL) ? Move(O) :(Init)
+  | Key(FR) ? Move(E) :(Init)
+  | Key(SPACE) ? Hit  :(Init)
+  | Key(ENTER) ? Jump :(Init)
+  | Key(b)  ? Jump(B) :(Init)
+  | Key(d)  ? Move(D) :(Init)
+  | Key(e)  ? Move(E) :(Init)
+  | Key(f)  ? Turn(B) :(Init)
+  | Key(p)  ? Pop     :(Init)
+  | Key(w)  ? Wizz    :(Init)
+  | Key(g)  ? Get     :(Init)
+  | Key(t)  ? Throw   :(Init)
+  | True    ? Power   :(Init)
+}

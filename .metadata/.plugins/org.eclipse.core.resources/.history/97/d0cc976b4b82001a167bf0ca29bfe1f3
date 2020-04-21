@@ -1,0 +1,22 @@
+package playerActions;
+
+import game.Entity;
+
+public class ActionHit extends Action {
+
+	public ActionHit() {
+		super();
+	}
+	
+	public ActionHit(int percentage) {
+		super(percentage);
+	}
+
+	@Override
+	public boolean apply(Entity e) {
+		return e.hit();
+	}
+	
+	
+	
+}

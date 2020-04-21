@@ -1,0 +1,21 @@
+package playerActions;
+
+import automaton.*;
+import game.Direction;
+import game.Entity;
+
+public class ActionTurn extends Action {
+
+	Direction m_dir;
+	
+	public ActionTurn(Direction dir, int percentage) {
+		super(percentage);
+		m_dir = dir;
+	}
+	
+	
+	@Override
+	public boolean apply(Entity e) {
+		return e.turn(m_dir);
+	}
+}

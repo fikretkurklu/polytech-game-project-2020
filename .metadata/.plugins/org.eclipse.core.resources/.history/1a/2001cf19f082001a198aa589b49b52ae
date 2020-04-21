@@ -1,0 +1,20 @@
+package playerActions;
+
+import game.Direction;
+import game.Entity;
+
+public class ActionWizz extends Action{
+	
+	Direction m_dir;
+	
+	public ActionWizz(int percentage) {
+		super(percentage);
+		m_dir = new Direction("F");
+	}
+	
+	@Override
+	public boolean apply(Entity e) {
+		return e.wizz(m_dir);
+	}
+	
+}

@@ -1,0 +1,17 @@
+package playerActions;
+
+import game.Entity;
+
+public class ActionGet extends Action {
+	
+	public ActionGet() {
+		super();
+	}
+
+	@Override
+	public boolean apply(Entity e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

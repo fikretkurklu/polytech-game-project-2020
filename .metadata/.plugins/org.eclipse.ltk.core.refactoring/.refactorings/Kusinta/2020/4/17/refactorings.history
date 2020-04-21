@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;Kusinta&apos;&#x0A;- Original project: &apos;Kusinta&apos;&#x0A;- Original element: &apos;playerActions.ActionRotate.java&apos;" description="Delete element" element1="/automaton&lt;playerActions{ActionRotate.java" elements="1" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1587375492651" subPackages="false" version="1.0"/>
+</session>

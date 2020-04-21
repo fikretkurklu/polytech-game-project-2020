@@ -1,0 +1,17 @@
+package playerActions;
+
+
+import game.Entity;
+
+public class ActionJump extends Action {
+	
+	public ActionJump(int percentage) {
+		super(percentage);
+	}
+	
+	@Override
+	public boolean apply(Entity e) {
+		return e.jump();
+	}
+
+}

@@ -1,0 +1,16 @@
+package playerActions;
+
+import game.Entity;
+
+public class ActionWizz extends Action{
+	
+	public ActionWizz(int percentage) {
+		super(percentage);
+	}
+	
+	@Override
+	public boolean apply(Entity e) {
+		return e.wizz();
+	}
+	
+}

@@ -1,0 +1,21 @@
+package playerCond;
+
+import game.Entity;
+
+public class CondUnaryOp implements ICondition {
+	
+	String m_operator;
+	ICondition m_condition;
+	
+	public CondUnaryOp(String operator, ICondition condition) {
+		this.operator = operator;
+		m_condition = condition;
+	}
+
+	@Override
+	public boolean eval(Entity e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

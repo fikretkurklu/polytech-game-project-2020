@@ -1,0 +1,20 @@
+package playerActions;
+
+import game.Direction;
+import game.Entity;
+
+public class ActionPop extends Action{
+	
+	Direction m_dir;
+
+	public ActionPop(Direction dir) {
+		super();
+		m_dir = dir;
+	}
+	
+	@Override
+	public boolean apply(Entity e) {
+		return e.pop(m_dir);
+	}	
+	
+}

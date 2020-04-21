@@ -1,0 +1,21 @@
+package playerActions;
+
+import game.Entity;
+
+public class ActionHit extends Action {
+	
+	Direction m_dir;
+	
+	public ActionHit(int percentage) {
+		super(percentage);
+		m_dir = new Direction("F");
+	}
+
+	@Override
+	public boolean apply(Entity e) {
+		return e.hit();
+	}
+	
+	
+	
+}
