@@ -41,7 +41,7 @@ public class Model {
 		List<automaton.Automaton> bots;
 		try {
 			ast = (AST) AutomataParser
-					.from_file("../../resources/gal/automata.gal");
+					.from_file("resources/gal/automata.gal");
 			Interpretor interpret = new Interpretor();
 			bots = (List<Automaton>) ast.accept(interpret);
 			 playerAutomaton = bots.get(3);
