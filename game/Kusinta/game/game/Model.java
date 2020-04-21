@@ -41,14 +41,11 @@ public class Model {
 		List<automaton.Automaton> bots;
 		try {
 			ast = (AST) AutomataParser
-					.from_file("../../automaton/gal/automata.gal");
+					.from_file("../../resources/gal/automata.gal");
 			Interpretor interpret = new Interpretor();
 			bots = (List<Automaton>) ast.accept(interpret);
 			 playerAutomaton = bots.get(3);
-			// Block entity = new Block(test);
-			// test.step(entity);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -76,6 +73,7 @@ public class Model {
 		setCenterScreen();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		m_room.paint(gp);
+		m_player.paint(gp);
 		gp.dispose();
 	}
 
