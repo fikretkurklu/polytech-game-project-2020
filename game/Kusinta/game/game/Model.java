@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import game.graphics.View;
 import game.room.Coord;
 import game.room.Room;
 
@@ -25,20 +26,27 @@ public class Model {
 	Coord centerScreen; // position du personnage plus tard;
 	
 	Player m_player;
+	View m_view;
 //	Opponent[] m_opponents;
 	
 	public Model() throws IOException {
 		m_room = new Room();
 		centerScreen = m_room.getStartCoord();
 		setCenterScreen();
+		m_view = null;
+	}
+	
+	public void setView(View view) {
+		m_view = view;
 	}
 	
 	public void setCenterScreen() {
 		x_decalage = m_width / 2 - centerScreen.X();
 		y_decalage = m_height / 2 - centerScreen.Y();
 	}
+	
 	public void tick(long elapsed) {
-		long ratio = elapsed / tListener.getTickTime() + 1;
+		long ratio = (long)(elapsed / m_view.getTickPeriod() + 1);
 		m_player.setRatio(ratio);
 		
 		
