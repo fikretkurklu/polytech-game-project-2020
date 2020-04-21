@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import game.Coord;
 
 public class Room {
