@@ -1,8 +1,6 @@
 package playerActions;
 
 import automaton.*;
-import game.Direction;
-import game.Entity;
 
 public class ActionEgg extends Action {
 	

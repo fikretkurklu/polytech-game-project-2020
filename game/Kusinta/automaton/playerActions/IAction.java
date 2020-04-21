@@ -1,7 +1,6 @@
 package playerActions;
 
 import automaton.*;
-import game.Entity;
 
 public interface IAction {
 	

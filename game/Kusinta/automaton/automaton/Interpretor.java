@@ -50,7 +50,7 @@ public class Interpretor implements IVisitor {
 			case "V" :
 			case "@" :
 			case "_" :
-				return new game.Category(name);
+				return new automaton.Category(name);
 				
 			default :
 				return null;
@@ -69,7 +69,7 @@ public class Interpretor implements IVisitor {
 			case "B" : // Back
 			case "L" : // On my left
 			case "R" : // On my right
-				return new game.Direction(name);
+				return new automaton.Direction(name);
 				
 			default :
 				return null;
@@ -136,44 +136,44 @@ public class Interpretor implements IVisitor {
 			return new ActionGet(percent);
 		case "Hit":
 			if (size == 1)
-				return new ActionHit((game.Direction) parameter.next(), percent);
+				return new ActionHit((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionHit(percent);
 		case "Egg" :
 			if (size == 1)
-				return new ActionEgg((game.Direction) parameter.next(), percent);
+				return new ActionEgg((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionEgg(percent);
 		case "Pop" :
 			if (size == 1)
-				return new ActionPop((game.Direction) parameter.next(), percent);
+				return new ActionPop((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionPop(percent);
 		case "Wizz" :
 			if (size == 1)
-				return new ActionWizz((game.Direction) parameter.next(), percent);
+				return new ActionWizz((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionWizz(percent);
 		case "Jump" :
 			if (size == 1)
-				return new ActionJump((game.Direction) parameter.next(), percent);
+				return new ActionJump((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionJump(percent);
 		case "Move" :
 			if (size == 1)
-				return new ActionMove((game.Direction) parameter.next(), percent);
+				return new ActionMove((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionMove(percent);
 		case "Pick" :
 			if (size == 1)
-				return new ActionPick((game.Direction) parameter.next(), percent);
+				return new ActionPick((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionPick(percent);
 		case "Power" :
 			return new ActionPower(percent);
 		case "Turn" :
 			if (size == 1)
-				return new ActionTurn((game.Direction) parameter.next(), percent);
+				return new ActionTurn((automaton.Direction) parameter.next(), percent);
 			else
 				return new ActionTurn(percent);
 		
@@ -182,9 +182,9 @@ public class Interpretor implements IVisitor {
 		case "True":
 			return new CondTrue();
 		case "Cell" :
-			return new CondCell((game.Direction) parameter.next(), (game.Category) parameter.next());
+			return new CondCell((automaton.Direction) parameter.next(), (automaton.Category) parameter.next());
 		case "Closest" :
-			return new CondClosest((game.Category) parameter.next(), (game.Direction) parameter.next());
+			return new CondClosest((automaton.Category) parameter.next(), (automaton.Direction) parameter.next());
 		case "GotPower" :
 			return new CondGotPower();
 		case "GotStuff" :
@@ -192,7 +192,7 @@ public class Interpretor implements IVisitor {
 		case "Key" :
 			return new CondKey((int) parameter.next());
 		case "MyDir" :
-			return new CondMyDir((game.Direction) parameter.next());
+			return new CondMyDir((automaton.Direction) parameter.next());
 			
 			
 		default :

@@ -1,6 +1,6 @@
 package playerActions;
 
-import game.Entity;
+import automaton.Entity;
 
 public class ActionPower extends Action {
 	

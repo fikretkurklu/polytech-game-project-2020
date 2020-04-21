@@ -3,7 +3,6 @@ package automaton;
 import java.util.HashMap;
 import java.util.List;
 
-import game.Entity;
 import playerActions.Action;
 import playerActions.IAction;
 import playerCond.*;

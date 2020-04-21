@@ -1,4 +1,4 @@
-package game;
+package automaton;
 
 import automaton.Automaton;
 import automaton.State;

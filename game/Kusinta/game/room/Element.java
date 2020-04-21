@@ -1,10 +1,12 @@
-package game.room;
+package room;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+
+import game.Coord;
 
 /*
  * 

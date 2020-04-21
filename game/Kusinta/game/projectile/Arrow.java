@@ -1,9 +1,11 @@
-package game;
+package projectile;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
+
+import player.Player;
 
 public class Arrow {
 

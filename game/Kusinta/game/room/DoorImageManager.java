@@ -1,4 +1,4 @@
-package game.room;
+package room;
 
 public class DoorImageManager extends ImageManager {
 

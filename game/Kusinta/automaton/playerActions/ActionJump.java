@@ -1,8 +1,8 @@
 package playerActions;
 
 
-import game.Direction;
-import game.Entity;
+import automaton.Direction;
+import automaton.Entity;
 
 public class ActionJump extends Action {
 	

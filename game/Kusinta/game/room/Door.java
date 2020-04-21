@@ -1,4 +1,6 @@
-package game.room;
+package room;
+
+import game.Coord;
 
 public class Door extends Element {
 

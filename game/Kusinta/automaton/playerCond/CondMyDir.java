@@ -1,7 +1,7 @@
 package playerCond;
 
-import game.Direction;
-import game.Entity;
+import automaton.Direction;
+import automaton.Entity;
 
 public class CondMyDir implements ICondition{
 

@@ -1,4 +1,4 @@
-package game.room;
+package game;
 
 public class Coord {
 

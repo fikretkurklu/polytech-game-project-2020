@@ -1,8 +1,8 @@
 package playerCond;
 
-import game.Category;
-import game.Direction;
-import game.Entity;
+import automaton.Category;
+import automaton.Direction;
+import automaton.Entity;
 
 public class CondClosest implements ICondition{
 

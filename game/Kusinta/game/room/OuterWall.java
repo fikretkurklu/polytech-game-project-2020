@@ -1,6 +1,6 @@
-package game.room;
+package room;
 
-
+import game.Coord;
 
 public class OuterWall extends Element {
 

@@ -1,4 +1,4 @@
-package game;
+package player;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import javax.swing.Timer;
 
 import automaton.*;
+import game.Model;
+import projectile.Arrow;
 
 public class Player extends Entity {
 
@@ -39,7 +41,7 @@ public class Player extends Entity {
 
 	int[] x_hitBox, y_hitBox;
 
-	LinkedList<Arrow> m_arrows;	
+	public LinkedList<Arrow> m_arrows;	
 
 	PlayerKeyListener m_pkl;
 	PlayerTimerListener m_tml;

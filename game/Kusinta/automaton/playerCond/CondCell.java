@@ -1,9 +1,9 @@
 package playerCond;
 
 
-import game.Entity;
-import game.Category;
-import game.Direction;
+import automaton.Category;
+import automaton.Direction;
+import automaton.Entity;
 
 public class CondCell implements ICondition{
 	

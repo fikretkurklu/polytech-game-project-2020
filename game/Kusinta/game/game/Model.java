@@ -14,8 +14,8 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import game.graphics.View;
-import game.room.Coord;
-import game.room.Room;
+import player.Player;
+import room.Room;
 
 
 public class Model {

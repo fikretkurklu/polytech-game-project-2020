@@ -1,6 +1,6 @@
 package playerCond;
 
-import game.Entity;
+import automaton.Entity;
 
 public class CondGotPower implements ICondition{
 
