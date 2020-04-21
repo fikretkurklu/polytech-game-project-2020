@@ -12,7 +12,7 @@ public class Room {
 	int nbCol;
 	String roomFile;
 	Element[] m_elements;
-	int ambiance = 2;
+	int ambiance = 1;
 	
 	Coord startCoord;
 	
