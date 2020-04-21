@@ -1,5 +1,6 @@
 package room;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +11,11 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 
-public class torch extends Decor{
+public class Torch extends Decor{
 
-	public torch(Coord coord) {
+	public Torch(Coord coord) {
 		super(false, true, true, coord);
+		
 		loadImages();
 	}
 	
@@ -31,16 +33,26 @@ public class torch extends Decor{
 	}
 	
 	private void loadImages() {
-		m_images = new BufferedImage[4];
+		m_images = new Image[4];
 		try {
-			m_imageIndex = 0;
-			m_images[0] = ImageIO.read(new File("resources/Room/decors/torch2_1.png"));
-			m_images[1] = ImageIO.read(new File("resources/Room/decors/torch2_2.png"));
-			m_images[2] = ImageIO.read(new File("resources/Room/decors/torch2_3.png"));
-			m_images[3] = ImageIO.read(new File("resources/Room/decors/torch2_4.png"));
+			File imageFile;
+			m_imageIndex = 0;			
+			imageFile = new File("resources/Room/decors/torch2_1.png");
+			m_images[0] = ImageIO.read(imageFile);
+			m_images[0] = m_images[0].getScaledInstance(SIZE, SIZE, 0);
+			imageFile = new File("resources/Room/decors/torch2_2.png");
+			m_images[1] = ImageIO.read(imageFile);
+			m_images[1] = m_images[1].getScaledInstance(SIZE, SIZE, 0);
+			imageFile = new File("resources/Room/decors/torch2_3.png");
+			m_images[2] = ImageIO.read(imageFile);
+			m_images[2] = m_images[2].getScaledInstance(SIZE, SIZE, 0);
+			imageFile = new File("resources/Room/decors/torch2_4.png");
+			m_images[3] = ImageIO.read(imageFile);
+			m_images[3] = m_images[3].getScaledInstance(SIZE, SIZE, 0);
 			__image = m_images[m_imageIndex];
-			getCoord().setX(getCoord().X() + (SIZE - __image.getWidth(null) / 2));
-		      getCoord().setY(getCoord().Y() + (SIZE - __image.getHeight(null) / 2));
+			
+			getCoord().setX(getCoord().X() + (SIZE - __image.getWidth(null)) / 2);
+		    getCoord().setY(getCoord().Y() + (SIZE - __image.getHeight(null)) / 2);
 		} catch (IOException e) {
 			System.out.println("Erreur while longind torch animation");
 			e.printStackTrace();

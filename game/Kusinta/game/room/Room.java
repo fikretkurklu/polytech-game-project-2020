@@ -91,7 +91,7 @@ public class Room {
 		} else if (code.equals("ES_T")) {
 			Decor[] tmp_decor = new Decor[m_decor.length + 1];
 			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
-			tmp_decor[m_decor.length] = new torch(false, true);
+			tmp_decor[m_decor.length] = new Torch(new Coord(coord));
 			m_decor = tmp_decor;
 			return new EmptySpace(coord, ESIM);
 		} else {
@@ -120,7 +120,9 @@ public class Room {
 	}
 	
 	public void tick(long elapsed) {
-		
+		for (int i = 0; i < m_decor.length; i ++) {
+			m_decor[i].tick(elapsed);
+		}
 	}
 
 }
