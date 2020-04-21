@@ -1,21 +1,15 @@
 package player;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 
-import javax.swing.Timer;
-
 import automaton.*;
-import game.Model;
 import projectile.Arrow;
 
-public class Player extends Entity {
+public class Player extends Character {
 
 	int DIMENSION = 5;
-
 	double G = 9.81;
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 10.5;
@@ -24,14 +18,9 @@ public class Player extends Entity {
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
 	boolean falling, jumping, poping;
 
-	int MAX_m_life = 100;
 	int SPEED_WALK = 3;
 
-	int m_x, m_y;
-	Model m_model;
-	Direction m_direction;
-
-	int m_life;
+	int m_mouse_x, m_mouse_y;
 
 	int dt_x, dt_y;
 	double speed_x, speed_y;
@@ -43,23 +32,13 @@ public class Player extends Entity {
 
 	public LinkedList<Arrow> m_arrows;	
 
-	PlayerKeyListener m_pkl;
-	PlayerTimerListener m_tml;
 
 	public Player(Automaton automaton, int x, int y, Direction dir) {
-		super(automaton);
-
-		m_x = x;
-		m_y = y;
-		m_direction = dir;
-
-		m_life = MAX_m_life;
+		super(automaton, x, y, dir);
 
 		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
 		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
 
-		m_pkl = new PlayerKeyListener();
-		m_tml = new PlayerTimerListener();
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
@@ -123,41 +102,7 @@ public class Player extends Entity {
 		m_y = (int) ((-0.5 * G * t + C * t) + DIMENSION);
 	}
 
-	@Override
-	public boolean wizz(Direction dir) { // activer un levier
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean power() { // Collision et perte de vie
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean turn(Direction dir) {
-		if (m_direction != dir)
-			m_direction = dir;
-		return true;
-	}
-
-	@Override
-	public boolean get() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean explode() {
-		return true;
-	}
+	
 
 	@Override
 	public boolean egg(Direction dir) { // tir
@@ -166,62 +111,44 @@ public class Player extends Entity {
 		
 		if(now - m_shot_time > 1000) {
 			
-			m_arrows.add(new Arrow(m_x, m_y, 10.0, this));
+			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x)/(Math.sqrt(Math.pow((m_model.m_mouseCoord.X() -m_x), 2) + Math.pow((m_model.m_mouseCoord.Y()-m_y), 2))));
+			m_arrows.add(new Arrow(m_x, m_y, angle, this));
 			
 			return true;
 		}
 		
 		return false;
 	}
-
-	@Override
-	public boolean hit(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mydir(Direction m_dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean cell(Direction direction, Category category) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean closest(Category category, Direction direction) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotstuff() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotpower() { // mort
-		// TODO Auto-generated method stub
-		if(m_life > 0) {
-			return true;
-		}
-		
-		return false;
+	
+	public void setPressed(int keyCode, boolean pressed) {
+		if (keyCode == 81)
+			qPressed = pressed;
+		if (keyCode == 90)
+			zPressed = pressed;
+		if (keyCode == 68)
+			dPressed = pressed;
+		if (keyCode == 32)
+			espPressed = pressed;
+		if (keyCode == 65)
+			aPressed = pressed;
+		if (keyCode == 69)
+			ePressed = pressed;
 	}
 
 	@Override
 	public boolean key(int keyCode) {
-		if (keyCode == 81)
+		if (keyCode == 81) {
+			if(speed_x == 0)
+				dt_x = 0;
 			return qPressed;
+		}
 		if (keyCode == 90)
 			return zPressed;
-		if (keyCode == 68)
+		if (keyCode == 68) {
+			if(speed_x == 9)
+				dt_x = 0;
 			return dPressed;
+		}
 		if (keyCode == 32)
 			return espPressed;
 		if (keyCode == 65)
@@ -230,81 +157,20 @@ public class Player extends Entity {
 			return ePressed;
 		return false;
 	}
-
-	private class PlayerKeyListener implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
+	
+	public void tick(long elapsed) {
+		// if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
+		if (!falling) {
+			m_time = 0;
+		} else {
+			m_time += elapsed;
 		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == 81) {
-				qPressed = true;
-				dt_x = 0;
-			}
-			if (e.getKeyCode() == 90)
-				zPressed = true;
-			if (e.getKeyCode() == 68) {
-				dPressed = true;
-				dt_x = 0;
-			}
-			if (e.getKeyCode() == 32)
-				espPressed = true;
-			if (e.getKeyCode() == 65)
-				aPressed = true;
-			if (e.getKeyCode() == 69)
-				ePressed = true;
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			if (e.getKeyCode() == 81)
-				qPressed = false;
-			if (e.getKeyCode() == 90)
-				zPressed = false;
-			if (e.getKeyCode() == 68)
-				dPressed = false;
-			if (e.getKeyCode() == 32)
-				espPressed = false;
-			if (e.getKeyCode() == 65)
-				aPressed = false;
-			if (e.getKeyCode() == 69)
-				ePressed = false;
-		}
-	}
-
-	private class PlayerTimerListener implements ActionListener {
-
-		private int tick_time = 10;
-		Timer m_timer;
-
-		public PlayerTimerListener() {
-			m_timer = new Timer(tick_time, this);
-			m_timer.start();
-		}
-
-		public long getTickTime() {
-			return tick_time;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
-			if (!falling) {
-				m_time = 0;
-			} else {
-				m_time += tick_time;
-			}
-			falling = true;
+		falling = true;
+		if(m_time >= 10)
 			gravity(m_time);
-//			} else {
-//			jumping = false;
-//			falling= false;
-			m_timer.restart();
-		}
-
+//		} else {
+//		jumping = false;
+//		falling= false;
 	}
 
 	@Override
@@ -312,5 +178,22 @@ public class Player extends Entity {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	private class PlayerMouseListener implements MouseMotionListener {
 
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			// TODO Auto-generated method stub
+			m_mouse_x = e.getX();
+			m_mouse_y = e.getY();
+		}
+		
+	}
+	
 }

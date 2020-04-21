@@ -21,6 +21,7 @@ import room.Room;
 public class Model {
 	
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
+	public Coord m_mouseCoord; 
 	
 	Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
@@ -57,6 +58,10 @@ public class Model {
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		m_room.paint(gp);
 		gp.dispose();
+	}
+	
+	public void setMouseCoord(Coord mouseCoord) {
+		m_mouseCoord = mouseCoord;
 	}
 	
 	/*
