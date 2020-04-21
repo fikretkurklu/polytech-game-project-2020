@@ -69,7 +69,7 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString() == "East") {
-			// if(!m_room.is_blocked(m_x + SPEED_WALK, m_y)){
+			 if(!m_room.is_blocked(m_x + SPEED_WALK, m_y)){
 			dt_x += m_ratio_x;
 			speed_x = .5 * ACCELERATION * dt_x * dt_x;
 			if (speed_x > SPEED_WALK)
@@ -177,7 +177,7 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
-		// if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
+		 if(!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)){
 		if (!falling) {
 			m_time = 0;
 		} else {
@@ -186,9 +186,10 @@ public class Player extends Character {
 		falling = true;
 		if (m_time >= 10)
 			gravity(m_time);
-//		} else {
-//		jumping = false;
-//		falling= false;
+		} else {
+		jumping = false;
+		falling= false;
+		}
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 10) {
 			m_imageElapsed = 0;

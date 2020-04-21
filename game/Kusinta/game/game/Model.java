@@ -23,7 +23,7 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	Room m_room;
+	public Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
 
 	Player m_player;
