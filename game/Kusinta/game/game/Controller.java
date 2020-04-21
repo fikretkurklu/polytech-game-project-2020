@@ -106,11 +106,14 @@ public class Controller implements GameCanvasListener {
 		}
 		
 		m_game.m_model.m_player.setPressed(e.getKeyCode(), true);
+			
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
+		
+		m_game.m_model.m_player.setPressed(e.getKeyCode(), false);
 	}
 
 	@Override

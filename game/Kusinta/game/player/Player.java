@@ -1,7 +1,10 @@
 package player;
 
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import automaton.*;
@@ -14,6 +17,10 @@ public class Player extends Character {
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 10.5;
 	double ACCELERATION_POP = 11;
+
+	static final int WALKING = 0;
+	static final int JUMPING = 1;
+	static final int IDLE = 2;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
 	boolean falling, jumping, poping;
@@ -30,18 +37,22 @@ public class Player extends Character {
 
 	int[] x_hitBox, y_hitBox;
 
-	public LinkedList<Arrow> m_arrows;	
+	public LinkedList<Arrow> m_arrows;
+	long m_imageElapsed;
 
+	int m_state;
 
-	public Player(Automaton automaton, int x, int y, Direction dir) {
+	public Player(Automaton automaton, int x, int y, Direction dir) throws IOException {
 		super(automaton, x, y, dir);
 
 		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
 		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
 
-
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
+
+		m_imageElapsed = 0;
+		m_state = IDLE;
 	}
 
 	public void setRatio(long ratio) {
@@ -102,24 +113,23 @@ public class Player extends Character {
 		m_y = (int) ((-0.5 * G * t + C * t) + DIMENSION);
 	}
 
-	
-
 	@Override
 	public boolean egg(Direction dir) { // tir
 		// TODO Auto-generated method stub
 		long now = System.currentTimeMillis();
-		
-		if(now - m_shot_time > 1000) {
-			
-			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x)/(Math.sqrt(Math.pow((m_model.m_mouseCoord.X() -m_x), 2) + Math.pow((m_model.m_mouseCoord.Y()-m_y), 2))));
+
+		if (now - m_shot_time > 1000) {
+
+			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(
+					Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
 			m_arrows.add(new Arrow(m_x, m_y, angle, this));
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == 81)
 			qPressed = pressed;
@@ -138,14 +148,18 @@ public class Player extends Character {
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == 81) {
-			if(speed_x == 0)
+			m_state = WALKING;
+			if (speed_x == 0)
 				dt_x = 0;
 			return qPressed;
 		}
-		if (keyCode == 90)
+		if (keyCode == 90) {
+			m_state = JUMPING;
 			return zPressed;
+		}
 		if (keyCode == 68) {
-			if(speed_x == 9)
+			m_state = WALKING;
+			if (speed_x == 9)
 				dt_x = 0;
 			return dPressed;
 		}
@@ -157,7 +171,7 @@ public class Player extends Character {
 			return ePressed;
 		return false;
 	}
-	
+
 	public void tick(long elapsed) {
 		// if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
 		if (!falling) {
@@ -166,11 +180,27 @@ public class Player extends Character {
 			m_time += elapsed;
 		}
 		falling = true;
-		if(m_time >= 10)
+		if (m_time >= 10)
 			gravity(m_time);
 //		} else {
 //		jumping = false;
 //		falling= false;
+		m_imageElapsed += elapsed;
+		if (m_imageElapsed > 10) {
+			m_imageElapsed = 0;
+
+			switch (m_state) {
+			case WALKING:
+				m_image_index = (m_image_index + 1) % 6 + 8;
+				break;
+			case JUMPING:
+				m_image_index = (m_image_index + 1) % 9 + 15;
+			default:
+				m_image_index = (m_image_index + 1) % 4;
+				break;
+			}
+
+		}
 	}
 
 	@Override
@@ -178,22 +208,11 @@ public class Player extends Character {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	private class PlayerMouseListener implements MouseMotionListener {
 
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
-			m_mouse_x = e.getX();
-			m_mouse_y = e.getY();
-		}
-		
+	public void paint(Graphics g) {
+		BufferedImage img = bI[m_image_index];
+		g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
+				null);
 	}
-	
+
 }
