@@ -83,8 +83,12 @@ public class Room {
 			return new OuterWall(coord, OWIM, "NE");
 		} else if (code.equals("ES")) {
 			return new EmptySpace(coord, ESIM);
-		} else if (code.equals("D")) {
-			return new Door(coord, DIM);
+		} else if (code.equals("ES_D")) {
+			Decor[] tmp_decor = new Decor[m_decor.length + 1];
+			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
+			tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM);
+			m_decor = tmp_decor;
+			return new EmptySpace(coord, ESIM);
 		} else if (code.equals("ES_I")) {
 			startCoord = new Coord(coord);
 			return new EmptySpace(coord, ESIM);
