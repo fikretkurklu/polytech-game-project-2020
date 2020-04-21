@@ -7,16 +7,38 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
+
 
 public class Model {
+	
 	int m_x, m_y, m_width, m_height;
-	Model() throws IOException {
-		
+	
+	TimerListener tListener;
+	
+	Player m_player;
+//	Opponent[] m_opponents;
+	
+	public Model() throws IOException {
+		tListener = new TimerListener();
 	}
 	
 	public void tick(long elapsed) {
+		long ratio = elapsed / tListener.getTickTime() + 1;
+		m_player.setRatio(ratio);
+		
 		
 	}
+	
+	public boolean isColliding() {
+		return false;
+	}
+	
+	
 	public void paint(Graphics g, int width, int height) {
 		
 	}
@@ -43,4 +65,30 @@ public class Model {
 	    }
 	    return null;
 	  }
+	
+	private class TimerListener implements ActionListener{
+		
+		private int tick_time = 10;
+		private long m_last;
+		Timer t;
+		
+		public TimerListener() {
+			t= new Timer(tick_time, this);
+			t.start();
+		}
+
+		public long getTickTime() {
+			return tick_time;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			long now = System.currentTimeMillis();
+			tick(now - m_last);
+			t.restart();
+			m_last = now;
+		}
+		
+	}
+	
 }

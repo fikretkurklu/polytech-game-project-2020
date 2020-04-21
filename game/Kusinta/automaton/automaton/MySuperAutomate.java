@@ -2,7 +2,6 @@ package automaton;
 
 import java.util.HashMap;
 
-
 import game.Block;
 import playerActions.*;
 import playerCond.*;
