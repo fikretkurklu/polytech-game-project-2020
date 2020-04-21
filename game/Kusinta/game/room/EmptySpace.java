@@ -2,7 +2,8 @@ package room;
 
 import game.Coord;
 
-public class EmptySpace extends Element{
+public class EmptySpace extends Element {
+	
 	
 	/*
 	 * 

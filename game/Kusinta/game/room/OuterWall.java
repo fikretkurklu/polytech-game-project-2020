@@ -32,13 +32,4 @@ public class OuterWall extends Element {
 		}		
 	}
 	
-	public void setOrientation(String orientation) {
-		m_orientation = orientation;
-	}
-	
-	public String getOrientation() {
-		return m_orientation;
-	}
-
-	
 }
