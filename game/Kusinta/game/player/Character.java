@@ -28,12 +28,13 @@ public abstract class Character extends Entity {
 
 	// Sprite m_character;
 
-	public Character(Automaton automaton, int x, int y, Direction dir) throws IOException {
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		m_x = x;
 		m_y = y;
 		m_direction = dir;
 
 		m_life = MAX_m_life;
+		m_model = model;
 	}
 
 	protected BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {

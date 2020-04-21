@@ -23,7 +23,7 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	Room m_room;
+	public Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
 
 	Player m_player;
@@ -49,7 +49,7 @@ public class Model {
 			e.printStackTrace();
 		}
 		
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("East"));
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("East"), this);
 	}
 
 	public void setView(View view) {
@@ -62,10 +62,7 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		long ratio = (long) (elapsed / m_view.getTickPeriod() + 1);
-		m_player.setRatio(ratio);
-		m_player.tick(ratio);
-			
+		m_player.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {

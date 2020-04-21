@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import automaton.*;
+import game.Model;
 import projectile.Arrow;
 
 public class Player extends Character {
@@ -40,8 +41,8 @@ public class Player extends Character {
 
 	int m_state;
 
-	public Player(Automaton automaton, int x, int y, Direction dir) throws IOException {
-		super(automaton, x, y, dir);
+	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
+		super(automaton, x, y, dir, model);
 
 		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
 		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
@@ -51,16 +52,12 @@ public class Player extends Character {
 
 		m_imageElapsed = 0;
 		m_state = IDLE;
-		
+
 		try {
-			bI = loadSprite("resources/Player/spritePlayer.png", 16, 8);
-		} catch(Exception e){
+			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setRatio(long ratio) {
-		m_ratio_x = ratio;
 	}
 
 	@Override
@@ -69,19 +66,20 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString() == "East") {
-			// if(!m_room.is_blocked(m_x + SPEED_WALK, m_y)){
-			dt_x += m_ratio_x;
-			speed_x = .5 * ACCELERATION * dt_x * dt_x;
-			if (speed_x > SPEED_WALK)
-				speed_x = SPEED_WALK;
-			m_x += speed_x;
-		} else if (dir.toString() == "West") {
-			// if(!m_room.is_blocked(m_x - SPEED_WALK, m_y)){
-			dt_x += m_ratio_x;
-			speed_x = .5 * ACCELERATION * dt_x * dt_x;
-			if (speed_x > SPEED_WALK)
-				speed_x = SPEED_WALK;
-			m_x -= speed_x;
+			if (!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)) {
+				dt_x += m_ratio_x;
+				speed_x = .5 * ACCELERATION * dt_x * dt_x;
+				if (speed_x > SPEED_WALK)
+					speed_x = SPEED_WALK;
+				m_x += speed_x;
+			} else if (dir.toString() == "West") {
+				// if(!m_room.is_blocked(m_x - SPEED_WALK, m_y)){
+				dt_x += m_ratio_x;
+				speed_x = .5 * ACCELERATION * dt_x * dt_x;
+				if (speed_x > SPEED_WALK)
+					speed_x = SPEED_WALK;
+				m_x -= speed_x;
+			}
 		}
 		return true;
 	}
@@ -177,20 +175,21 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
-		// if(!m_room.is_blocked(m_x, m_y - DIMENSION)){
-		if (!falling) {
-			m_time = 0;
+		if (!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)) {
+			if (!falling) {
+				m_time = 0;
+			} else {
+				m_time += elapsed;
+			}
+			falling = true;
+			if (m_time >= 10)
+				gravity(m_time);
 		} else {
-			m_time += elapsed;
+			jumping = false;
+			falling = false;
 		}
-		falling = true;
-		if (m_time >= 10)
-			gravity(m_time);
-//		} else {
-//		jumping = false;
-//		falling= false;
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 10) {
+		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
 			switch (m_state) {
@@ -217,7 +216,7 @@ public class Player extends Character {
 		if (bI != null) {
 			BufferedImage img = bI[m_image_index];
 			g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
-				null);
+					null);
 		}
 	}
 
