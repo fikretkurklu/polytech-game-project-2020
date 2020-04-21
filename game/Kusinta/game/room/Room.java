@@ -168,6 +168,10 @@ public class Room {
 		return m_elements[(x%nbCol) * nbCol + y %nbRow].__isSolid;
 	}
 	
+	public boolean isBlocked(Coord coord) {
+		return m_elements[(coord.X() %nbCol) * nbCol + coord.Y() %nbRow].__isSolid;
+	}
+	
 	public void tick(long elapsed) {
 		for (int i = 0; i < m_decor.length; i ++) {
 			m_decor[i].tick(elapsed);
