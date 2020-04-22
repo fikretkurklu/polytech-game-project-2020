@@ -1,6 +1,5 @@
 package room;
 
-import automaton.Automaton;
 import game.Coord;
 
 /*
@@ -11,8 +10,8 @@ import game.Coord;
 
 public class InnerWall extends Element {
 	
-	public InnerWall(Coord coord, InnerWallImageManager IWImageManager, Automaton automaton) throws Exception {
-		super(true, true, coord, automaton);
+	public InnerWall(Coord coord, InnerWallImageManager IWImageManager) throws Exception {
+		super(true, true, coord);
 		String path = IWImageManager.get("", IWImageManager.useImageTable);
 		if (path != null) {
 			loadImage(path);

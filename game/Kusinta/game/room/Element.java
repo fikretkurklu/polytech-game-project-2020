@@ -37,6 +37,12 @@ public abstract class Element extends Entity{
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
+	
+	public Element(boolean isSolid, boolean isVisible, Coord coord) {
+		__coord = coord;
+		__isVisible = isVisible;
+		__isSolid = isSolid;
+	}
 
 	public void loadImage(String path) throws Exception {
 		File imageFile = new File(path);

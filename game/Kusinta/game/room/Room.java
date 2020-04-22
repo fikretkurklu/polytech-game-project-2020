@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import automata.ast.AST;
 import automata.parser.AutomataParser;
@@ -21,16 +20,18 @@ public class Room {
 	int nbCol;
 
 	String roomFile;
-	Element[] m_elements; // liste des éléments de la salles (mur, et vide)
+	Element[] m_elements; // liste des entity de la salles (mur)
+	Element[] m_background; // liste du décors non entité
 	Decor[] m_decor; // liste de tout les décors affichable
 	int ambiance;
 	boolean isChanged;
+	
 	/*
 	 * Cette variable va nous servir à eviter que les décors ne soient pas trop
 	 * collé
 	 */
+	
 	int decorFreq;
-
 	Coord startCoord;
 
 	OuterWallImageManager OWIM;
@@ -39,11 +40,15 @@ public class Room {
 	DoorImageManager DIM;
 	Automaton BlockAutomaton = null;
 	Automaton StaticDecorAutomaton = null;
+	
+	int m_BlockAElapsed = 0;
 
 	@SuppressWarnings("unchecked")
 	public Room() {
 		startCoord = new Coord();
 		m_decor = new Decor[0];
+		m_elements = new Element[0];
+		m_background = new Element[0];
 		decorFreq = (int) (Math.random() * 10) + 5;
 		ambiance = (int) (Math.random() * RoomParam.nbAmbiance) + 1;
 
@@ -62,22 +67,28 @@ public class Room {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		BufferedReader f;
 		try {
 			roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
 			f = new BufferedReader(new FileReader(new File(roomFile)));
 			/*
-			 * Le fichier suis cette syntaxe: Row:Col CODE/CODE/CODE/...../ ... ... ...
+			 * Le fichier suis cette syntaxe: 
+			 * Row:Col 
+			 * CODE/CODE/CODE/...../ 
+			 * ...
+			 * ...
+			 * ...
 			 */
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
-			m_elements = new Element[nbRow * nbCol];
+			//m_background = new Element[i * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
-					;
+					//m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
+					CodeElement(actualLigne[j], j, i);
 				}
 			}
 			f.close();
@@ -87,43 +98,57 @@ public class Room {
 		}
 	}
 
-	public Element CodeElement(String code, int x, int y) throws Exception {
-		Coord coord = new Coord(x, y);
+	public void CodeElement(String code, int x, int y) throws Exception{
+		
+		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
 		if (code.equals("IW")) {
-			return new InnerWall(coord, IWIM, BlockAutomaton);
+			Grow(false, new InnerWall(coord, IWIM));
 		} else if (code.equals("OW_E")) {
-			return new OuterWall(coord, OWIM, "E", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "E", BlockAutomaton));
 		} else if (code.equals("OW_S")) {
-			return new OuterWall(coord, OWIM, "S", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "S", BlockAutomaton));
 		} else if (code.equals("OW_W")) {
-			return new OuterWall(coord, OWIM, "W", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "W", BlockAutomaton));
 		} else if (code.equals("OW_N")) {
-			return new OuterWall(coord, OWIM, "N", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "N", BlockAutomaton));
 		} else if (code.equals("OW_SE")) {
-			return new OuterWall(coord, OWIM, "SE", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "SE", BlockAutomaton));
 		} else if (code.equals("OW_SW")) {
-			return new OuterWall(coord, OWIM, "SW", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "SW", BlockAutomaton));
 		} else if (code.equals("OW_NW")) {
-			return new OuterWall(coord, OWIM, "NW", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "NW", BlockAutomaton));
 		} else if (code.equals("OW_NE")) {
-			return new OuterWall(coord, OWIM, "NE", BlockAutomaton);
+			Grow(true, new OuterWall(coord, OWIM, "NE", BlockAutomaton));
 		} else if (code.equals("ES")) {
-			return new EmptySpace(coord, ESIM, BlockAutomaton);
+			Grow(false, new EmptySpace(coord, ESIM));
 		} else if (code.equals("ES_D")) {
 			newDecor(coord, true);
-			return new EmptySpace(coord, ESIM, BlockAutomaton);
+			Grow(false, new EmptySpace(coord, ESIM));
 		} else if (code.equals("ES_I")) {
 			startCoord = new Coord(coord);
-			startCoord.translate(Decor.SIZE / 2, Decor.SIZE / 2);
-			return new EmptySpace(coord, ESIM, BlockAutomaton);
+			startCoord.translate(Decor.SIZE / 2, Decor.SIZE);
+			Grow(false, new EmptySpace(coord, ESIM));
 		} else if (code.equals("ES_T")) {
 			newDecor(coord, false);
-			return new EmptySpace(coord, ESIM, BlockAutomaton);
+			Grow(false, new EmptySpace(coord, ESIM));
 		} 
-		throw new Exception("Code room err: " + code);
+		//throw new Exception("Code room err: " + code);
 
 	}
 
+	public void Grow(boolean isElement, Element add) {
+		if (isElement) {
+			Element[] tmp_elements= new Element[m_elements.length + 1];
+			System.arraycopy(m_elements, 0, tmp_elements, 0, m_elements.length);
+			tmp_elements[m_elements.length] = add;
+			m_elements = tmp_elements;
+		}
+		Element[] tmp_background= new Element[m_background.length + 1];
+		System.arraycopy(m_background, 0, tmp_background, 0, m_background.length);
+		tmp_background[m_background.length] = add;
+		m_background = tmp_background;
+	}
+	
 	/*
 	 * Methode qui va creer un nouveau décor a la position souhaitée, en fonction de
 	 * la fréquence d'appartition du décor. le boolean isDoor permet de spécifier
@@ -176,6 +201,9 @@ public class Room {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+		for (int i = 0; i < m_background.length; i++) {
+			m_background[i].paint(g);
+		}
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].paint(g);
 		}
@@ -188,7 +216,7 @@ public class Room {
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].__isSolid;
+			return m_background[n].__isSolid;
 		}
 		return true;
 	}
@@ -197,6 +225,7 @@ public class Room {
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);
 		}
+		m_BlockAElapsed += elapsed;
 	}
 
 }
