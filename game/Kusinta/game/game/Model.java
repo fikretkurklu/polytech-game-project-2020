@@ -17,6 +17,7 @@ import automaton.Interpretor;
 import game.graphics.View;
 import player.Player;
 import room.Room;
+import underworld.Map;
 
 public class Model {
 
@@ -25,14 +26,16 @@ public class Model {
 
 	public Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
-
+	public Map m_map;
 	Player m_player;
 	View m_view;
 //	Opponent[] m_opponents;
 
 	public Model() throws IOException {
-		m_room = new Room();
-		centerScreen = m_room.getStartCoord();
+//		m_room = new Room();
+//		centerScreen = m_room.getStartCoord();
+		m_map = new Map();
+		centerScreen = m_map.getStartCoord();
 		setCenterScreen();
 		m_view = null;
 
@@ -49,7 +52,7 @@ public class Model {
 			e.printStackTrace();
 		}
 		
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("East"), this);
+//		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("East"), this);
 	}
 
 	public void setView(View view) {
@@ -62,8 +65,8 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
-		m_room.tick(elapsed);
+//		m_player.tick(elapsed);
+//		m_room.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -71,8 +74,9 @@ public class Model {
 		m_height = height;
 		setCenterScreen();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		m_room.paint(gp);
-		m_player.paint(gp);
+//		m_room.paint(gp);
+		m_map.paint(gp);
+//		m_player.paint(gp);
 		gp.dispose();
 	}
 
