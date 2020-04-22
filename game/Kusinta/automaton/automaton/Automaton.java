@@ -1,11 +1,9 @@
 package automaton;
 
 import java.util.HashMap;
-import java.util.List;
 
 import playerActions.Action;
-import playerActions.IAction;
-import playerCond.*;
+
 
 public class Automaton {
 
