@@ -20,7 +20,7 @@ public class RoomGenerator {
 		m_elementTable = new String[row][col];
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < col; j++) {
-				m_elementTable[i][j]="";
+				m_elementTable[i][j] = "";
 			}
 		}
 	}
@@ -68,49 +68,65 @@ public class RoomGenerator {
 						|| (i == m_row - borderSize && j == m_col - borderSize)) {
 					m_elementTable[i][j] = "IW";
 				} else if (i == borderSize - 1 && j > borderSize - 1 && j < m_col - borderSize) {
-					if (m_elementTable[i + 1][j].contentEquals("OW_N" ) || m_elementTable[i + 1][j].contentEquals("OW_NE") 
+					if (m_elementTable[i + 1][j].contentEquals("OW_N")
+							|| m_elementTable[i + 1][j].contentEquals("OW_NE")
 							|| m_elementTable[i + 1][j].contentEquals("OW_NW")) {
 						m_elementTable[i + 1][j] = "IW";
 						m_elementTable[i][j] = "IW";
-					} else if (m_elementTable[i + 1][j].contentEquals("OW_E") || m_elementTable[i + 1][j].contentEquals("OW_W")
-							|| m_elementTable[i + 1][j].contentEquals("OW_S") || m_elementTable[i + 1][j].contentEquals("IW")
-							|| m_elementTable[i + 1][j].contentEquals("OW_SE") || m_elementTable[i + 1][j].contentEquals("OW_SW")) {
+					} else if (m_elementTable[i + 1][j].contentEquals("OW_E")
+							|| m_elementTable[i + 1][j].contentEquals("OW_W")
+							|| m_elementTable[i + 1][j].contentEquals("OW_S")
+							|| m_elementTable[i + 1][j].contentEquals("IW")
+							|| m_elementTable[i + 1][j].contentEquals("OW_SE")
+							|| m_elementTable[i + 1][j].contentEquals("OW_SW")) {
 						m_elementTable[i][j] = "IW";
 					} else {
 						m_elementTable[i][j] = "OW_S";
 					}
 				} else if (i == m_row - borderSize && j > borderSize - 1 && j < m_col - borderSize) {
-					if (m_elementTable[i - 1][j].contentEquals("OW_S") || m_elementTable[i - 1][j].contentEquals("OW_SW")
+					if (m_elementTable[i - 1][j].contentEquals("OW_S")
+							|| m_elementTable[i - 1][j].contentEquals("OW_SW")
 							|| m_elementTable[i - 1][j].contentEquals("OW_SE")) {
 						m_elementTable[i - 1][j] = "IW";
 						m_elementTable[i][j] = "IW";
-					} else if (m_elementTable[i - 1][j].contentEquals("OW_E") || m_elementTable[i - 1][j].contentEquals("OW_W")
-							|| m_elementTable[i - 1][j].contentEquals("OW_N") || m_elementTable[i - 1][j].contentEquals("IW")
-							|| m_elementTable[i - 1][j].contentEquals("OW_NE") || m_elementTable[i - 1][j].contentEquals("OW_NW")) {
+					} else if (m_elementTable[i - 1][j].contentEquals("OW_E")
+							|| m_elementTable[i - 1][j].contentEquals("OW_W")
+							|| m_elementTable[i - 1][j].contentEquals("OW_N")
+							|| m_elementTable[i - 1][j].contentEquals("IW")
+							|| m_elementTable[i - 1][j].contentEquals("OW_NE")
+							|| m_elementTable[i - 1][j].contentEquals("OW_NW")) {
 						m_elementTable[i][j] = "IW";
 					} else {
 						m_elementTable[i][j] = "OW_N";
 					}
 				} else if (j == borderSize - 1 && i > borderSize - 1 && i < m_row - borderSize) {
-					if (m_elementTable[i][j + 1].contentEquals("OW_W") || m_elementTable[i][j + 1].contentEquals("OW_NW")
+					if (m_elementTable[i][j + 1].contentEquals("OW_W")
+							|| m_elementTable[i][j + 1].contentEquals("OW_NW")
 							|| m_elementTable[i][j + 1].contentEquals("OW_SW")) {
 						m_elementTable[i][j + 1] = "IW";
 						m_elementTable[i][j] = "IW";
-					} else if (m_elementTable[i][j + 1].contentEquals("OW_E") || m_elementTable[i][j + 1].contentEquals("OW_S")
-							|| m_elementTable[i][j + 1].contentEquals("OW_N") || m_elementTable[i][j + 1].contentEquals("IW")
-							|| m_elementTable[i][j + 1].contentEquals("OW_NE") || m_elementTable[i][j + 1].contentEquals("OW_SE")) {
+					} else if (m_elementTable[i][j + 1].contentEquals("OW_E")
+							|| m_elementTable[i][j + 1].contentEquals("OW_S")
+							|| m_elementTable[i][j + 1].contentEquals("OW_N")
+							|| m_elementTable[i][j + 1].contentEquals("IW")
+							|| m_elementTable[i][j + 1].contentEquals("OW_NE")
+							|| m_elementTable[i][j + 1].contentEquals("OW_SE")) {
 						m_elementTable[i][j] = "IW";
 					} else {
 						m_elementTable[i][j] = "OW_E";
 					}
 				} else if (j == m_col - borderSize && i > borderSize - 1 && i < m_row - borderSize) {
-					if (m_elementTable[i][j - 1].contentEquals("OW_E") || m_elementTable[i][j - 1].contentEquals("OW_SE")
+					if (m_elementTable[i][j - 1].contentEquals("OW_E")
+							|| m_elementTable[i][j - 1].contentEquals("OW_SE")
 							|| m_elementTable[i][j - 1].contentEquals("OW_NE")) {
 						m_elementTable[i][j - 1] = "IW";
 						m_elementTable[i][j] = "IW";
-					} else if (m_elementTable[i][j - 1].contentEquals("OW_W") || m_elementTable[i][j - 1].contentEquals("OW_S")
-							|| m_elementTable[i][j - 1].contentEquals("OW_N") || m_elementTable[i][j - 1].contentEquals("IW")
-							|| m_elementTable[i][j - 1].contentEquals("OW_NW") || m_elementTable[i][j - 1].contentEquals("OW_SW")) {
+					} else if (m_elementTable[i][j - 1].contentEquals("OW_W")
+							|| m_elementTable[i][j - 1].contentEquals("OW_S")
+							|| m_elementTable[i][j - 1].contentEquals("OW_N")
+							|| m_elementTable[i][j - 1].contentEquals("IW")
+							|| m_elementTable[i][j - 1].contentEquals("OW_NW")
+							|| m_elementTable[i][j - 1].contentEquals("OW_SW")) {
 						m_elementTable[i][j] = "IW";
 					} else {
 						m_elementTable[i][j] = "OW_W";
@@ -208,162 +224,238 @@ public class RoomGenerator {
 				for (int k2 = j; k2 < j + length; k2++) {
 					if (k == i && k2 == j) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
-							
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
+
 							verification = -1;
 							return;
-						} else if (m_elementTable[k - 1][k2].contentEquals("IW") || m_elementTable[k][k2 - 1].contentEquals("IW")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_N") || m_elementTable[k][k2 - 1].contentEquals("OW_N")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_S") || m_elementTable[k][k2 - 1].contentEquals("OW_S")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_E") || m_elementTable[k][k2 - 1].contentEquals("OW_E")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_W") || m_elementTable[k][k2 - 1].contentEquals("OW_W")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_NE") || m_elementTable[k][k2 - 1].contentEquals("OW_NE")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_NW") || m_elementTable[k][k2 - 1].contentEquals("OW_NW")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_SE") || m_elementTable[k][k2 - 1].contentEquals("OW_SE")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_SW") || m_elementTable[k][k2 - 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+						} else if (m_elementTable[k - 1][k2].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_SW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW")) {
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k == i && k2 == j + length - 1) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& !m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k - 1][k2].contentEquals("IW") || m_elementTable[k][k2 + 1].contentEquals("IW")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_N") || m_elementTable[k][k2 + 1].contentEquals("OW_N")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_S") || m_elementTable[k][k2 + 1].contentEquals("OW_S")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_E") || m_elementTable[k][k2 + 1].contentEquals("OW_E")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_W") || m_elementTable[k][k2 + 1].contentEquals("OW_W")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_NE") || m_elementTable[k][k2 + 1].contentEquals("OW_NE")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_NW") || m_elementTable[k][k2 + 1].contentEquals("OW_NW")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_SE") || m_elementTable[k][k2 + 1].contentEquals("OW_SE")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_SW") || m_elementTable[k][k2 + 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+						} else if (m_elementTable[k - 1][k2].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_SW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW")) {
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k == i + width - 1 && k2 == j) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k + 1][k2].contentEquals("IW") || m_elementTable[k][k2 - 1].contentEquals("IW")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_N") || m_elementTable[k][k2 - 1].contentEquals("OW_N")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_S") || m_elementTable[k][k2 - 1].contentEquals("OW_S")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_E") || m_elementTable[k][k2 - 1].contentEquals("OW_E")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_W") || m_elementTable[k][k2 - 1].contentEquals("OW_W")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_NE") || m_elementTable[k][k2 - 1].contentEquals("OW_NE")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_NW") || m_elementTable[k][k2 - 1].contentEquals("OW_NW")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_SE") || m_elementTable[k][k2 - 1].contentEquals("OW_SE")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_SW") || m_elementTable[k][k2 - 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+						} else if (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW")) {
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k == i + width - 1 && k2 == j + length - 1) {
 						if (!m_elementTable[k][k2].contentEquals("") && m_elementTable[k][k2].contentEquals("ES")
-								&& m_elementTable[k][k2].contentEquals("ES_I") && m_elementTable[k][k2].contentEquals("ES_T")
+								&& m_elementTable[k][k2].contentEquals("ES_I")
+								&& m_elementTable[k][k2].contentEquals("ES_T")
 								&& m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k + 1][k2].contentEquals("IW") || m_elementTable[k][k2 + 1].contentEquals("IW")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_N") || m_elementTable[k][k2 + 1].contentEquals("OW_N")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_S") || m_elementTable[k][k2 + 1].contentEquals("OW_S")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_E") || m_elementTable[k][k2 + 1].contentEquals("OW_E")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_W") || m_elementTable[k][k2 + 1].contentEquals("OW_W")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_NE") || m_elementTable[k][k2 + 1].contentEquals("OW_NE")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_NW") || m_elementTable[k][k2 + 1].contentEquals("OW_NW")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_SE") || m_elementTable[k][k2 + 1].contentEquals("OW_SE")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_SW") || m_elementTable[k][k2 + 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+						} else if (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW")) {
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k == i) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& !m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k - 1][k2].contentEquals("IW") || m_elementTable[k - 1][k2].contentEquals("OW_N")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_S") || m_elementTable[k - 1][k2].contentEquals("OW_E")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_W") || m_elementTable[k - 1][k2].contentEquals("OW_NE")
-								|| m_elementTable[k - 1][k2].contentEquals("OW_NW") || m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						} else if (m_elementTable[k - 1][k2].contentEquals("IW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
 								|| m_elementTable[k - 1][k2].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k == i + width - 1) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& !m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k + 1][k2].contentEquals("IW") || m_elementTable[k + 1][k2].contentEquals("OW_N")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_S") || m_elementTable[k + 1][k2].contentEquals("OW_E")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_W") || m_elementTable[k + 1][k2].contentEquals("OW_NE")
-								|| m_elementTable[k + 1][k2].contentEquals("OW_NW") || m_elementTable[k + 1][k2].contentEquals("OW_SE")
+						} else if (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k2 == j) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && !m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& !m_elementTable[k][k2].contentEquals("ES_T")
 								&& !m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k][k2 - 1].contentEquals("IW") || m_elementTable[k][k2 - 1].contentEquals("OW_N")
-								|| m_elementTable[k][k2 - 1].contentEquals("OW_S") || m_elementTable[k][k2 - 1].contentEquals("OW_E")
-								|| m_elementTable[k][k2 - 1].contentEquals("OW_W") || m_elementTable[k][k2 - 1].contentEquals("OW_NE")
-								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW") || m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+						} else if (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
 								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
 					} else if (k2 == j + length - 1) {
 						if (!m_elementTable[k][k2].contentEquals("") && !m_elementTable[k][k2].contentEquals("ES")
-								&& !m_elementTable[k][k2].contentEquals("ES_I") && m_elementTable[k][k2].contentEquals("ES_T")
+								&& !m_elementTable[k][k2].contentEquals("ES_I")
+								&& m_elementTable[k][k2].contentEquals("ES_T")
 								&& m_elementTable[k][k2].contentEquals("ES_D")) {
-							//System.out.println(
-							//		"The platform is over an existing element\n you can't place another platform on it in soft\n Try medium or Hard mode");
+							// System.out.println(
+							// "The platform is over an existing element\n you can't place another platform
+							// on it in soft\n Try medium or Hard mode");
 							verification = -1;
 							return;
-						} else if (m_elementTable[k][k2 + 1].contentEquals("IW") || m_elementTable[k][k2 + 1].contentEquals("OW_N")
-								|| m_elementTable[k][k2 + 1].contentEquals("OW_S") || m_elementTable[k][k2 + 1].contentEquals("OW_E")
-								|| m_elementTable[k][k2 + 1].contentEquals("OW_W") || m_elementTable[k][k2 + 1].contentEquals("OW_NE")
-								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW") || m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+						} else if (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
 								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW")) {
-							//System.out.println(
-							//		"There is a block next to your platform.\n You cannot add it in Soft mode.\n Try medium mode or change location");
+							// System.out.println(
+							// "There is a block next to your platform.\n You cannot add it in Soft mode.\n
+							// Try medium mode or change location");
 							verification = -1;
 							return;
 						}
@@ -451,7 +543,7 @@ public class RoomGenerator {
 	public void QuickPreview() {
 		System.out.println("Quick review of the room :");
 		System.out.print(
-				"Table :\n-' . ' is an Empty space or a Decor\n-' I ' is the initial point\n-' D ' is the door\n-' X ' is a wall\n-' : ' is a unidentified cell\n");
+				"Table :\n-' . ' is an Empty space or a Decor\n-' I ' is the initial point\n-' D ' is the door\n-' X ' is a wall\n-' : ' is a unidentified cell\n-' / ' is NW\n-' \\ ' is NW\n-' L ' is SW\n-' J ' is SE\n");
 		System.out.print(" /  ");
 		for (int i = 0; i < m_col; i++) {
 			if (i >= 10) {
@@ -464,7 +556,7 @@ public class RoomGenerator {
 		for (int i = 0; i < m_row; i++) {
 			if (i < 10) {
 				System.out.print(" " + i + "  ");
-			} else if  (i >= 10) {
+			} else if (i >= 10) {
 				System.out.print(" " + i + " ");
 			}
 			for (int j = 0; j < m_col; j++) {
@@ -474,11 +566,23 @@ public class RoomGenerator {
 					System.out.print(" I ");
 				} else if (m_elementTable[i][j].contentEquals("ES_D")) {
 					System.out.print(" D ");
-				} else if (m_elementTable[i][j].contentEquals("IW") || m_elementTable[i][j].contentEquals("OW_N") 
-						|| m_elementTable[i][j].contentEquals("OW_S") || m_elementTable[i][j].contentEquals("OW_E")
-						|| m_elementTable[i][j].contentEquals("OW_W") || m_elementTable[i][j].contentEquals("OW_NE")
-						|| m_elementTable[i][j].contentEquals("OW_NW") || m_elementTable[i][j].contentEquals("OW_SE") 
-						|| m_elementTable[i][j].contentEquals("OW_SW")) {
+				} else if (m_elementTable[i][j].contentEquals("OW_N")) {
+					System.out.print(" ^ ");
+				} else if (m_elementTable[i][j].contentEquals("OW_S")) {
+					System.out.print(" v ");
+				} else if (m_elementTable[i][j].contentEquals("OW_E")) {
+					System.out.print(" > ");
+				} else if (m_elementTable[i][j].contentEquals("OW_W")) {
+					System.out.print(" < ");
+				} else if (m_elementTable[i][j].contentEquals("OW_NE")) {
+					System.out.print(" \\ ");
+				} else if (m_elementTable[i][j].contentEquals("OW_NW")) {
+					System.out.print(" / ");
+				} else if (m_elementTable[i][j].contentEquals("OW_SE")) {
+					System.out.print(" J ");
+				} else if (m_elementTable[i][j].contentEquals("OW_SW")){
+					System.out.print(" L ");
+				} else if (m_elementTable[i][j].contentEquals("IW")) {
 					System.out.print(" X ");
 				} else {
 					System.out.print(" : ");
@@ -487,13 +591,13 @@ public class RoomGenerator {
 			System.out.print("\n");
 		}
 	}
-	
+
 	/*
 	 * 
 	 * This method destroys a platform at the given position
 	 * 
 	 */
-	
+
 	public void zoneDestruction() {
 		System.out.println("Enter i of the position you want to destroy :");
 		int i = enterNb();
@@ -503,12 +607,42 @@ public class RoomGenerator {
 		int width = enterNb();
 		System.out.println("Enter length of the area to destroy");
 		int length = enterNb();
-		for (int k = i; k < i+length; k++) {
-			for (int k2 = j; k2 < j+width; k2++) {
-				m_elementTable[i][j] = "ES";
+		for (int k = i; k < i + width; k++) {
+			for (int k2 = j; k2 < j + length; k2++) {
+				m_elementTable[k][k2] = "ES";
 			}
 		}
-		
+
+	}
+
+	/*
+	 * 
+	 * This method changes one block
+	 * 
+	 */
+
+	public void changeBlock() {
+		int i = -1;
+		int j = -1;
+		while((i <0 || i >m_row) && (j<0 || j>m_col)) {
+			System.out.println("Enter i row (need to fit in the map):");
+			i = enterNb();
+			System.out.println("Enter j col (need to fit in the map):");
+			j = enterNb();
+		}
+		String blockType = "";
+		while (!blockType.contentEquals("ES") && !blockType.contentEquals("ES_I") && !blockType.contentEquals("ES_D")
+				&& !blockType.contentEquals("ES_T") && !blockType.contentEquals("IW")
+				&& !blockType.contentEquals("OW_N") && !blockType.contentEquals("OW_S")
+				&& !blockType.contentEquals("OW_E") && !blockType.contentEquals("OW_W")
+				&& !blockType.contentEquals("OW_NE") && !blockType.contentEquals("OW_NW")
+				&& !blockType.contentEquals("OW_SE") && !blockType.contentEquals("OW_SW")) {
+			System.out.println("Enter new block type :");
+			System.out.println("Possible blockTypes are :");
+			System.out.println("IW, ES, ES_I, ES_D, ES_T, OW_N, OW_S, OW_E, OW_W, OW_NE, OW_NW, OW_SE, OW_SW");
+			blockType = enterTxt();
+		}
+		m_elementTable[i][j] = blockType;
 	}
 
 	/*
@@ -534,6 +668,7 @@ public class RoomGenerator {
 			System.out.println("-'p--s' to create a new platform in Soft mode (no platforms around)");
 			System.out.println(
 					"-'p--h' to create a new platform in Hard mode (without checking what is behind/around it)");
+			System.out.println("-'chb' to change a specific bloc");
 			System.out.println("-'b' to finish a room by adding it's border");
 			System.out.println("-'des' to change an area of the map to empty spaces");
 			System.out.println("-'s' to save the current room as a text file");
@@ -544,6 +679,8 @@ public class RoomGenerator {
 			String str = enterTxt();
 			if (str.contentEquals("new")) {
 				f = getFile();
+				row = 0;
+				col = 0;
 				while (row <= 0 || col <= 0) {
 					row = enterRow();
 					col = enterCol();
@@ -554,7 +691,8 @@ public class RoomGenerator {
 					}
 				}
 				roomGen = new RoomGenerator(row, col);
-				System.out.println("The new room has been created with the size : "+roomGen.m_row+":"+roomGen.m_col);
+				System.out.println(
+						"The new room has been created with the size : " + roomGen.m_row + ":" + roomGen.m_col);
 				enterTxt();
 			} else if (str.contentEquals("edit")) {
 				f = openFile();
@@ -562,13 +700,13 @@ public class RoomGenerator {
 				col = getCol(f);
 				roomGen = new RoomGenerator(row, col);
 				roomGen.m_elementTable = roomGen.extractor(f);
-				if (roomGen.m_elementTable!=null) {
+				if (roomGen.m_elementTable != null) {
 					System.out.println("The File is correctly openned");
 				} else {
 					System.out.println("The file was open incorrectly");
 					f = null;
-					row=0;
-					col=0;
+					row = 0;
+					col = 0;
 					roomGen = null;
 				}
 				enterTxt();
@@ -578,6 +716,13 @@ public class RoomGenerator {
 				}
 				roomGen.zoneDestruction();
 				System.out.println("The area has been cleaned");
+				enterTxt();
+			} else if (str.contentEquals("chb")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.changeBlock();
+				System.out.println("The given block has been changed");
 				enterTxt();
 			} else if (str.contentEquals("e")) {
 				if (f == null || roomGen == null) {
@@ -673,10 +818,10 @@ public class RoomGenerator {
 
 	/*
 	 * 
-	 * This method open an existing file with the given name 
+	 * This method open an existing file with the given name
 	 * 
 	 */
-	
+
 	public static File openFile() {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Enter new FileName");
@@ -690,13 +835,14 @@ public class RoomGenerator {
 		}
 		return f1;
 	}
-	
+
 	/*
 	 * 
-	 * This method extract the element from each lines of the document to get the room set up
+	 * This method extract the element from each lines of the document to get the
+	 * room set up
 	 * 
 	 */
-	
+
 	public String[][] extractor(File f) throws IOException {
 		BufferedReader reader = CreateNewReader(f);
 		reader.readLine();
@@ -708,23 +854,23 @@ public class RoomGenerator {
 				return null;
 			}
 			String[] lineTable = line.split("/");
-			if (lineTable.length!=m_col) {
+			if (lineTable.length != m_col) {
 				System.out.println("Error in the extraction : dimensions do not correpond");
 				reader.close();
 				return null;
 			}
-			for (int j = 0; j <m_col ; j++) {
-				m_elementTable[i][j]=lineTable[j];
+			for (int j = 0; j < m_col; j++) {
+				m_elementTable[i][j] = lineTable[j];
 			}
 		}
 		reader.close();
 		return m_elementTable;
 	}
-	
+
 	/*
 	 * 
-	 * This method allow to create of File of the given name. 
-	 * If the name is already used, a new name is asked
+	 * This method allow to create of File of the given name. If the name is already
+	 * used, a new name is asked
 	 * 
 	 */
 
@@ -814,7 +960,7 @@ public class RoomGenerator {
 	 * This method reads the corresponding file to get the number of rows
 	 * 
 	 */
-	
+
 	public static int getRow(File f) throws IOException {
 		BufferedReader reader = CreateNewReader(f);
 		String line = reader.readLine();
@@ -822,13 +968,13 @@ public class RoomGenerator {
 		reader.close();
 		return Integer.parseInt(lineTable[0]);
 	}
-	
+
 	/*
 	 * 
 	 * This method reads the corresponding file to get the number of cols
 	 * 
 	 */
-	
+
 	public static int getCol(File f) throws IOException {
 		BufferedReader reader = CreateNewReader(f);
 		String line = reader.readLine();
@@ -836,7 +982,7 @@ public class RoomGenerator {
 		reader.close();
 		return Integer.parseInt(lineTable[1]);
 	}
-	
+
 	/*
 	 * 
 	 * This method return an integer given by the user;
