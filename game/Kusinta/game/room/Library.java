@@ -1,10 +1,11 @@
 package room;
 
+import automaton.Automaton;
 import game.Coord;
 
 public class Library extends Decor {
-	public Library(Coord coord, Room room) {
-		super(false, true, false, coord, room);
+	public Library(Coord coord, Room room, Automaton automaton) {
+		super(false,true, false, coord, room, automaton);
 		int n = (int) (Math.random() * 2) + 1;
 		String image_path = "resources/Room/decors/library" + n + ".png";
 		try {

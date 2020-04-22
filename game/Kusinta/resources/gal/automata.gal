@@ -19,3 +19,8 @@ Fleche (Init) {
   | Cell(H,V) ? Move : (Init)
   | Cell(H,_) ? Explode : ( )
 }
+
+Decor (Inactif) {                
+  *(Inactif) 
+  | True ? : (Inactif)
+}

@@ -1,5 +1,6 @@
 package room;
 
+import automaton.Automaton;
 import game.Coord;
 
 public class EmptySpace extends Element {
@@ -12,16 +13,8 @@ public class EmptySpace extends Element {
 	 * 
 	 */
 
-	public EmptySpace(EmptySpaceImageManager ESImageManager) throws Exception {
-		super(false, true);
-		String path = ESImageManager.get("", ESImageManager.useImageTable);
-		if (path != null) {
-			loadImage(path);
-		}
-	}
-
-	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws Exception {
-		super(false, true, coord);
+	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager, Automaton automaton) throws Exception {
+		super(false, true, coord, automaton);
 		String path = ESImageManager.get("", ESImageManager.useImageTable);
 		if (path != null) {
 			loadImage(path);
