@@ -436,15 +436,31 @@ public class RoomGenerator {
 
 	/*
 	 * 
-	 * 
-	 * 
+	 * This method is used to get a quick view of the blocks and platform you've
+	 * already put
 	 * 
 	 */
 
 	public void QuickReview() {
 		System.out.println("Quick review of the room :");
-		System.out.print("Table de correspondance :\n-' . ' is an ");
+		System.out.print(
+				"Table :\n-' . ' is an Empty space or a Decor\n-' I ' is the initial point\n-' D ' is the door\n-' X ' is a wall\n-' : ' is a unidentified cell\n");
+		for (int i = 0; i < m_col + 1; i++) {
+			if (i == 0) {
+				System.out.print(" " + i + "  ");
+			} else if (i >= 10) {
+				System.out.print(i + " ");
+			} else {
+				System.out.print(" " + i + " ");
+			}
+		}
+		System.out.print("\n");
 		for (int i = 0; i < m_row; i++) {
+			if (i + 1 < 10) {
+				System.out.print(" " + (i + 1) + "  ");
+			} else if (i + 1 >= 10) {
+				System.out.print(" " + (i + 1) + " ");
+			}
 			for (int j = 0; j < m_col; j++) {
 				if (m_elementTable[i][j] == "ES" || m_elementTable[i][j] == "ES_T") {
 					System.out.print(" . ");
@@ -453,12 +469,11 @@ public class RoomGenerator {
 				} else if (m_elementTable[i][j] == "ES_D") {
 					System.out.print(" D ");
 				} else if (m_elementTable[i][j] == "IW" || m_elementTable[i][j] == "OW_N"
-						|| m_elementTable[i][j] == "OW_S" || m_elementTable[i][j]=="OW_E"
-						|| m_elementTable[i][j]=="OW_W" || m_elementTable[i][j]=="OW_NE"
-						|| m_elementTable[i][j]=="OW_NW" || m_elementTable[i][j]=="OW_SE"
-						|| m_elementTable[i][j]=="OW_SW") {
+						|| m_elementTable[i][j] == "OW_S" || m_elementTable[i][j] == "OW_E"
+						|| m_elementTable[i][j] == "OW_W" || m_elementTable[i][j] == "OW_NE"
+						|| m_elementTable[i][j] == "OW_NW" || m_elementTable[i][j] == "OW_SE"
+						|| m_elementTable[i][j] == "OW_SW") {
 					System.out.print(" X ");
-
 				} else {
 					System.out.print(" : ");
 				}
@@ -593,9 +608,9 @@ public class RoomGenerator {
 
 		roomGen.emptyMapGenerator();
 		roomGen.AddPlatformHard();
-		roomGen.AddPlatformSoft();
-		roomGen.AddPlatformSoft();
-		roomGen.AddCompleteBorder();
+		roomGen.AddDoor();
+		roomGen.AddInitialpoint();
+		roomGen.QuickReview();
 		roomGen.updateTextDocument(f);
 	}
 
