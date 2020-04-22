@@ -1,5 +1,6 @@
 package player;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import projectile.Arrow;
 public class Player extends Character {
 
 	int DIMENSION = 5;
+	int DIMENSION_HB = 140;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 10.5;
@@ -25,9 +27,9 @@ public class Player extends Character {
 	boolean falling, jumping, poping;
 
 	int SPEED_WALK = 3;
-
-	int m_mouse_x, m_mouse_y;
-
+	
+	int m_width;
+	
 	int dt_x, dt_y;
 	double speed_x, speed_y;
 	long m_ratio_x, m_ratio_y;
@@ -44,26 +46,33 @@ public class Player extends Character {
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model);
 		
-		m_y-=DIMENSION;
+		try {
+			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
+			m_width = bI[0].getWidth();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
-		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
+		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
+		y_hitBox = new int[] { m_y, m_y - DIMENSION_HB, m_y - DIMENSION_HB, m_y};
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
 		m_State = IDLE;
-
-		try {
-			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		qPressed = false;
+		zPressed = false;
+		dPressed = false;
+		espPressed = false;
+		aPressed = false;
+		ePressed = false;
 	}
 
 	@Override
 	public boolean move(Direction dir) { // bouger
+		m_State = WALKING;
 		if (dir != m_direction) {
 			turn(dir);
 		}
@@ -90,32 +99,38 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		// if(!m_room.is_blocked(m_x, m_y + DIMENSION)){
-		jumping = true;
-		m_time = 0;
-		return false;
+		m_State = JUMPING;
+		if(!m_model.m_room.isBlocked(m_x, m_y + DIMENSION)){
+			jumping = true;
+			m_time = 0;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		// if(!m_room.is_blocked(m_x, m_y + DIMENSION)){
-		poping = true;
-		m_time = 0;
-		return false;
+		m_State = JUMPING;
+		if(!m_model.m_room.isBlocked(m_x, m_y + 2*DIMENSION)){
+			poping = true;
+			m_time = 0;
+		}
+		return true;
 	}
 
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
-		double C;
-		if (jumping) {
-			C = ACCELERATION_JUMP;
-		} else if (poping) {
-			C = ACCELERATION_POP;
-		} else {
-			C = 0;
+		if(!m_model.m_room.isBlocked(m_x, m_y)){
+			double C;
+			if (jumping) {
+				C = ACCELERATION_JUMP;
+			} else if (poping) {
+				C = ACCELERATION_POP;
+			} else {
+				C = 0;
+			}
+			m_y = (int) ((-0.5 * G * t + C * t));
 		}
-		m_y = (int) ((-0.5 * G * t + C * t) + DIMENSION);
 	}
 
 	@Override
@@ -153,17 +168,14 @@ public class Player extends Character {
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == 113) {
-			m_State = WALKING;
 			if (speed_x == 0)
 				dt_x = 0;
 			return qPressed;
 		}
-		if (keyCode == 90) {
-			m_State = JUMPING;
+		if (keyCode == 122) {
 			return zPressed;
 		}
-		if (keyCode == 68) {
-			m_State = WALKING;
+		if (keyCode == 100) {
 			if (speed_x == 9)
 				dt_x = 0;
 			return dPressed;
@@ -197,11 +209,15 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 
 			switch (m_State) {
+			case IDLE:
+				m_image_index = (m_image_index + 1) % 4;
+				break;
 			case WALKING:
 				m_image_index = (m_image_index + 1) % 6 + 8;
 				break;
 			case JUMPING:
 				m_image_index = (m_image_index + 1) % 9 + 15;
+				break;
 			default:
 				m_image_index = (m_image_index + 1) % 4;
 				break;
@@ -213,9 +229,13 @@ public class Player extends Character {
 	public void paint(Graphics g) {
 		if (bI != null) {
 			BufferedImage img = bI[m_image_index];
-			g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
-					null);
+			int w = DIMENSION * img.getWidth();
+			int h = DIMENSION * img.getHeight();
+			g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y, w, h, null);
+			g.drawRect(m_x, m_y, img.getWidth(), h);
 		}
+		g.setColor(Color.blue);
+		g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 	}
 
 }
