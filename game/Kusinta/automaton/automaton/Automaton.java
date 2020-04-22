@@ -27,7 +27,7 @@ public class Automaton {
 				return act;
 			}
 		}
-		return actions[-1];
+		return actions[actions.length];
 	}
 	
 	private State randomState(HashMap<State, Transition[]> t) {
@@ -43,7 +43,7 @@ public class Automaton {
 					Action actions[] = (Action[]) transitions[i].m_actions;
 					if (actions.length == 1)
 						actions[0].apply(e);
-					else
+					else if (actions.length > 1)
 						randomAction(actions).apply(e);
 					if (transitions[i].finalState.getName().equals("_"))
 						e.setCurrentState(randomState(mapTransitions));
