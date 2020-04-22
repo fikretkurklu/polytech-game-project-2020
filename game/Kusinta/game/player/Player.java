@@ -15,8 +15,8 @@ public class Player extends Character {
 	int DIMENSION = 5;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
-	double ACCELERATION_JUMP = 1.5;
-	double ACCELERATION_POP = 0.5;
+	double ACCELERATION_JUMP = 2;
+	double ACCELERATION_POP = 2;
 	
 	int SPEED_WALK = 1;
 
@@ -109,7 +109,7 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height)){
+		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height) && !falling){
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
@@ -123,11 +123,13 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height)){
+		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height) && !falling){
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			poping = true;
-			m_time = 0;
+			falling = true;
+			m_time = m_ratio_y;
+			gravity(m_time);
 		}
 		return true;
 	}
@@ -242,6 +244,7 @@ public class Player extends Character {
 		} else if(falling) {
 			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 			falling = false;
+			jumping = false;
 		} else {
 			m_State = IDLE;
 			jumping = false;
