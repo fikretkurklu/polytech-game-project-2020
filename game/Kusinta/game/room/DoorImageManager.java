@@ -13,11 +13,11 @@ public class DoorImageManager extends ImageManager {
 		useImageTable = false;
 		switch(ambiance) {
 		case(1) :
-			String[] path_1 = {"resources/Room/A1/Door1.png","resources/Room/A1/Door2.png"};
+			String[] path_1 = {"resources/Room/decors/Door1.png"};
 			this.imgPath = path_1;
 			break;
 		case(2) :
-			String[] path_2 = {"resources/Room/A2/Door1.png"};
+			String[] path_2 = {"resources/Room/decors/Door1.png"};
 			this.imgPath = path_2;		
 			break;
 		case(3) :

@@ -4,7 +4,14 @@ import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
 
+
+import automata.ast.AST;
+import automata.parser.AutomataParser;
+import automaton.Automaton;
+import automaton.Entity;
+import automaton.Interpretor;
 import game.Coord;
 
 public class Room {
@@ -12,40 +19,76 @@ public class Room {
 	int m_width, m_height;
 	int nbRow;
 	int nbCol;
-	String roomFile;
-	Element[] m_elements;
-	int ambiance = 1;
-	
-	Coord startCoord;
-	
-	OuterWallImageManager OWIM = new OuterWallImageManager(ambiance);
-	InnerWallImageManager IWIM = new InnerWallImageManager(ambiance);
-	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
 
+	String roomFile;
+	Element[] m_elements; // liste des entity de la salles (mur)
+	Element[] m_background; // liste du décors non entité
+	Decor[] m_decor; // liste de tout les décors affichable
+	int ambiance;
+	boolean isChanged;
+	
+	/*
+	 * Cette variable va nous servir à eviter que les décors ne soient pas trop
+	 * collé
+	 */
+	
+	int decorFreq;
+	Coord startCoord;
+
+	OuterWallImageManager OWIM;
+	InnerWallImageManager IWIM;
+	EmptySpaceImageManager ESIM;
+	DoorImageManager DIM;
+	Automaton BlockAutomaton = null;
+	Automaton StaticDecorAutomaton = null;
+	
+	int m_BlockAElapsed = 0;
+
+	@SuppressWarnings("unchecked")
 	public Room() {
 		startCoord = new Coord();
+		m_decor = new Decor[0];
+		m_elements = new Element[0];
+		m_background = new Element[0];
+		decorFreq = (int) (Math.random() * 10) + 5;
+		ambiance = (int) (Math.random() * RoomParam.nbAmbiance) + 1;
+
+		OWIM = new OuterWallImageManager(ambiance);
+		IWIM = new InnerWallImageManager(ambiance);
+		ESIM = new EmptySpaceImageManager(ambiance);
+		DIM = new DoorImageManager(ambiance);
+
+		AST ast;
+		
+		try {
+			ast = (AST) AutomataParser.from_file("resources/gal/automata.gal");
+			Interpretor interpret = new Interpretor();
+			BlockAutomaton = ((List<Automaton>) ast.accept(interpret)).get(1);
+			StaticDecorAutomaton = ((List<Automaton>) ast.accept(interpret)).get(3);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		BufferedReader f;
 		try {
-			roomFile = "resources/Room/Sample/room1.sample";
+			roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
 			f = new BufferedReader(new FileReader(new File(roomFile)));
-
 			/*
 			 * Le fichier suis cette syntaxe: 
 			 * Row:Col 
 			 * CODE/CODE/CODE/...../ 
-			 * ... 
-			 * ... 
+			 * ...
+			 * ...
 			 * ...
 			 */
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
-			m_elements = new Element[nbRow * nbCol];
+			//m_background = new Element[i * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE,
-							i * Element.SIZE);;
+					CodeElement(actualLigne[j], j, i);
 				}
 			}
 			f.close();
@@ -55,52 +98,146 @@ public class Room {
 		}
 	}
 
-	public Element CodeElement(String code, int x, int y) throws Exception {
-		Coord coord = new Coord(x, y);
+	public void CodeElement(String code, int x, int y) throws Exception{
+		
+		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
 		if (code.equals("IW")) {
-			return new InnerWall(coord, IWIM);
+			Grow(false, new InnerWall(coord, IWIM));
 		} else if (code.equals("OW_E")) {
-			return new OuterWall(coord, OWIM, "E");
+			Grow(true, new OuterWall(coord, OWIM, "E", BlockAutomaton));
 		} else if (code.equals("OW_S")) {
-			return new OuterWall(coord, OWIM, "S");
+			Grow(true, new OuterWall(coord, OWIM, "S", BlockAutomaton));
 		} else if (code.equals("OW_W")) {
-			return new OuterWall(coord, OWIM, "W");
+			Grow(true, new OuterWall(coord, OWIM, "W", BlockAutomaton));
 		} else if (code.equals("OW_N")) {
-			return new OuterWall(coord, OWIM, "N");
+			Grow(true, new OuterWall(coord, OWIM, "N", BlockAutomaton));
 		} else if (code.equals("OW_SE")) {
-			return new OuterWall(coord, OWIM, "SE");
+			Grow(true, new OuterWall(coord, OWIM, "SE", BlockAutomaton));
 		} else if (code.equals("OW_SW")) {
-			return new OuterWall(coord, OWIM, "SW");
+			Grow(true, new OuterWall(coord, OWIM, "SW", BlockAutomaton));
 		} else if (code.equals("OW_NW")) {
-			return new OuterWall(coord, OWIM, "NW");
+			Grow(true, new OuterWall(coord, OWIM, "NW", BlockAutomaton));
 		} else if (code.equals("OW_NE")) {
-			return new OuterWall(coord, OWIM, "NE");
+			Grow(true, new OuterWall(coord, OWIM, "NE", BlockAutomaton));
 		} else if (code.equals("ES")) {
-			return new EmptySpace(coord, ESIM);
+			Grow(false, new EmptySpace(coord, ESIM));
+		} else if (code.equals("ES_D")) {
+			newDecor(coord, true);
+			Grow(false, new EmptySpace(coord, ESIM));
 		} else if (code.equals("ES_I")) {
 			startCoord = new Coord(coord);
-			return new EmptySpace(coord, ESIM);
-			
-		} else {
-			System.out.println("Non reach point. Code Error on : " + code);
-		}
+			startCoord.translate(Decor.SIZE / 2, Decor.SIZE);
+			Grow(false, new EmptySpace(coord, ESIM));
+		} else if (code.equals("ES_T")) {
+			newDecor(coord, false);
+			Grow(false, new EmptySpace(coord, ESIM));
+		} 
+		//throw new Exception("Code room err: " + code);
 
-		throw new Exception("Code room err: " + code);
+	}
+
+	public void Grow(boolean isElement, Element add) {
+		if (isElement) {
+			Element[] tmp_elements= new Element[m_elements.length + 1];
+			System.arraycopy(m_elements, 0, tmp_elements, 0, m_elements.length);
+			tmp_elements[m_elements.length] = add;
+			m_elements = tmp_elements;
+		}
+		Element[] tmp_background= new Element[m_background.length + 1];
+		System.arraycopy(m_background, 0, tmp_background, 0, m_background.length);
+		tmp_background[m_background.length] = add;
+		m_background = tmp_background;
+	}
+	
+	/*
+	 * Methode qui va creer un nouveau décor a la position souhaitée, en fonction de
+	 * la fréquence d'appartition du décor. le boolean isDoor permet de spécifier
+	 * que l'ont veut creer une porte.
+	 */
+	public void newDecor(Coord coord, boolean isDoor) {
+		if (isDoor) {
+			Decor[] tmp_decor = new Decor[m_decor.length + 1];
+			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
+			try {
+				tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM, this, StaticDecorAutomaton);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			m_decor = tmp_decor;
+		} else {
+			int rand = (int) (Math.random() * 100);
+			if (rand < decorFreq) {
+				Decor[] tmp_decor = new Decor[m_decor.length + 1];
+				System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
+				int decor_type = (int) (Math.random() * Decor.NB_DECOR);
+				switch (decor_type) {
+				case 0:
+					tmp_decor[m_decor.length] = new Torch(new Coord(coord), this, StaticDecorAutomaton);
+					break;
+				case 1:
+					tmp_decor[m_decor.length] = new Lamp(new Coord(coord), this, StaticDecorAutomaton);
+					break;
+				case 2:
+					tmp_decor[m_decor.length] = new Library(new Coord(coord), this, StaticDecorAutomaton);
+					break;
+				case 3:
+					tmp_decor[m_decor.length] = new Stage(new Coord(coord), this, StaticDecorAutomaton);
+					break;
+				default:
+					tmp_decor[m_decor.length] = new Lamp(new Coord(coord), this, StaticDecorAutomaton);
+					break;
+				}
+				m_decor = tmp_decor;
+				decorFreq = 0;
+			} else {
+				decorFreq += (int) (Math.random() * 10) + 5;
+			}
+		}
 
 	}
 
 	public void paint(Graphics g) {
-		for (int i = 0; i < m_elements.length; i++) {
-			m_elements[i].paint(g);
+		for (int i = 0; i < m_background.length; i++) {
+			m_background[i].paint(g);
+		}
+		for (int i = 0; i < m_decor.length; i++) {
+			m_decor[i].paint(g);
 		}
 	}
-	
+
 	public Coord getStartCoord() {
 		return startCoord;
 	}
-	
+
 	public boolean isBlocked(int x, int y) {
-		return m_elements[(x%nbCol) * nbCol + y %nbRow].__isSolid;
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_background[n].__isSolid;
+		}
+		return true;
+	}
+
+	public void tick(long elapsed) {
+		for (int i = 0; i < m_decor.length; i++) {
+			m_decor[i].tick(elapsed);
+		}
+		m_BlockAElapsed += elapsed;
+		if (m_BlockAElapsed > 1000) {
+			m_BlockAElapsed = 0;
+			for (int i = 0; i < m_elements.length; i ++) {
+				if (m_elements[i].getAutomaton() != null) {
+					m_elements[i].getAutomaton().step(m_elements[i]);
+				}
+			}
+			
+			for (int i = 0; i < m_decor.length; i ++) {
+				if (m_decor[i].getAutomaton() != null) {
+					m_decor[i].getAutomaton().step(m_decor[i]);
+				}
+			}
+			
+		}
 	}
 
 }
