@@ -91,6 +91,7 @@ public class Room {
 			return new EmptySpace(coord, ESIM);
 		} else if (code.equals("ES_I")) {
 			startCoord = new Coord(coord);
+			startCoord.translate(Decor.SIZE / 2, Decor.SIZE / 2);
 			return new EmptySpace(coord, ESIM);
 		} else if (code.equals("ES_T")) {
 			newDecor(coord, false);
