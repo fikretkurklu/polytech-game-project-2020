@@ -43,7 +43,6 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model);
-
 		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
 		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
 
@@ -217,6 +216,8 @@ public class Player extends Character {
 			BufferedImage img = bI[m_image_index];
 			g.drawImage(img, m_x - DIMENSION, m_y - DIMENSION, DIMENSION * img.getWidth(), DIMENSION * img.getHeight(),
 					null);
+		} else {
+			
 		}
 	}
 

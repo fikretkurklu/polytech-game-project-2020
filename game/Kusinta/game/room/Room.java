@@ -175,11 +175,12 @@ public class Room {
 	}
 	
 	public boolean isBlocked(int x, int y) {
-		return m_elements[(x %nbCol) * nbCol + y %nbRow].__isSolid;
+		return m_elements[(x / Element.SIZE) + (y / Element.SIZE * nbCol)].__isSolid;
+		return true;
 	}
 	
 	public boolean isBlocked(Coord coord) {
-		return m_elements[(coord.X() %nbCol) * nbCol + coord.Y() %nbRow].__isSolid;
+		return m_elements[(coord.X() %nbCol) * nbCol + (coord.Y() %nbRow) * nbRow].__isSolid;
 	}
 	
 	public void tick(long elapsed) {
