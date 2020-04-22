@@ -6,12 +6,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-import automaton.Entity;
 import game.Coord;
 import room.Element;
-import room.EmptySpace;
-import room.EmptySpaceImageManager;
-import room.RoomParam;
+
 
 public class Map {
 	
