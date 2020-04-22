@@ -176,7 +176,6 @@ public class Room {
 	
 	public boolean isBlocked(int x, int y) {
 		return m_elements[(x / Element.SIZE) + (y / Element.SIZE * nbCol)].__isSolid;
-		return true;
 	}
 	
 	public boolean isBlocked(Coord coord) {
