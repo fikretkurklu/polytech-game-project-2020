@@ -10,6 +10,7 @@ import java.util.List;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.Entity;
 import automaton.Interpretor;
 import game.Coord;
 
@@ -223,7 +224,9 @@ public class Room {
 		}
 		m_BlockAElapsed += elapsed;
 		if (m_BlockAElapsed > 1000) {
-			m_elements
+			for (int i = 0; i < m_elements.length; i ++) {
+			}
+			
 		}
 	}
 
