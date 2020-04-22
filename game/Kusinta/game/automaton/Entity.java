@@ -6,7 +6,7 @@ import automaton.State;
 public abstract class Entity {
 
 	private State m_state;
-	Automaton m_automaton;
+	protected Automaton m_automaton;
 	
 	public Entity() {}
 	

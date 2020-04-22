@@ -29,6 +29,10 @@ public abstract class Character extends Entity {
 	// Sprite m_character;
 
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
+		super(automaton);
+		
+		m_automaton = automaton;
+		
 		m_x = x;
 		m_y = y;
 		m_direction = dir;

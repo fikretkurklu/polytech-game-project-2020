@@ -39,7 +39,7 @@ public class Player extends Character {
 	public LinkedList<Arrow> m_arrows;
 	long m_imageElapsed;
 
-	int m_state;
+	int m_State;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model);
@@ -53,7 +53,7 @@ public class Player extends Character {
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
-		m_state = IDLE;
+		m_State = IDLE;
 
 		try {
 			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
@@ -153,17 +153,17 @@ public class Player extends Character {
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == 81) {
-			m_state = WALKING;
+			m_State = WALKING;
 			if (speed_x == 0)
 				dt_x = 0;
 			return qPressed;
 		}
 		if (keyCode == 90) {
-			m_state = JUMPING;
+			m_State = JUMPING;
 			return zPressed;
 		}
 		if (keyCode == 68) {
-			m_state = WALKING;
+			m_State = WALKING;
 			if (speed_x == 9)
 				dt_x = 0;
 			return dPressed;
@@ -191,11 +191,12 @@ public class Player extends Character {
 			jumping = false;
 			falling = false;
 		}
+		
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
-			switch (m_state) {
+			switch (m_State) {
 			case WALKING:
 				m_image_index = (m_image_index + 1) % 6 + 8;
 				break;
@@ -206,6 +207,7 @@ public class Player extends Character {
 				break;
 			}
 		}
+		m_automaton.step(this);
 	}
 
 	public void paint(Graphics g) {
