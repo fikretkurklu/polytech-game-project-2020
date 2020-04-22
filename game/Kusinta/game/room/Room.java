@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import game.Coord;
 
 public class Room {
@@ -16,7 +18,7 @@ public class Room {
 	String roomFile;
 	Element[] m_elements; // liste des éléments de la salles (mur, et vide)
 	Decor[] m_decor; // liste de tout les décors affichable
-	int ambiance = 1;
+	int ambiance;
 	boolean isChanged;
 	/* 
 	 * Cette variable va nous servir à eviter que les décors ne soient pas trop collé
@@ -25,18 +27,25 @@ public class Room {
 	
 	Coord startCoord;
 	
-	OuterWallImageManager OWIM = new OuterWallImageManager(ambiance);
-	InnerWallImageManager IWIM = new InnerWallImageManager(ambiance);
-	EmptySpaceImageManager ESIM = new EmptySpaceImageManager(ambiance);
-	DoorImageManager DIM = new DoorImageManager(ambiance);
+	OuterWallImageManager OWIM;
+	InnerWallImageManager IWIM;
+	EmptySpaceImageManager ESIM;
+	DoorImageManager DIM;
 	
 	public Room() {
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		decorFreq = (int) (Math.random() * 10) + 5;
+		ambiance = (int) (Math.random() * RoomParam.nbAmbiance) + 1;
+		
+		OWIM = new OuterWallImageManager(ambiance);
+		IWIM = new InnerWallImageManager(ambiance);
+		ESIM = new EmptySpaceImageManager(ambiance);
+		DIM = new DoorImageManager(ambiance);
+		
 		BufferedReader f;
 		try {
-			roomFile = "resources/Room/Sample/room1.sample";
+			roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
 			f = new BufferedReader(new FileReader(new File(roomFile)));
 			/*
 			 * Le fichier suis cette syntaxe: 
@@ -114,7 +123,7 @@ public class Room {
 			Decor[] tmp_decor = new Decor[m_decor.length + 1];
 			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
 			try {
-				tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM);
+				tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM, this);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -128,19 +137,19 @@ public class Room {
 				int decor_type = (int) (Math.random() * Decor.NB_DECOR);
 				switch (decor_type) {
 				case 0:
-					tmp_decor[m_decor.length] = new Torch(new Coord(coord));
+					tmp_decor[m_decor.length] = new Torch(new Coord(coord), this);
 					break;
 				case 1:
-					tmp_decor[m_decor.length] = new Lamp(new Coord(coord));
+					tmp_decor[m_decor.length] = new Lamp(new Coord(coord), this);
 					break;
 				case 2:
-					tmp_decor[m_decor.length] = new Library(new Coord(coord));
+					tmp_decor[m_decor.length] = new Library(new Coord(coord), this);
 					break;
 				case 3:
-					tmp_decor[m_decor.length] = new Stage(new Coord(coord));
+					tmp_decor[m_decor.length] = new Stage(new Coord(coord), this);
 					break;
 				default:
-					tmp_decor[m_decor.length] = new Lamp(new Coord(coord));
+					tmp_decor[m_decor.length] = new Lamp(new Coord(coord),this);
 					break;
 				}
 				m_decor = tmp_decor;
@@ -166,7 +175,7 @@ public class Room {
 	}
 	
 	public boolean isBlocked(int x, int y) {
-		return m_elements[(x%nbCol) * nbCol + y %nbRow].__isSolid;
+		return m_elements[(x %nbCol) * nbCol + y %nbRow].__isSolid;
 	}
 	
 	public boolean isBlocked(Coord coord) {

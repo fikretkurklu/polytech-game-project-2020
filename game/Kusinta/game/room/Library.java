@@ -3,8 +3,8 @@ package room;
 import game.Coord;
 
 public class Library extends Decor {
-	public Library(Coord coord) {
-		super(false, true, false, coord);
+	public Library(Coord coord, Room room) {
+		super(false, true, false, coord, room);
 		int n = (int) (Math.random() * 2) + 1;
 		String image_path = "resources/Room/decors/library" + n + ".png";
 		try {

@@ -9,8 +9,8 @@ import game.Coord;
 
 public class Torch extends Decor{
 
-	public Torch(Coord coord) {
-		super(false, true, true, coord);
+	public Torch(Coord coord, Room room) {
+		super(false, true, true, coord, room);
 		loadImages();
 	}
 	

@@ -2,11 +2,9 @@ package room;
 import game.Coord;
 
 public class Door extends Decor {
-
-	Room m_room;
 	
-	public Door(Coord coord, DoorImageManager DImageManager) throws Exception {
-		super(false, true, true, coord);
+	public Door(Coord coord, DoorImageManager DImageManager, Room room) throws Exception {
+		super(false, true, true, coord, room);
 		String path = DImageManager.get("", DImageManager.useImageTable);
 		if (path != null) {
 			loadImage(path);
