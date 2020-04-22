@@ -135,6 +135,7 @@ public class Player extends Character {
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
 		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()) || falling){
+			m_State = JUMPING;
 			double C;
 			if (jumping) {
 				C = ACCELERATION_JUMP;
@@ -182,7 +183,7 @@ public class Player extends Character {
 			if(pressed == true && m_State!=JUMPING) {
 				m_image_index = 15;
 			} else {
-				m_State = IDLE;
+					m_State = IDLE;
 			}
 		}
 		if (keyCode == 100) {
@@ -239,8 +240,10 @@ public class Player extends Character {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if(falling) {
-			
+			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
+			falling = false;
 		} else {
+			m_State = IDLE;
 			jumping = false;
 			falling = false;
 		}
@@ -259,6 +262,8 @@ public class Player extends Character {
 				break;
 			case JUMPING:
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
+				if(m_image_index == 18)
+					m_image_index = 22;
 				break;
 			default:
 				m_image_index = (m_image_index + 1) % 4;

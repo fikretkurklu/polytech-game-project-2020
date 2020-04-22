@@ -102,15 +102,6 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-		if (e.getKeyCode() == 37) {
-			m_game.m_model.centerScreen.translate(-10, 0);
-		} else if (e.getKeyCode() == 38) {
-			m_game.m_model.centerScreen.translate(0, -10);
-		} else if (e.getKeyCode() == 39) {
-			m_game.m_model.centerScreen.translate(10, 0);
-		} else if (e.getKeyCode() == 40) {
-			m_game.m_model.centerScreen.translate(0, 10);
-		}
 
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
 

@@ -24,7 +24,6 @@ public class Model {
 	public Coord m_mouseCoord;
 
 	public Room m_room;
-	Coord centerScreen; // position du personnage plus tard;
 
 	Player m_player;
 	View m_view;
@@ -32,8 +31,6 @@ public class Model {
 
 	public Model() throws IOException {
 		m_room = new Room();
-		centerScreen = m_room.getStartCoord();
-		setCenterScreen();
 		m_view = null;
 
 		AST ast;
@@ -50,6 +47,8 @@ public class Model {
 		}
 		
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("E"), this);
+		setCenterScreen();
+
 	}
 
 	public void setView(View view) {
@@ -57,11 +56,9 @@ public class Model {
 	}
 
 	public void setCenterScreen() {
-		x_decalage = m_width / 2 - centerScreen.X();
-		y_decalage = m_height / 2 - centerScreen.Y();
+		x_decalage = m_width / 2 - m_player.getCoord().X();
+		y_decalage = m_height / 2 - m_player.getCoord().Y();
 
-//		x_decalage = m_player.getCoord().X();
-//		y_decalage = m_player.getCoord().Y();
 	}
 
 	public void tick(long elapsed) {
