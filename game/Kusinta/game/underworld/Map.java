@@ -23,13 +23,13 @@ public class Map {
 	int nbRow;
 	int nbCol;
 
-	EmptySpaceImageManager ESIM;
+	MapEmptySpaceImageManager ESIM;
 
 	public Map() {
 		startCoord = new Coord();
 		ambiance = (int)(Math.random()*MapParam.nbAmbiance)+1;
 		BufferedReader f;
-		ESIM = new EmptySpaceImageManager(1);
+		ESIM = new MapEmptySpaceImageManager(1);
 
 		try {
 			mapFile = MapParam.mapFile;
@@ -63,7 +63,7 @@ public class Map {
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
 		if (code.equals("ES")) {
-			return new EmptySpace(coord, ESIM);
+			return new MapEmptySpace(coord, ESIM);
 		}
 		throw new Exception("Code room err: " + code);
 	}
