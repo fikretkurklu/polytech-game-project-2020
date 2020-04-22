@@ -13,13 +13,12 @@ import projectile.Arrow;
 public class Player extends Character {
 
 	int DIMENSION = 5;
-	int DIMENSION_HB = 140;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 10.5;
 	double ACCELERATION_POP = 11;
 	
-	int SPEED_WALK = 3;
+	int SPEED_WALK = 1;
 
 	static final int WALKING = 0;
 	static final int JUMPING = 1;
@@ -55,7 +54,7 @@ public class Player extends Character {
 		}
 
 		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
-		y_hitBox = new int[] { m_y, m_y + m_height, m_y + m_height, m_y};
+		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
@@ -78,15 +77,15 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)){
+			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
 					speed_x = SPEED_WALK;
 				m_x += speed_x;
 			}
-		} else if (dir.toString() == "W") {
-			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y)){
+		} else if (dir.toString().equals("W")) {
+			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x - m_width, m_y-m_height)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -252,11 +251,10 @@ public class Player extends Character {
 			int w = DIMENSION * img.getWidth();
 			int h = DIMENSION * img.getHeight();
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y, w, h, null);
+				g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y-h, w, h, null);
 			} else {
-				g.drawImage(img, m_x + (2*img.getWidth()+5*DIMENSION), m_y, -w, h, null);
+				g.drawImage(img, m_x + (2*img.getWidth()+5*DIMENSION), m_y-h, -w, h, null);
 			}
-			g.drawRect(m_x, m_y, img.getWidth(), h);
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
