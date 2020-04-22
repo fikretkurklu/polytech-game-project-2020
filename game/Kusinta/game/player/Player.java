@@ -18,6 +18,8 @@ public class Player extends Character {
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 10.5;
 	double ACCELERATION_POP = 11;
+	
+	int SPEED_WALK = 3;
 
 	static final int WALKING = 0;
 	static final int JUMPING = 1;
@@ -25,10 +27,8 @@ public class Player extends Character {
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
 	boolean falling, jumping, poping;
-
-	int SPEED_WALK = 3;
 	
-	int m_width;
+	int m_width, m_height;
 	
 	int dt_x, dt_y;
 	double speed_x, speed_y;
@@ -49,12 +49,13 @@ public class Player extends Character {
 		try {
 			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
 			m_width = bI[0].getWidth();
+			m_height= DIMENSION * bI[0].getHeight();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
-		y_hitBox = new int[] { m_y, m_y - DIMENSION_HB, m_y - DIMENSION_HB, m_y};
+		y_hitBox = new int[] { m_y, m_y + m_height, m_y + m_height, m_y};
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
@@ -73,24 +74,24 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		m_State = WALKING;
-		if (dir != m_direction) {
+		if (!dir.toString().equals(m_direction.toString())) {
 			turn(dir);
 		}
-		if (dir.toString() == "East") {
-			 if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)){
-			dt_x += m_ratio_x;
-			speed_x = .5 * ACCELERATION * dt_x * dt_x;
-			if (speed_x > SPEED_WALK)
-				speed_x = SPEED_WALK;
-			m_x += speed_x;
-			 }
-		} else if (dir.toString() == "West") {
+		if (dir.toString().equals("E")) {
+			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)){
+				dt_x += m_ratio_x;
+				speed_x = .5 * ACCELERATION * dt_x * dt_x;
+				if (speed_x > SPEED_WALK)
+					speed_x = SPEED_WALK;
+				m_x += speed_x;
+			}
+		} else if (dir.toString() == "W") {
 			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y)){
-			dt_x += m_ratio_x;
-			speed_x = .5 * ACCELERATION * dt_x * dt_x;
-			if (speed_x > SPEED_WALK)
-				speed_x = SPEED_WALK;
-			m_x -= speed_x;
+				dt_x += m_ratio_x;
+				speed_x = .5 * ACCELERATION * dt_x * dt_x;
+				if (speed_x > SPEED_WALK)
+					speed_x = SPEED_WALK;
+				m_x -= speed_x;
 			}
 		}
 		return true;
@@ -151,12 +152,30 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		if (keyCode == 81)
+		if (keyCode == 113) {
 			qPressed = pressed;
-		if (keyCode == 90)
+			if(pressed == true && m_State!=WALKING) {
+				m_image_index = 8;
+			} else {
+				m_State = IDLE;
+			}
+		}
+		if (keyCode == 122) {
 			zPressed = pressed;
-		if (keyCode == 68)
+			if(pressed == true && m_State!=JUMPING) {
+				m_image_index = 15;
+			} else {
+				m_State = IDLE;
+			}
+		}
+		if (keyCode == 100) {
 			dPressed = pressed;
+			if(pressed == true && m_State!=WALKING) {
+				m_image_index = 8;
+			} else {
+				m_State = IDLE;
+			}
+		}
 		if (keyCode == 32)
 			espPressed = pressed;
 		if (keyCode == 65)
@@ -190,6 +209,7 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+		m_ratio_x = elapsed;
 		if (!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)) {
 			if (!falling) {
 				m_time = 0;
@@ -231,11 +251,15 @@ public class Player extends Character {
 			BufferedImage img = bI[m_image_index];
 			int w = DIMENSION * img.getWidth();
 			int h = DIMENSION * img.getHeight();
-			g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y, w, h, null);
+			if (m_direction.toString().equals("E")) {
+				g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y, w, h, null);
+			} else {
+				g.drawImage(img, m_x + (2*img.getWidth()+5*DIMENSION), m_y, -w, h, null);
+			}
 			g.drawRect(m_x, m_y, img.getWidth(), h);
+			g.setColor(Color.blue);
+			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
-		g.setColor(Color.blue);
-		g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 	}
 
 }

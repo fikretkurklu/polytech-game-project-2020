@@ -49,7 +49,7 @@ public class Model {
 			e.printStackTrace();
 		}
 		
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("East"), this);
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("E"), this);
 	}
 
 	public void setView(View view) {
