@@ -224,7 +224,17 @@ public class Room {
 		}
 		m_BlockAElapsed += elapsed;
 		if (m_BlockAElapsed > 1000) {
+			m_BlockAElapsed = 0;
 			for (int i = 0; i < m_elements.length; i ++) {
+				if (m_elements[i].getAutomaton() != null) {
+					m_elements[i].getAutomaton().step(m_elements[i]);
+				}
+			}
+			
+			for (int i = 0; i < m_decor.length; i ++) {
+				if (m_decor[i].getAutomaton() != null) {
+					m_decor[i].getAutomaton().step(m_decor[i]);
+				}
 			}
 			
 		}
