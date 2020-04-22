@@ -27,9 +27,16 @@ import java.awt.event.MouseEvent;
 import game.graphics.GameCanvasListener;
 
 public class Controller implements GameCanvasListener {
-	
-	
+	private static final int K_Z = 122;
+	private static final int K_Q = 113;
+	private static final int K_S = 115;
+	private static final int K_D = 100;
+	private static final int K_A = 97;
+	private static final int K_E = 101;
+	private static final int K_SPACE = 32;
 	Game m_game;
+
+	
 
 	Controller(Game game) {
 		m_game = game;
@@ -104,16 +111,16 @@ public class Controller implements GameCanvasListener {
 		} else if (e.getKeyCode() == 40) {
 			m_game.m_model.centerScreen.translate(0, 10);
 		}
-		
-		m_game.m_model.m_player.setPressed((int)e.getKeyChar(), true);
-			
+
+		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
-		
-		m_game.m_model.m_player.setPressed((int)e.getKeyChar(), false);
+
+		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
 	}
 
 	@Override
