@@ -63,6 +63,7 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
+		m_room.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
