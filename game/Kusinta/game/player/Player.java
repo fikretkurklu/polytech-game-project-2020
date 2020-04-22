@@ -68,7 +68,6 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString() == "East") {
-<<<<<<< HEAD
 			 if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)){
 			dt_x += m_ratio_x;
 			speed_x = .5 * ACCELERATION * dt_x * dt_x;
@@ -83,21 +82,6 @@ public class Player extends Character {
 			if (speed_x > SPEED_WALK)
 				speed_x = SPEED_WALK;
 			m_x -= speed_x;
-=======
-			if (!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)) {
-				dt_x += m_ratio_x;
-				speed_x = .5 * ACCELERATION * dt_x * dt_x;
-				if (speed_x > SPEED_WALK)
-					speed_x = SPEED_WALK;
-				m_x += speed_x;
-			} else if (dir.toString() == "West") {
-				// if(!m_room.is_blocked(m_x - SPEED_WALK, m_y)){
-				dt_x += m_ratio_x;
-				speed_x = .5 * ACCELERATION * dt_x * dt_x;
-				if (speed_x > SPEED_WALK)
-					speed_x = SPEED_WALK;
-				m_x -= speed_x;
->>>>>>> 04243b91d16fa735243dc75506c04a9ab34f0ebc
 			}
 		}
 		return true;
@@ -194,16 +178,6 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
-<<<<<<< HEAD
-		if (!falling) {
-			m_time = 0;
-		} else {
-			m_time += elapsed;
-		}
-		falling = true;
-		if (m_time >= 10) {
-			gravity(m_time);
-=======
 		if (!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)) {
 			if (!falling) {
 				m_time = 0;
@@ -213,7 +187,6 @@ public class Player extends Character {
 			falling = true;
 			if (m_time >= 10)
 				gravity(m_time);
->>>>>>> 04243b91d16fa735243dc75506c04a9ab34f0ebc
 		} else {
 			jumping = false;
 			falling = false;
