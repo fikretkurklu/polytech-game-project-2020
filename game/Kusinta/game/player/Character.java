@@ -34,7 +34,6 @@ public abstract class Character extends Entity {
 		m_direction = dir;
 
 		m_life = MAX_m_life;
-		
 		m_model = model;
 	}
 
