@@ -11,12 +11,13 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import game.Coord;
 import game.Model;
 import projectile.Arrow;
 
 public abstract class Character extends Entity {
 
-	int m_x, m_y;
+	Coord m_coord;
 	Model m_model;
 	Direction m_direction;
 
@@ -33,8 +34,8 @@ public abstract class Character extends Entity {
 		
 		m_automaton = automaton;
 		
-		m_x = x;
-		m_y = y;
+		m_coord = new Coord(x,y);
+		
 		m_direction = dir;
 
 		m_life = MAX_m_life;
@@ -60,6 +61,10 @@ public abstract class Character extends Entity {
 			return images;
 		}
 		return null;
+	}
+	
+	public Coord getCoord() {
+		return m_coord;
 	}
 	
 	@Override

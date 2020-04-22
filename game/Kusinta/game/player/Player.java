@@ -15,8 +15,8 @@ public class Player extends Character {
 	int DIMENSION = 5;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
-	double ACCELERATION_JUMP = 10.5;
-	double ACCELERATION_POP = 11;
+	double ACCELERATION_JUMP = 1.5;
+	double ACCELERATION_POP = 0.5;
 	
 	int SPEED_WALK = 1;
 
@@ -28,6 +28,8 @@ public class Player extends Character {
 	boolean falling, jumping, poping;
 	
 	int m_width, m_height;
+	
+	int y_gravity;
 	
 	int dt_x, dt_y;
 	double speed_x, speed_y;
@@ -52,6 +54,9 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
 
 		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
@@ -73,16 +78,20 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		m_State = WALKING;
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
+		
 		if (!dir.toString().equals(m_direction.toString())) {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height)){
+			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height/2)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
 					speed_x = SPEED_WALK;
 				m_x += speed_x;
+				m_coord.setX(m_x);
 			}
 		} else if (dir.toString().equals("W")) {
 			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x - m_width, m_y-m_height)){
@@ -91,6 +100,7 @@ public class Player extends Character {
 				if (speed_x > SPEED_WALK)
 					speed_x = SPEED_WALK;
 				m_x -= speed_x;
+				m_coord.setX(m_x);
 			}
 		}
 		return true;
@@ -99,19 +109,23 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		m_State = JUMPING;
-		if(!m_model.m_room.isBlocked(m_x, m_y + DIMENSION)){
+		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height)){
+			m_State = JUMPING;
+			y_gravity = m_coord.Y();
 			jumping = true;
-			m_time = 0;
-		}
+			falling = true;
+			m_time = m_ratio_y;
+			gravity(m_time);
+			}
 		return true;
 	}
 
 	@Override
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		m_State = JUMPING;
-		if(!m_model.m_room.isBlocked(m_x, m_y + 2*DIMENSION)){
+		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height)){
+			m_State = JUMPING;
+			y_gravity = m_coord.Y();
 			poping = true;
 			m_time = 0;
 		}
@@ -120,7 +134,7 @@ public class Player extends Character {
 
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_x, m_y)){
+		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()) || falling){
 			double C;
 			if (jumping) {
 				C = ACCELERATION_JUMP;
@@ -129,7 +143,8 @@ public class Player extends Character {
 			} else {
 				C = 0;
 			}
-			m_y = (int) ((-0.5 * G * t + C * t));
+			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
+			m_coord.setY(newY);
 		}
 	}
 
@@ -137,6 +152,9 @@ public class Player extends Character {
 	public boolean egg(Direction dir) { // tir
 		// TODO Auto-generated method stub
 		long now = System.currentTimeMillis();
+		
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
 
 		if (now - m_shot_time > 1000) {
 
@@ -209,8 +227,10 @@ public class Player extends Character {
 
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
-		if (!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)) {
+		m_ratio_y = elapsed;
+		if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
 			if (!falling) {
+				y_gravity = m_coord.Y();
 				m_time = 0;
 			} else {
 				m_time += elapsed;
@@ -218,6 +238,8 @@ public class Player extends Character {
 			falling = true;
 			if (m_time >= 10)
 				gravity(m_time);
+		} else if(falling) {
+			
 		} else {
 			jumping = false;
 			falling = false;
@@ -232,10 +254,11 @@ public class Player extends Character {
 				m_image_index = (m_image_index + 1) % 4;
 				break;
 			case WALKING:
-				m_image_index = (m_image_index + 1) % 6 + 8;
+				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
+				System.out.println(m_image_index);
 				break;
 			case JUMPING:
-				m_image_index = (m_image_index + 1) % 9 + 15;
+				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				break;
 			default:
 				m_image_index = (m_image_index + 1) % 4;
@@ -243,10 +266,20 @@ public class Player extends Character {
 			}
 		}
 		m_automaton.step(this);
+		
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
+		
+		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
+		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
+
 	}
 
 	public void paint(Graphics g) {
 		if (bI != null) {
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y();
+			
 			BufferedImage img = bI[m_image_index];
 			int w = DIMENSION * img.getWidth();
 			int h = DIMENSION * img.getHeight();

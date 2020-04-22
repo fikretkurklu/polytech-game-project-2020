@@ -59,6 +59,9 @@ public class Model {
 	public void setCenterScreen() {
 		x_decalage = m_width / 2 - centerScreen.X();
 		y_decalage = m_height / 2 - centerScreen.Y();
+
+//		x_decalage = m_player.getCoord().X();
+//		y_decalage = m_player.getCoord().Y();
 	}
 
 	public void tick(long elapsed) {
