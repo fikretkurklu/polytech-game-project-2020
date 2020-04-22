@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import automaton.Automaton;
 import game.Coord;
 
 public class Torch extends Decor{
 
-	public Torch(Coord coord, Room room) {
-		super(false, true, true, coord, room);
+	public Torch(Coord coord, Room room, Automaton automaton) {
+		super(false,true, true, coord, room, automaton);
 		loadImages();
 	}
 	

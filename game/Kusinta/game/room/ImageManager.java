@@ -22,4 +22,12 @@ public abstract class ImageManager {
 		}
 	}
 	
+	public boolean getUseImageTable() {
+		return useImageTable;
+	}
+	
+	public String[] getImgPath() {
+		return imgPath;
+	}
+ 	
 }
