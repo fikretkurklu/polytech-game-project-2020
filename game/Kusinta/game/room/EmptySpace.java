@@ -12,14 +12,6 @@ public class EmptySpace extends Element {
 	 * 
 	 */
 
-	public EmptySpace(EmptySpaceImageManager ESImageManager) throws Exception {
-		super(false, true);
-		String path = ESImageManager.get("", ESImageManager.useImageTable);
-		if (path != null) {
-			loadImage(path);
-		}
-	}
-
 	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws Exception {
 		super(false, true, coord);
 		String path = ESImageManager.get("", ESImageManager.useImageTable);

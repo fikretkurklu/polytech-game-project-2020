@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import automaton.Automaton;
 import automaton.Entity;
 import game.Coord;
 
@@ -28,9 +29,11 @@ public abstract class Element extends Entity{
 	private Coord __coord;
 	boolean __isVisible;
 	boolean __isSolid;
-
-	public Element(boolean isSolid, boolean isVisible) {
-		__coord = new Coord();
+	
+	
+	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton) {
+		super(automaton);
+		__coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}

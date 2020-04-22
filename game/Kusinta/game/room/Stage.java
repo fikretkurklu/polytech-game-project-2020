@@ -1,11 +1,12 @@
 package room;
 
+import automaton.Automaton;
 import game.Coord;
 
 public class Stage extends Decor{
 
-	public Stage(Coord coord) {
-		super(false,true, false, coord);
+	public Stage(Coord coord, Room room, Automaton automaton) {
+		super(false,true, false, coord, room, automaton);
 		int n = (int) (Math.random() * 2) + 1;
 		String image_path = "resources/Room/decors/stage"+n+".png";
 		try {
