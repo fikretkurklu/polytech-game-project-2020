@@ -105,7 +105,7 @@ public class Controller implements GameCanvasListener {
 			m_game.m_model.centerScreen.translate(0, 10);
 		}
 		
-		m_game.m_model.m_player.setPressed(e.getKeyCode(), true);
+		m_game.m_model.m_player.setPressed((int)e.getKeyChar(), true);
 			
 	}
 
@@ -113,7 +113,7 @@ public class Controller implements GameCanvasListener {
 	public void keyReleased(KeyEvent e) {
 		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
 		
-		m_game.m_model.m_player.setPressed(e.getKeyCode(), false);
+		m_game.m_model.m_player.setPressed((int)e.getKeyChar(), false);
 	}
 
 	@Override

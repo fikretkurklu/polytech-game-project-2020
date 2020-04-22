@@ -152,7 +152,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean key(int keyCode) {
-		if (keyCode == 81) {
+		if (keyCode == 113) {
 			m_State = WALKING;
 			if (speed_x == 0)
 				dt_x = 0;
