@@ -8,6 +8,8 @@ import room.Element;
 
 public class Cloud extends Element{
 	
+	public static final int SIZE = 86;
+	
 	int m_width, m_height;
 	String imagePath;
 	PlayerSoul player;
@@ -15,6 +17,8 @@ public class Cloud extends Element{
 
 	public Cloud(PlayerSoul player, Automaton automaton, Coord coord) {
 		super(false, true, coord, automaton);
+		m_width = 2 * SIZE;
+		m_height = 2 * SIZE;
 		this.player = player;
 		outScreen = false;
 		try {
