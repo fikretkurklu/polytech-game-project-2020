@@ -93,5 +93,8 @@ public abstract class Entity {
 		return false;
 	}
 	
+	public Automaton getAutomaton() {
+		return m_automaton;
+	}
 	
 }

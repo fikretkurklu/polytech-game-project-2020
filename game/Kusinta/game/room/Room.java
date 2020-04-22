@@ -10,6 +10,7 @@ import java.util.List;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.Entity;
 import automaton.Interpretor;
 import game.Coord;
 
@@ -87,7 +88,6 @@ public class Room {
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					//m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
 					CodeElement(actualLigne[j], j, i);
 				}
 			}
@@ -179,7 +179,7 @@ public class Room {
 					tmp_decor[m_decor.length] = new Lamp(new Coord(coord), this, StaticDecorAutomaton);
 					break;
 				case 2:
-					tmp_decor[m_decor.length] = new Library(new Coord(coord), this, StaticDecorAutomaton );
+					tmp_decor[m_decor.length] = new Library(new Coord(coord), this, StaticDecorAutomaton);
 					break;
 				case 3:
 					tmp_decor[m_decor.length] = new Stage(new Coord(coord), this, StaticDecorAutomaton);
@@ -198,9 +198,6 @@ public class Room {
 	}
 
 	public void paint(Graphics g) {
-		for (int i = 0; i < m_elements.length; i++) {
-			m_elements[i].paint(g);
-		}
 		for (int i = 0; i < m_background.length; i++) {
 			m_background[i].paint(g);
 		}
@@ -220,12 +217,36 @@ public class Room {
 		}
 		return true;
 	}
-
+	
+	public int blockTop(int x, int y) {
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_background[n].getCoord().Y();
+		} else {
+			return 0;
+		}
+	}
+	
 	public void tick(long elapsed) {
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);
 		}
 		m_BlockAElapsed += elapsed;
+		if (m_BlockAElapsed > 1000) {
+			m_BlockAElapsed = 0;
+			for (int i = 0; i < m_elements.length; i ++) {
+				if (m_elements[i].getAutomaton() != null) {
+					m_elements[i].getAutomaton().step(m_elements[i]);
+				}
+			}
+			
+			for (int i = 0; i < m_decor.length; i ++) {
+				if (m_decor[i].getAutomaton() != null) {
+					m_decor[i].getAutomaton().step(m_decor[i]);
+				}
+			}
+			
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package room;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 
 public abstract class ImageManager {
@@ -22,4 +23,19 @@ public abstract class ImageManager {
 		}
 	}
 	
+	public boolean getUseImageTable() {
+		return useImageTable;
+	}
+	
+	public String[] getImgPath() {
+		return imgPath;
+	}
+	
+	public void setUseImageTable(boolean b) {
+		useImageTable = b;
+	}
+	public void setImgPath(String[] p) {
+		imgPath = p;
+	}
+ 	
 }
