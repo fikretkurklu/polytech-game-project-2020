@@ -29,7 +29,7 @@ public class Map {
 		startCoord = new Coord();
 		ambiance = (int)(Math.random()*MapParam.nbAmbiance)+1;
 		BufferedReader f;
-		ESIM = new EmptySpaceImageManager(ambiance);
+		ESIM = new EmptySpaceImageManager(1);
 
 		try {
 			mapFile = MapParam.mapFile;
