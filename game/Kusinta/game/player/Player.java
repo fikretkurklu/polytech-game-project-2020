@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import automaton.*;
+import game.Model;
 import projectile.Arrow;
 
 public class Player extends Character {
@@ -40,8 +41,10 @@ public class Player extends Character {
 
 	int m_state;
 
-	public Player(Automaton automaton, int x, int y, Direction dir) throws IOException {
-		super(automaton, x, y, dir);
+	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
+		super(automaton, x, y, dir, model);
+		
+		m_y-=DIMENSION;
 
 		x_hitBox = new int[] { m_x - DIMENSION, m_x - DIMENSION, m_x + DIMENSION, m_x + DIMENSION };
 		y_hitBox = new int[] { m_y - DIMENSION, m_y + DIMENSION, m_y + DIMENSION, m_y - DIMENSION };
@@ -69,19 +72,21 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString() == "East") {
-			 if(!m_room.is_blocked(m_x + SPEED_WALK, m_y)){
+			 if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y)){
 			dt_x += m_ratio_x;
 			speed_x = .5 * ACCELERATION * dt_x * dt_x;
 			if (speed_x > SPEED_WALK)
 				speed_x = SPEED_WALK;
 			m_x += speed_x;
+			 }
 		} else if (dir.toString() == "West") {
-			// if(!m_room.is_blocked(m_x - SPEED_WALK, m_y)){
+			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y)){
 			dt_x += m_ratio_x;
 			speed_x = .5 * ACCELERATION * dt_x * dt_x;
 			if (speed_x > SPEED_WALK)
 				speed_x = SPEED_WALK;
 			m_x -= speed_x;
+			}
 		}
 		return true;
 	}
@@ -177,14 +182,13 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
-		 if(!m_model.m_room.isBlocked(m_x, m_y - DIMENSION)){
 		if (!falling) {
 			m_time = 0;
 		} else {
 			m_time += elapsed;
 		}
 		falling = true;
-		if (m_time >= 10)
+		if (m_time >= 10) {
 			gravity(m_time);
 		} else {
 		jumping = false;
@@ -204,14 +208,7 @@ public class Player extends Character {
 				m_image_index = (m_image_index + 1) % 4;
 				break;
 			}
-
 		}
-	}
-
-	@Override
-	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public void paint(Graphics g) {
