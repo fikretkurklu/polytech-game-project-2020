@@ -15,8 +15,8 @@ public class Player extends Character {
 	int DIMENSION = 5;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
-	double ACCELERATION_JUMP = 2;
-	double ACCELERATION_POP = 2;
+	double ACCELERATION_JUMP = 1.8;
+	double ACCELERATION_POP = 1.65;
 	
 	int SPEED_WALK = 1;
 
@@ -77,7 +77,11 @@ public class Player extends Character {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		m_State = WALKING;
+		if(poping || jumping || falling) {
+			m_State = JUMPING;
+		} else {
+			m_State = WALKING;
+		}
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 		
@@ -85,7 +89,7 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if(!m_model.m_room.isBlocked(m_x + SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height) && !m_model.m_room.isBlocked(m_x + m_width, m_y-m_height/2)){
+			if(!checkBlock(m_x + m_width, m_y-1) && !checkBlock(m_x + m_width, m_y-m_height) && !checkBlock(m_x + m_width, m_y-m_height/2)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -94,7 +98,7 @@ public class Player extends Character {
 				m_coord.setX(m_x);
 			}
 		} else if (dir.toString().equals("W")) {
-			if(!m_model.m_room.isBlocked(m_x - SPEED_WALK, m_y-1) && !m_model.m_room.isBlocked(m_x - m_width, m_y-m_height)){
+			if(!checkBlock(m_x - m_width, m_y-1) && !checkBlock(m_x - m_width, m_y-m_height) && !checkBlock(m_x - m_width, m_y-m_height/2)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -109,7 +113,7 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height) && !falling){
+		if(!checkBlock(m_coord.X(), m_coord.Y()- m_height) && !falling){
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
@@ -123,7 +127,7 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()+ m_height) && !falling){
+		if(!checkBlock(m_coord.X(), m_coord.Y()+ m_height) && !falling){
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			poping = true;
@@ -136,7 +140,7 @@ public class Player extends Character {
 
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
-		if(!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()) || falling){
+		if(!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(m_coord.X(), m_coord.Y()-m_height) && !checkBlock(m_coord.X() + m_width, m_coord.Y()-1) && !checkBlock(m_coord.X() - m_width, m_coord.Y()-1) || falling){
 			m_State = JUMPING;
 			double C;
 			if (jumping) {
@@ -148,6 +152,8 @@ public class Player extends Character {
 			}
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
 			m_coord.setY(newY);
+		} else {
+			m_time = 0;
 		}
 	}
 
@@ -174,10 +180,12 @@ public class Player extends Character {
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == 113) {
 			qPressed = pressed;
-			if(pressed == true && m_State!=WALKING) {
-				m_image_index = 8;
-			} else {
-				m_State = IDLE;
+			if(!(poping || jumping || falling)) {
+				if(pressed == true && m_State!=WALKING) {
+					m_image_index = 8;
+				} else {
+					m_State = IDLE;
+				}
 			}
 		}
 		if (keyCode == 122) {
@@ -190,10 +198,12 @@ public class Player extends Character {
 		}
 		if (keyCode == 100) {
 			dPressed = pressed;
-			if(pressed == true && m_State!=WALKING) {
-				m_image_index = 8;
-			} else {
-				m_State = IDLE;
+			if(!(poping || jumping || falling)) {
+				if(pressed == true && m_State!=WALKING) {
+					m_image_index = 8;
+				} else {
+					m_State = IDLE;
+				}
 			}
 		}
 		if (keyCode == 32)
@@ -215,7 +225,7 @@ public class Player extends Character {
 			return zPressed;
 		}
 		if (keyCode == 100) {
-			if (speed_x == 9)
+			if (speed_x == 0)
 				dt_x = 0;
 			return dPressed;
 		}
@@ -231,7 +241,7 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+		if (!checkBlock(m_coord.X(), m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -245,15 +255,20 @@ public class Player extends Character {
 			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 			falling = false;
 			jumping = false;
-		} else {
+			poping = false;
 			m_State = IDLE;
+		} else {
 			jumping = false;
 			falling = false;
+			poping = false;
 		}
 		
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
+			
+			if(poping || jumping || falling)
+				m_State = JUMPING;
 
 			switch (m_State) {
 			case IDLE:
@@ -261,7 +276,6 @@ public class Player extends Character {
 				break;
 			case WALKING:
 				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
-				System.out.println(m_image_index);
 				break;
 			case JUMPING:
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
@@ -299,6 +313,10 @@ public class Player extends Character {
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
+	}
+	
+	public boolean checkBlock(int x, int y) {
+		return m_model.m_room.isBlocked(x, y);
 	}
 
 }
