@@ -6,6 +6,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import automaton.Automaton;
+import automaton.Entity;
 import game.Coord;
 
 /*
@@ -19,7 +21,7 @@ import game.Coord;
  * 
  */
 
-public abstract class Element {
+public abstract class Element extends Entity{
 
 	public static final int SIZE = 86;
 
@@ -27,9 +29,11 @@ public abstract class Element {
 	private Coord __coord;
 	boolean __isVisible;
 	boolean __isSolid;
-
-	public Element(boolean isSolid, boolean isVisible) {
-		__coord = new Coord();
+	
+	
+	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton) {
+		super(automaton);
+		__coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
@@ -59,9 +63,12 @@ public abstract class Element {
 	}
 	
 	public void paint(Graphics g) {
-		int x = this.getCoord().X();
-		int y = this.getCoord().Y();
-		g.drawImage(__image, x, y, null);
+		if (__isVisible) {
+			int x = this.getCoord().X();
+			int y = this.getCoord().Y();
+			g.drawImage(__image, x, y, null);
+		}
+		
 	}
 
 }
