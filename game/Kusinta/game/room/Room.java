@@ -87,7 +87,6 @@ public class Room {
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					//m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
 					CodeElement(actualLigne[j], j, i);
 				}
 			}
@@ -179,7 +178,7 @@ public class Room {
 					tmp_decor[m_decor.length] = new Lamp(new Coord(coord), this, StaticDecorAutomaton);
 					break;
 				case 2:
-					tmp_decor[m_decor.length] = new Library(new Coord(coord), this, StaticDecorAutomaton );
+					tmp_decor[m_decor.length] = new Library(new Coord(coord), this, StaticDecorAutomaton);
 					break;
 				case 3:
 					tmp_decor[m_decor.length] = new Stage(new Coord(coord), this, StaticDecorAutomaton);
@@ -198,9 +197,6 @@ public class Room {
 	}
 
 	public void paint(Graphics g) {
-		for (int i = 0; i < m_elements.length; i++) {
-			m_elements[i].paint(g);
-		}
 		for (int i = 0; i < m_background.length; i++) {
 			m_background[i].paint(g);
 		}
@@ -226,6 +222,9 @@ public class Room {
 			m_decor[i].tick(elapsed);
 		}
 		m_BlockAElapsed += elapsed;
+		if (m_BlockAElapsed > 1000) {
+			m_elements
+		}
 	}
 
 }
