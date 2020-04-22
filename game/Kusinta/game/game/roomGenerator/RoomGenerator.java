@@ -13,8 +13,6 @@ public class RoomGenerator {
 	String[][] m_elementTable;
 	int m_row;
 	int m_col;
-	public static String[] outeWallDictionnary = { "OW_N", "OW_S", "OW_E", "OW_W", "OW_NE", "OW_NW", "OW_SE", "OW_SW" };
-	public static String[] emptySpaceDictionnary = { "ES_T", "ES_I", "ES_D", "ES" };
 
 	public RoomGenerator(int row, int col) {
 		m_row = row;
@@ -436,15 +434,31 @@ public class RoomGenerator {
 
 	/*
 	 * 
-	 * 
-	 * 
+	 * This method is used to get a quick view of the blocks and platform you've
+	 * already put
 	 * 
 	 */
 
 	public void QuickReview() {
 		System.out.println("Quick review of the room :");
-		System.out.print("Table de correspondance :\n-' . ' is an ");
+		System.out.print(
+				"Table :\n-' . ' is an Empty space or a Decor\n-' I ' is the initial point\n-' D ' is the door\n-' X ' is a wall\n-' : ' is a unidentified cell\n");
+		for (int i = 0; i < m_col + 1; i++) {
+			if (i == 0) {
+				System.out.print(" " + i + "  ");
+			} else if (i >= 10) {
+				System.out.print(i + " ");
+			} else {
+				System.out.print(" " + i + " ");
+			}
+		}
+		System.out.print("\n");
 		for (int i = 0; i < m_row; i++) {
+			if (i + 1 < 10) {
+				System.out.print(" " + (i + 1) + "  ");
+			} else if (i + 1 >= 10) {
+				System.out.print(" " + (i + 1) + " ");
+			}
 			for (int j = 0; j < m_col; j++) {
 				if (m_elementTable[i][j] == "ES" || m_elementTable[i][j] == "ES_T") {
 					System.out.print(" . ");
@@ -453,17 +467,113 @@ public class RoomGenerator {
 				} else if (m_elementTable[i][j] == "ES_D") {
 					System.out.print(" D ");
 				} else if (m_elementTable[i][j] == "IW" || m_elementTable[i][j] == "OW_N"
-						|| m_elementTable[i][j] == "OW_S" || m_elementTable[i][j]=="OW_E"
-						|| m_elementTable[i][j]=="OW_W" || m_elementTable[i][j]=="OW_NE"
-						|| m_elementTable[i][j]=="OW_NW" || m_elementTable[i][j]=="OW_SE"
-						|| m_elementTable[i][j]=="OW_SW") {
+						|| m_elementTable[i][j] == "OW_S" || m_elementTable[i][j] == "OW_E"
+						|| m_elementTable[i][j] == "OW_W" || m_elementTable[i][j] == "OW_NE"
+						|| m_elementTable[i][j] == "OW_NW" || m_elementTable[i][j] == "OW_SE"
+						|| m_elementTable[i][j] == "OW_SW") {
 					System.out.print(" X ");
-
 				} else {
 					System.out.print(" : ");
 				}
 			}
 			System.out.print("\n");
+		}
+	}
+
+	/*
+	 * 
+	 * This method is used to create a menu to select the different method the
+	 * player would use
+	 * 
+	 */
+
+	public static void Menu() throws IOException {
+		File f = null;
+		int row = 0;
+		int col = 0;
+		int state = 0;
+		RoomGenerator roomGen = null;
+		while (state == 0) {
+			System.out.println("Menu Display :");
+			System.out.println("-'new' to generate a new map with the desired size");
+			System.out.println("-'edit' to edit an existing map");
+			System.out.println("-'e' to create a map full of empty spaces");
+			System.out.println("-'i' to set the position of the initial point");
+			System.out.println("-'d' to set the position of the door");
+			System.out.println("-'p--s' to create a new platform in Soft mode (no platforms around)");
+			System.out.println(
+					"-'p--h' to create a new platform in Hard mode (without checking what is behind/around it)");
+			System.out.println("-'b' to finish a room by adding it's border");
+			System.out.println("-'qr' to get a Quick review of the room");
+			System.out.println("-'q' to quit the room generator");
+			System.out.print("\n\n");
+			System.out.println("Enter an option :");
+			String str = enterTxt();
+			System.out.println(str);
+			if (str.contentEquals("new")) {
+				f = getFile();
+				while (row <= 0 || col <= 0) {
+					row = enterRow();
+					col = enterCol();
+					if (row <= 0) {
+						System.out.println("A room need at least 1 row");
+					} else if (col <= 0) {
+						System.out.println("A room need at least 1 col");
+					}
+				}
+				roomGen = new RoomGenerator(row, col);
+			} else if (str.contentEquals("edit")) {
+
+			} else if (str.contentEquals("e")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.emptyMapGenerator();
+			} else if (str.contentEquals("i")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.AddInitialpoint();
+			} else if (str.contentEquals("d")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.AddDoor();
+			} else if (str.contentEquals("p--s")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.AddPlatformSoft();
+			} else if (str.contentEquals("p--h")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.AddPlatformHard();
+			} else if (str.contentEquals("b")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.AddCompleteBorder();
+			} else if (str.contentEquals("qr")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.QuickReview();
+			} else if (str.contains("q")) {
+				System.out.println("Are you sure you want to quit? y/n");
+				String rep = enterTxt();
+				if (rep.contentEquals("y")) {
+					state = 1;
+					System.out.println("End of use");
+					System.out.println("Goodbye");
+				} else if (rep.contentEquals("n")) {
+					System.out.println("Lets continue then !");
+				} else {
+					System.out.println("I didn't get your answer, so lets continue !");
+				}
+			} else {
+				System.out.println("The following option doesn't exist");
+			}
 		}
 	}
 
@@ -581,22 +691,32 @@ public class RoomGenerator {
 
 	public static int enterNb() {
 		Scanner scan = new Scanner(System.in);
-		String fileName = scan.nextLine();
-		return Integer.parseInt(fileName);
+		String nbString = scan.nextLine();
+		return Integer.parseInt(nbString);
+	}
+
+	/*
+	 * 
+	 * This method return a String given by the user;
+	 * 
+	 */
+
+	public static String enterTxt() {
+		Scanner scan = new Scanner(System.in);
+		String name = scan.nextLine();
+		return name;
 	}
 
 	public static void main(String[] args) throws IOException {
-		File f = getFile();
-		int row = enterRow();
-		int col = enterCol();
-		RoomGenerator roomGen = new RoomGenerator(row, col);
-
-		roomGen.emptyMapGenerator();
-		roomGen.AddPlatformHard();
-		roomGen.AddPlatformSoft();
-		roomGen.AddPlatformSoft();
-		roomGen.AddCompleteBorder();
-		roomGen.updateTextDocument(f);
+		Menu();
+		/*
+		 * File f = getFile(); int row = enterRow(); int col = enterCol(); RoomGenerator
+		 * roomGen = new RoomGenerator(row, col);
+		 * 
+		 * roomGen.emptyMapGenerator(); roomGen.AddPlatformHard(); roomGen.AddDoor();
+		 * roomGen.AddInitialpoint(); roomGen.QuickReview();
+		 * roomGen.updateTextDocument(f);
+		 */
 	}
 
 }
