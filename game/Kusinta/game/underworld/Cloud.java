@@ -4,7 +4,7 @@ import java.awt.Image;
 import automaton.Automaton;
 import automaton.Direction;
 import game.Coord;
-import room.Element;
+import environnement.Element;
 
 public class Cloud extends Element{
 	

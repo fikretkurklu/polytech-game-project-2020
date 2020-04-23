@@ -6,11 +6,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import automaton.Automaton;
 import game.Coord;
-import room.Element;
+import environnement.Element;
+import environnement.Env;
 
 
-public class Map {
+public class Underworld {
 	public final static int MAX_CLOUDS = 10;
 	
 	String mapFile;
@@ -21,16 +23,19 @@ public class Map {
 	int nbRow;
 	int nbCol;
 	Cloud [] m_clouds;
-	MapEmptySpaceImageManager ESIM;
-
-	public Map() {
+	UnderworldEmptySpaceImageManager ESIM;
+	Automaton cloudAutomaton, wallAutomaton;
+	UndWallImageManager UWIM;
+	public Underworld() {
+//		super(Env.UNDERWORLD);
 		startCoord = new Coord();
-		ambiance = (int)(Math.random()*MapParam.nbAmbiance)+1;
+		ambiance = (int)(Math.random()*UnderworldParam.nbAmbiance)+1;
 		BufferedReader f;
-		ESIM = new MapEmptySpaceImageManager(1);
+		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
+		UWIM = new UndWallImageManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
 		try {
-			mapFile = MapParam.mapFile;
+			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
 			 * Le fichier suis cette syntaxe: 
@@ -61,7 +66,17 @@ public class Map {
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
 		if (code.equals("ES")) {
-			return new MapEmptySpace(coord, ESIM);
+			return new UnderworldEmptySpace(coord, ESIM);
+		}else if (code.contentEquals("LS")) {
+			return new UndWall(coord, null, code, wallAutomaton);
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
 		}
 		throw new Exception("Code room err: " + code);
 	}
@@ -81,12 +96,15 @@ public class Map {
 		return startCoord;
 	}
 	
-	public void tick(long elapsed) {
+/*	public void tick(long elapsed) {
 		for (int i = 0; i < m_clouds.length; i++) {
 			if (m_clouds[i].getAutomaton() != null) {
+				if (m_clouds[i].hasExploded) {
+					m_clouds[i] = new Cloud(cloudAutomaton, m_clouds[i].getCoord().translateX(-(int)Math.random()*(m_height-m_height/5)));
+				}
 				m_clouds[i].getAutomaton().step(m_clouds[i]);
 			}
 		}
-	}
+	}*/
 	
 }
