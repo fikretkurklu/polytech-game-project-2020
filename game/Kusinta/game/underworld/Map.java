@@ -11,6 +11,7 @@ import room.Element;
 
 
 public class Map {
+	public final static int MAX_CLOUDS = 10;
 	
 	String mapFile;
 	int m_width, m_height;
@@ -19,7 +20,7 @@ public class Map {
 	Coord startCoord;
 	int nbRow;
 	int nbCol;
-
+	Cloud [] m_clouds;
 	MapEmptySpaceImageManager ESIM;
 
 	public Map() {
@@ -27,7 +28,7 @@ public class Map {
 		ambiance = (int)(Math.random()*MapParam.nbAmbiance)+1;
 		BufferedReader f;
 		ESIM = new MapEmptySpaceImageManager(1);
-
+		m_clouds = new Cloud[MAX_CLOUDS];
 		try {
 			mapFile = MapParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
@@ -64,15 +65,28 @@ public class Map {
 		}
 		throw new Exception("Code room err: " + code);
 	}
+	
+	
 
 	public void paint(Graphics g) {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+		for (int i = 0; i < m_clouds.length; i++) {
+			m_clouds[i].paint(g);
+		}
 	}
 	
 	public Coord getStartCoord() {
 		return startCoord;
+	}
+	
+	public void tick(long elapsed) {
+		for (int i = 0; i < m_clouds.length; i++) {
+			if (m_clouds[i].getAutomaton() != null) {
+				m_clouds[i].getAutomaton().step(m_clouds[i]);
+			}
+		}
 	}
 	
 }
