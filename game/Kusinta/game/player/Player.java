@@ -9,10 +9,12 @@ import java.util.LinkedList;
 import automaton.*;
 import game.Model;
 import projectile.Arrow;
+import room.Element;
 
 public class Player extends Character {
+	
+	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	int DIMENSION = 5;
 	double G = 9.81;
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 1.8;
@@ -23,6 +25,8 @@ public class Player extends Character {
 	static final int WALKING = 0;
 	static final int JUMPING = 1;
 	static final int IDLE = 2;
+	
+	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
 	boolean falling, jumping, poping;
@@ -49,16 +53,21 @@ public class Player extends Character {
 		
 		try {
 			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
-			m_width = bI[0].getWidth();
-			m_height= DIMENSION * bI[0].getHeight();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		DIMENSION = SIZE / (bI[0].getHeight());
+		float ratio = (float)(bI[0].getWidth()*2) /(float)(5 * bI[0].getHeight());
+		//System.out.println("ratio = " +ratio);
+		
+		m_height= DIMENSION * bI[0].getHeight();
+		m_width = (int)(m_height * ratio);
+		
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
+		x_hitBox = new int[] { m_x - m_width/2, m_x - m_width/2, m_x + m_width/2, m_x + m_width/2};
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
 		m_arrows = new LinkedList<Arrow>();
@@ -150,6 +159,7 @@ public class Player extends Character {
 			} else {
 				C = 0;
 			}
+			
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
 			m_coord.setY(newY);
 		} else {
@@ -239,6 +249,11 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+//		System.out.println( 5 *bI[0].getHeight());
+//		System.out.println(bI[0].getWidth());
+//		System.out.println("m_height = "+m_height);
+//		System.out.println("m_width = "+m_width);
+//		System.out.println(DIMENSION);
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
 		if (!checkBlock(m_coord.X(), m_coord.Y())) {
@@ -292,7 +307,7 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 		
-		x_hitBox = new int[] { m_x - m_width, m_x - m_width, m_x + m_width, m_x + m_width};
+		x_hitBox = new int[] { m_x - m_width/2, m_x - m_width/2, m_x + m_width/2, m_x + m_width/2};
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
 	}
@@ -303,12 +318,12 @@ public class Player extends Character {
 			int m_y = m_coord.Y();
 			
 			BufferedImage img = bI[m_image_index];
-			int w = DIMENSION * img.getWidth();
-			int h = DIMENSION * img.getHeight();
+			int w =  DIMENSION * m_width;
+			int h = m_height;
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (2*img.getWidth()+5*DIMENSION), m_y-h, w, h, null);
+				g.drawImage(img, m_x - (2*img.getWidth() + DIMENSION), m_y-h, w, h, null);
 			} else {
-				g.drawImage(img, m_x + (2*img.getWidth()+5*DIMENSION), m_y-h, -w, h, null);
+				g.drawImage(img, m_x + (2*img.getWidth()), m_y-h, -w, h, null);
 			}
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
