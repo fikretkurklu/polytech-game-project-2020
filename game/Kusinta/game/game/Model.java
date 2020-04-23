@@ -72,7 +72,7 @@ public class Model {
 		m_height = height;
 		setCenterScreen();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		m_env.paint(gp);
+		m_env.paint(gp, width, height);
 		m_player.paint(gp);
 		gp.dispose();
 	}

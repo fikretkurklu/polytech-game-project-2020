@@ -21,7 +21,7 @@ public abstract class Env {
 	}
 	
 	
-	public abstract void paint(Graphics g);
+	public abstract void paint(Graphics g, int width, int height);
 	
 	public abstract void tick(long elapsed);
 }
