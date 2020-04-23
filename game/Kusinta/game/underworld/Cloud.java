@@ -40,7 +40,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean explode() {
-		outScreen = false;
+		outScreen = true;
 		return true;
 	}
 	
