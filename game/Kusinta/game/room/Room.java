@@ -46,8 +46,8 @@ public class Room extends Env{
 	int m_BlockAElapsed = 0;
 
 	@SuppressWarnings("unchecked")
-	public Room() {
-		super(Env.ROOM);
+	public Room(AutomatonLibrary AL) {
+		super(Env.ROOM, AL);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];
@@ -60,16 +60,8 @@ public class Room extends Env{
 		ESIM = new EmptySpaceImageManager(ambiance);
 		DIM = new DoorImageManager(ambiance);
 
-		AST ast;
-		
-		try {
-			ast = (AST) AutomataParser.from_file("resources/gal/automata.gal");
-			Interpretor interpret = new Interpretor();
-			BlockAutomaton = ((List<Automaton>) ast.accept(interpret)).get(1);
-			StaticDecorAutomaton = ((List<Automaton>) ast.accept(interpret)).get(3);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		StaticDecorAutomaton = m_AL.getAutomaton("Decor");
+		BlockAutomaton = m_AL.getAutomaton("Block");
 		
 		BufferedReader f;
 		try {
