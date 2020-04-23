@@ -2,6 +2,8 @@ package room;
 
 import java.util.HashMap;
 
+import environnement.ImageManager;
+
 public class OuterWallImageManager extends ImageManager {
 	
 	/*

@@ -8,4 +8,7 @@ public class Direction {
 		m_dir = dir;
 	}
 	
+	public String toString() {
+		return m_dir;
+	}
 }
