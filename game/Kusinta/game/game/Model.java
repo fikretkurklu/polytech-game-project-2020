@@ -17,7 +17,7 @@ import automaton.Interpretor;
 import game.graphics.View;
 import player.Player;
 import room.Room;
-import underworld.Map;
+import underworld.Underworld;
 
 public class Model {
 
@@ -26,7 +26,7 @@ public class Model {
 
 	public Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
-	public Map m_map;
+	public Underworld m_map;
 	Player m_player;
 	View m_view;
 //	Opponent[] m_opponents;
@@ -34,7 +34,7 @@ public class Model {
 	public Model() throws IOException {
 //		m_room = new Room();
 //		centerScreen = m_room.getStartCoord();
-		m_map = new Map();
+		m_map = new Underworld();
 		centerScreen = m_map.getStartCoord();
 		setCenterScreen();
 		m_view = null;

@@ -2,16 +2,18 @@ package underworld;
 
 import java.awt.Graphics;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import automaton.Automaton;
 import game.Coord;
 import environnement.Element;
+import environnement.Env;
 
 
-public class Map {
+public class Underworld {
+	public final static int MAX_CLOUDS = 10;
 	
 	String mapFile;
 	int m_width, m_height;
@@ -20,17 +22,20 @@ public class Map {
 	Coord startCoord;
 	int nbRow;
 	int nbCol;
-
-	MapEmptySpaceImageManager ESIM;
-
-	public Map() {
+	Cloud [] m_clouds;
+	UnderworldEmptySpaceImageManager ESIM;
+	Automaton cloudAutomaton, wallAutomaton;
+	UndWallImageManager UWIM;
+	public Underworld() {
+//		super(Env.UNDERWORLD);
 		startCoord = new Coord();
-		ambiance = (int)(Math.random()*MapParam.nbAmbiance)+1;
+		ambiance = (int)(Math.random()*UnderworldParam.nbAmbiance)+1;
 		BufferedReader f;
-		ESIM = new MapEmptySpaceImageManager(1);
-
+		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
+		UWIM = new UndWallImageManager(ambiance);
+		m_clouds = new Cloud[MAX_CLOUDS];
 		try {
-			mapFile = MapParam.mapFile;
+			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
 			 * Le fichier suis cette syntaxe: 
@@ -61,19 +66,45 @@ public class Map {
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
 		if (code.equals("ES")) {
-			return new MapEmptySpace(coord, ESIM);
+			return new UnderworldEmptySpace(coord, ESIM);
+		}else if (code.contentEquals("LS")) {
+			return new UndWall(coord, null, code, wallAutomaton);
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
+		}else if (code.contentEquals("")) {
+			
 		}
 		throw new Exception("Code room err: " + code);
 	}
+	
+	
 
 	public void paint(Graphics g) {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
+		}
+		for (int i = 0; i < m_clouds.length; i++) {
+			m_clouds[i].paint(g);
 		}
 	}
 	
 	public Coord getStartCoord() {
 		return startCoord;
 	}
+	
+/*	public void tick(long elapsed) {
+		for (int i = 0; i < m_clouds.length; i++) {
+			if (m_clouds[i].getAutomaton() != null) {
+				if (m_clouds[i].hasExploded) {
+					m_clouds[i] = new Cloud(cloudAutomaton, m_clouds[i].getCoord().translateX(-(int)Math.random()*(m_height-m_height/5)));
+				}
+				m_clouds[i].getAutomaton().step(m_clouds[i]);
+			}
+		}
+	}*/
 	
 }
