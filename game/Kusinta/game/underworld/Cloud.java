@@ -1,10 +1,11 @@
 package underworld;
 
 import java.awt.Image;
+
 import automaton.Automaton;
 import automaton.Direction;
 import game.Coord;
-import room.Element;
+import environnement.Element;
 
 public class Cloud extends Element{
 	
@@ -12,14 +13,12 @@ public class Cloud extends Element{
 	
 	int m_width, m_height;
 	String imagePath;
-	PlayerSoul player;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 
-	public Cloud(PlayerSoul player, Automaton automaton, Coord coord) {
+	public Cloud(Automaton automaton, Coord coord) {
 		super(false, true, coord, automaton);
 		m_width = 2 * SIZE;
 		m_height = 2 * SIZE;
-		this.player = player;
 		outScreen = false;
 		randomImage();
 		try {
@@ -62,7 +61,8 @@ public class Cloud extends Element{
 			outScreen = true;
 			return true;
 		}
-		hide();
+		if (player != null)
+			hide();
 		getCoord().translateX(-20);
 		return true;
 	}

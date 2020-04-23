@@ -2,12 +2,13 @@ package underworld;
 
 import java.awt.Graphics;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
 import game.Coord;
-import room.Element;
+import environnement.Element;
 
 
 public class Map {

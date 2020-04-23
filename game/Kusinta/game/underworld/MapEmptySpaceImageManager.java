@@ -1,6 +1,6 @@
 package underworld;
 
-import room.ImageManager;
+import environnement.ImageManager;
 
 public class MapEmptySpaceImageManager extends ImageManager{
 	public MapEmptySpaceImageManager(int ambiance) {

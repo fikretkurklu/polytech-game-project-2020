@@ -1,7 +1,8 @@
 package underworld;
 
 import game.Coord;
-import room.Element;
+
+import environnement.Element;
 
 public class MapEmptySpace extends Element {
 
