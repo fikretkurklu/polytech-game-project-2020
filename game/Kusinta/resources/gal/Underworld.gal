@@ -15,5 +15,5 @@ PlayerSoul (Init){
   | Key(FL) ? Move(L) : (Visible)
   | Key(FR) ? Move(R) : (Visible)
   | Key(SPACE) ? Jump : (Visible)
-  | Key(Enter) ? Egg : (Visible)
+  | Key(ENTER) ? Egg : (Visible)
 }

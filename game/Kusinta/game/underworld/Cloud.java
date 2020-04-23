@@ -47,7 +47,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean move(Direction dir) {
-		getCoord().translateX(-20);
+		getCoord().translateX(-1);
 		return true;
 	}
 }
