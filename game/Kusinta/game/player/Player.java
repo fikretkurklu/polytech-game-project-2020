@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import automaton.*;
 import game.Model;
 import projectile.Arrow;
-import room.Element;
+import environnement.Element;
 
 public class Player extends Character {
 	
@@ -67,7 +67,7 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		x_hitBox = new int[] { m_x - m_width/2, m_x - m_width/2, m_x + m_width/2, m_x + m_width/2};
+		x_hitBox = new int[] { m_x - (m_width/2 + 3 * DIMENSION), m_x - (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION)};
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
 		m_arrows = new LinkedList<Arrow>();
@@ -98,7 +98,7 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if(!checkBlock(m_x + m_width, m_y-1) && !checkBlock(m_x + m_width, m_y-m_height) && !checkBlock(m_x + m_width, m_y-m_height/2)){
+			if(!checkBlock(x_hitBox[2], m_y-1) && !checkBlock(x_hitBox[2], m_y-m_height) && !checkBlock(x_hitBox[2], m_y-m_height/2)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -107,7 +107,7 @@ public class Player extends Character {
 				m_coord.setX(m_x);
 			}
 		} else if (dir.toString().equals("W")) {
-			if(!checkBlock(m_x - m_width, m_y-1) && !checkBlock(m_x - m_width, m_y-m_height) && !checkBlock(m_x - m_width, m_y-m_height/2)){
+			if(!checkBlock(x_hitBox[0], m_y-1) && !checkBlock(x_hitBox[0], m_y-m_height) && !checkBlock(x_hitBox[0], m_y-m_height/2)){
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -307,7 +307,7 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 		
-		x_hitBox = new int[] { m_x - m_width/2, m_x - m_width/2, m_x + m_width/2, m_x + m_width/2};
+		x_hitBox = new int[] { m_x - (m_width/2 + 3 * DIMENSION), m_x - (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION)};
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
 	}
@@ -321,9 +321,9 @@ public class Player extends Character {
 			int w =  DIMENSION * m_width;
 			int h = m_height;
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (2*img.getWidth() + DIMENSION), m_y-h, w, h, null);
+				g.drawImage(img, m_x - (w/2), m_y-h, w, h, null);
 			} else {
-				g.drawImage(img, m_x + (2*img.getWidth()), m_y-h, -w, h, null);
+				g.drawImage(img, m_x + (w/2), m_y-h, -w, h, null);
 			}
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);

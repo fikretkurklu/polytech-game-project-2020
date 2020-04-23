@@ -16,7 +16,7 @@ import environnement.Element;
 import environnement.Env;
 import game.Coord;
 
-public class Room extends Env{
+public class Room{
 
 	int nbRow;
 	int nbCol;
@@ -47,7 +47,7 @@ public class Room extends Env{
 
 	@SuppressWarnings("unchecked")
 	public Room() {
-		super(Env.ROOM);
+		//super(Env.ROOM);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];
