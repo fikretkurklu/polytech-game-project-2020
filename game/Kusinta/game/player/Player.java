@@ -12,29 +12,29 @@ import projectile.Arrow;
 import environnement.Element;
 
 public class Player extends Character {
-	
+
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	double G = 9.81;
 	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 1.8;
 	double ACCELERATION_POP = 1.65;
-	
+
 	int SPEED_WALK = 1;
 
 	static final int WALKING = 0;
 	static final int JUMPING = 1;
 	static final int IDLE = 2;
-	
+
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed;
 	boolean falling, jumping, poping;
-	
+
 	int m_width, m_height;
-	
+
 	int y_gravity;
-	
+
 	int dt_x, dt_y;
 	double speed_x, speed_y;
 	long m_ratio_x, m_ratio_y;
@@ -50,32 +50,33 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model);
-		
+
 		try {
 			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		DIMENSION = SIZE / (bI[0].getHeight());
-		float ratio = (float)(bI[0].getWidth()*2) /(float)(5 * bI[0].getHeight());
-		//System.out.println("ratio = " +ratio);
-		
-		m_height= DIMENSION * bI[0].getHeight();
-		m_width = (int)(m_height * ratio);
-		
+		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
+		// System.out.println("ratio = " +ratio);
+
+		m_height = DIMENSION * bI[0].getHeight();
+		m_width = (int) (m_height * ratio);
+
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		x_hitBox = new int[] { m_x - (m_width/2 + 3 * DIMENSION), m_x - (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION)};
-		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
+		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
+				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
+		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
 		m_State = IDLE;
-		
+
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -86,19 +87,20 @@ public class Player extends Character {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		if(poping || jumping || falling) {
+		if (poping || jumping || falling) {
 			m_State = JUMPING;
 		} else {
 			m_State = WALKING;
 		}
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
-		
+
 		if (!dir.toString().equals(m_direction.toString())) {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if(!checkBlock(x_hitBox[2], m_y-1) && !checkBlock(x_hitBox[2], m_y-m_height) && !checkBlock(x_hitBox[2], m_y-m_height/2)){
+			if (!checkBlock(x_hitBox[2], m_y - 1) && !checkBlock(x_hitBox[2], m_y - m_height)
+					&& !checkBlock(x_hitBox[2], m_y - m_height / 2)) {
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -107,7 +109,8 @@ public class Player extends Character {
 				m_coord.setX(m_x);
 			}
 		} else if (dir.toString().equals("W")) {
-			if(!checkBlock(x_hitBox[0], m_y-1) && !checkBlock(x_hitBox[0], m_y-m_height) && !checkBlock(x_hitBox[0], m_y-m_height/2)){
+			if (!checkBlock(x_hitBox[0], m_y - 1) && !checkBlock(x_hitBox[0], m_y - m_height)
+					&& !checkBlock(x_hitBox[0], m_y - m_height / 2)) {
 				dt_x += m_ratio_x;
 				speed_x = .5 * ACCELERATION * dt_x * dt_x;
 				if (speed_x > SPEED_WALK)
@@ -122,21 +125,21 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!checkBlock(m_coord.X(), m_coord.Y()- m_height) && !falling){
+		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
 			m_time = m_ratio_y;
 			gravity(m_time);
-			}
+		}
 		return true;
 	}
 
 	@Override
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
-		if(!checkBlock(m_coord.X(), m_coord.Y()+ m_height) && !falling){
+		if (!checkBlock(m_coord.X(), m_coord.Y() + m_height) && !falling) {
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			poping = true;
@@ -149,7 +152,8 @@ public class Player extends Character {
 
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
-		if(!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[0], m_coord.Y()) && !checkBlock(x_hitBox[2], m_coord.Y()) || falling){
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[0], m_coord.Y())
+				&& !checkBlock(x_hitBox[2], m_coord.Y()) || falling) {
 			m_State = JUMPING;
 			double C;
 			if (jumping) {
@@ -159,10 +163,11 @@ public class Player extends Character {
 			} else {
 				C = 0;
 			}
-			
-			if(checkBlock(m_coord.X(), m_coord.Y()-m_height) || checkBlock(x_hitBox[2]-2, m_coord.Y()-m_height) || checkBlock(x_hitBox[0]+2, m_coord.Y()-m_height)) {
+
+			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock(x_hitBox[2] - 2, m_coord.Y() - m_height)
+					|| checkBlock(x_hitBox[0] + 2, m_coord.Y() - m_height)) {
 				C = 0;
-				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y()-m_height) + m_height);
+				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height);
 				y_gravity = m_coord.Y();
 				jumping = false;
 				poping = false;
@@ -170,7 +175,7 @@ public class Player extends Character {
 				m_time = t;
 				System.out.println(" ratio_y = " + m_ratio_y);
 			}
-			
+
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
 			m_coord.setY(newY);
 		} else {
@@ -182,15 +187,21 @@ public class Player extends Character {
 	public boolean egg(Direction dir) { // tir
 		// TODO Auto-generated method stub
 		long now = System.currentTimeMillis();
-		
+
 		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
+		int m_y = m_coord.Y() - m_height / 2;
 
 		if (now - m_shot_time > 1000) {
 
-			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(
-					Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
-			m_arrows.add(new Arrow(m_x, m_y, angle, this));
+			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
+			try {
+				m_arrows.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			m_shot_time = now;
 
 			return true;
 		}
@@ -201,8 +212,8 @@ public class Player extends Character {
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == 113) {
 			qPressed = pressed;
-			if(!(poping || jumping || falling)) {
-				if(pressed == true && m_State!=WALKING) {
+			if (!(poping || jumping || falling)) {
+				if (pressed == true && m_State != WALKING) {
 					m_image_index = 8;
 				} else {
 					m_State = IDLE;
@@ -211,16 +222,16 @@ public class Player extends Character {
 		}
 		if (keyCode == 122) {
 			zPressed = pressed;
-			if(pressed == true && m_State!=JUMPING) {
+			if (pressed == true && m_State != JUMPING) {
 				m_image_index = 15;
 			} else {
-					m_State = IDLE;
+				m_State = IDLE;
 			}
 		}
 		if (keyCode == 100) {
 			dPressed = pressed;
-			if(!(poping || jumping || falling)) {
-				if(pressed == true && m_State!=WALKING) {
+			if (!(poping || jumping || falling)) {
+				if (pressed == true && m_State != WALKING) {
 					m_image_index = 8;
 				} else {
 					m_State = IDLE;
@@ -277,7 +288,7 @@ public class Player extends Character {
 			falling = true;
 			if (m_time >= 10)
 				gravity(m_time);
-		} else if(falling) {
+		} else if (falling) {
 			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 			falling = false;
 			jumping = false;
@@ -288,12 +299,12 @@ public class Player extends Character {
 			falling = false;
 			poping = false;
 		}
-		
+
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-			
-			if(poping || jumping || falling)
+
+			if (poping || jumping || falling)
 				m_State = JUMPING;
 
 			switch (m_State) {
@@ -305,7 +316,7 @@ public class Player extends Character {
 				break;
 			case JUMPING:
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
-				if(m_image_index == 18)
+				if (m_image_index == 18)
 					m_image_index = 22;
 				break;
 			default:
@@ -314,33 +325,41 @@ public class Player extends Character {
 			}
 		}
 		m_automaton.step(this);
-		
+
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
-		
-		x_hitBox = new int[] { m_x - (m_width/2 + 3 * DIMENSION), m_x - (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION), m_x + (m_width/2 + 3 * DIMENSION)};
-		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y};
 
+		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
+				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
+		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
+		
+		for(int i = 0; i < m_arrows.size(); i++) {
+			m_arrows.get(i).tick(elapsed);
+		}
 	}
 
 	public void paint(Graphics g) {
 		if (bI != null) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
-			
+
 			BufferedImage img = bI[m_image_index];
-			int w =  DIMENSION * m_width;
+			int w = DIMENSION * m_width;
 			int h = m_height;
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (w/2), m_y-h, w, h, null);
+				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
 			} else {
-				g.drawImage(img, m_x + (w/2), m_y-h, -w, h, null);
+				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
+		
+		for(int i = 0; i < m_arrows.size(); i++) {
+			m_arrows.get(i).paint(g);
+		}
 	}
-	
+
 	public boolean checkBlock(int x, int y) {
 		return m_model.m_room.isBlocked(x, y);
 	}
