@@ -11,10 +11,15 @@ public abstract class Env {
 	
 	public int m_type;
 	public AutomatonLibrary m_AL;
-	public Env(int type, AutomatonLibrary AL) {
+	protected int m_width;
+	protected int m_height;
+	public Env(int type, AutomatonLibrary AL, int w, int h) {
 		m_type = type;
 		m_AL = AL;
+		m_width = w;
+		m_height = h;
 	}
+	
 	
 	public abstract void paint(Graphics g);
 	
