@@ -23,6 +23,7 @@ public abstract class Character extends Entity {
 
 	int MAX_m_life = 100;
 	int m_life;
+	int m_resistance, m_force, m_attackSpeed;
 
 	BufferedImage[] bI;
 	int m_image_index, last_image_index;
@@ -39,6 +40,7 @@ public abstract class Character extends Entity {
 		m_direction = dir;
 
 		m_life = MAX_m_life;
+		m_attackSpeed = 1000; 
 		m_model = model;
 		
 		m_image_index = 0;
@@ -146,11 +148,10 @@ public abstract class Character extends Entity {
 		return false;
 	}
 	
-
 	@Override
 	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
+
 
 }
