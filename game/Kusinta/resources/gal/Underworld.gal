@@ -7,8 +7,13 @@ Cloud (Init){
 
 PlayerSoul (Init){
   * (Visible)
-  | Cell(H,O) ? Pop : (Move)
-  | !Cell(H,O) ? Wizz : (Move)
-  * (Move)
-  | True ? 		: (Visible)
+  | Cell(H,O) ? Pop : (Actions)
+  | !Cell(H,O) ? Wizz : (Actions)
+  * (Actions)
+  | Key(FU) ? Move(N) : (Visible)
+  | Key(FD) ? Move(S) : (Visible)
+  | Key(FL) ? Move(L) : (Visible)
+  | Key(FR) ? Move(R) : (Visible)
+  | Key(SPACE) ? Jump : (Visible)
+  | Key(Enter) ? Egg : (Visible)
 }

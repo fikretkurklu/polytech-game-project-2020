@@ -1,29 +1,55 @@
 package underworld;
 
-import automaton.Entity;
-import game.Coord;
+import java.io.IOException;
 
-public class PlayerSoul extends Entity {
+import automaton.Automaton;
+import automaton.Category;
+import automaton.Direction;
+import game.Coord;
+import game.Model;
+import player.Character;
+
+public class PlayerSoul extends Character {
 	
-	Coord m_coord;
 	boolean hidden;
 	
-	public PlayerSoul(Coord coord) {
-		m_coord = coord;
+	public PlayerSoul(Automaton automaton, Coord coord, int x, int y, Direction dir, Model model) throws IOException {
+		super(automaton, x, y, dir, model);
 		hidden = false;
 	}
 	
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		if ((dir.toString() == "H") && (cat.toString() == "O")) {
+			/*On demande au model les coordonnées des nuages*/
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean pop(Direction dir) {
+		hidden = true;
+		return true;
+	}
+	
+	@Override
+	public boolean wizz(Direction dir) {
+		hidden = false;
+		return true;
+	}
+	
 	public int getX() {
-		return m_coord.X();
+		return getCoord().X();
 	}
 	
 	public int getY() {
-		return m_coord.Y();
+		return getCoord().Y();
 	}
 	
-	public boolean playerHide() {
-		return hidden;
-	}
+	
+	
+	
+	
 
 	
 }
