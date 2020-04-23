@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
@@ -27,6 +26,8 @@ public class Model {
 
 	Player m_player;
 	View m_view;
+	public Automaton playerAutomaton;
+	public Automaton arrowAutomaton;
 //	Opponent[] m_opponents;
 
 	public Model() throws IOException {
@@ -34,19 +35,21 @@ public class Model {
 		m_view = null;
 
 		AST ast;
-		Automaton playerAutomaton = null;
+		playerAutomaton = null;
+		arrowAutomaton = null;
 		List<automaton.Automaton> bots;
 		try {
-			ast = (AST) AutomataParser
-					.from_file("resources/gal/automata.gal");
+			ast = (AST) AutomataParser.from_file("resources/gal/automata.gal");
 			Interpretor interpret = new Interpretor();
 			bots = (List<Automaton>) ast.accept(interpret);
-			 playerAutomaton = bots.get(0);
+			playerAutomaton = bots.get(0);
+			arrowAutomaton = bots.get(2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("E"), this);
+
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
+				new Direction("E"), this);
 		setCenterScreen();
 
 	}
