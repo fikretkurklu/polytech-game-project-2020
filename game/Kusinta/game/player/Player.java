@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import automaton.*;
+import game.Controller;
 import game.Model;
 import projectile.Arrow;
 import environnement.Element;
@@ -16,7 +17,6 @@ public class Player extends Character {
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	double G = 9.81;
-	double ACCELERATION = 0.01;
 	double ACCELERATION_JUMP = 1.8;
 	double ACCELERATION_POP = 1.65;
 
@@ -34,9 +34,9 @@ public class Player extends Character {
 	int m_width, m_height;
 
 	int y_gravity;
-
-	int dt_x, dt_y;
-	double speed_x, speed_y;
+	int dt_y;
+	double speed_y;
+	
 	long m_ratio_x, m_ratio_y;
 
 	long m_time, m_shot_time;
@@ -99,23 +99,13 @@ public class Player extends Character {
 			turn(dir);
 		}
 		if (dir.toString().equals("E")) {
-			if (!checkBlock(x_hitBox[2], m_y - 1) && !checkBlock(x_hitBox[2], m_y - m_height)
-					&& !checkBlock(x_hitBox[2], m_y - m_height / 2)) {
-				dt_x += m_ratio_x;
-				speed_x = .5 * ACCELERATION * dt_x * dt_x;
-				if (speed_x > SPEED_WALK)
-					speed_x = SPEED_WALK;
-				m_x += speed_x;
+			if(!checkBlock(x_hitBox[2], m_y-1) && !checkBlock(x_hitBox[2], m_y-m_height) && !checkBlock(x_hitBox[2], m_y-m_height/2)){
+				m_x += SPEED_WALK;
 				m_coord.setX(m_x);
 			}
 		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(x_hitBox[0], m_y - 1) && !checkBlock(x_hitBox[0], m_y - m_height)
-					&& !checkBlock(x_hitBox[0], m_y - m_height / 2)) {
-				dt_x += m_ratio_x;
-				speed_x = .5 * ACCELERATION * dt_x * dt_x;
-				if (speed_x > SPEED_WALK)
-					speed_x = SPEED_WALK;
-				m_x -= speed_x;
+			if(!checkBlock(x_hitBox[0], m_y-1) && !checkBlock(x_hitBox[0], m_y-m_height) && !checkBlock(x_hitBox[0], m_y-m_height/2)){
+				m_x -= SPEED_WALK;
 				m_coord.setX(m_x);
 			}
 		}
@@ -124,8 +114,12 @@ public class Player extends Character {
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
+<<<<<<< HEAD
 		// TODO Auto-generated method stub
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
+=======
+		if(!checkBlock(m_coord.X(), m_coord.Y()- m_height) && !falling){
+>>>>>>> 5f4b1c4cef674d2e7ee8e28a3db151f780da8bd0
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
@@ -137,9 +131,14 @@ public class Player extends Character {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public boolean pop(Direction dir) { // sauter
 		// TODO Auto-generated method stub
 		if (!checkBlock(m_coord.X(), m_coord.Y() + m_height) && !falling) {
+=======
+	public boolean pop(Direction dir) { // sauter moins haut
+		if(!checkBlock(m_coord.X(), m_coord.Y()+ m_height) && !falling){
+>>>>>>> 5f4b1c4cef674d2e7ee8e28a3db151f780da8bd0
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			poping = true;
@@ -151,9 +150,7 @@ public class Player extends Character {
 	}
 
 	private void gravity(long t) {
-		// TODO Auto-generated method stub
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[0], m_coord.Y())
-				&& !checkBlock(x_hitBox[2], m_coord.Y()) || falling) {
+		if(!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2]-1, m_coord.Y()) && !checkBlock(x_hitBox[0]-2, m_coord.Y()) || falling){
 			m_State = JUMPING;
 			double C;
 			if (jumping) {
@@ -185,7 +182,6 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-		// TODO Auto-generated method stub
 		long now = System.currentTimeMillis();
 
 		int m_x = m_coord.X();
@@ -210,7 +206,7 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		if (keyCode == 113) {
+		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
 			if (!(poping || jumping || falling)) {
 				if (pressed == true && m_State != WALKING) {
@@ -220,7 +216,7 @@ public class Player extends Character {
 				}
 			}
 		}
-		if (keyCode == 122) {
+		if (keyCode == Controller.K_Z) {
 			zPressed = pressed;
 			if (pressed == true && m_State != JUMPING) {
 				m_image_index = 15;
@@ -228,7 +224,7 @@ public class Player extends Character {
 				m_State = IDLE;
 			}
 		}
-		if (keyCode == 100) {
+		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
 			if (!(poping || jumping || falling)) {
 				if (pressed == true && m_State != WALKING) {
@@ -238,47 +234,38 @@ public class Player extends Character {
 				}
 			}
 		}
-		if (keyCode == 32)
+		if (keyCode == Controller.K_SPACE)
 			espPressed = pressed;
-		if (keyCode == 65)
+		if (keyCode == Controller.K_A)
 			aPressed = pressed;
-		if (keyCode == 69)
+		if (keyCode == Controller.K_E)
 			ePressed = pressed;
 	}
 
 	@Override
 	public boolean key(int keyCode) {
-		if (keyCode == 113) {
-			if (speed_x == 0)
-				dt_x = 0;
+		if (keyCode == Controller.K_Q) {
 			return qPressed;
 		}
-		if (keyCode == 122) {
+		if (keyCode == Controller.K_Z) {
 			return zPressed;
 		}
-		if (keyCode == 100) {
-			if (speed_x == 0)
-				dt_x = 0;
+		if (keyCode == Controller.K_D) {
 			return dPressed;
 		}
-		if (keyCode == 32)
+		if (keyCode == Controller.K_SPACE)
 			return espPressed;
-		if (keyCode == 65)
+		if (keyCode == Controller.K_A)
 			return aPressed;
-		if (keyCode == 69)
+		if (keyCode == Controller.K_E)
 			return ePressed;
 		return false;
 	}
 
 	public void tick(long elapsed) {
-//		System.out.println( 5 *bI[0].getHeight());
-//		System.out.println(bI[0].getWidth());
-//		System.out.println("m_height = "+m_height);
-//		System.out.println("m_width = "+m_width);
-//		System.out.println(DIMENSION);
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!checkBlock(m_coord.X(), m_coord.Y())) {
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2]-1, m_coord.Y()) && !checkBlock(x_hitBox[0]+1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -303,9 +290,11 @@ public class Player extends Character {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-
-			if (poping || jumping || falling)
+			
+			if(falling|| jumping || poping )
 				m_State = JUMPING;
+
+			last_image_index = m_image_index;
 
 			switch (m_State) {
 			case IDLE:
@@ -313,10 +302,14 @@ public class Player extends Character {
 				break;
 			case WALKING:
 				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
+				if(m_image_index < 8)
+					m_image_index = 8;
 				break;
 			case JUMPING:
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
-				if (m_image_index == 18)
+				if(falling && !jumping)
+					m_image_index = 23;
+				if(m_image_index == 18)
 					m_image_index = 22;
 				break;
 			default:
@@ -342,7 +335,9 @@ public class Player extends Character {
 		if (bI != null) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
-
+			
+			checkSprite();
+			
 			BufferedImage img = bI[m_image_index];
 			int w = DIMENSION * m_width;
 			int h = m_height;
@@ -362,6 +357,20 @@ public class Player extends Character {
 
 	public boolean checkBlock(int x, int y) {
 		return m_model.m_room.isBlocked(x, y);
+	}
+	
+	public void checkSprite() {
+		if(m_State == WALKING && (m_image_index < 8 || m_image_index > 14)) {
+			m_image_index = (last_image_index - 8 + 1) % 6 + 8;
+		}
+		if(m_State == JUMPING && (m_image_index < 15 || m_image_index > 24)) {
+			m_image_index = (last_image_index - 15 + 1) % 9 + 15;
+			if(m_image_index >= 18 && m_image_index < 22)
+				m_image_index = 22;
+		}
+		if(m_State == IDLE && (m_image_index > 4)) {
+			m_image_index = (last_image_index + 1) % 4;
+		}
 	}
 
 }
