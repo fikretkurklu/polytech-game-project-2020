@@ -2,7 +2,9 @@ package underworld;
 
 import java.awt.Image;
 
+
 import automaton.Automaton;
+import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import environnement.Element;
@@ -20,7 +22,7 @@ public class Cloud extends Element{
 		m_width = 2 * SIZE;
 		m_height = 2 * SIZE;
 		outScreen = false;
-		randomImage();
+		imagePath = UnderworldParam.cloudImage[0];
 		try {
 			loadImage(imagePath, m_width, m_height);
 		} catch (Exception e) {
@@ -29,40 +31,22 @@ public class Cloud extends Element{
 		}
 	}
 	
-	public void randomImage(){
-		float randomNumber = (float) Math.random();
-		if (randomNumber <= 0.5) {
-			//imagePath = 
-		} else {
-			//imagePath =
-		}
-	}
-	
-	// Effectue le changement de booléen nécessaire lorsque le joueur se trouve derrière un nuage
-	private void hide() {
-		int width = getCoord().X() + m_width;
-		int height = getCoord().Y() + m_height;
-		int playerX = player.getX();
-		int playerY = player.getY();
-		if (! player.hidden) {
-			if ((playerX >= getCoord().X()) && (playerX <= width) && (playerY >= getCoord().Y()) && (playerY <= height)) {
-				player.hidden = true;
-			}
-		} else {
-			if (! ((playerX >= getCoord().X()) && (playerX <= width) && (playerY >= getCoord().Y()) && (playerY <= height))) {
-				player.hidden = false;
-			}
-		}
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		if (dir.toString() == "H")
+			return getCoord().X() + m_width <= 0;
+		return false;
 	}
 	
 	@Override
+	public boolean explode() {
+		outScreen = false;
+		return true;
+	}
+	
+	
+	@Override
 	public boolean move(Direction dir) {
-		if (getCoord().X() + m_width <= 0) {
-			outScreen = true;
-			return true;
-		}
-		if (player != null)
-			hide();
 		getCoord().translateX(-20);
 		return true;
 	}
