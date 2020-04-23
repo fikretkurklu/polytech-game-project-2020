@@ -14,6 +14,7 @@ import automata.parser.AutomataParser;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Interpretor;
+import environnement.Env;
 import game.graphics.View;
 import player.Player;
 import room.Room;
@@ -23,14 +24,14 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	public Room m_room;
+	public Env m_env;
 
 	Player m_player;
 	View m_view;
 //	Opponent[] m_opponents;
 
 	public Model() throws IOException {
-		m_room = new Room();
+		m_env = new Room();
 		m_view = null;
 
 		AST ast;
@@ -63,7 +64,7 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
-		m_room.tick(elapsed);
+		m_env.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -71,7 +72,7 @@ public class Model {
 		m_height = height;
 		setCenterScreen();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		m_room.paint(gp);
+		m_env.paint(gp);
 		m_player.paint(gp);
 		gp.dispose();
 	}
