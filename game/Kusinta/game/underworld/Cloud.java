@@ -2,7 +2,9 @@ package underworld;
 
 import java.awt.Image;
 
+
 import automaton.Automaton;
+import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import environnement.Element;
@@ -20,21 +22,12 @@ public class Cloud extends Element{
 		m_width = 2 * SIZE;
 		m_height = 2 * SIZE;
 		outScreen = false;
-		randomImage();
+		imagePath = UnderworldParam.cloudImage[0];
 		try {
 			loadImage(imagePath, m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-	
-	public void randomImage(){
-		float randomNumber = (float) Math.random();
-		if (randomNumber <= 0.5) {
-			//imagePath = 
-		} else {
-			//imagePath =
 		}
 	}
 	
@@ -56,13 +49,18 @@ public class Cloud extends Element{
 	}
 	
 	@Override
+	public boolean cell(Direction dir, Category cat) {
+		if (dir.toString() == "H")
+			return getCoord().X() + m_width <= 0;
+		return false;
+	}
+	
+	@Override
 	public boolean move(Direction dir) {
 		if (getCoord().X() + m_width <= 0) {
 			outScreen = true;
 			return true;
 		}
-		if (player != null)
-			hide();
 		getCoord().translateX(-20);
 		return true;
 	}
