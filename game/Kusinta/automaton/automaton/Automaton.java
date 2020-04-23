@@ -7,11 +7,13 @@ import playerActions.Action;
 
 public class Automaton {
 
+	String name;
 	State initialState;
 	HashMap<State, Transition[]> mapTransitions;
 	
 	
-	public Automaton(State state, HashMap<State, Transition[]> transitions) {
+	public Automaton(String name, State state, HashMap<State, Transition[]> transitions) {
+		this.name = name;
 		initialState = state;
 		mapTransitions = transitions;
 	}

@@ -12,6 +12,7 @@ import java.util.ListIterator;
 import automata.ast.* ;
 import automata.util.* ;
 
+@SuppressWarnings("unchecked")
 public class AutomataParser implements AutomataParserConstants {
 
   public static AST from_file(String path_file) throws Exception
