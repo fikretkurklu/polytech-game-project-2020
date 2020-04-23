@@ -10,6 +10,7 @@ import java.util.List;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.AutomatonLibrary;
 import automaton.Interpretor;
 import environnement.Decor;
 import environnement.Element;
@@ -46,8 +47,8 @@ public class Room extends Env{
 	int m_BlockAElapsed = 0;
 
 	@SuppressWarnings("unchecked")
-	public Room(AutomatonLibrary AL) {
-		super(Env.ROOM, AL);
+	public Room(AutomatonLibrary AL, int width, int height) {
+		super(Env.ROOM, AL, width, height);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];
