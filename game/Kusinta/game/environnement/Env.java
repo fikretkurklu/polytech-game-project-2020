@@ -2,6 +2,8 @@ package environnement;
 
 import java.awt.Graphics;
 
+import automaton.AutomatonLibrary;
+
 public abstract class Env {
 	public static final int VILLAGE = 0;
 	public static final int ROOM = 1;
