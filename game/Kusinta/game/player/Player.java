@@ -123,16 +123,8 @@ public class Player extends Character {
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
-<<<<<<< HEAD
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
-=======
-<<<<<<< HEAD
-		// TODO Auto-generated method stub
-		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
-=======
-		if(!checkBlock(m_coord.X(), m_coord.Y()- m_height) && !falling){
->>>>>>> 5f4b1c4cef674d2e7ee8e28a3db151f780da8bd0
->>>>>>> aa6f50a5e8c2c57aa62989d68f37e4f693c12191
+
 			m_State = JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
@@ -144,27 +136,10 @@ public class Player extends Character {
 	}
 
 	@Override
-<<<<<<< HEAD
-	public boolean pop(Direction dir) { // sauter
-		// TODO Auto-generated method stub
-		if (!checkBlock(m_coord.X(), m_coord.Y() + m_height) && !falling) {
-=======
 	public boolean pop(Direction dir) { // sauter moins haut
-<<<<<<< HEAD
 		// m_model.m_room.setupVillageMode();
 		System.out.println("setupVillageMode");
-=======
-		if(!checkBlock(m_coord.X(), m_coord.Y()+ m_height) && !falling){
->>>>>>> 5f4b1c4cef674d2e7ee8e28a3db151f780da8bd0
-			m_State = JUMPING;
-			y_gravity = m_coord.Y();
-			poping = true;
-			falling = true;
-			m_time = m_ratio_y;
-			gravity(m_time);
-		}
->>>>>>> aa6f50a5e8c2c57aa62989d68f37e4f693c12191
-		return true;
+			return true;
 	}
 
 	private void gravity(long t) {
@@ -224,11 +199,7 @@ public class Player extends Character {
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
-<<<<<<< HEAD
 			if (!(jumping || falling)) {
-=======
-			if (!(poping || jumping || falling)) {
->>>>>>> aa6f50a5e8c2c57aa62989d68f37e4f693c12191
 				if (pressed == true && m_State != WALKING) {
 					m_image_index = 8;
 				} else {
@@ -246,11 +217,7 @@ public class Player extends Character {
 		}
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
-<<<<<<< HEAD
 			if (!(jumping || falling)) {
-=======
-			if (!(poping || jumping || falling)) {
->>>>>>> aa6f50a5e8c2c57aa62989d68f37e4f693c12191
 				if (pressed == true && m_State != WALKING) {
 					m_image_index = 8;
 				} else {
@@ -348,17 +315,11 @@ public class Player extends Character {
 
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
-<<<<<<< HEAD
 
 		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
 				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
 		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
-=======
->>>>>>> aa6f50a5e8c2c57aa62989d68f37e4f693c12191
 
-		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
-				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
-		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
 		
 		for(int i = 0; i < m_arrows.size(); i++) {
 			m_arrows.get(i).tick(elapsed);
