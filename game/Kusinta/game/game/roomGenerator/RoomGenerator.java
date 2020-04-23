@@ -279,7 +279,7 @@ public class RoomGenerator {
 								|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
 								|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
 								|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
-								&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								&& (m_elementTable[k][k2 + 1].contentEquals("IW")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
@@ -315,7 +315,7 @@ public class RoomGenerator {
 						}
 					} else if (k == i + width - 1 && k2 == j) {
 
-						if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						if ((m_elementTable[k + 1][k2].contentEquals("IW")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
@@ -367,7 +367,7 @@ public class RoomGenerator {
 								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
 								|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))
-								&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								&& (m_elementTable[k][k2 + 1].contentEquals("IW")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
 										|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
