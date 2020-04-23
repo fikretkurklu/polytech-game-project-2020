@@ -761,7 +761,22 @@ public class RoomGenerator {
 			}
 		}
 	}
+	
+	/*
+	 * 
+	 * This method checks the room and add the required changes
+	 * 
+	 */
 
+	public void verification() {
+		for (int k = 1; k < m_row-1; k++) {
+			for (int k2 = 1; k2 < m_col-1; k2++) {
+				
+			}
+		}
+	}
+	
+	
 	/*
 	 * 
 	 * This method is used to add the initial point of the player This method will
