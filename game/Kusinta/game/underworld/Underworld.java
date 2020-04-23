@@ -7,12 +7,13 @@ import java.io.File;
 import java.io.FileReader;
 
 import automaton.Automaton;
+import automaton.AutomatonLibrary;
 import game.Coord;
 import environnement.Element;
 import environnement.Env;
 
 
-public class Underworld {
+public class Underworld extends Env{
 	public final static int MAX_CLOUDS = 10;
 	
 	String mapFile;
@@ -26,14 +27,20 @@ public class Underworld {
 	UnderworldEmptySpaceImageManager ESIM;
 	Automaton cloudAutomaton, wallAutomaton;
 	UndWallImageManager UWIM;
-	public Underworld() {
-//		super(Env.UNDERWORLD);
+	AutomatonLibrary m_AL;
+	
+	public Underworld(AutomatonLibrary AL, int width, int height) {
+		super(Env.UNDERWORLD, AL, width, height);
 		startCoord = new Coord();
 		ambiance = (int)(Math.random()*UnderworldParam.nbAmbiance)+1;
 		BufferedReader f;
 		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
 		UWIM = new UndWallImageManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
+		m_AL = AL;
+		wallAutomaton = m_AL.getAutomaton("Block");
+		cloudAutomaton = m_AL.getAutomaton("Cloud");
+		
 		try {
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
@@ -68,7 +75,7 @@ public class Underworld {
 		if (code.equals("ES")) {
 			return new UnderworldEmptySpace(coord, ESIM);
 		}else if (code.contentEquals("LS")) {
-			return new UndWall(coord, null, code, wallAutomaton);
+			return new UndWall(coord, UWIM, code, wallAutomaton);
 		}else if (code.contentEquals("")) {
 			
 		}else if (code.contentEquals("")) {
@@ -83,7 +90,7 @@ public class Underworld {
 	
 	
 
-	public void paint(Graphics g) {
+	public void paint(Graphics g, int width, int height) {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
@@ -94,6 +101,14 @@ public class Underworld {
 	
 	public Coord getStartCoord() {
 		return startCoord;
+	}
+
+
+
+	@Override
+	public void tick(long elapsed) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 /*	public void tick(long elapsed) {
