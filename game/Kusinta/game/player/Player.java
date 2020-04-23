@@ -275,6 +275,8 @@ public class Player extends Character {
 			if(falling|| jumping || poping )
 				m_State = JUMPING;
 
+			last_image_index = m_image_index;
+
 			switch (m_State) {
 			case IDLE:
 				m_image_index = (m_image_index + 1) % 4;
@@ -311,8 +313,7 @@ public class Player extends Character {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 			
-			if(m_State == WALKING && (m_image_index<8 || m_image_index >14))
-				m_image_index = 8;
+			checkSprite();
 			
 			BufferedImage img = bI[m_image_index];
 			int w =  DIMENSION * m_width;
@@ -329,6 +330,20 @@ public class Player extends Character {
 	
 	public boolean checkBlock(int x, int y) {
 		return m_model.m_room.isBlocked(x, y);
+	}
+	
+	public void checkSprite() {
+		if(m_State == WALKING && (m_image_index < 8 || m_image_index > 14)) {
+			m_image_index = (last_image_index - 8 + 1) % 6 + 8;
+		}
+		if(m_State == JUMPING && (m_image_index < 15 || m_image_index > 24)) {
+			m_image_index = (last_image_index - 15 + 1) % 9 + 15;
+			if(m_image_index >= 18 && m_image_index < 22)
+				m_image_index = 22;
+		}
+		if(m_State == IDLE && (m_image_index > 4)) {
+			m_image_index = (last_image_index + 1) % 4;
+		}
 	}
 
 }
