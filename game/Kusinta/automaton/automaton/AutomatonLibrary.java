@@ -47,7 +47,7 @@ public class AutomatonLibrary {
 		}		
 	}
 	
-	public Automaton getAutomate(String name) throws Exception{
+	public Automaton getAutomaton(String name) throws Exception{
 		Automaton automaton = mapAutomaton.get(name);
 		if (automaton != null) {
 			return automaton;
