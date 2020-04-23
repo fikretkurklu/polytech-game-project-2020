@@ -93,7 +93,8 @@ public class AutomataParser implements AutomataParserConstants {
  **/
 
 /* Identifier */
-  final public String P_Identifier() throws ParseException {
+  
+final public String P_Identifier() throws ParseException {
   Token token;
     token = jj_consume_token(ID);
                {if (true) return token.image;}

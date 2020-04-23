@@ -1,5 +1,7 @@
 package room;
 
+import environnement.ImageManager;
+
 public class DoorImageManager extends ImageManager {
 
 	/*

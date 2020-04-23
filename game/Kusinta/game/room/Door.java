@@ -1,12 +1,13 @@
 package room;
 import automaton.Automaton;
+import environnement.Decor;
 import game.Coord;
 
 public class Door extends Decor {
 	
 	public Door(Coord coord, DoorImageManager DImageManager, Room room, Automaton automaton) throws Exception {
 		super(false, true, true, coord, room, automaton);
-		String path = DImageManager.get("", DImageManager.useImageTable);
+		String path = DImageManager.get("");
 		if (path != null) {
 			loadImage(path);
 		}

@@ -1,5 +1,6 @@
 package room;
 
+import environnement.Element;
 import game.Coord;
 
 public class EmptySpace extends Element {
@@ -14,7 +15,7 @@ public class EmptySpace extends Element {
 
 	public EmptySpace(Coord coord, EmptySpaceImageManager ESImageManager) throws Exception {
 		super(false, true, coord);
-		String path = ESImageManager.get("", ESImageManager.useImageTable);
+		String path = ESImageManager.get("");
 		if (path != null) {
 			loadImage(path);
 		}

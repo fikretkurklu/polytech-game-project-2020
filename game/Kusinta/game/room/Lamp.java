@@ -1,6 +1,7 @@
 package room;
 
 import automaton.Automaton;
+import environnement.Decor;
 import game.Coord;
 
 public class Lamp extends Decor{

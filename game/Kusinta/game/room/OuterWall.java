@@ -1,6 +1,7 @@
 package room;
 
 import automaton.Automaton;
+import environnement.Element;
 import game.Coord;
 
 public class OuterWall extends Element {
@@ -18,7 +19,7 @@ public class OuterWall extends Element {
 	public OuterWall(Coord coord, OuterWallImageManager OWImageManager, String orientation, Automaton automaton) throws Exception {
 		super(true, true, coord, automaton);
 		m_orientation = orientation;
-		String path = OWImageManager.get(m_orientation,OWImageManager.useImageTable);
+		String path = OWImageManager.get(m_orientation);
 		if (path != null) {
 			loadImage(path);
 		}		

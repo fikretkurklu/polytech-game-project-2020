@@ -1,4 +1,4 @@
-package room;
+package environnement;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -25,10 +25,10 @@ public abstract class Element extends Entity{
 
 	public static final int SIZE = 86;
 
-	Image __image;
+	protected Image __image;
 	private Coord __coord;
-	boolean __isVisible;
-	boolean __isSolid;
+	protected boolean __isVisible;
+	protected boolean __isSolid;
 	
 	
 	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton) {
@@ -78,6 +78,10 @@ public abstract class Element extends Entity{
 			g.drawImage(__image, x, y, null);
 		}
 		
+	}
+	
+	public boolean isSolid() {
+		return __isSolid;
 	}
 
 }
