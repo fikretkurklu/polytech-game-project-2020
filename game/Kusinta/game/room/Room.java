@@ -10,6 +10,7 @@ import java.util.List;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.AutomatonLibrary;
 import automaton.Interpretor;
 import environnement.Decor;
 import environnement.Element;
@@ -46,8 +47,8 @@ public class Room extends Env{
 	int m_BlockAElapsed = 0;
 
 	@SuppressWarnings("unchecked")
-	public Room() {
-		super(Env.ROOM);
+	public Room(AutomatonLibrary AL, int width, int height) {
+		super(Env.ROOM, AL, width, height);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];
@@ -60,16 +61,8 @@ public class Room extends Env{
 		ESIM = new EmptySpaceImageManager(ambiance);
 		DIM = new DoorImageManager(ambiance);
 
-		AST ast;
-		
-		try {
-			ast = (AST) AutomataParser.from_file("resources/gal/automata.gal");
-			Interpretor interpret = new Interpretor();
-			BlockAutomaton = ((List<Automaton>) ast.accept(interpret)).get(1);
-			StaticDecorAutomaton = ((List<Automaton>) ast.accept(interpret)).get(3);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		StaticDecorAutomaton = m_AL.getAutomaton("Decor");
+		BlockAutomaton = m_AL.getAutomaton("Block");
 		
 		BufferedReader f;
 		try {
@@ -199,7 +192,9 @@ public class Room extends Env{
 
 	}
 
-	public void paint(Graphics g) {
+	public void paint(Graphics g, int width, int height) {
+		m_width = width;
+		m_height = height;
 		for (int i = 0; i < m_background.length; i++) {
 			m_background[i].paint(g);
 		}
@@ -228,7 +223,14 @@ public class Room extends Env{
 			return 0;
 		}
 	}
-	
+	public int blockBot(int x, int y) {
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_background[n].getCoord().Y() + Element.SIZE;
+		} else {
+			return 0;
+		}
+	}
 	public void tick(long elapsed) {
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);

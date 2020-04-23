@@ -320,7 +320,7 @@ public class Interpretor implements IVisitor {
 
 //	@Override
 	public Object exit(Automaton automaton, Object initial_state, List<Object> modes) {
-		return new automaton.Automaton((automaton.State)initial_state, mapTransitions);
+		return new automaton.Automaton(automaton.name, (automaton.State)initial_state, mapTransitions);
 	}
 
 	@Override
@@ -337,7 +337,7 @@ public class Interpretor implements IVisitor {
 
 	@Override
 	public Object exit(automata.ast.Automaton automaton, Object initial_state, List<Object> modes) {
-		return new automaton.Automaton((automaton.State)initial_state, mapTransitions);
+		return new automaton.Automaton(automaton.name, (automaton.State)initial_state, mapTransitions);
 	}
 
 }
