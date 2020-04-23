@@ -192,7 +192,9 @@ public class Room extends Env{
 
 	}
 
-	public void paint(Graphics g) {
+	public void paint(Graphics g, int width, int height) {
+		m_width = width;
+		m_height = height;
 		for (int i = 0; i < m_background.length; i++) {
 			m_background[i].paint(g);
 		}
