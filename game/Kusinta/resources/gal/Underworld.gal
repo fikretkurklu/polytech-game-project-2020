@@ -1,0 +1,14 @@
+Cloud (Init){	
+  * (Init)
+  | Cell(H,O) ? Explode : ()
+  | True ? Move : (Init)     
+  * ()
+}
+
+PlayerSoul (Init){
+  * (Visible)
+  | Cell(H,O) ? Pop : (Move)
+  | !Cell(H,O) ? Wizz : (Move)
+  * (Move)
+  | True ? 		: (Visible)
+}

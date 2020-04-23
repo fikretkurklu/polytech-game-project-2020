@@ -12,7 +12,7 @@ public class interpretorTest {
 	public static void main(String[] args) {
 		AutomatonLibrary AL = new AutomatonLibrary();
 		try {
-			Automaton a = AL.getAutomate("Player_donjon");
+			Automaton a = AL.getAutomaton("Player_donjon");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
