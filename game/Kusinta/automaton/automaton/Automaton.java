@@ -51,6 +51,7 @@ public class Automaton {
 						e.setCurrentState(randomState(mapTransitions));
 					else
 						e.setCurrentState(transitions[i].finalState);
+					return;
 				}
 			}
 		}
