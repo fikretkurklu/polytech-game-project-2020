@@ -47,7 +47,7 @@ public class Room extends Env{
 	int m_BlockAElapsed = 0;
 
 	@SuppressWarnings("unchecked")
-	public Room(AutomatonLibrary AL, int width, int height) {
+	public Room(AutomatonLibrary AL, int width, int height) throws Exception {
 		super(Env.ROOM, AL, width, height);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
