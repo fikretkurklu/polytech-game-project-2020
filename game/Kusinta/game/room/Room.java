@@ -229,6 +229,15 @@ public class Room{
 		}
 	}
 	
+	public int blockBot(int x, int y) {
+        int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+        if (n >= 0 && n < nbRow * nbCol) {
+            return m_background[n].getCoord().Y() + Element.SIZE;
+        } else {
+            return 0;
+        }
+    }
+	
 	public void tick(long elapsed) {
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);

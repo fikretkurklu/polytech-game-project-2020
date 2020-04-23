@@ -149,7 +149,7 @@ public class Player extends Character {
 
 	private void gravity(long t) {
 		// TODO Auto-generated method stub
-		if(!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(m_coord.X(), m_coord.Y()-m_height) && !checkBlock(m_coord.X() + m_width, m_coord.Y()-1) && !checkBlock(m_coord.X() - m_width, m_coord.Y()-1) || falling){
+		if(!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[0], m_coord.Y()) && !checkBlock(x_hitBox[2], m_coord.Y()) || falling){
 			m_State = JUMPING;
 			double C;
 			if (jumping) {
@@ -158,6 +158,17 @@ public class Player extends Character {
 				C = ACCELERATION_POP;
 			} else {
 				C = 0;
+			}
+			
+			if(checkBlock(m_coord.X(), m_coord.Y()-m_height) || checkBlock(x_hitBox[2]-2, m_coord.Y()-m_height) || checkBlock(x_hitBox[0]+2, m_coord.Y()-m_height)) {
+				C = 0;
+				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y()-m_height) + m_height);
+				y_gravity = m_coord.Y();
+				jumping = false;
+				poping = false;
+				t = (long) 0.1;
+				m_time = t;
+				System.out.println(" ratio_y = " + m_ratio_y);
 			}
 			
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
