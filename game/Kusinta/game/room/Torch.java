@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import automaton.Automaton;
+import environnement.Decor;
 import game.Coord;
 
 public class Torch extends Decor{

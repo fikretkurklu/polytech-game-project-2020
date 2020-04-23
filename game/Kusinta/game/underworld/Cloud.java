@@ -21,11 +21,21 @@ public class Cloud extends Element{
 		m_height = 2 * SIZE;
 		this.player = player;
 		outScreen = false;
+		randomImage();
 		try {
-			loadImage(imagePath);
+			loadImage(imagePath, m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void randomImage(){
+		float randomNumber = (float) Math.random();
+		if (randomNumber <= 0.5) {
+			//imagePath = 
+		} else {
+			//imagePath =
 		}
 	}
 	
@@ -48,7 +58,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean move(Direction dir) {
-		if (getCoord().X() <= 0) {
+		if (getCoord().X() + m_width <= 0) {
 			outScreen = true;
 			return true;
 		}
