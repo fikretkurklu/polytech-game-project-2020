@@ -1,19 +1,20 @@
-package room;
+package environnement;
 
 import java.awt.Image;
 
 import automaton.Automaton;
 import game.Coord;
+import room.Room;
 
 public abstract class Decor extends Element{
 	
 	public static final int NB_DECOR = 4;
 	
-	int m_imageIndex;
-	long m_imageElapsed;
-	boolean isAnimated;
-	Image[] m_images;
-	Room m_room;
+	protected int m_imageIndex;
+	protected long m_imageElapsed;
+	protected boolean isAnimated;
+	protected Image[] m_images;
+	protected Room m_room;
 	
 	public Decor(boolean isSolid, boolean isVisible, boolean isAnimated, Coord coord, Room room, Automaton automaton) {
 		super(isSolid, isVisible, coord, automaton);
