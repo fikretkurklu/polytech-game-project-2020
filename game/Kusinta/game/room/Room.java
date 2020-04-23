@@ -10,13 +10,14 @@ import java.util.List;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
-import automaton.Entity;
 import automaton.Interpretor;
+import environnement.Decor;
+import environnement.Element;
+import environnement.Env;
 import game.Coord;
 
-public class Room {
+public class Room extends Env{
 
-	int m_width, m_height;
 	int nbRow;
 	int nbCol;
 
@@ -46,6 +47,7 @@ public class Room {
 
 	@SuppressWarnings("unchecked")
 	public Room() {
+		super(Env.ROOM);
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];
@@ -213,7 +215,7 @@ public class Room {
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
-			return m_background[n].__isSolid;
+			return m_background[n].isSolid();
 		}
 		return true;
 	}

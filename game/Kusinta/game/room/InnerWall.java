@@ -1,5 +1,6 @@
 package room;
 
+import environnement.Element;
 import game.Coord;
 
 /*
@@ -12,7 +13,7 @@ public class InnerWall extends Element {
 	
 	public InnerWall(Coord coord, InnerWallImageManager IWImageManager) throws Exception {
 		super(true, true, coord);
-		String path = IWImageManager.get("", IWImageManager.useImageTable);
+		String path = IWImageManager.get("");
 		if (path != null) {
 			loadImage(path);
 		}
