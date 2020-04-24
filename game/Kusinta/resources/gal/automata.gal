@@ -5,8 +5,9 @@ Player_donjon(Init){
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
-  | Key(z) ? 50% Pop / 50% Jump: (Init)
-  | Key(SPACE) ? Egg() : (Init)        
+  | Key(z) ? Jump: (Init)
+  | Key(SPACE) ? Egg() : (Init)
+  | Key(v) ? Pop() : (Init)       
 }
 
 Block (Inactif) {                

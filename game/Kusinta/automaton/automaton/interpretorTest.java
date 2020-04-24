@@ -1,14 +1,7 @@
 package automaton;
 
-import java.util.List;
-
-
-import automata.ast.AST;
-import automata.parser.AutomataParser;
-//import game.Block;
-
+@SuppressWarnings("unused")
 public class interpretorTest {
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		AutomatonLibrary AL = new AutomatonLibrary();
 		try {

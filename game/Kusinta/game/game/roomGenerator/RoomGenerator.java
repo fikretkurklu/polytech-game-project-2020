@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+@SuppressWarnings("resource")
 public class RoomGenerator {
 
 	String[][] m_elementTable;
@@ -200,8 +201,8 @@ public class RoomGenerator {
 
 	/*
 	 * This method is used to add a platform and insert in the environnement where
-	 * you add it The changes to make it correponds to the nearby platforms are
-	 * This method cannot be applied for border platforms
+	 * you add it The changes to make it correponds to the nearby platforms are This
+	 * method cannot be applied for border platforms
 	 * 
 	 */
 
@@ -210,7 +211,7 @@ public class RoomGenerator {
 		int j = 0;
 		int width = 0;
 		int length = 0;
-		while ((i<=0 || i+width>=m_row-1) && (j<=0 || j+length>=m_col-1)) {
+		while ((i <= 0 || i + width >= m_row - 1) && (j <= 0 || j + length >= m_col - 1)) {
 			System.out.println("Enter i position :");
 			i = enterNb();
 			System.out.println("Enter j position :");
@@ -764,6 +765,353 @@ public class RoomGenerator {
 
 	/*
 	 * 
+	 * This method checks the room and add the required changes
+	 * 
+	 */
+
+	public void verification() {
+		for (int k = 1; k < m_row - 1; k++) {
+			for (int k2 = 1; k2 < m_col - 1; k2++) {
+				if (m_elementTable[k][k2]== "" || m_elementTable[k][k2]==null) {
+					m_elementTable[k][k2] = "ES";
+				} else if (m_elementTable[k][k2]=="ES" || m_elementTable[k][k2]=="ES_I" || m_elementTable[k][k2]=="ES_D" || m_elementTable[k][k2]=="ES_T") {
+					m_elementTable[k][k2] = m_elementTable[k][k2];
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW") || m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "IW";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_E";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_S";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_W";
+				} else if ((m_elementTable[k + 1][k2].contentEquals("IW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_N";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_SE";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_SW";
+				} else if ((m_elementTable[k + 1][k2].contentEquals("IW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 - 1].contentEquals("IW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_NE";
+				} else if ((m_elementTable[k + 1][k2].contentEquals("IW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					m_elementTable[k][k2] = "OW_NW";
+				} else if ((m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW"))
+						&& (m_elementTable[k + 1][k2].contentEquals("IW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SE")
+								|| m_elementTable[k + 1][k2].contentEquals("OW_SW"))) {
+					if (m_elementTable[k][k2].contentEquals("IW") || m_elementTable[k][k2].contentEquals("OW_N")
+							|| m_elementTable[k][k2].contentEquals("OW_S")
+							|| m_elementTable[k][k2].contentEquals("OW_E")
+							|| m_elementTable[k][k2].contentEquals("OW_W")
+							|| m_elementTable[k][k2].contentEquals("OW_NE")
+							|| m_elementTable[k][k2].contentEquals("OW_NW")
+							|| m_elementTable[k][k2].contentEquals("OW_SE")
+							|| m_elementTable[k][k2].contentEquals("OW_SW")) {
+						m_elementTable[k][k2] = "ES";
+					}
+				} else if ((m_elementTable[k][k2 - 1].contentEquals("IW")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_SW"))
+						&& (m_elementTable[k][k2 + 1].contentEquals("IW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+								|| m_elementTable[k][k2 + 1].contentEquals("OW_SW"))) {
+					if (m_elementTable[k][k2].contentEquals("IW") || m_elementTable[k][k2].contentEquals("OW_N")
+							|| m_elementTable[k][k2].contentEquals("OW_S")
+							|| m_elementTable[k][k2].contentEquals("OW_E")
+							|| m_elementTable[k][k2].contentEquals("OW_W")
+							|| m_elementTable[k][k2].contentEquals("OW_NE")
+							|| m_elementTable[k][k2].contentEquals("OW_NW")
+							|| m_elementTable[k][k2].contentEquals("OW_SE")
+							|| m_elementTable[k][k2].contentEquals("OW_SW")) {
+						m_elementTable[k][k2] = "ES";
+					}
+				} else if (m_elementTable[k][k2 - 1].contentEquals("IW")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_N")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_S")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_E")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_W")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_NE")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_NW")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_SE")
+						|| m_elementTable[k][k2 - 1].contentEquals("OW_SW")
+
+						|| m_elementTable[k][k2 + 1].contentEquals("IW")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_N")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_S")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_E")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_W")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_NE")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_NW")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_SE")
+						|| m_elementTable[k][k2 + 1].contentEquals("OW_SW")
+
+						|| m_elementTable[k - 1][k2].contentEquals("IW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SE")
+						|| m_elementTable[k - 1][k2].contentEquals("OW_SW")
+
+						|| m_elementTable[k + 1][k2].contentEquals("IW")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_N")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_S")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_E")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_W")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NE")
+						|| m_elementTable[k + 1][k2].contentEquals("OW_NW")
+						|| m_elementTable[k + 1][k2 - 1].contentEquals("OW_SE")
+						|| m_elementTable[k + 1][k2 - 1].contentEquals("OW_SW")) {
+					if (m_elementTable[k][k2].contentEquals("IW") || m_elementTable[k][k2].contentEquals("OW_N")
+							|| m_elementTable[k][k2].contentEquals("OW_S")
+							|| m_elementTable[k][k2].contentEquals("OW_E")
+							|| m_elementTable[k][k2].contentEquals("OW_W")
+							|| m_elementTable[k][k2].contentEquals("OW_NE")
+							|| m_elementTable[k][k2].contentEquals("OW_NW")
+							|| m_elementTable[k][k2].contentEquals("OW_SE")
+							|| m_elementTable[k][k2].contentEquals("OW_SW")) {
+						m_elementTable[k][k2] = "ES";
+					}
+				}
+			}
+		}
+	}
+
+	/*
+	 * 
 	 * This method is used to add the initial point of the player This method will
 	 * will not work if the cell is already full/used by a wall The initial point
 	 * can replace a decor.
@@ -940,6 +1288,7 @@ public class RoomGenerator {
 			System.out.println("-'chb' to change a specific bloc");
 			System.out.println("-'b' to finish a room by adding it's border");
 			System.out.println("-'des' to change an area of the map to empty spaces");
+			System.out.println("-'v' to make a verification/check of the current room (automatic correction of the room)");
 			System.out.println("-'s' to save the current room as a text file");
 			System.out.println("-'qr' to get a Quick Preview of the room");
 			System.out.println("-'q' to quit the room generator");
@@ -1041,6 +1390,13 @@ public class RoomGenerator {
 				}
 				roomGen.AddCompleteBorder();
 				System.out.println("AddBorder done");
+				enterTxt();
+			} else if(str.contentEquals("v")) {
+				if (f == null || roomGen == null) {
+					System.out.println("No room are currently edited");
+				}
+				roomGen.verification();
+				System.out.println("Verification done");
 				enterTxt();
 			} else if (str.contentEquals("s")) {
 				if (f == null || roomGen == null) {
