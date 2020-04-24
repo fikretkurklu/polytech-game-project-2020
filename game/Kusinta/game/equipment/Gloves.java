@@ -1,4 +1,4 @@
-package equipement;
+package equipment;
 
 public class Gloves {
 
