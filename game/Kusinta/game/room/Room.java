@@ -1,26 +1,24 @@
 package room;
 
 import java.awt.Graphics;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.List;
 
-
-import automata.ast.AST;
-import automata.parser.AutomataParser;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
-import automaton.Interpretor;
 import environnement.Decor;
 import environnement.Element;
-import environnement.Env;
 import game.Coord;
 
-public class Room extends Env{
+public class Room{
 
 	int nbRow;
 	int nbCol;
+	
+	AutomatonLibrary m_AL;
+	int m_width, m_height;
 
 	String roomFile;
 	Element[] m_elements; // liste des entity de la salles (mur)
@@ -46,9 +44,10 @@ public class Room extends Env{
 	
 	int m_BlockAElapsed = 0;
 
-	@SuppressWarnings("unchecked")
 	public Room(AutomatonLibrary AL, int width, int height) throws Exception {
-		super(Env.ROOM, AL, width, height);
+		m_AL = AL;
+		m_width = width;
+		m_height = height;
 		startCoord = new Coord();
 		m_decor = new Decor[0];
 		m_elements = new Element[0];

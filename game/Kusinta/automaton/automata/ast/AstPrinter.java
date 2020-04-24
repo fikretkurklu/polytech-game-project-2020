@@ -21,6 +21,7 @@ package automata.ast;
 import automata.util.Dot;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class AstPrinter implements IVisitor {
 
 	StringBuilder nodes;
@@ -132,6 +133,7 @@ public class AstPrinter implements IVisitor {
 	}
 
 	public void enter(Action action) {}
+	
 	
 	public Object exit(Action action, List<Object> funcalls) {
 		non_terminal(action,"Action");

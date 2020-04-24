@@ -27,13 +27,15 @@ import java.awt.event.MouseEvent;
 import game.graphics.GameCanvasListener;
 
 public class Controller implements GameCanvasListener {
-	private static final int K_Z = 122;
-	private static final int K_Q = 113;
-	private static final int K_S = 115;
-	private static final int K_D = 100;
-	private static final int K_A = 97;
-	private static final int K_E = 101;
-	private static final int K_SPACE = 32;
+	public static final int K_Z = 122;
+	public static final int K_Q = 113;
+	public static final int K_S = 115;
+	public static final int K_D = 100;
+	public static final int K_A = 97;
+	public static final int K_E = 101;
+	public static final int K_SPACE = 32;
+	public static final int K_V = 118;
+	
 	Game m_game;
 
 	

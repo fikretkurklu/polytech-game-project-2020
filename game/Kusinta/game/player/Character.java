@@ -1,11 +1,8 @@
 package player;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -13,58 +10,61 @@ import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
 import game.Model;
-import projectile.Arrow;
+import projectile.Projectile;
 
 public abstract class Character extends Entity {
 
-	Coord m_coord;
-	Model m_model;
-	Direction m_direction;
+	protected Coord m_coord;
+	protected Model m_model;
+	protected Direction m_direction;
 
-	int MAX_m_life = 100;
+	int MAX_LIFE = 100;
 	int m_life;
+	int m_resistance, m_strength, m_attackSpeed;
+	
+	protected LinkedList<Projectile> m_projectiles;
 
 	BufferedImage[] bI;
-	int m_image_index;
+	int m_image_index, last_image_index;
 
 	// Sprite m_character;
 
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
-		
-		m_automaton = automaton;
 		
 		m_coord = new Coord(x,y);
 		
 		m_direction = dir;
+		
+		MAX_LIFE = maxLife;
 
-		m_life = MAX_m_life;
+		m_life = life;
+		m_resistance = resistance;
+		m_strength = strength;
+		m_attackSpeed = attackSpeed;
+		
+		m_projectiles = new LinkedList<Projectile>();
+		
 		m_model = model;
-	}
-
-	protected BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		// TODO Auto-generated method stub
-		File imageFile = new File(filename);
-		if (imageFile.exists()) {
-			BufferedImage image = ImageIO.read(imageFile);
-			int width = image.getWidth(null) / ncols;
-			int height = image.getHeight(null) / nrows;
-
-			BufferedImage[] images = new BufferedImage[nrows * ncols];
-			for (int i = 0; i < nrows; i++) {
-				for (int j = 0; j < ncols; j++) {
-					int x = j * width;
-					int y = i * height;
-					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
-				}
-			}
-			return images;
-		}
-		return null;
+		
+		m_image_index = 0;
+		last_image_index = 0;
 	}
 	
 	public Coord getCoord() {
 		return m_coord;
+	}
+	
+	public Direction getDirection() {
+		return m_direction;
+	}
+	
+	public Model getModel() {
+		return m_model;
+	}
+	
+	public LinkedList<Projectile> getProjectiles(){
+		return m_projectiles;
 	}
 	
 	@Override
@@ -135,19 +135,31 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean gotpower() { // mort
-		// TODO Auto-generated method stub
 		if (m_life > 0) {
 			return true;
 		}
-
 		return false;
 	}
 	
-
 	@Override
 	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	public void setLife(int l) {
+		if (l > MAX_LIFE) {
+			m_life = MAX_LIFE;
+		} else {
+			m_life = l;
+		}
+	}
+	
+	public void setResistance(int resistance) {
+			m_resistance= resistance;
+	}
+	
+	public void setStrength(int strength) {
+			m_strength = strength;
 	}
 
 }
