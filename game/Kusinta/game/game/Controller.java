@@ -49,6 +49,9 @@ public class Controller implements GameCanvasListener {
 		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
 		System.out.println("   modifiers=" + e.getModifiersEx());
 		System.out.println("   buttons=" + e.getButton());
+		if (m_game.m_model.mode ==  Model.VILLAGE) {
+			m_game.m_model.m_village.Clicked();
+		}
 	}
 
 	@Override

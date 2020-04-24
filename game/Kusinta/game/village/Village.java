@@ -2,15 +2,21 @@ package village;
 
 import java.awt.Graphics;
 
+import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+
 public class Village {
 
 	private double DIVISOR = 0.2;
-
-	private int ID_ADVENTURE = 0;
-	private int ID_INVENTORY = 1;
-	private int ID_MAGIC_SHOP = 2;
-	private int ID_WEAPON_SHOP = 3;
-	private int ID_INFIRMARY = 4;
+	
+	public static enum ID_BUTTON {
+		ADVENTURE,
+		INVENTORY,
+		MAGIC_SHOP,
+		WEAPON_SHOP,
+		INFIRMARY,
+		EQUIPEMENT,
+		DEFAULT
+	}
 
 	private String INVENTORY_ICO = "resources/Village/HUD/Chest.png";
 	private String ADVENTURE_ICO = "resources/Village/HUD/adventure.png";
@@ -18,46 +24,48 @@ public class Village {
 	private String WEAPON_SHOP_ICO = "resources/Village/HUD/weaponShop.png";
 	private String INFIRMARY_ICO = "resources/Village/HUD/infirmary.png";
 	private String BUTTON_PANEL_BG = "resources/Village/HUD/menuBG.jpg";
-	private String IMAGE_PANEL_BG = "resources/Village/HUD/villageBG.jpg";
+	
+	private String IMAGE_VILLAGE = "resources/Village/HUD/villageBG.jpg";
+	private String IMAGE_WEAPON_SHOP = "resources/Village/HUD/weaponShopBG.jpg";
+	private String IMAGE_MAGIC_SHOP = "resources/Village/HUD/magicShopBG.jpg";
 
 	int m_width, m_height;
 
 	Panel menuPanel;
 	Panel immagePanel;
-	
-	PanelElem m_focus;
+
+	Button m_focus;
 
 	public Village(int w, int h) {
 		m_width = w;
 		m_height = h;
 		menuPanel = new Panel(0, 0, (int) (m_width * DIVISOR), m_height);
 		menuPanel.setImage(BUTTON_PANEL_BG);
-		// menuPanel.setBackGroundColor(Color.BLUE.darker());
 		int buttonSizeW = (int) (menuPanel.m_width * 0.5);
 		int buttonSizeH = menuPanel.m_height / 12;
 
 		immagePanel = new Panel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
-		immagePanel.setImage(IMAGE_PANEL_BG);
+		setEnv(ID_BUTTON.DEFAULT);
 
 		Button b;
 		b = new Button((menuPanel.m_width - buttonSizeW) / 2, menuPanel.m_height / 6 - buttonSizeH / 2, buttonSizeW,
-				buttonSizeH, ID_ADVENTURE);
+				buttonSizeH, ID_BUTTON.ADVENTURE);
 		b.setImage(ADVENTURE_ICO);
 		menuPanel.add(b);
 		b = new Button((menuPanel.m_width - buttonSizeW) / 2, menuPanel.m_height / 6 * 2 - buttonSizeH / 2, buttonSizeW,
-				buttonSizeH, ID_INVENTORY);
+				buttonSizeH, ID_BUTTON.INVENTORY);
 		b.setImage(INVENTORY_ICO);
 		menuPanel.add(b);
 		b = new Button((menuPanel.m_width - buttonSizeW) / 2, menuPanel.m_height / 6 * 3 - buttonSizeH / 2, buttonSizeW,
-				buttonSizeH, ID_WEAPON_SHOP);
+				buttonSizeH, ID_BUTTON.WEAPON_SHOP);
 		b.setImage(WEAPON_SHOP_ICO);
 		menuPanel.add(b);
 		b = new Button((menuPanel.m_width - buttonSizeW) / 2, menuPanel.m_height / 6 * 4 - buttonSizeH / 2, buttonSizeW,
-				buttonSizeH, ID_MAGIC_SHOP);
+				buttonSizeH, ID_BUTTON.MAGIC_SHOP);
 		b.setImage(MAGIC_SHOP_ICO);
 		menuPanel.add(b);
 		b = new Button((menuPanel.m_width - buttonSizeW) / 2, menuPanel.m_height / 6 * 5 - buttonSizeH / 2, buttonSizeW,
-				buttonSizeH, ID_INFIRMARY);
+				buttonSizeH, ID_BUTTON.INFIRMARY);
 		b.setImage(INFIRMARY_ICO);
 		menuPanel.add(b);
 	}
@@ -78,12 +86,12 @@ public class Village {
 		menuPanel.paint(g);
 		immagePanel.paint(g);
 	}
-	
+
 	public void mouseMoved(int x, int y) {
-		PanelElem b = null;
+		Button b = null;
 		if (menuPanel.isInside(x, y)) {
 			b = menuPanel.mouseMoved(x, y);
-		} else {	
+		} else {
 			b = immagePanel.mouseMoved(x, y);
 		}
 		if (b != m_focus) {
@@ -96,6 +104,30 @@ public class Village {
 			}
 		}
 	}
-	
-	
+
+	public void Clicked() {
+		if (m_focus != null) {
+			setEnv(m_focus.ID);
+		}
+	}
+
+	private void setEnv(ID_BUTTON ID) {
+		switch (ID) {
+		case ADVENTURE:
+			break;
+		case INFIRMARY:
+			break;
+		case EQUIPEMENT:
+			break;
+		case WEAPON_SHOP:
+			immagePanel.setImage(IMAGE_WEAPON_SHOP);
+			break;
+		case MAGIC_SHOP:
+			immagePanel.setImage(IMAGE_MAGIC_SHOP);
+			break;
+		default:
+			immagePanel.setImage(IMAGE_VILLAGE);
+			break;
+		}
+	}
 }

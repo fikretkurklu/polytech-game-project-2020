@@ -7,16 +7,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Button extends PanelElem{
+public class Button {
 
-	int ID;
+	Village.ID_BUTTON ID;
 	Image m_img;
+	int m_width, m_height, m_x, m_y;
 	
-	public Button(int x, int y, int w, int h, int id) {
-		super(x, y, w, h);
+	public Button(int x, int y, int w, int h, Village.ID_BUTTON id) {
+		m_width = w;
+		m_height = h;
+		m_x = x;
+		m_y = y;
 		this.ID = id;
 	}
-	@Override
 	public void paint(Graphics g) {
 		if (m_img != null) {
 			g.drawImage(m_img, m_x, m_y, null);
@@ -38,7 +41,6 @@ public class Button extends PanelElem{
 			e.printStackTrace();
 		}
 	}
-	@Override
 	public void resized(double ratio_w, double ratio_h) {
 		m_width *= ratio_w;
 		m_height *= ratio_h;
@@ -50,7 +52,7 @@ public class Button extends PanelElem{
 		
 	}
 	
-	public PanelElem mouseMoved(int x, int y) {
+	public Button mouseMoved(int x, int y) {
 		if (x > m_x && x < m_x + m_width && y > m_y && y < m_y + m_height) {
 			return this;
 		} else {

@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 public class Panel {
 	int m_width, m_height;
 	int m_x, m_y;
-	LinkedList<PanelElem> m_elem;
+	LinkedList<Button> m_elem;
 	Image m_bg;
 	
 	boolean focus;
@@ -21,15 +21,15 @@ public class Panel {
 		m_height = h;
 		m_x = x;
 		m_y = y;
-		m_elem = new LinkedList<PanelElem>();
+		m_elem = new LinkedList<Button>();
 		focus = false;
 	}
 
-	public void add(PanelElem elem) {
+	public void add(Button elem) {
 		m_elem.add(elem);
 	}
 
-	public void remove(PanelElem elem) {
+	public void remove(Button elem) {
 		m_elem.remove(elem);
 	}
 
@@ -77,7 +77,7 @@ public class Panel {
 	/*
 	 * Est appelée uniquement si on est sur le Panel
 	 */
-	public PanelElem mouseMoved(int x, int y) {
+	public Button mouseMoved(int x, int y) {
 		for (int i = 0; i < m_elem.size(); i++) {
 			if (m_elem.get(i).mouseMoved(x - m_x, y - m_y) != null) {
 				return m_elem.get(i);
