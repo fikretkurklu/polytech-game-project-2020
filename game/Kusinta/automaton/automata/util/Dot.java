@@ -19,9 +19,6 @@ package automata.util;
 
 import java.io.PrintStream;
 
-
-import automata.ast.Parameter;
-
 public final class Dot {
 
   // using String	
