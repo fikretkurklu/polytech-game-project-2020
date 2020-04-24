@@ -1,7 +1,6 @@
 package underworld;
 
 import automaton.Automaton;
-import game.Coord;
 import game.Model;
 import player.Character;
 import projectile.Projectile;

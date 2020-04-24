@@ -35,9 +35,7 @@ public class Cloud extends Element{
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			if (getCoord().X() + m_width <= 0) {
-				return true;
-			}
+			return (getCoord().X() + m_width <= 0);
 		}
 		return false;
 	}
