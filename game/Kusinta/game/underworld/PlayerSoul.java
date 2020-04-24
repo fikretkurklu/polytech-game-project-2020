@@ -19,7 +19,7 @@ public class PlayerSoul extends Character {
 	 */
 	
 	public PlayerSoul(Automaton automaton, Coord coord, int x, int y, Direction dir, Model model) throws IOException {
-		super(automaton, x, y, dir, model);
+		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
 		hidden = false;
 	}
 	
@@ -30,9 +30,7 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString() == "H") && (cat.toString() == "O")) {
-			Cloud clouds[] = m_model.m_map.m_clouds;
-			int x = getCoord().X();
-			int y = getCoord().Y();
+			Cloud clouds[] = getModel().m_underworld.m_clouds;
 			for (int i = 0 ; i < clouds.length ; i++) {
 				if  (contains(clouds[i]))
 					return true;

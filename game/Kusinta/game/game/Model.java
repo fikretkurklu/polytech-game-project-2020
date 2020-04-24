@@ -5,21 +5,17 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
 
-import automata.ast.AST;
-import automata.parser.AutomataParser;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
-import automaton.Interpretor;
-import environnement.Env;
 import game.graphics.View;
 import player.Player;
 import room.Room;
+import underworld.Underworld;
 
 public class Model {
 	
@@ -37,6 +33,7 @@ public class Model {
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Room m_room;
+	public Underworld m_underworld;
 //	Opponent[] m_opponents;
 
 	public Model(View view) throws Exception {
