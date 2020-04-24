@@ -17,9 +17,9 @@ import projectile.Arrow;
 
 public abstract class Character extends Entity {
 
-	Coord m_coord;
-	Model m_model;
-	Direction m_direction;
+	protected Coord m_coord;
+	protected Model m_model;
+	protected Direction m_direction;
 
 	int MAX_m_life = 100;
 	int m_life;

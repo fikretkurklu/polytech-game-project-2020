@@ -23,10 +23,20 @@ public class PlayerSoul extends Character {
 		hidden = false;
 	}
 	
+	private boolean contains(Cloud cloud) {
+		return ((getCoord().X() >= cloud.getCoord().X()) && (getCoord().X() <= cloud.xMax) && (getCoord().Y() >= cloud.getCoord().Y()) && (getCoord().Y() <= cloud.yMax));
+	}
+	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString() == "H") && (cat.toString() == "O")) {
-			/*On demande au model les coordonnées des nuages*/
+			Cloud clouds[] = m_model.m_map.m_clouds;
+			int x = getCoord().X();
+			int y = getCoord().Y();
+			for (int i = 0 ; i < clouds.length ; i++) {
+				if  (contains(clouds[i]))
+					return true;
+			}
 		}
 		return false;
 	}
@@ -45,7 +55,7 @@ public class PlayerSoul extends Character {
 	
 	@Override
 	public boolean move(Direction dir) {
-		switch (dir.toString()) {
+		switch (m_direction.toString()) {
 			case "N" : 
 				getCoord().translate(0, - 20);
 				return true;
@@ -63,12 +73,46 @@ public class PlayerSoul extends Character {
 		}
 	}
 	
-	public int getX() {
-		return getCoord().X();
+	@Override
+	public boolean jump(Direction dir) {
+		switch (m_direction.toString()) {
+		case "N" : 
+			getCoord().translate(0, - 40);
+			return true;
+		case "S" : 
+			getCoord().translate(0, 40);
+			return true;
+		case "E" :
+			getCoord().translate(40, 0);
+			return true;
+		case "W" :
+			getCoord().translate(-40, 0);
+			return true;
+		default :
+			return false;
+		}
 	}
 	
-	public int getY() {
-		return getCoord().Y();
+	// Ajouter la création du leurre (avec newCoord)
+	@Override
+	public boolean egg(Direction dir) {
+		Coord newCoord = new Coord(getCoord().X(), getCoord().Y());
+		switch (m_direction.toString()) {
+			case "N" : 
+				newCoord.translate(0, - 40);
+				return true;
+			case "S" : 
+				newCoord.translate(0, 40);
+				return true;
+			case "E" :
+				newCoord.translate(40, 0);
+				return true;
+			case "W" :
+				newCoord.translate(-40, 0);
+				return true;
+			default :
+				return false;
+		}
 	}
 	
 	

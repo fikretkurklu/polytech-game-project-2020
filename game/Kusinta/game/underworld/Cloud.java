@@ -14,6 +14,7 @@ public class Cloud extends Element{
 	public static final int SIZE = 86;
 	
 	int m_width, m_height;
+	int xMax, yMax;
 	String imagePath;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 
@@ -21,6 +22,8 @@ public class Cloud extends Element{
 		super(false, true, coord, automaton);
 		m_width = 2 * SIZE;
 		m_height = 2 * SIZE;
+		xMax = getCoord().X() + m_width;
+		yMax = getCoord().Y() + m_height;
 		outScreen = false;
 		imagePath = UnderworldParam.cloudImage[0];
 		try {
@@ -33,7 +36,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if (dir.toString() == "H")
+		if ((dir.toString() == "H") && (cat.toString() == "O"))
 			return getCoord().X() + m_width <= 0;
 		return false;
 	}
@@ -47,7 +50,9 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean move(Direction dir) {
-		getCoord().translateX(-20);
+		getCoord().translateX(-2);
+		xMax = getCoord().X() + m_width;
+		yMax = getCoord().Y() + m_height;
 		return true;
 	}
 }
