@@ -50,7 +50,6 @@ public class Player extends Character {
 
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
-		// System.out.println("ratio = " +ratio);
 
 		m_height = DIMENSION * bI[0].getHeight();
 		m_width = (int) (m_height * ratio);
@@ -80,7 +79,6 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		int random = (int) (Math.random() * 10);
-		System.out.println("random = " + random);
 		if (random < m_slowness) {
 			if (jumping || falling) {
 				m_State = State.JUMPING;

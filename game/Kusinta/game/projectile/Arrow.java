@@ -13,7 +13,7 @@ import player.Player;
 public class Arrow extends Projectile{
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	static final int SPEED = 1;
+	static final int SPEED = 3;
 	int DIMENSION;
 	
 	int m_height;
@@ -25,10 +25,10 @@ public class Arrow extends Projectile{
 		
 		DIMENSION = SIZE / (image.getHeight(null));
 		
-		float ratio = (float) (image.getWidth(null) * 2) / (float) (5 * image.getHeight(null));
+		float ratio = (float) (image.getWidth(null) * 4) / (float) (5 * image.getHeight(null));
 		
 		m_height = DIMENSION * image.getHeight(null);
-		m_width = (int) (m_height * ratio);
+		m_width =  (int) (ratio * image.getWidth(null));
 	}
 
 	@Override
@@ -40,7 +40,6 @@ public class Arrow extends Projectile{
 
 	@Override
 	public boolean move(Direction dir) {
-		// TODO Auto-generated method stub
         m_coord.setX(m_coord.X()  + SPEED);
         
 		return true;
@@ -51,19 +50,25 @@ public class Arrow extends Projectile{
 			int w = DIMENSION * m_width;
 			int h = m_height;
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(image, m_coord.X() - (w / 2), m_coord.Y() - h, w, h, null);
+				g.drawImage(image, m_coord.X() - (w / 2), m_coord.Y()- h/2, w, h, null);
 			} else {
-				g.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h, -w, h, null);
+				g.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h/2, -w, h, null);
 			}
-			g.setColor(Color.blue);
-			//g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
 	}
 	
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		return !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		if (m_State == HIT_STATE) {
+			System.out.println(c);
+			return !c;
+		}
+		if (!c) {
+			m_State = HIT_STATE;
+		}
+		return c;
 	}
 
 

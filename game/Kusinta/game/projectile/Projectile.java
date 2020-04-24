@@ -19,7 +19,7 @@ public abstract class Projectile extends Entity {
 	public static final int SIZE = 86;
 
 	protected Coord m_coord;
-	protected int m_state;
+	protected int m_State;
 	protected double m_angle;
 	protected Character m_shooter;
 	protected Direction m_direction;
@@ -34,6 +34,7 @@ public abstract class Projectile extends Entity {
 		m_shooter = shooter;
 		m_direction = m_shooter.getDirection();
 		m_model = model;
+		m_State = OK_STATE;
 	}
 
 	@Override
