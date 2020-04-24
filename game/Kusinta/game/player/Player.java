@@ -21,10 +21,8 @@ public class Player extends Character {
 	int m_slowness;
 
 	int SPEED_WALK = 1;
-
-	static final int WALKING = 0;
-	static final int JUMPING = 1;
-	static final int IDLE = 2;
+	
+	enum State {WALKING, JUMPING, IDLE};
 
 	int DIMENSION;
 
@@ -46,7 +44,7 @@ public class Player extends Character {
 	public LinkedList<Arrow> m_arrows;
 	long m_imageElapsed;
 
-	int m_State;
+	State m_State;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model);
@@ -69,13 +67,13 @@ public class Player extends Character {
 
 		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
 				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
-		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
+		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
 
 		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
-		m_State = IDLE;
+		m_State = State.IDLE;
 
 		qPressed = false;
 		zPressed = false;
@@ -94,9 +92,9 @@ public class Player extends Character {
 		System.out.println("random = " + random);
 		if (random < m_slowness) {
 			if (jumping || falling) {
-				m_State = JUMPING;
+				m_State = State.JUMPING;
 			} else {
-				m_State = WALKING;
+				m_State = State.WALKING;
 			}
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
@@ -125,7 +123,7 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 
-			m_State = JUMPING;
+			m_State = State.JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
@@ -145,7 +143,7 @@ public class Player extends Character {
 	private void gravity(long t) {
 		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2] - 1, m_coord.Y())
 				&& !checkBlock(x_hitBox[0] - 2, m_coord.Y()) || falling) {
-			m_State = JUMPING;
+			m_State = State.JUMPING;
 			double C;
 			if (jumping) {
 				C = ACCELERATION_JUMP;
@@ -200,28 +198,28 @@ public class Player extends Character {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
 			if (!(jumping || falling)) {
-				if (pressed == true && m_State != WALKING) {
+				if (pressed == true && m_State != State.WALKING) {
 					m_image_index = 8;
 				} else {
-					m_State = IDLE;
+					m_State = State.IDLE;
 				}
 			}
 		}
 		if (keyCode == Controller.K_Z) {
 			zPressed = pressed;
-			if (pressed == true && m_State != JUMPING) {
+			if (pressed == true && m_State != State.JUMPING) {
 				m_image_index = 15;
 			} else {
-				m_State = IDLE;
+				m_State = State.IDLE;
 			}
 		}
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
 			if (!(jumping || falling)) {
-				if (pressed == true && m_State != WALKING) {
+				if (pressed == true && m_State != State.WALKING) {
 					m_image_index = 8;
 				} else {
-					m_State = IDLE;
+					m_State = State.IDLE;
 				}
 			}
 		}
@@ -275,7 +273,7 @@ public class Player extends Character {
 			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 			falling = false;
 			jumping = false;
-			m_State = IDLE;
+			m_State = State.IDLE;
 		} else {
 			jumping = false;
 			falling = false;
@@ -286,7 +284,7 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 
 			if (falling || jumping)
-				m_State = JUMPING;
+				m_State = State.JUMPING;
 
 			last_image_index = m_image_index;
 
@@ -318,7 +316,7 @@ public class Player extends Character {
 
 		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
 				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
-		y_hitBox = new int[] { m_y, m_y - m_height, m_y - m_height, m_y };
+		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
 
 		
 		for(int i = 0; i < m_arrows.size(); i++) {
@@ -355,21 +353,25 @@ public class Player extends Character {
 	}
 
 	public void checkSprite() {
-		if (m_State == WALKING && (m_image_index < 8 || m_image_index > 14)) {
+		if (m_State == State.WALKING && (m_image_index < 8 || m_image_index > 14)) {
 			m_image_index = (last_image_index - 8 + 1) % 6 + 8;
 		}
-		if (m_State == JUMPING && (m_image_index < 15 || m_image_index > 24)) {
+		if (m_State == State.JUMPING && (m_image_index < 15 || m_image_index > 24)) {
 			m_image_index = (last_image_index - 15 + 1) % 9 + 15;
 			if (m_image_index >= 18 && m_image_index < 22)
 				m_image_index = 22;
 		}
-		if (m_State == IDLE && (m_image_index > 4)) {
+		if (m_State == State.IDLE && (m_image_index > 4)) {
 			m_image_index = (last_image_index + 1) % 4;
 		}
 	}
 	
 	public void setSlowness(int s) {
-		m_slowness = s;
+		if(s<6) {
+			m_slowness = 6;
+		} else {
+			m_slowness = s;
+		}
 	}
 	
 	public void setGravity(int g) {

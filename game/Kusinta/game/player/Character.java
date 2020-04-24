@@ -21,9 +21,11 @@ public abstract class Character extends Entity {
 	public Model m_model;
 	public Direction m_direction;
 
-	int MAX_m_life = 100;
+	int MAX_LIFE = 100;
+	int MAX_RESISTANCE = 100;
+	int MAX_FORCE = 200;
 	int m_life;
-	int m_resistance, m_force, m_attackSpeed;
+	int m_resistance, m_strength, m_attackSpeed;
 
 	BufferedImage[] bI;
 	int m_image_index, last_image_index;
@@ -39,8 +41,10 @@ public abstract class Character extends Entity {
 		
 		m_direction = dir;
 
-		m_life = MAX_m_life;
-		m_attackSpeed = 1000; 
+		m_life = MAX_LIFE;
+		m_attackSpeed = 1000;
+		m_resistance = 0;
+		m_strength = 0;
 		m_model = model;
 		
 		m_image_index = 0;
@@ -48,7 +52,6 @@ public abstract class Character extends Entity {
 	}
 
 	protected BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		// TODO Auto-generated method stub
 		File imageFile = new File(filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);
@@ -140,11 +143,9 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean gotpower() { // mort
-		// TODO Auto-generated method stub
 		if (m_life > 0) {
 			return true;
 		}
-
 		return false;
 	}
 	
@@ -153,5 +154,28 @@ public abstract class Character extends Entity {
 		return true;
 	}
 
+	public void setLife(int l) {
+		if (l > MAX_LIFE) {
+			m_life = MAX_LIFE;
+		} else {
+			m_life = l;
+		}
+	}
+	
+	public void setResistance(int resistance) {
+		if (resistance > MAX_RESISTANCE) {
+			m_resistance = MAX_RESISTANCE;
+		} else {
+			m_resistance= resistance;
+		}
+	}
+	
+	public void setStrength(int strength) {
+		if (strength > MAX_FORCE) {
+			m_strength = MAX_FORCE;
+		} else {
+			m_strength = strength;
+		}
+	}
 
 }
