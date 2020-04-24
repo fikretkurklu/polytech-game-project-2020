@@ -12,7 +12,9 @@ public abstract class PanelElem {
 		m_y = y;
 	}
 		
-	public abstract void resized(long ratio_w, long ratio_h);
+	public abstract void resized(double ratio_w, double ratio_h);
 	
 	public abstract void paint(Graphics g);
+	
+	public abstract PanelElem mouseMoved(int x, int y);
 }

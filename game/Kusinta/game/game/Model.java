@@ -9,13 +9,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
-import automaton.Direction;
 import game.graphics.View;
 import player.Player;
 import room.Room;
+import village.Village;
 
 public class Model {
-	
+
 	public final static int VILLAGE = 0;
 	public final static int ROOM = 1;
 	public final static int UNDERWORLD = 2;
@@ -30,24 +30,30 @@ public class Model {
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Room m_room;
+	public Village m_village;
 //	Opponent[] m_opponents;
 
-	public Model(View view) throws Exception {
+	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
-		m_width = m_view.getWidth();
-		m_height = m_view.getHeight();
+		m_width = w;
+		m_height = h;
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
-		setRoomEnv();
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
-				new Direction("E"), this);
-		setCenterScreen();
+		/*setRoomEnv();
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),new Direction("E"), this);
+		setCenterScreen();*/
+		setVillageEnv();
 	}
-	
+
 	public void setRoomEnv() throws Exception {
-			m_room = new Room(m_AL, m_width, m_height);
-			mode = ROOM;
+		m_room = new Room(m_AL, m_width, m_height);
+		mode = ROOM;
+	}
+
+	public void setVillageEnv() {
+		mode = VILLAGE;
+		m_village = new Village(m_width, m_height);
 	}
 
 	public void setCenterScreen() {
@@ -57,7 +63,7 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		switch(mode) {
+		switch (mode) {
 		case ROOM:
 			m_player.tick(elapsed);
 			m_room.tick(elapsed);
@@ -68,14 +74,17 @@ public class Model {
 	public void paint(Graphics g, int width, int height) {
 		m_width = width;
 		m_height = height;
-		switch(mode) {
+		switch (mode) {
 		case ROOM:
 			setCenterScreen();
 			Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 			m_room.paint(gp, width, height);
 			m_player.paint(gp);
 			gp.dispose();
-		}
+			break;
+		case VILLAGE:
+			m_village.paint(g, m_width, m_height);
+		} 
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {

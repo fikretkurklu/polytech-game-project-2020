@@ -93,6 +93,9 @@ public class Controller implements GameCanvasListener {
 		System.out.println("   modifiers=" + e.getModifiersEx());
 		System.out.println("   buttons=" + e.getButton());
 		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
+		if (m_game.m_model.mode ==  Model.VILLAGE) {
+			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
+		}
 	}
 
 	@Override
