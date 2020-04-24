@@ -36,10 +36,10 @@ public class Model {
 	public Underworld m_underworld;
 //	Opponent[] m_opponents;
 
-	public Model(View view) throws Exception {
-		m_view = view;
-		m_width = m_view.getWidth();
-		m_height = m_view.getHeight();
+	public Model(View view, int w, int h) throws Exception {
+        m_view = view;
+        m_width = w;
+        m_height = h;
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
