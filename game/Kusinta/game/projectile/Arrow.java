@@ -3,6 +3,7 @@ package projectile;
 import java.awt.Color;
 
 import java.awt.Graphics;
+import java.util.concurrent.TimeUnit;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -18,9 +19,10 @@ public class Arrow extends Projectile{
 	
 	int m_height;
 	int m_width;
+	
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player) throws Exception {
-		super(arrowAutomaton, x, y, angle, player, player.getModel());
+	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction) throws Exception {
+		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
 		loadImage("resources/Player/spriteArrow.png");
 		
 		DIMENSION = SIZE / (image.getHeight(null));
@@ -29,19 +31,22 @@ public class Arrow extends Projectile{
 		
 		m_height = DIMENSION * image.getHeight(null);
 		m_width =  (int) (ratio * image.getWidth(null));
+		m_dead_time = 0;
 	}
 
 	@Override
 	public boolean explode() {
-		System.out.println("coucou");
-		m_shooter.getProjectiles().remove(this);
+		if(m_dead_time == 0) {
+			m_dead_time = System.currentTimeMillis();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean move(Direction dir) {
-        m_coord.setX(m_coord.X()  + SPEED);
-        
+		m_coord.setX((int) (m_coord.X()  + SPEED * Math.cos(m_angle)));
+		m_coord.setY((int) (m_coord.Y()  + SPEED * Math.sin(m_angle)));
+		
 		return true;
 	}
 	
@@ -70,6 +75,5 @@ public class Arrow extends Projectile{
 		}
 		return c;
 	}
-
 
 }

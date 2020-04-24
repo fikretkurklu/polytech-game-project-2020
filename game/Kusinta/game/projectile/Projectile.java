@@ -24,17 +24,22 @@ public abstract class Projectile extends Entity {
 	protected Character m_shooter;
 	protected Direction m_direction;
 	protected Model m_model;
-
+	protected long m_dead_time;
+	protected float m_alpha;
+	
+	
 	Image image;
 
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
+	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);
 		m_coord = new Coord(x,y);
 		m_angle = angle;
 		m_shooter = shooter;
-		m_direction = m_shooter.getDirection();
+		m_direction = direction;
 		m_model = model;
 		m_State = OK_STATE;
+		m_alpha = 1f;
+		
 	}
 
 	@Override
@@ -139,5 +144,21 @@ public abstract class Projectile extends Entity {
 	
 	public void tick(long elapsed) {
 		m_automaton.step(this);
+	}
+	
+	public long getDeadTime() {
+		return m_dead_time;
+	}
+	
+	public int getState() {
+		return m_State;
+	}
+	
+	public float getAlpha() {
+		return m_alpha;
+	}
+	
+	public void setAlpha(float alpha) {
+		m_alpha = alpha;
 	}
 }

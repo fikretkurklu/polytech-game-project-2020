@@ -1,9 +1,12 @@
 package player;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
 
 import automaton.*;
 import game.Controller;
@@ -20,8 +23,10 @@ public class Player extends Character {
 	int m_slowness;
 
 	int SPEED_WALK = 1;
-	
-	enum State {WALKING, JUMPING, IDLE};
+
+	enum State {
+		WALKING, JUMPING, IDLE
+	};
 
 	int DIMENSION;
 
@@ -44,7 +49,7 @@ public class Player extends Character {
 
 	State m_State;
 
-	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception{
+	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite("resources/Player/spritePlayer.png", 16, 7);
 
@@ -126,7 +131,7 @@ public class Player extends Character {
 	public boolean pop(Direction dir) { // sauter moins haut
 		// m_model.m_room.setupVillageMode();
 		System.out.println("setupVillageMode");
-			return true;
+		return true;
 	}
 
 	private void gravity(long t) {
@@ -167,14 +172,27 @@ public class Player extends Character {
 
 		if (now - m_shot_time > m_attackSpeed) {
 
-			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
+			Direction direc;
+			double angle;
+			int mouse_x = m_model.m_mouseCoord.X();
+			int mouse_y = m_model.m_mouseCoord.Y();
+
+			if (mouse_x > m_x) {
+				direc = new Direction("E");
+			} else {
+				direc = new Direction("W");
+			}
+
+			angle = Math.asin((m_y - mouse_y) / (Math.sqrt(Math.pow((mouse_x - m_x), 2) + Math.pow((m_y - mouse_y), 2))));
+			
+			System.out.println(angle);
 			try {
-				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this));
+				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			m_shot_time = now;
 
 			return true;
@@ -307,8 +325,7 @@ public class Player extends Character {
 				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
 		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
 
-		
-		for(int i = 0; i < m_projectiles.size(); i++) {
+		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
 		}
 	}
@@ -331,9 +348,31 @@ public class Player extends Character {
 			g.setColor(Color.blue);
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
-		
-		for(int i = 0; i < m_projectiles.size(); i++) {
-			((Arrow) m_projectiles.get(i)).paint(g);
+
+		LinkedList<Arrow> listIndexToRemove = new LinkedList<Arrow>();
+
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			long now = System.currentTimeMillis();
+
+			if (now - m_projectiles.get(i).getDeadTime() > 5000 && m_projectiles.get(i).getState() == 2) {
+				listIndexToRemove.add((Arrow) m_projectiles.get(i));
+			}
+
+			if (now - m_projectiles.get(i).getDeadTime() > 1000 && m_projectiles.get(i).getState() == 2) {
+				Graphics2D g2D = (Graphics2D) g;
+				m_projectiles.get(i).setAlpha(m_projectiles.get(i).getAlpha() * 0.95f);
+				g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, m_projectiles.get(i).getAlpha()));
+				((Arrow) m_projectiles.get(i)).paint(g);
+				g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+			} else {
+				((Arrow) m_projectiles.get(i)).paint(g);
+			}
+
+		}
+
+		for (int i = 0; i < listIndexToRemove.size(); i++) {
+			m_projectiles.remove(listIndexToRemove.get(i));
+
 		}
 	}
 
@@ -354,15 +393,15 @@ public class Player extends Character {
 			m_image_index = (last_image_index + 1) % 4;
 		}
 	}
-	
+
 	public void setSlowness(int s) {
-		if(s<6) {
+		if (s < 6) {
 			m_slowness = 6;
 		} else {
 			m_slowness = s;
 		}
 	}
-	
+
 	public void setGravity(int g) {
 		G = g;
 	}
