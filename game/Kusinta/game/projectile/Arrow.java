@@ -3,6 +3,7 @@ package projectile;
 import java.awt.Color;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.concurrent.TimeUnit;
 
 import automaton.Automaton;
@@ -14,7 +15,8 @@ import player.Player;
 public class Arrow extends Projectile{
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	static final int SPEED = 3;
+	static final int SPEED = 9;
+	int moving;
 	int DIMENSION;
 	
 	int m_height;
@@ -32,6 +34,7 @@ public class Arrow extends Projectile{
 		m_height = DIMENSION * image.getHeight(null);
 		m_width =  (int) (ratio * image.getWidth(null));
 		m_dead_time = 0;
+		moving = 0;
 	}
 
 	@Override
@@ -44,8 +47,17 @@ public class Arrow extends Projectile{
 
 	@Override
 	public boolean move(Direction dir) {
-		m_coord.setX((int) (m_coord.X()  + SPEED * Math.cos(m_angle)));
-		m_coord.setY((int) (m_coord.Y()  + SPEED * Math.sin(m_angle)));
+		if(moving == 0) {
+
+			if (m_direction.toString().equals("E")) {
+				m_coord.setX((int) (m_coord.X()  + SPEED * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y()  - SPEED * Math.sin(m_angle)));
+			} else {
+				m_coord.setX((int) (m_coord.X()  - SPEED * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y()  - SPEED * Math.sin(m_angle)));
+			}
+		}
+		moving = (moving + 1) % 3; 
 		
 		return true;
 	}
@@ -54,10 +66,15 @@ public class Arrow extends Projectile{
 		if (image != null) {
 			int w = DIMENSION * m_width;
 			int h = m_height;
+			Graphics2D g2D = (Graphics2D)g;
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(image, m_coord.X() - (w / 2), m_coord.Y()- h/2, w, h, null);
+				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
+				g2D.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h/2, w, h, null);
+				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
 			} else {
-				g.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h/2, -w, h, null);
+				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
+				g2D.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h/2, -w, h, null);
+				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
 			}
 		}
 	}

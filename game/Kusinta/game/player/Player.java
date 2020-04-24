@@ -173,19 +173,36 @@ public class Player extends Character {
 		if (now - m_shot_time > m_attackSpeed) {
 
 			Direction direc;
-			double angle;
+			float angle;
+			double r;
 			int mouse_x = m_model.m_mouseCoord.X();
 			int mouse_y = m_model.m_mouseCoord.Y();
+			int x = mouse_x - m_x;
+			int y = m_y - mouse_y;
+			System.out.println("mx = "+mouse_x);
+			System.out.println("my = "+mouse_y);
+
+			System.out.println("m_x = "+m_x);
+			System.out.println("m_y = "+m_y);
+
+			System.out.println("x = "+x);
+			System.out.println("y = "+y);
 
 			if (mouse_x > m_x) {
 				direc = new Direction("E");
 			} else {
 				direc = new Direction("W");
 			}
-
-			angle = Math.asin((m_y - mouse_y) / (Math.sqrt(Math.pow((mouse_x - m_x), 2) + Math.pow((m_y - mouse_y), 2))));
+				
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			angle = (float) Math.asin(Math.abs(y) / r);
 			
-			System.out.println(angle);
+			if(mouse_y> m_y) {
+				angle = -angle;
+			}
+			
+			System.out.println("angle = "+angle);
+			System.out.println("r = "+r);
 			try {
 				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
 			} catch (Exception e) {
