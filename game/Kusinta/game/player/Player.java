@@ -1,10 +1,9 @@
 package player;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.LinkedList;
 
 import automaton.*;
 import game.Controller;
@@ -41,19 +40,13 @@ public class Player extends Character {
 
 	int[] x_hitBox, y_hitBox;
 
-	public LinkedList<Arrow> m_arrows;
 	long m_imageElapsed;
 
 	State m_State;
 
-	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
-		super(automaton, x, y, dir, model);
-
-		try {
-			bI = loadSprite("resources/Player/spritePlayer.png", 16, 7);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception{
+		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
+		bI = m_model.loadSprite("resources/Player/spritePlayer.png", 16, 7);
 
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
@@ -68,8 +61,6 @@ public class Player extends Character {
 		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
 				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
 		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
-
-		m_arrows = new LinkedList<Arrow>();
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
@@ -180,8 +171,8 @@ public class Player extends Character {
 
 			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
 			try {
-				m_arrows.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this));
-			} catch (IOException e) {
+				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this));
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -319,8 +310,8 @@ public class Player extends Character {
 		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
 
 		
-		for(int i = 0; i < m_arrows.size(); i++) {
-			m_arrows.get(i).tick(elapsed);
+		for(int i = 0; i < m_projectiles.size(); i++) {
+			m_projectiles.get(i).tick(elapsed);
 		}
 	}
 
@@ -343,8 +334,8 @@ public class Player extends Character {
 			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
 		}
 		
-		for(int i = 0; i < m_arrows.size(); i++) {
-			m_arrows.get(i).paint(g);
+		for(int i = 0; i < m_projectiles.size(); i++) {
+			((Arrow) m_projectiles.get(i)).paint(g);
 		}
 	}
 

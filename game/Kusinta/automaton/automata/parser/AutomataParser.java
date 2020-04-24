@@ -4,15 +4,13 @@ package automata.parser;
 import java.io.BufferedReader;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+
 
 import automata.ast.* ;
-import automata.util.* ;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("unused")
 public class AutomataParser implements AutomataParserConstants {
 
   public static AST from_file(String path_file) throws Exception
@@ -95,6 +93,7 @@ public class AutomataParser implements AutomataParserConstants {
 
 /* Identifier */
   
+
 final public String P_Identifier() throws ParseException {
   Token token;
     token = jj_consume_token(ID);

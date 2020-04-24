@@ -1,9 +1,7 @@
 package projectile;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -12,28 +10,30 @@ import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
-import player.Player;
+import game.Model;
+import player.Character;
 
 public abstract class Projectile extends Entity {
 	static final int OK_STATE = 1;
 	static final int HIT_STATE = 2;
 	public static final int SIZE = 86;
 
-	Coord m_coord;
-	int m_state;
-	double m_angle;
-	Player m_shooter;
-	Direction m_direction;
+	protected Coord m_coord;
+	protected int m_state;
+	protected double m_angle;
+	protected Character m_shooter;
+	protected Direction m_direction;
+	protected Model m_model;
 
 	Image image;
 
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Player player) {
+	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
 		super(projectileAutomaton);
 		m_coord = new Coord(x,y);
 		m_angle = angle;
-
-		m_direction = player.m_direction;
-		m_shooter = player;
+		m_shooter = shooter;
+		m_direction = m_shooter.getDirection();
+		m_model = model;
 	}
 
 	@Override

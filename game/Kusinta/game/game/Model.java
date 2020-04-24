@@ -1,62 +1,53 @@
 package game;
 
 import java.awt.Graphics;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.imageio.ImageIO;
-
-import automata.ast.AST;
-import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.AutomatonLibrary;
 import automaton.Direction;
-import automaton.Interpretor;
-import environnement.Env;
 import game.graphics.View;
 import player.Player;
 import room.Room;
 
 public class Model {
+	
+	public final static int VILLAGE = 0;
+	public final static int ROOM = 1;
+	public final static int UNDERWORLD = 2;
 
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	public Env m_env;
-
 	Player m_player;
 	View m_view;
+	public int mode;
+	private AutomatonLibrary m_AL;
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
+	public Room m_room;
 //	Opponent[] m_opponents;
 
-	public Model() throws IOException {
-		m_env = new Room();
-		m_view = null;
-
-		AST ast;
-		playerAutomaton = null;
-		arrowAutomaton = null;
-		List<automaton.Automaton> bots;
-		try {
-			ast = (AST) AutomataParser.from_file("resources/gal/automata.gal");
-			Interpretor interpret = new Interpretor();
-			bots = (List<Automaton>) ast.accept(interpret);
-			playerAutomaton = bots.get(0);
-			arrowAutomaton = bots.get(2);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	public Model(View view) throws Exception {
+		m_view = view;
+		m_width = m_view.getWidth();
+		m_height = m_view.getHeight();
+		m_AL = new AutomatonLibrary();
+		playerAutomaton = m_AL.getAutomaton("Player_donjon");
+		arrowAutomaton = m_AL.getAutomaton("Fleche");
+		setRoomEnv();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		setCenterScreen();
-
 	}
-
-	public void setView(View view) {
-		m_view = view;
+	
+	public void setRoomEnv() throws Exception {
+			m_room = new Room(m_AL, m_width, m_height);
+			mode = ROOM;
 	}
 
 	public void setCenterScreen() {
@@ -66,18 +57,25 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
-		m_env.tick(elapsed);
+		switch(mode) {
+		case ROOM:
+			m_player.tick(elapsed);
+			m_room.tick(elapsed);
+			break;
+		}
 	}
 
 	public void paint(Graphics g, int width, int height) {
 		m_width = width;
 		m_height = height;
-		setCenterScreen();
-		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		m_env.paint(gp, width, height);
-		m_player.paint(gp);
-		gp.dispose();
+		switch(mode) {
+		case ROOM:
+			setCenterScreen();
+			Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
+			m_room.paint(gp, width, height);
+			m_player.paint(gp);
+			gp.dispose();
+		}
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
@@ -87,7 +85,7 @@ public class Model {
 	/*
 	 * Loading a sprite
 	 */
-	public static BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
+	public BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
 		File imageFile = new File(filename);
 		if (imageFile.exists()) {
 			BufferedImage image = ImageIO.read(imageFile);

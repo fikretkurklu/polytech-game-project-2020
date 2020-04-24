@@ -1,9 +1,8 @@
 package projectile;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -20,27 +19,22 @@ public class Arrow extends Projectile{
 	int m_height;
 	int m_width;
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player) throws IOException {
-		super(arrowAutomaton, x, y, angle, player);
-		try {
-			loadImage("resources/Player/spriteArrow.png");
-			
-			DIMENSION = SIZE / (image.getHeight(null));
-			
-			float ratio = (float) (image.getWidth(null) * 2) / (float) (5 * image.getHeight(null));
-			
-			m_height = DIMENSION * image.getHeight(null);
-			m_width = (int) (m_height * ratio);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player) throws Exception {
+		super(arrowAutomaton, x, y, angle, player, player.getModel());
+		loadImage("resources/Player/spriteArrow.png");
+		
+		DIMENSION = SIZE / (image.getHeight(null));
+		
+		float ratio = (float) (image.getWidth(null) * 2) / (float) (5 * image.getHeight(null));
+		
+		m_height = DIMENSION * image.getHeight(null);
+		m_width = (int) (m_height * ratio);
 	}
 
 	@Override
 	public boolean explode() {
 		System.out.println("coucou");
-		m_shooter.m_arrows.remove(this);
+		m_shooter.getProjectiles().remove(this);
 		return true;
 	}
 
@@ -69,9 +63,7 @@ public class Arrow extends Projectile{
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		// TODO Auto-generated method stub
-		
-		return !(m_shooter.m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		return !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
 	}
 
 

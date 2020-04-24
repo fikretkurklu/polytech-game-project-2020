@@ -52,12 +52,9 @@ public class Game {
 	Sound m_music;
 
 	Game() throws Exception {
-		m_model = new Model();
 		m_controller = new Controller(this);
 		m_view = new View(m_controller);
-		
-		m_model.setView(m_view);
-
+		m_model = new Model(m_view);
 		// creating frame
 		Dimension d = new Dimension(1024, 768);
 		m_frame = m_view.createFrame(d);

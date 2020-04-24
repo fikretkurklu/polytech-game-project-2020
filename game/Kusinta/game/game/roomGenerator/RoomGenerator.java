@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+@SuppressWarnings("resource")
 public class RoomGenerator {
 
 	String[][] m_elementTable;
