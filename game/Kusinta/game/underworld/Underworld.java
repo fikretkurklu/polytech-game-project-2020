@@ -11,7 +11,7 @@ import automaton.AutomatonLibrary;
 import game.Coord;
 import environnement.Element;
 
-public class Underworld{
+public class Underworld {
 	public final static int MAX_CLOUDS = 1;
 
 	AutomatonLibrary m_al;
@@ -77,10 +77,10 @@ public class Underworld{
 	}
 
 	private void generateClouds(Cloud[] clouds) {
-		for(int i = 0; i < clouds.length;i++) {
+		for (int i = 0; i < clouds.length; i++) {
 			clouds[i] = new Cloud(cloudAutomaton, new Coord(200, 1000));
 		}
-		
+
 	}
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
@@ -97,7 +97,14 @@ public class Underworld{
 			return new UndWall(coord, UWIM, "W", wallAutomaton);
 		} else if (code.contentEquals("WB")) {
 			return new UndWall(coord, UWIM, "B", wallAutomaton);
+		} else if (code.contentEquals("IOW")) {
+			return new UndWall(coord, UWIM, "IOW", wallAutomaton);
+		} else if (code.contentEquals("RWB")) {
+			return new UndWall(coord, UWIM, "RWB", wallAutomaton);
+		} else if (code.contentEquals("OWD")) {
+			return new UndWall(coord, UWIM, "OWD", wallAutomaton);
 		}
+
 		throw new Exception("Code room err: " + code);
 	}
 
@@ -111,11 +118,11 @@ public class Underworld{
 	}
 
 	public Coord getStartCoord() {
-		return new Coord(0,0);
+		return new Coord(0, 0);
 	}
 
 	public void tick(long elapsed) {
-		
+
 		for (int i = 0; i < m_clouds.length; i++) {
 			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
@@ -127,7 +134,7 @@ public class Underworld{
 			}
 		}
 	}
-	
+
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
@@ -135,7 +142,7 @@ public class Underworld{
 		}
 		return true;
 	}
-	
+
 	public int blockTop(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
@@ -144,6 +151,7 @@ public class Underworld{
 			return 0;
 		}
 	}
+
 	public int blockBot(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
