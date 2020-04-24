@@ -10,11 +10,11 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import game.Coord;
 import environnement.Element;
-import environnement.Env;
 
-public class Underworld extends Env {
+public class Underworld{
 	public final static int MAX_CLOUDS = 1;
 
+	AutomatonLibrary m_al;
 	String mapFile;
 	int m_width, m_height;
 	Element[] m_elements;
@@ -29,7 +29,9 @@ public class Underworld extends Env {
 	AutomatonLibrary m_AL;
 
 	public Underworld(AutomatonLibrary AL, int width, int height) {
-		super(Env.UNDERWORLD, AL, width, height);
+		m_al = AL;
+		m_width = width;
+		m_height = height;
 		startCoord = new Coord();
 		ambiance = (int) (Math.random() * UnderworldParam.nbAmbiance) + 1;
 		BufferedReader f;
@@ -76,7 +78,7 @@ public class Underworld extends Env {
 
 	private void generateClouds(Cloud[] clouds) {
 		for(int i = 0; i < clouds.length;i++) {
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(1000, 200));
+			clouds[i] = new Cloud(cloudAutomaton, new Coord(1000, 1000));
 		}
 		
 	}
@@ -112,7 +114,6 @@ public class Underworld extends Env {
 		return new Coord(0,0);
 	}
 
-	@Override
 	public void tick(long elapsed) {
 
 		for (int i = 0; i < m_clouds.length; i++) {

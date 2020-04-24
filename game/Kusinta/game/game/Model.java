@@ -44,6 +44,7 @@ public class Model {
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		setRoomEnv();
+		setUnderworldEnv();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		setCenterScreen();
@@ -53,6 +54,11 @@ public class Model {
 			m_room = new Room(m_AL, m_width, m_height);
 			mode = ROOM;
 	}
+	
+	public void setUnderworldEnv() throws Exception {
+		m_underworld = new Underworld(m_AL, m_width, m_height);
+		mode = UNDERWORLD;
+}
 
 	public void setCenterScreen() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
@@ -66,7 +72,9 @@ public class Model {
 			m_player.tick(elapsed);
 			m_room.tick(elapsed);
 			break;
-		}
+		case UNDERWORLD:
+			m_underworld.tick(elapsed);
+		}	
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -79,6 +87,11 @@ public class Model {
 			m_room.paint(gp, width, height);
 			m_player.paint(gp);
 			gp.dispose();
+		case UNDERWORLD:
+			setCenterScreen();
+			Graphics gu = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
+			m_underworld.paint(gu, width, height);
+			gu.dispose();
 		}
 	}
 
