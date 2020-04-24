@@ -17,7 +17,7 @@ import environnement.Element;
 import environnement.Env;
 import game.Coord;
 
-public class Room extends Env{
+public class Room{
 
 	int nbRow;
 	int nbCol;
