@@ -118,7 +118,7 @@ public class Underworld {
 	}
 
 	public Coord getStartCoord() {
-		return new Coord(0, 0);
+		return startCoord;
 	}
 
 	public void tick(long elapsed) {
