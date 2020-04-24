@@ -36,7 +36,6 @@ public class Underworld extends Env {
 		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
 		UWIM = new UndWallImageManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
-		generateClouds(m_clouds);
 		m_AL = AL;
 		try {
 			wallAutomaton = m_AL.getAutomaton("Block");
@@ -50,7 +49,7 @@ public class Underworld extends Env {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		generateClouds(m_clouds);
 		try {
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
@@ -77,7 +76,7 @@ public class Underworld extends Env {
 
 	private void generateClouds(Cloud[] clouds) {
 		for(int i = 0; i < clouds.length;i++) {
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(200, 200));
+			clouds[i] = new Cloud(cloudAutomaton, new Coord(1000, 200));
 		}
 		
 	}
@@ -110,7 +109,7 @@ public class Underworld extends Env {
 	}
 
 	public Coord getStartCoord() {
-		return startCoord;
+		return new Coord(0,0);
 	}
 
 	@Override

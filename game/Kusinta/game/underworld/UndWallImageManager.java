@@ -16,9 +16,9 @@ public class UndWallImageManager  extends ImageManager{
 		switch(ambiance) {
 		case(1) :
 			imgBar = new String[]{"resources/Underworld/Wall/wallSide.png"};
-			imgHorizSide = new String[]{"resources/Underworld/Wall/wallSideHorizontal.png"};
-			imgLeftSide = new String[]{"resources/Underworld/Wall/leftSide.png"};
-			imgRightSide = new String[]{"resources/Underworld/Wall/righttSide.png"};
+			imgHorizSide = new String[]{"resources/Underworld/Wall/wallSideHozizontal.png"};
+			imgLeftSide = new String[]{"resources/Underworld/Wall/leftSide_ow.png"};
+			imgRightSide = new String[]{"resources/Underworld/Wall/rightSide_ow.png"};
 			imgWall = new String[]{"resources/Underworld/Wall/outerWall.png"};
 			imageTable.put("B", imgBar);
 			imageTable.put("HS", imgHorizSide);

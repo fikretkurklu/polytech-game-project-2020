@@ -12,11 +12,14 @@ import javax.imageio.ImageIO;
 import automata.ast.AST;
 import automata.parser.AutomataParser;
 import automaton.Automaton;
+import automaton.AutomatonLibrary;
 import automaton.Direction;
 import automaton.Interpretor;
+import environnement.Env;
 import game.graphics.View;
 import player.Player;
 import room.Room;
+import underworld.PlayerSoul;
 import underworld.Underworld;
 
 public class Model {
@@ -26,22 +29,28 @@ public class Model {
 
 	public Room m_room;
 	Coord centerScreen; // position du personnage plus tard;
-	public Underworld m_map;
-	Player m_player;
+	PlayerSoul m_player;
 	View m_view;
 //	Opponent[] m_opponents;
-
+	Env m_env;
 	public Model() throws IOException {
 //		m_room = new Room();
 //		centerScreen = m_room.getStartCoord();
-		m_map = new Underworld();
-		centerScreen = m_map.getStartCoord();
-		setCenterScreen();
+		AutomatonLibrary m_al = new AutomatonLibrary();
+		m_env = new Underworld(m_al, m_width, m_height);
+		centerScreen = ((Underworld) m_env).getStartCoord();
+//		setCenterScreen();
 		m_view = null;
 
 		AST ast;
 		Automaton playerAutomaton = null;
-		List<automaton.Automaton> bots;
+		try {
+			playerAutomaton = m_al.getAutomaton("PlayerSoul");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+/*		List<automaton.Automaton> bots;
 		try {
 			ast = (AST) AutomataParser
 					.from_file("resources/gal/automata.gal");
@@ -50,11 +59,9 @@ public class Model {
 			 playerAutomaton = bots.get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), new Direction("E"), this);
-		setCenterScreen();
-
+//		m_player = new PlayerSoul(playerAutomaton, ((Underworld) m_env).getStartCoord().X(), ((Underworld) m_env).getStartCoord().Y(), new Direction("E"), this);
 	}
 
 	public void setView(View view) {
@@ -68,17 +75,18 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
-		m_room.tick(elapsed);
+//		m_player.tick(elapsed);
+		m_env.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
 		m_width = width;
 		m_height = height;
-		setCenterScreen();
+//		setCenterScreen();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		m_room.paint(gp);
-		m_player.paint(gp);
+		m_env.paint(gp, width, height);
+//		m_room.paint(gp);
+//		m_player.paint(gp);
 		gp.dispose();
 	}
 
