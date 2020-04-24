@@ -8,8 +8,6 @@ import environnement.Element;
 
 public class Cloud extends Element{
 	
-	public static final int SIZE = 86;
-	
 	int m_width, m_height;
 	int xMax, yMax;
 	String imagePath;
@@ -19,8 +17,8 @@ public class Cloud extends Element{
 
 	public Cloud(Automaton automaton, Coord coord) {
 		super(false, true, coord, automaton);
-		m_width = SIZE;
-		m_height = SIZE;
+		m_width = Element.SIZE;
+		m_height = Element.SIZE;
 		xMax = getCoord().X() + m_width;
 		yMax = getCoord().Y() + m_height;
 		outScreen = false;
@@ -37,9 +35,7 @@ public class Cloud extends Element{
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			if (getCoord().X() <= 0) {
-				return true;
-			}
+			return (getCoord().X() + m_width <= 0);
 		}
 		return false;
 	}

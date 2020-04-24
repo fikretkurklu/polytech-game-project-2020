@@ -92,27 +92,27 @@ public class PlayerSoul extends Character {
 	}
 	
 	// Ajouter la création du leurre (avec newCoord)
-	@Override
-	public boolean egg(Direction dir) {
-		Coord newCoord = new Coord(getCoord().X(), getCoord().Y());
-		switch (m_direction.toString()) {
-			case "N" : 
-				newCoord.translate(0, - 40);
-				m_projectiles.add(new Lure(true, true, newCoord));
-				return true;
-			case "S" : 
-				newCoord.translate(0, 40);
-				return true;
-			case "E" :
-				newCoord.translate(40, 0);
-				return true;
-			case "W" :
-				newCoord.translate(-40, 0);
-				return true;
-			default :
-				return false;
-		}
-	}
+//	@Override
+//	public boolean egg(Direction dir) {
+//		Coord newCoord = new Coord(getCoord().X(), getCoord().Y());
+//		switch (m_direction.toString()) {
+//			case "N" : 
+//				newCoord.translate(0, - 40);
+//				m_projectiles.add(new Lure(true, true, newCoord));
+//				return true;
+//			case "S" : 
+//				newCoord.translate(0, 40);
+//				return true;
+//			case "E" :
+//				newCoord.translate(40, 0);
+//				return true;
+//			case "W" :
+//				newCoord.translate(-40, 0);
+//				return true;
+//			default :
+//				return false;
+//		}
+//	}
 	
 	
 	

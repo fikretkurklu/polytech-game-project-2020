@@ -119,7 +119,7 @@ public class Underworld{
 		for (int i = 0; i < m_clouds.length; i++) {
 			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
-					Coord newCoord = new Coord(200, m_clouds[i].getCoord().Y());
+					Coord newCoord = new Coord(1024, m_clouds[i].getCoord().Y());
 					m_clouds[i] = new Cloud(cloudAutomaton, newCoord);
 				}
 				m_clouds[i].tick(elapsed);
