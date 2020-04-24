@@ -98,6 +98,7 @@ public class PlayerSoul extends Character {
 		switch (m_direction.toString()) {
 			case "N" : 
 				newCoord.translate(0, - 40);
+				m_projectiles.add(new Lure(true, true, newCoord));
 				return true;
 			case "S" : 
 				newCoord.translate(0, 40);

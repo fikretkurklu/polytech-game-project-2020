@@ -1,14 +1,17 @@
 package underworld;
 
-import environnement.Element;
+import automaton.Automaton;
 import game.Coord;
+import game.Model;
+import player.Character;
+import projectile.Projectile;
 
-public class Lure extends Element {
+public class Lure extends Projectile {
 	
 	boolean elapsed;
 
-	public Lure(boolean isSolid, boolean isVisible, Coord coord) {
-		super(isSolid, isVisible, coord);
+	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
+		super(projectileAutomaton, x, y, angle, shooter, model);
 		elapsed = false;
 	}
 

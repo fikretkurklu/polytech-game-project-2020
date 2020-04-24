@@ -78,7 +78,7 @@ public class Underworld{
 
 	private void generateClouds(Cloud[] clouds) {
 		for(int i = 0; i < clouds.length;i++) {
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(1000, 1000));
+			clouds[i] = new Cloud(cloudAutomaton, new Coord(200, 1000));
 		}
 		
 	}
@@ -115,14 +115,14 @@ public class Underworld{
 	}
 
 	public void tick(long elapsed) {
-
+		
 		for (int i = 0; i < m_clouds.length; i++) {
 			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
-					Coord newCoord = m_clouds[i].getCoord();
-					newCoord.translateX(-(int) Math.random() * (m_width - m_width / 5 + 1) + m_width / 5);
+					Coord newCoord = new Coord(200, m_clouds[i].getCoord().Y());
 					m_clouds[i] = new Cloud(cloudAutomaton, newCoord);
 				}
+				m_clouds[i].tick(elapsed);
 				m_clouds[i].getAutomaton().step(m_clouds[i]);
 			}
 		}

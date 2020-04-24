@@ -1,8 +1,5 @@
 package underworld;
 
-import java.awt.Image;
-
-
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -17,14 +14,17 @@ public class Cloud extends Element{
 	int xMax, yMax;
 	String imagePath;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
+	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
+	long timeElapsed = 0;
 
 	public Cloud(Automaton automaton, Coord coord) {
 		super(false, true, coord, automaton);
-		m_width = 2 * SIZE;
-		m_height = 2 * SIZE;
+		m_width = SIZE;
+		m_height = SIZE;
 		xMax = getCoord().X() + m_width;
 		yMax = getCoord().Y() + m_height;
 		outScreen = false;
+		move = false;
 		imagePath = UnderworldParam.cloudImage[0];
 		try {
 			loadImage(imagePath, m_width, m_height);
@@ -36,8 +36,11 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if ((dir.toString() == "H") && (cat.toString() == "O"))
-			return getCoord().X() + m_width <= 0;
+		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
+			if (getCoord().X() <= 0) {
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -50,9 +53,20 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean move(Direction dir) {
-		getCoord().translateX(-2);
-		xMax = getCoord().X() + m_width;
-		yMax = getCoord().Y() + m_height;
-		return true;
+		if (move) {
+			move = false;
+			getCoord().translateX(-1);
+			xMax = getCoord().X() + m_width;
+			return true;
+		}
+		return false;
+	}
+	
+	public void tick(long elapsed) {
+			timeElapsed += elapsed;
+		    if (timeElapsed > 10) {
+		      timeElapsed = 0;
+		      move = true;
+		    }
 	}
 }
