@@ -8,7 +8,9 @@ import java.io.FileReader;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
+import automaton.Direction;
 import game.Coord;
+import game.Model;
 import environnement.Element;
 
 public class Underworld {
@@ -27,6 +29,9 @@ public class Underworld {
 	Automaton cloudAutomaton, wallAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
+	
+	
+	
 
 	public Underworld(AutomatonLibrary AL, int width, int height) {
 		m_al = AL;
@@ -41,11 +46,6 @@ public class Underworld {
 		m_AL = AL;
 		try {
 			wallAutomaton = m_AL.getAutomaton("Block");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
 			cloudAutomaton = m_AL.getAutomaton("Cloud");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
@@ -160,13 +160,5 @@ public class Underworld {
 			return 0;
 		}
 	}
-
-	/*
-	 * public void tick(long elapsed) { for (int i = 0; i < m_clouds.length; i++) {
-	 * if (m_clouds[i].getAutomaton() != null) { if (m_clouds[i].outScreen) {
-	 * m_clouds[i] = new Cloud(cloudAutomaton,
-	 * m_clouds[i].getCoord().translateX(-(int)Math.random()*(m_height-m_height/5)))
-	 * ; } m_clouds[i].getAutomaton().step(m_clouds[i]); } } }
-	 */
 
 }

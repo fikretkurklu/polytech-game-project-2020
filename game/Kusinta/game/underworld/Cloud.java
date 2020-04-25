@@ -20,7 +20,7 @@ public class Cloud extends Element{
 		m_width = Element.SIZE;
 		m_height = Element.SIZE;
 		xMax = getCoord().X() + m_width;
-		yMax = getCoord().Y() + m_height;
+		yMax = getCoord().Y() - m_height;
 		outScreen = false;
 		move = false;
 		imagePath = UnderworldParam.cloudImage[0];
@@ -35,7 +35,7 @@ public class Cloud extends Element{
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			return (getCoord().X() + m_width <= 0);
+			return (getCoord().X() + m_width <= 0) || (getCoord().Y() + m_height <= 0);
 		}
 		return false;
 	}
