@@ -175,18 +175,11 @@ public class Player extends Character {
 			Direction direc;
 			float angle;
 			double r;
-			int mouse_x = m_model.m_mouseCoord.X();
-			int mouse_y = m_model.m_mouseCoord.Y();
+			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+			
 			int x = mouse_x - m_x;
 			int y = m_y - mouse_y;
-			System.out.println("mx = "+mouse_x);
-			System.out.println("my = "+mouse_y);
-
-			System.out.println("m_x = "+m_x);
-			System.out.println("m_y = "+m_y);
-
-			System.out.println("x = "+x);
-			System.out.println("y = "+y);
 
 			if (mouse_x > m_x) {
 				direc = new Direction("E");
@@ -201,8 +194,6 @@ public class Player extends Character {
 				angle = -angle;
 			}
 			
-			System.out.println("angle = "+angle);
-			System.out.println("r = "+r);
 			try {
 				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
 			} catch (Exception e) {

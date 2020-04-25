@@ -14,7 +14,6 @@ import projectile.Projectile;
 
 public abstract class Character extends Entity {
 
-	protected Coord m_coord;
 	protected Model m_model;
 	protected Direction m_direction;
 

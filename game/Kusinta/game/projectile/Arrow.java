@@ -1,10 +1,7 @@
 package projectile;
 
-import java.awt.Color;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.concurrent.TimeUnit;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -79,10 +76,9 @@ public class Arrow extends Projectile{
 		}
 	}
 	
-	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		boolean c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) || (m_model.m_room.isBlocked((int)(m_coord.X() + m_width * Math.cos(m_angle)),(int)(m_coord.Y() - m_height * Math.sin(m_angle)))));
 		if (m_State == HIT_STATE) {
 			System.out.println(c);
 			return !c;

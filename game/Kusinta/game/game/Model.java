@@ -80,8 +80,6 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
-		m_mouseCoord.setX(m_mouseCoord.X() - x_decalage);
-		m_mouseCoord.setY(m_mouseCoord.Y() - y_decalage);
 	}
 
 	/*
@@ -105,6 +103,14 @@ public class Model {
 			return images;
 		}
 		return null;
+	}
+	
+	public int getXDecalage() {
+		return x_decalage;
+	}
+	
+	public int getYDecalage() {
+		return y_decalage;
 	}
 
 }

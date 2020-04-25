@@ -18,13 +18,16 @@ public abstract class Projectile extends Entity {
 	static final int HIT_STATE = 2;
 	public static final int SIZE = 86;
 
-	protected Coord m_coord;
-	protected int m_State;
 	protected double m_angle;
-	protected Character m_shooter;
 	protected Direction m_direction;
+	
+	protected int m_State;
+	
+	protected Character m_shooter;
 	protected Model m_model;
+	
 	protected long m_dead_time;
+	
 	protected float m_alpha;
 	
 	
@@ -32,14 +35,31 @@ public abstract class Projectile extends Entity {
 
 	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);
+		
 		m_coord = new Coord(x,y);
 		m_angle = angle;
-		m_shooter = shooter;
 		m_direction = direction;
+		
+		m_shooter = shooter;
 		m_model = model;
+		
 		m_State = OK_STATE;
+		
 		m_alpha = 1f;
 		
+	}
+	
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		if (m_State == HIT_STATE) {
+			System.out.println(c);
+			return !c;
+		}
+		if (!c) {
+			m_State = HIT_STATE;
+		}
+		return c;
 	}
 
 	@Override
