@@ -2,15 +2,14 @@ package underworld;
 
 import java.awt.Graphics;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
-import automaton.Direction;
 import game.Coord;
-import game.Model;
 import environnement.Element;
 
 public class Underworld {

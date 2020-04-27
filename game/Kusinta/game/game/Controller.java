@@ -98,38 +98,18 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		System.out.println("Key typed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
-		switch(m_game.m_model.mode) {
-		case 1:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
-			break;
-		case 2:
-			m_game.m_model.m_playerSoul.setPressed((int) e.getKeyChar(), true);
-			break;
-		}
-		
-		
-
+		m_game.m_model.setPressed((int) e.getKeyChar(), true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
-		switch(m_game.m_model.mode) {
-		case 1:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
-			break;
-		case 2:
-			m_game.m_model.m_playerSoul.setPressed((int) e.getKeyChar(), false);
-			break;
-		}
+		m_game.m_model.setPressed((int) e.getKeyChar(), false);
 	}
 
 	@Override
