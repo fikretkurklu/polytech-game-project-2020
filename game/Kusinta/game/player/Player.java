@@ -93,9 +93,10 @@ public class Player extends Character {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 
-			if (!dir.toString().equals(m_direction.toString())) {
+			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 				turn(dir);
 			}
+			
 			if (dir.toString().equals("E")) {
 				if (!checkBlock(x_hitBox[2], m_y - 1) && !checkBlock(x_hitBox[2], m_y - m_height)
 						&& !checkBlock(x_hitBox[2], m_y - m_height / 2)) {
@@ -192,6 +193,8 @@ public class Player extends Character {
 			} else {
 				direc = new Direction("W");
 			}
+			
+			turn(direc);
 
 			if (!direc.toString().equals(m_direction.toString())) {
 				turn(direc);
@@ -369,8 +372,6 @@ public class Player extends Character {
 		if (bI != null) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
-
-			checkSprite();
 //
 //			System.out.println("m_state = "+m_State);
 
@@ -380,6 +381,9 @@ public class Player extends Character {
 			} else {
 				img = bI[m_image_index];
 			}
+
+			checkSprite();
+
 			int w = DIMENSION * m_width;
 			int h = m_height;
 			if (m_direction.toString().equals("E")) {
@@ -457,43 +461,47 @@ public class Player extends Character {
 	}
 
 	public void setState(State state) {
-		if (state == State.IDLE) {
-			if (shooting) {
-				setState(State.SHOOTING);
-			} else if ((!jumping) || (!falling)) {
-				m_State = State.IDLE;
-				m_image_index = 0;
-				moving = false;
-			} else if (moving) {
-				setState(State.WALKING);
-			} else {
-				setState(State.JUMPING);
-			}
-		}
-		if (state == State.JUMPING) {
-			m_State = State.JUMPING;
-			m_image_index = 16;
-		}
-		if (state == State.SHOOTING) {
-			m_State = State.SHOOTING;
-			if (jumping || falling || moving) {
-				m_image_index = 9;
-			} else {
-				m_image_index = 2;
-			}
-			shooting = true;
-		}
-		if (state == State.WALKING) {
-			if (m_State != State.SHOOTING) {
-				if (falling || jumping) {
-					setState(State.JUMPING);
+		if (state != m_State) {
+			if (state == State.IDLE) {
+				if (shooting) {
+					setState(State.SHOOTING);
+				} else if ((!jumping) || (!falling)) {
+					m_State = State.IDLE;
+					m_image_index = 0;
+					moving = false;
+				} else if (moving) {
+					setState(State.WALKING);
 				} else {
-					m_State = State.WALKING;
-					m_image_index = 8;
-					moving = true;
+					setState(State.JUMPING);
 				}
-			} else {
-				setState(State.SHOOTING);
+			}
+			if (state == State.JUMPING) {
+				if (!shooting) {
+					m_State = State.JUMPING;
+					m_image_index = 16;
+				}
+			}
+			if (state == State.SHOOTING) {
+				m_State = State.SHOOTING;
+				if (jumping || falling || moving) {
+					m_image_index = 9;
+				} else {
+					m_image_index = 2;
+				}
+				shooting = true;
+			}
+			if (state == State.WALKING) {
+				if (m_State != State.SHOOTING) {
+					if (falling || jumping) {
+						setState(State.JUMPING);
+					} else {
+						m_State = State.WALKING;
+						m_image_index = 8;
+						moving = true;
+					}
+				} else {
+					setState(State.SHOOTING);
+				}
 			}
 		}
 	}
