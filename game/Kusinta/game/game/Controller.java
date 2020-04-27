@@ -97,13 +97,13 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Key typed: " + e.getKeyChar() + " code=" + e.getKeyCode());
+//		System.out.println("Key typed: " + e.getKeyChar() + " code=" + e.getKeyCode());
 
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
+//		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
 
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
 
@@ -111,7 +111,7 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
+//		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
 
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
 	}

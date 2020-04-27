@@ -23,7 +23,7 @@ public abstract class Character extends Entity {
 	protected LinkedList<Projectile> m_projectiles;
 
 	BufferedImage[] bI;
-	int m_image_index, last_image_index;
+	int m_image_index;
 
 	// Sprite m_character;
 
@@ -46,7 +46,6 @@ public abstract class Character extends Entity {
 		m_model = model;
 		
 		m_image_index = 0;
-		last_image_index = 0;
 	}
 	
 	public Coord getCoord() {
