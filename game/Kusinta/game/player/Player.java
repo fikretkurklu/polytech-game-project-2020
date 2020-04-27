@@ -1,10 +1,8 @@
 package player;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
@@ -172,47 +170,9 @@ public class Player extends Character {
 
 		long now = System.currentTimeMillis();
 
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y() - m_height / 2;
-
 		if (now - m_shot_time > m_attackSpeed) {
-			// System.out.println("ok");
 
 			setState(State.SHOOTING);
-
-			Direction direc;
-			float angle;
-			double r;
-			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
-
-			int x = mouse_x - m_x;
-			int y = m_y - mouse_y;
-
-			if (mouse_x > m_x) {
-				direc = new Direction("E");
-			} else {
-				direc = new Direction("W");
-			}
-
-			turn(direc);
-
-			if (!direc.toString().equals(m_direction.toString())) {
-				turn(direc);
-			}
-
-			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
-
-			if (mouse_y > m_y) {
-				angle = -angle;
-			}
-
-			try {
-				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
 			m_shot_time = now;
 
@@ -339,13 +299,15 @@ public class Player extends Character {
 			case SHOOTING:
 				m_image_index++;
 				if (!moving && !falling && m_image_index > 6) {
+					shoot();
 					setState(State.IDLE);
 					shooting = false;
 				} else if (m_image_index > 13) {
+					shoot();
 					setState(State.IDLE);
 					shooting = false;
 				}
-				System.out.println("shooting = " + shooting);
+				System.out.println("m_image_index = " + m_image_index);
 
 				break;
 			default:
@@ -371,17 +333,15 @@ public class Player extends Character {
 		if (bI != null) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
-//
-//			System.out.println("m_state = "+m_State);
+
+			checkSprite();
 
 			BufferedImage img;
-			if (m_State == State.SHOOTING) {
+			if (shooting) {
 				img = bIShooting[m_image_index];
 			} else {
 				img = bI[m_image_index];
 			}
-
-			checkSprite();
 
 			int w = DIMENSION * m_width;
 			int h = m_height;
@@ -398,7 +358,7 @@ public class Player extends Character {
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			long now = System.currentTimeMillis();
-			
+
 			((Arrow) m_projectiles.get(i)).paint(g);
 
 			if (now - m_projectiles.get(i).getDeadTime() > 5000 && m_projectiles.get(i).getState() == 2) {
@@ -464,14 +424,12 @@ public class Player extends Character {
 				} else {
 					setState(State.JUMPING);
 				}
-			}
-			if (state == State.JUMPING) {
+			} else if (state == State.JUMPING) {
 				if (!shooting) {
 					m_State = State.JUMPING;
 					m_image_index = 16;
 				}
-			}
-			if (state == State.SHOOTING) {
+			} else if (state == State.SHOOTING) {
 				m_State = State.SHOOTING;
 				if (jumping || falling || moving) {
 					m_image_index = 9;
@@ -479,8 +437,7 @@ public class Player extends Character {
 					m_image_index = 2;
 				}
 				shooting = true;
-			}
-			if (state == State.WALKING) {
+			} else if (state == State.WALKING) {
 				if (m_State != State.SHOOTING) {
 					if (falling || jumping) {
 						setState(State.JUMPING);
@@ -493,6 +450,45 @@ public class Player extends Character {
 					setState(State.SHOOTING);
 				}
 			}
+		}
+	}
+
+	public void shoot() {
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y() - m_height / 2;
+
+		Direction direc;
+		float angle;
+		double r;
+		int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+		int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+
+		int x = mouse_x - m_x;
+		int y = m_y - mouse_y;
+
+		if (mouse_x > m_x) {
+			direc = new Direction("E");
+		} else {
+			direc = new Direction("W");
+		}
+
+		turn(direc);
+
+		if (!direc.toString().equals(m_direction.toString())) {
+			turn(direc);
+		}
+
+		r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+		angle = (float) Math.asin(Math.abs(y) / r);
+
+		if (mouse_y > m_y) {
+			angle = -angle;
+		}
+
+		try {
+			m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
