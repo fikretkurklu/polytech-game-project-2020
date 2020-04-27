@@ -111,6 +111,9 @@ public class Player extends Character {
 			falling = true;
 			if (!shooting)
 				m_image_index = 16;
+			else {
+				m_image_index = m_image_index + 7;
+			}
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -184,9 +187,11 @@ public class Player extends Character {
 			qPressed = pressed;
 			if (pressed) {
 				moving = true;
+				if(shooting)
+					m_image_index = m_image_index + 7;
 			} else {
 				moving = false;
-				if(shooting && !falling) {
+				if(shooting && !falling && m_image_index>7) {
 					m_image_index = m_image_index - 7;
 				}
 			}

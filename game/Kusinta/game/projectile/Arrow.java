@@ -3,6 +3,7 @@ package projectile;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -19,6 +20,8 @@ public class Arrow extends Projectile {
 
 	int m_height;
 	int m_width;
+	
+	int[] x_hitBox, y_hitBox;
 
 	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction)
 			throws Exception {
@@ -31,6 +34,9 @@ public class Arrow extends Projectile {
 
 		m_height = DIMENSION * image.getHeight(null);
 		m_width = (int) (ratio * image.getWidth(null));
+		
+		hitBox = new Rectangle((int)(m_coord.X()-(m_width/2)*Math.cos(m_angle)),(int)( m_coord.Y()-(m_height/2)*Math.sin(m_angle)), m_width, m_height);
+		
 
 		m_dead_time = 0;
 
@@ -79,6 +85,7 @@ public class Arrow extends Projectile {
 				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
 			}
 		}
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		if (now - getDeadTime() > 1000 && getState() == 2) {
 			setAlpha(this.getAlpha() * 0.95f);

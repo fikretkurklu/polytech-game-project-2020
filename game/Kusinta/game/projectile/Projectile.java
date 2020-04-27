@@ -1,6 +1,7 @@
 package projectile;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,8 @@ public abstract class Projectile extends Entity {
 	protected long m_dead_time;
 	
 	protected float m_alpha;
+	
+	protected Rectangle hitBox;
 	
 	
 	Image image;
