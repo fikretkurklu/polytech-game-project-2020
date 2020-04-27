@@ -1,6 +1,7 @@
 package player;
 
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -24,8 +25,8 @@ public abstract class Character extends Entity {
 	
 	protected LinkedList<Projectile> m_projectiles;
 
-	BufferedImage[] bI;
-	int m_image_index, last_image_index;
+	protected BufferedImage[] bI;
+	protected int m_image_index, last_image_index;
 
 	// Sprite m_character;
 

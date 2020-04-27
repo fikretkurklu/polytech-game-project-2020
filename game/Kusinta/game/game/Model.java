@@ -15,6 +15,7 @@ import automaton.Direction;
 import game.graphics.View;
 import player.Player;
 import room.Room;
+import underworld.PlayerSoul;
 import underworld.Underworld;
 
 public class Model {
@@ -27,11 +28,13 @@ public class Model {
 	public Coord m_mouseCoord;
 
 	Player m_player;
+	PlayerSoul m_playerSoul;
 	View m_view;
 	public int mode;
 	private AutomatonLibrary m_AL;
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
+	public Automaton playerSoulAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
 //	Opponent[] m_opponents;
@@ -42,12 +45,16 @@ public class Model {
         m_height = h;
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
+		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		setRoomEnv();
 		setUnderworldEnv();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
-		setCenterScreen();
+		m_playerSoul = new PlayerSoul(playerSoulAutomaton, 1000, 1000, 
+				new Direction("E"), this);
+		//setCenterScreenPlayer();
+		setCenterScreenPlayerSoul();
 	}
 	
 	public void setRoomEnv() throws Exception {
@@ -60,9 +67,15 @@ public class Model {
 		mode = UNDERWORLD;
 }
 
-	public void setCenterScreen() {
+	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
+
+	}
+	
+	public void setCenterScreenPlayerSoul() {
+		x_decalage = m_width / 2 - m_playerSoul.getCoord().X();
+		y_decalage = m_height / 2 - m_playerSoul.getCoord().Y();
 
 	}
 
@@ -73,6 +86,7 @@ public class Model {
 			m_room.tick(elapsed);
 			break;
 		case UNDERWORLD:
+			m_playerSoul.tick(elapsed);
 			m_underworld.tick(elapsed);
 		}	
 	}
@@ -82,15 +96,16 @@ public class Model {
 		m_height = height;
 		switch(mode) {
 		case ROOM:
-			setCenterScreen();
+			setCenterScreenPlayer();
 			Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 			m_room.paint(gp, width, height);
 			m_player.paint(gp);
 			gp.dispose();
 		case UNDERWORLD:
-			setCenterScreen();
+			setCenterScreenPlayerSoul();
 			Graphics gu = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 			m_underworld.paint(gu, width, height);
+			m_playerSoul.paint(gu);
 			gu.dispose();
 		}
 	}

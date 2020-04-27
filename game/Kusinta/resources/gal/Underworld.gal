@@ -5,17 +5,15 @@ Cloud (Init){
   * ()
 }
 
-PlayerSoul (Init){
+PlayerSoul (Visible){
   * (Visible)
   | Cell(H,O) ? Pop : (Actions)
   | !Cell(H,O) ? Wizz : (Actions)
   * (Actions)
-  | Key(FU) ? Turn(N) : (Moving)
-  | Key(FD) ? Turn(S) : (Moving)
-  | Key(FL) ? Turn(L) : (Moving)
-  | Key(FR) ? Turn(R) : (Moving)
+  | Key(z) ? Move(N) : (Visible)
+  | Key(s) ? Move(S) : (Visible)
+  | Key(q) ? Move(W) : (Visible)
+  | Key(d) ? Move(E) : (Visible)
   | Key(SPACE) ? Jump : (Visible)
-  | Key(ENTER) ? Egg : (Visible)
-  * (Moving)
-  | True ? Move : (Visible)
+  | Key(v) ? Egg : (Visible)
 }
