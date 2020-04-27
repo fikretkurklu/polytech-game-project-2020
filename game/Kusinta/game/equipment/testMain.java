@@ -10,7 +10,7 @@ public class testMain {
 		System.out.println(rarity);
 		int weight = m.getModification(Stats.Weight);
 		System.out.println(weight);
-		
+		m.applyMultiplier();
 	}
 
 }

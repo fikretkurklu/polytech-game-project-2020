@@ -14,6 +14,6 @@ public interface Stat {
 	 * 
 	 */
 	
-	public enum Stats {Rarity, Price, Weight, Resistance, Strengh, AttackSpeed, Health, WeightReduction}; 
+	public enum Stats {Rarity, Price, Weight, Resistance, Strengh, AttackSpeed, Health, WeightReduction, DropMultiplier}; 
 	
 }

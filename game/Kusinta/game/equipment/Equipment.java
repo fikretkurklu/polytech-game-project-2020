@@ -34,6 +34,39 @@ public abstract class Equipment {
 		statTable.put(Stats.AttackSpeed, 0);
 		statTable.put(Stats.Health, 0);
 		statTable.put(Stats.WeightReduction, 0);
+		
+	}
+	
+	/*
+	 * This method sets the multiplier to be used in the weapon drop of stats
+	 * 
+	 */
+	
+	public float setMultiplier() {
+		int rarity = statTable.get(Stats.Rarity);
+		float var_borne = (float) rarity/10 * 2;
+		float borne_inf = (float) (1 + var_borne);
+		float borne_sup = (borne_inf) *2;
+		return (float) (Math.random()*(borne_sup - borne_inf)+borne_inf);
+	}
+	
+	/*
+	 * This method is used to apply a different multiplier to all Statistic of the equipment 
+	 * 
+	 */
+	
+	public void applyMultiplier() {
+		Stats[] statistic = Stats.values();
+		for (int i = 0; i < statistic.length; i++) {
+			float multiplier = setMultiplier();
+			Stats s = statistic[i];
+			int val_init = statTable.get(s);
+			if (s.equals(Stats.Price)) {
+				statTable.put(s, (int) (val_init*multiplier));
+			} else if (!s.equals(Stats.Weight)) {
+				statTable.put(s, (int) (val_init*multiplier));
+			}
+		}
 	}
 	
 	/*
