@@ -51,7 +51,7 @@ public class Arrow extends Projectile {
 	@Override
 	public boolean move(Direction dir) {
 		long now = System.currentTimeMillis();
-		if (now - m_creationTime > 600) {
+		if (now - m_creationTime > 700) {
 			if (moving == 0) {
 
 				if (m_direction.toString().equals("E")) {
