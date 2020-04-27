@@ -71,7 +71,6 @@ public class Arrow extends Projectile {
 	public void paint(Graphics g) {
 		long now = System.currentTimeMillis();
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
-		
 		if (now - m_creationTime > 600) {
 			if (image != null) {
 				int w = DIMENSION * m_width;
@@ -91,8 +90,10 @@ public class Arrow extends Projectile {
 
 		if (now - getDeadTime() > 1000 && getState() == 2) {
 			setAlpha(this.getAlpha() * 0.95f);
-		} 
+		}
+		
 	}
+
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {

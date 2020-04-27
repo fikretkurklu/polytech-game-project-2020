@@ -13,7 +13,7 @@ import projectile.Projectile;
 
 public abstract class Character extends Entity {
 
-	protected Model m_model;
+	public Model m_model;
 	protected Direction m_direction;
 
 	int MAX_LIFE = 100;

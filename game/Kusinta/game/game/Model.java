@@ -76,6 +76,7 @@ public class Model {
 			m_player.paint(gp);
 			gp.dispose();
 		}
+	
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
@@ -112,5 +113,6 @@ public class Model {
 	public int getYDecalage() {
 		return y_decalage;
 	}
-
+	
+	
 }
