@@ -1,5 +1,6 @@
 package player;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -162,5 +163,11 @@ public abstract class Character extends Entity {
 	public void setStrength(int strength) {
 			m_strength = strength;
 	}
+
+	public abstract void tick(long elapsed);
+
+	public abstract void paint(Graphics gp);
+
+	public abstract void setPressed(int keyChar, boolean b);
 
 }

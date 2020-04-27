@@ -1,5 +1,8 @@
 package underworld;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -9,7 +12,9 @@ import environnement.Element;
 public class Cloud extends Element{
 	
 	int m_width, m_height;
-	int xMax, yMax;
+//	int xMax, yMax;
+	int xHitbox[];
+	int yHitbox[];
 	String imagePath;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
@@ -19,8 +24,11 @@ public class Cloud extends Element{
 		super(false, true, coord, automaton);
 		m_width = Element.SIZE;
 		m_height = Element.SIZE;
-		xMax = getCoord().X() + m_width;
-		yMax = getCoord().Y() - m_height;
+		xHitbox = new int[4];
+		yHitbox = new int[4];
+		calculateHitbox();
+//		xMax = getCoord().X() + m_width;
+//		yMax = getCoord().Y() - m_height;
 		outScreen = false;
 		move = false;
 		imagePath = UnderworldParam.cloudImage[0];
@@ -30,6 +38,23 @@ public class Cloud extends Element{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void calculateHitbox() {
+		
+		int x = getCoord().X();
+		int y = getCoord().Y();
+		
+		xHitbox[0] = x;
+		xHitbox[1] = x + m_width;
+		xHitbox[2] = x + m_width;
+		xHitbox[3] = x;
+		
+		yHitbox[0] = y;
+		yHitbox[1] = y;
+		yHitbox[2] = y - m_height;
+		yHitbox[3] = y - m_height;
+		
 	}
 	
 	@Override
@@ -52,10 +77,17 @@ public class Cloud extends Element{
 		if (move) {
 			move = false;
 			getCoord().translateX(-1);
-			xMax = getCoord().X() + m_width;
+			calculateHitbox();
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.blue);
+		g.drawPolyline(xHitbox, yHitbox, 4);
 	}
 	
 	public void tick(long elapsed) {

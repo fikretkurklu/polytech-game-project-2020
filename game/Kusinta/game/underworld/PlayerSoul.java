@@ -2,9 +2,11 @@ package underworld;
 
 import java.io.IOException;
 
+
 import javax.imageio.ImageIO;
 
 import java.io.File;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -20,9 +22,14 @@ public class PlayerSoul extends Character {
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	
+	int m_width, m_height = SIZE;
+	
 	boolean hidden;
 	Image m_images[];
 	long m_imageElapsed;
+	
+	int xHitbox[];
+	int yHitbox[];
 	
 	boolean qPressed, zPressed, dPressed, sPressed, vPressed, spacePressed;
 	boolean leftOrientation;
@@ -36,9 +43,14 @@ public class PlayerSoul extends Character {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
 		hidden = false;
 		loadImage();
+		xHitbox = new int[4];
+		yHitbox = new int[4];
+		calculateHitbox();
 	}
 	
 	private void loadImage() {
+		m_width = SIZE; 
+		m_height = SIZE;
 		m_images = new Image[4];
 		File imageFile;
 		Image image;
@@ -63,8 +75,26 @@ public class PlayerSoul extends Character {
 		}
 	}
 	
+	private void calculateHitbox() {
+			
+			int x = getCoord().X();
+			int y = getCoord().Y();
+			
+			xHitbox[0] = x;
+			xHitbox[1] = x + m_width;
+			xHitbox[2] = x + m_width;
+			xHitbox[3] = x;
+			
+			yHitbox[0] = y;
+			yHitbox[1] = y;
+			yHitbox[2] = y - m_height;
+			yHitbox[3] = y - m_height;
+		
+	}
+	
+	
 	private boolean contains(Cloud cloud) {
-		return ((getCoord().X() >= cloud.getCoord().X()) && (getCoord().X() <= cloud.xMax) && (getCoord().Y() <= cloud.getCoord().Y()) && (getCoord().Y() >= cloud.yMax));
+		return ((xHitbox[0] >= cloud.xHitbox[0]) && (xHitbox[0] <= cloud.xHitbox[1]) && (yHitbox[0] >= cloud.yHitbox[0]) && (yHitbox[0] <= cloud.yHitbox[1]));
 	}
 	
 	@Override
@@ -219,6 +249,7 @@ public class PlayerSoul extends Character {
 	
 	public void paint(Graphics g) {
 		if (m_images != null) {
+			calculateHitbox();
 			if (m_image_index >= 4) {
 				m_image_index = 0;
 			}
@@ -228,6 +259,8 @@ public class PlayerSoul extends Character {
 				g.drawImage(m_images[m_image_index], m_coord.X() - SIZE , m_coord.Y(), SIZE, SIZE, null);
 			if (hidden)
 				g.drawOval( m_coord.X() , m_coord.Y(), SIZE / 2, SIZE / 2);
+			g.setColor(Color.blue);
+			g.drawPolyline(xHitbox, yHitbox, 4);
 		}
 	}
 	
