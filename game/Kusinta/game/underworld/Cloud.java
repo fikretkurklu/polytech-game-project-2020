@@ -22,8 +22,8 @@ public class Cloud extends Element{
 
 	public Cloud(Automaton automaton, Coord coord) {
 		super(false, true, coord, automaton);
-		m_width = Element.SIZE;
-		m_height = Element.SIZE;
+		m_width = 2 * Element.SIZE;
+		m_height = 2 * Element.SIZE;
 		xHitbox = new int[4];
 		yHitbox = new int[4];
 		calculateHitbox();
@@ -52,8 +52,8 @@ public class Cloud extends Element{
 		
 		yHitbox[0] = y;
 		yHitbox[1] = y;
-		yHitbox[2] = y - m_height;
-		yHitbox[3] = y - m_height;
+		yHitbox[2] = y + m_height;
+		yHitbox[3] = y + m_height;
 		
 	}
 	
@@ -87,7 +87,7 @@ public class Cloud extends Element{
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.blue);
-		g.drawPolyline(xHitbox, yHitbox, 4);
+		g.drawPolygon(xHitbox, yHitbox, 4);
 	}
 	
 	public void tick(long elapsed) {
