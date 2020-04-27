@@ -1,7 +1,6 @@
 package equipment;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public class HealthPotion extends Consumable {
 
@@ -10,8 +9,8 @@ public class HealthPotion extends Consumable {
 	 * 
 	 */
 	
-	public HealthPotion(Coord coord) {
-		super(coord);
+	public HealthPotion() {
+		super();
 	}
 
 	@Override

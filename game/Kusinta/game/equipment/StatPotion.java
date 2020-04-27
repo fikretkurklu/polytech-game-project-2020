@@ -1,7 +1,6 @@
 package equipment;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public class StatPotion extends Consumable {
 
@@ -12,8 +11,8 @@ public class StatPotion extends Consumable {
 	
 	int statChoice;
 
-	public StatPotion(Coord coord) {
-		super(coord);
+	public StatPotion() {
+		super();
 		statChoice = (int) (Math.random() * 3);
 	}
 

@@ -1,12 +1,11 @@
 package equipment;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public class ShortBow extends Equipment {
 
-	public ShortBow(Coord coord) {
-		super(coord);
+	public ShortBow() {
+		super();
 		statTable.put(Stats.Price, 100);
 		statTable.put(Stats.Weight, 200);
 		statTable.put(Stats.Strengh, 5);

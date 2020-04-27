@@ -1,6 +1,5 @@
 package equipment;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.util.HashMap;
@@ -8,14 +7,14 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public abstract class Equipment {
+	
+	public static final int SIZE = 86;
 	
 	//This HashMap is used to contain the bonus that the equipment will give
 	protected HashMap<Stats, Integer> statTable;
 	protected Image __img;
-	protected Coord __coord;
 	
 	/*
 	 * The equipment is built by randomly picking a rarity
@@ -24,7 +23,7 @@ public abstract class Equipment {
 	 * 
 	 */
 	
-	public Equipment(Coord coord) {
+	public Equipment() {
 		int rarity = (int) (Math.random()*9+1);
 		statTable = new HashMap<Stats, Integer>();
 		statTable.put(Stats.Rarity, rarity);
@@ -35,7 +34,6 @@ public abstract class Equipment {
 		statTable.put(Stats.AttackSpeed, 0);
 		statTable.put(Stats.Health, 0);
 		statTable.put(Stats.WeightReduction, 0);
-		__coord = coord;
 	}
 	
 	/*
@@ -51,26 +49,25 @@ public abstract class Equipment {
 	 *This method is used to load the image for the equipment and resize it to the given size
 	 */
 	
-	public void loadImage(String path, int width, int height) throws Exception {
+	public void loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__img = ImageIO.read(imageFile);
-			__img= __img.getScaledInstance(width, height, 0);
+			__img= __img.getScaledInstance(SIZE, SIZE, java.awt.Image.SCALE_SMOOTH);
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
 	}
 	
 	/*
-	 * This method is used to draw the image on the window
+	 * This method allow to resize the object to follow the window resize
 	 * 
 	 */
 	
-	public void paint(Graphics g) {
-		int x = __coord.X();
-		int y = __coord.Y();
-		g.drawImage(__img, x, y, null);
-		
+	public void resize(int width, int height) {
+		if (__img.getHeight(null) != height || __img.getWidth(null) != width) {
+			__img = __img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+		}
 	}
 	
 }

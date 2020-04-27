@@ -1,12 +1,11 @@
 package equipment;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public class Grieves extends Equipment {
 
-	public Grieves(Coord coord) {
-		super(coord);
+	public Grieves() {
+		super();
 		statTable.put(Stats.Price, 50);
 		statTable.put(Stats.Weight, 50);
 		statTable.put(Stats.WeightReduction, 5);

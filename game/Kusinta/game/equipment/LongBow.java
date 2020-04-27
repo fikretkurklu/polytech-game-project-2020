@@ -1,7 +1,6 @@
 package equipment;
 
 import equipment.Stat.Stats;
-import game.Coord;
 
 public class LongBow extends Equipment {
 
@@ -10,8 +9,8 @@ public class LongBow extends Equipment {
 	 * 
 	 */
 	
-	public LongBow(Coord coord) {
-		super(coord);
+	public LongBow() {
+		super();
 		statTable.put(Stats.Price, 200);
 		statTable.put(Stats.Weight, 100);
 		statTable.put(Stats.Strengh, 20);

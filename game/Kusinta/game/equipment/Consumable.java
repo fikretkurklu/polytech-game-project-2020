@@ -1,6 +1,5 @@
 package equipment;
 
-import game.Coord;
 
 public abstract class Consumable extends Equipment {
 
@@ -17,8 +16,8 @@ public abstract class Consumable extends Equipment {
 	boolean inUse;
 	long duration;
 
-	public Consumable(Coord coord) {
-		super(coord);
+	public Consumable() {
+		super();
 		inUse = false;
 	}
 	
