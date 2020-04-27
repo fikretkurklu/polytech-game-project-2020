@@ -75,6 +75,11 @@ public class Player extends Character {
 		if (random < m_slowness) {
 
 			moving = true;
+			
+			if(shooting) {
+				if(m_image_index<= 5)
+					m_image_index = m_image_index + 6;
+			}
 
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
@@ -111,9 +116,6 @@ public class Player extends Character {
 			falling = true;
 			if (!shooting)
 				m_image_index = 16;
-			else if( m_image_index < 5){
-				m_image_index = m_image_index + 7;
-			}
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -135,7 +137,9 @@ public class Player extends Character {
 
 			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock((hitBox.x+hitBox.width) - 2, m_coord.Y() - m_height)
 					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
-				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height);
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				hitBox.translate(0, -(m_coord.Y()-botBlock));
+				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
 				jumping = false;
 				t = (long) 0.1;
@@ -187,13 +191,8 @@ public class Player extends Character {
 			qPressed = pressed;
 			if (pressed) {
 				moving = true;
-				if(shooting && m_image_index < 5)
-					m_image_index = m_image_index + 7;
 			} else {
 				moving = false;
-				if(shooting && !falling && m_image_index>7) {
-					m_image_index = m_image_index - 7;
-				}
 			}
 		}
 		if (keyCode == Controller.K_Z) {
@@ -272,8 +271,6 @@ public class Player extends Character {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			if(shooting && !moving)
-				m_image_index = m_image_index - 7;
 		} else {
 			jumping = false;
 			falling = false;
