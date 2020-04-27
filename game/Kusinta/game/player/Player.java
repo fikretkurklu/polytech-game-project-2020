@@ -96,7 +96,7 @@ public class Player extends Character {
 			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 				turn(dir);
 			}
-			
+
 			if (dir.toString().equals("E")) {
 				if (!checkBlock(x_hitBox[2], m_y - 1) && !checkBlock(x_hitBox[2], m_y - m_height)
 						&& !checkBlock(x_hitBox[2], m_y - m_height / 2)) {
@@ -149,7 +149,8 @@ public class Player extends Character {
 				jumping = false;
 				t = (long) 0.1;
 				m_time = t;
-				m_image_index = 23;
+				if (!shooting)
+					m_image_index = 23;
 			}
 
 			double C;
@@ -193,7 +194,7 @@ public class Player extends Character {
 			} else {
 				direc = new Direction("W");
 			}
-			
+
 			turn(direc);
 
 			if (!direc.toString().equals(m_direction.toString())) {
@@ -304,6 +305,7 @@ public class Player extends Character {
 		} else {
 			jumping = false;
 			falling = false;
+			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 		}
 
 		m_imageElapsed += elapsed;
@@ -312,9 +314,6 @@ public class Player extends Character {
 
 			if (falling || jumping)
 				setState(State.JUMPING);
-
-//			if (shooting)
-//				m_State = State.SHOOTING;
 
 			last_image_index = m_image_index;
 
