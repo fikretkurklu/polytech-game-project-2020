@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
@@ -65,24 +64,6 @@ public abstract class Character extends Entity {
 	public LinkedList<Projectile> getProjectiles(){
 		return m_projectiles;
 	}
-	
-	@Override
-	public boolean wizz(Direction dir) { // activer un levier
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean power() { // Collision et perte de vie
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public boolean turn(Direction dir) {
@@ -92,57 +73,11 @@ public abstract class Character extends Entity {
 	}
 
 	@Override
-	public boolean get() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean explode() {
-		return true;
-	}
-
-	@Override
-	public boolean hit(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mydir(Direction m_dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean cell(Direction direction, Category category) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean closest(Category category, Direction direction) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotstuff() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean gotpower() { // mort
 		if (m_life > 0) {
 			return true;
 		}
 		return false;
-	}
-	
-	@Override
-	public boolean store() {
-		return true;
 	}
 
 	public void setLife(int l) {

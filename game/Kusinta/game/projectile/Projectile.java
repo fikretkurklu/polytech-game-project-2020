@@ -53,103 +53,12 @@ public abstract class Projectile extends Entity {
 	public boolean cell(Direction dir, Category cat) {
 		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
 		if (m_State == HIT_STATE) {
-			System.out.println(c);
 			return !c;
 		}
 		if (!c) {
 			m_State = HIT_STATE;
 		}
 		return c;
-	}
-
-	@Override
-	public boolean jump(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pop(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean wizz(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean power() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean turn(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean get() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean egg(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hit(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mydir(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean closest(Category cat, Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotstuff() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotpower() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean key(int keyCode) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public void loadImage(String path) throws Exception {
