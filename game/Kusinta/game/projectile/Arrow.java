@@ -1,5 +1,6 @@
 package projectile;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -69,7 +70,9 @@ public class Arrow extends Projectile {
 
 	public void paint(Graphics g) {
 		long now = System.currentTimeMillis();
-		if (now - m_creationTime > 700) {
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
+		
+		if (now - m_creationTime > 600) {
 			if (image != null) {
 				int w = DIMENSION * m_width;
 				int h = m_height;
@@ -85,6 +88,10 @@ public class Arrow extends Projectile {
 				}
 			}
 		}
+
+		if (now - getDeadTime() > 1000 && getState() == 2) {
+			setAlpha(this.getAlpha() * 0.95f);
+		} 
 	}
 
 	@Override

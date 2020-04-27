@@ -398,21 +398,12 @@ public class Player extends Character {
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			long now = System.currentTimeMillis();
+			
+			((Arrow) m_projectiles.get(i)).paint(g);
 
 			if (now - m_projectiles.get(i).getDeadTime() > 5000 && m_projectiles.get(i).getState() == 2) {
 				listIndexToRemove.add((Arrow) m_projectiles.get(i));
 			}
-
-			if (now - m_projectiles.get(i).getDeadTime() > 1000 && m_projectiles.get(i).getState() == 2) {
-				Graphics2D g2D = (Graphics2D) g;
-				m_projectiles.get(i).setAlpha(m_projectiles.get(i).getAlpha() * 0.95f);
-				g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, m_projectiles.get(i).getAlpha()));
-				((Arrow) m_projectiles.get(i)).paint(g);
-				g2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-			} else {
-				((Arrow) m_projectiles.get(i)).paint(g);
-			}
-
 		}
 
 		for (int i = 0; i < listIndexToRemove.size(); i++) {
