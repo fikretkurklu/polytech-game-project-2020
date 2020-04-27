@@ -7,7 +7,7 @@ public class UndInnerWallManager extends ImageManager {
 		useImageTable = false;
 		switch (ambiance) {
 		case (1):
-			String[] path_1 = { "resources/Room/A1/InnerWall1.png"};
+			String[] path_1 = { "resources/Room/A1/InnerWall2.png"};
 			this.imgPath = path_1;
 			break;
 		case (2):
