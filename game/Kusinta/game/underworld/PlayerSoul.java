@@ -3,6 +3,7 @@ package underworld;
 import java.io.IOException;
 
 
+
 import javax.imageio.ImageIO;
 
 import java.io.File;
@@ -80,15 +81,15 @@ public class PlayerSoul extends Character {
 			int x = getCoord().X();
 			int y = getCoord().Y();
 			
-			xHitbox[0] = x;
-			xHitbox[1] = x + m_width;
-			xHitbox[2] = x + m_width;
-			xHitbox[3] = x;
+			xHitbox[0] = x - m_width + (m_width / 7);
+			xHitbox[1] = x - (m_width / 7);
+			xHitbox[2] = x - (m_width / 7);
+			xHitbox[3] = x - m_width + (m_width / 7);
 			
-			yHitbox[0] = y;
-			yHitbox[1] = y;
-			yHitbox[2] = y - m_height;
-			yHitbox[3] = y - m_height;
+			yHitbox[0] = y + (m_width / 7);
+			yHitbox[1] = y + (m_width / 7);
+			yHitbox[2] = y + m_height - (m_width / 7);
+			yHitbox[3] = y + m_height - (m_width / 7);
 		
 	}
 	
@@ -173,7 +174,7 @@ public class PlayerSoul extends Character {
 		return super.turn(dir);
 	}
 	
-	public static final int DISTANCE = 1;
+	public static final int DISTANCE = 5;
 	
 	@Override
 	public boolean move(Direction dir) {
@@ -260,7 +261,7 @@ public class PlayerSoul extends Character {
 			if (hidden)
 				g.drawOval( m_coord.X() , m_coord.Y(), SIZE / 2, SIZE / 2);
 			g.setColor(Color.blue);
-			g.drawPolyline(xHitbox, yHitbox, 4);
+			g.drawPolygon(xHitbox, yHitbox, 4);
 		}
 	}
 	
