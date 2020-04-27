@@ -1,7 +1,9 @@
 package player;
 
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -27,7 +29,7 @@ public abstract class Character extends Entity {
 	protected LinkedList<Projectile> m_projectiles;
 
 	BufferedImage[] bI;
-	int m_image_index;	
+	protected int m_image_index;	
 
 	Rectangle hitBox;
 
@@ -98,5 +100,11 @@ public abstract class Character extends Entity {
 	public void setStrength(int strength) {
 			m_strength = strength;
 	}
+
+	public abstract void tick(long elapsed);
+
+	public abstract void paint(Graphics gp);
+
+	public abstract void setPressed(int keyChar, boolean b);
 
 }
