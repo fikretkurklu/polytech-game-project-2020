@@ -16,6 +16,10 @@ public class UndWallImageManager  extends ImageManager{
 		String[] imgIOW;
 		String[] imgRWB;
 		String[] imgOWD;
+		String[] imgN;
+		String[] imgS;
+		String[] imgE;
+		String[] imgW;
 		switch(ambiance) {
 		case(1) :
 			imgBar = new String[]{"resources/Underworld/Wall/wallSide.png"};
@@ -26,6 +30,10 @@ public class UndWallImageManager  extends ImageManager{
 			imgIOW = new String[]{"resources/Underworld/Wall/wallSideHorizontalInner.png"};
 			imgRWB = new String[]{"resources/Underworld/Wall/right_WB.png"};
 			imgOWD = new String[]{"resources/Underworld/Wall/test_OW.png"};
+			imgN = new String[]{"resources/Room/A1/OuterWallN.png"};
+			imgS = new String[]{"resources/Room/A1/OuterWallS.png"};
+			imgW = new String[]{"resources/Room/A1/OuterWallW.png"};
+			imgE = new String[]{"resources/Room/A1/OuterWallE.png"};
 			imageTable.put("B", imgBar);
 			imageTable.put("HS", imgHorizSide);
 			imageTable.put("LS", imgLeftSide);
@@ -34,6 +42,10 @@ public class UndWallImageManager  extends ImageManager{
 			imageTable.put("IOW", imgIOW);
 			imageTable.put("RWB", imgRWB);
 			imageTable.put("OWD", imgOWD);
+			imageTable.put("N", imgN);
+			imageTable.put("S", imgS);
+			imageTable.put("W", imgW);
+			imageTable.put("E", imgE);
 			break;
 		case(2) :
 			imgBar = new String[]{"resources/Underworld/Wall/wallSide.png"};

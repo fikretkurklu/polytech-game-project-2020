@@ -24,6 +24,7 @@ public class Underworld {
 	int nbCol;
 	Cloud[] m_clouds;
 	UnderworldEmptySpaceImageManager ESIM;
+	UndInnerWallManager UIWM;
 	Automaton cloudAutomaton, wallAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
@@ -37,6 +38,7 @@ public class Underworld {
 		BufferedReader f;
 		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
 		UWIM = new UndWallImageManager(ambiance);
+		UIWM = new UndInnerWallManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
 		m_AL = AL;
 		try {
@@ -85,7 +87,7 @@ public class Underworld {
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
-		if (code.equals("ES")) {
+/*		if (code.equals("ES")) {
 			return new UnderworldEmptySpace(coord, ESIM);
 		} else if (code.contentEquals("LS")) {
 			return new UndWall(coord, UWIM, "LS", wallAutomaton);
@@ -103,8 +105,20 @@ public class Underworld {
 			return new UndWall(coord, UWIM, "RWB", wallAutomaton);
 		} else if (code.contentEquals("OWD")) {
 			return new UndWall(coord, UWIM, "OWD", wallAutomaton);
+		}*/
+		if (code.equals("IW")) {
+			return new UndInnerWall(coord, UIWM);
+		} else if (code.contentEquals("OW_E")) {
+			return new UndWall(coord, UWIM, "E", wallAutomaton);
+		} else if (code.contentEquals("OW_S")) {
+			return new UndWall(coord, UWIM, "S", wallAutomaton);
+		} else if (code.contentEquals("OW_N")) {
+			return new UndWall(coord, UWIM, "N", wallAutomaton);
+		} else if (code.contentEquals("OW_W")) {
+			return new UndWall(coord, UWIM, "W", wallAutomaton);
+		} else if (code.equals("ES")) {
+			return new UnderworldEmptySpace(coord, ESIM);
 		}
-
 		throw new Exception("Code room err: " + code);
 	}
 
