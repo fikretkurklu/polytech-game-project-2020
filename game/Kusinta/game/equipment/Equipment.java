@@ -57,14 +57,16 @@ public abstract class Equipment {
 	
 	public void applyMultiplier() {
 		Stats[] statistic = Stats.values();
-		for (int i = 0; i < statistic.length; i++) {
+		for (int i = 0; i < statistic.length-1; i++) {
 			float multiplier = setMultiplier();
 			Stats s = statistic[i];
-			int val_init = statTable.get(s);
-			if (s.equals(Stats.Price)) {
-				statTable.put(s, (int) (val_init*multiplier));
-			} else if (!s.equals(Stats.Weight)) {
-				statTable.put(s, (int) (val_init*multiplier));
+			if (s!=null) {
+				int val_init = statTable.get(s);
+				if (s.equals(Stats.Price)) {
+					statTable.put(s, (int) (val_init*multiplier));
+				} else if (!s.equals(Stats.Weight) && !s.equals(Stats.Rarity) ) {
+					statTable.put(s, (int) (val_init*multiplier));
+				}
 			}
 		}
 	}
