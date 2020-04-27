@@ -111,7 +111,7 @@ public class Player extends Character {
 			falling = true;
 			if (!shooting)
 				m_image_index = 16;
-			else {
+			else if( m_image_index < 5){
 				m_image_index = m_image_index + 7;
 			}
 			m_time = m_ratio_y;
@@ -187,7 +187,7 @@ public class Player extends Character {
 			qPressed = pressed;
 			if (pressed) {
 				moving = true;
-				if(shooting)
+				if(shooting && m_image_index < 5)
 					m_image_index = m_image_index + 7;
 			} else {
 				moving = false;
@@ -280,6 +280,11 @@ public class Player extends Character {
 			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y()-botBlock));
 			m_coord.setY(botBlock);
+		}
+		
+		if(!moving && !falling) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			m_coord.setY(topBlock);
 		}
 		
 		if(shooting) {

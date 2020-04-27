@@ -36,7 +36,7 @@ public class Arrow extends Projectile {
 		m_width = (int) (ratio * image.getWidth(null));
 		
 		hitBox = new Rectangle((int)(m_coord.X()-(m_width/2)*Math.cos(m_angle)),(int)( m_coord.Y()-(m_height/2)*Math.sin(m_angle)), m_width, m_height);
-		
+		x_hitBox = new int[] {};
 
 		m_dead_time = 0;
 
