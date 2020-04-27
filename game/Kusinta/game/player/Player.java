@@ -31,7 +31,7 @@ public class Player extends Character {
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping;
+	boolean falling, jumping, shooting, moving;
 
 	int m_width, m_height;
 
@@ -87,11 +87,9 @@ public class Player extends Character {
 	public boolean move(Direction dir) { // bouger
 		int random = (int) (Math.random() * 10);
 		if (random < m_slowness) {
-			if (jumping || falling) {
-				m_State = State.JUMPING;
-			} else {
-				m_State = State.WALKING;
-			}
+
+			setState(State.WALKING);
+
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 
@@ -119,7 +117,8 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 
-			m_State = State.JUMPING;
+			setState(State.JUMPING);
+
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
@@ -139,24 +138,24 @@ public class Player extends Character {
 	private void gravity(long t) {
 		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2] - 1, m_coord.Y())
 				&& !checkBlock(x_hitBox[0] - 2, m_coord.Y()) || falling) {
-			if (m_State != State.SHOOTING)
-				m_State = State.JUMPING;
-			double C;
-			if (jumping) {
-				C = ACCELERATION_JUMP;
-			} else {
-				C = 0;
-			}
+
+			setState(State.JUMPING);
 
 			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock(x_hitBox[2] - 2, m_coord.Y() - m_height)
 					|| checkBlock(x_hitBox[0] + 2, m_coord.Y() - m_height)) {
-				C = 0;
 				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height);
 				y_gravity = m_coord.Y();
 				jumping = false;
 				t = (long) 0.1;
 				m_time = t;
-				System.out.println(" ratio_y = " + m_ratio_y);
+				m_image_index = 23;
+			}
+
+			double C;
+			if (jumping) {
+				C = ACCELERATION_JUMP;
+			} else {
+				C = 0;
 			}
 
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
@@ -175,8 +174,9 @@ public class Player extends Character {
 		int m_y = m_coord.Y() - m_height / 2;
 
 		if (now - m_shot_time > m_attackSpeed) {
+			// System.out.println("ok");
 
-			m_State = State.SHOOTING;
+			setState(State.SHOOTING);
 
 			Direction direc;
 			float angle;
@@ -221,40 +221,32 @@ public class Player extends Character {
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
-			if (!(jumping || falling)) {
-				if (pressed && m_State != State.WALKING) {
-					m_image_index = 8;
-				} else {
-					m_State = State.IDLE;
-				}
+			if (pressed) {
+				setState(State.WALKING);
+			} else {
+				setState(State.IDLE);
 			}
 		}
 		if (keyCode == Controller.K_Z) {
 			zPressed = pressed;
-			if (pressed && m_State != State.JUMPING) {
-				m_image_index = 15;
+			if (pressed) {
+				setState(State.JUMPING);
 			} else {
-				m_State = State.IDLE;
+				setState(State.IDLE);
 			}
 		}
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
-			if (!(jumping || falling)) {
-				if (pressed && m_State != State.WALKING) {
-					m_image_index = 8;
-				} else {
-					m_State = State.IDLE;
-				}
+			if (pressed) {
+				setState(State.WALKING);
+			} else {
+				setState(State.IDLE);
 			}
 		}
 		if (keyCode == Controller.K_SPACE) {
 			espPressed = pressed;
-			if (pressed && m_State != State.SHOOTING) {
-				if (falling) {
-					m_image_index = 9;
-				} else {
-					m_image_index = 2;
-				}
+			if (pressed) {
+				setState(State.SHOOTING);
 			}
 		}
 		if (keyCode == Controller.K_A)
@@ -305,7 +297,7 @@ public class Player extends Character {
 			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 			falling = false;
 			jumping = false;
-			m_State = State.IDLE;
+			setState(State.IDLE);
 		} else {
 			jumping = false;
 			falling = false;
@@ -316,7 +308,10 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 
 			if (falling || jumping)
-				m_State = State.JUMPING;
+				setState(State.JUMPING);
+
+//			if (shooting)
+//				m_State = State.SHOOTING;
 
 			last_image_index = m_image_index;
 
@@ -335,14 +330,21 @@ public class Player extends Character {
 					m_image_index = 23;
 				if (m_image_index == 18)
 					m_image_index = 22;
+				if (m_image_index >= 22)
+					m_image_index = 22;
+				System.out.println(m_image_index);
 				break;
 			case SHOOTING:
 				m_image_index++;
-				if (!falling && m_image_index > 6)
-					m_State = State.IDLE;
-				if (m_image_index > 13) {
-					m_State = State.IDLE;
+				if (!moving && !falling && m_image_index > 6) {
+					setState(State.IDLE);
+					shooting = false;
+				} else if (m_image_index > 13) {
+					setState(State.IDLE);
+					shooting = false;
 				}
+				System.out.println("shooting = " + shooting);
+
 				break;
 			default:
 				m_image_index = (m_image_index + 1) % 4;
@@ -369,6 +371,8 @@ public class Player extends Character {
 			int m_y = m_coord.Y();
 
 			checkSprite();
+//
+//			System.out.println("m_state = "+m_State);
 
 			BufferedImage img;
 			if (m_State == State.SHOOTING) {
@@ -426,6 +430,8 @@ public class Player extends Character {
 			m_image_index = (last_image_index - 15 + 1) % 9 + 15;
 			if (m_image_index >= 18 && m_image_index < 22)
 				m_image_index = 22;
+			if (m_image_index >= 22)
+				m_image_index = 22;
 		}
 		if (m_State == State.IDLE && (m_image_index > 4)) {
 			m_image_index = (last_image_index + 1) % 4;
@@ -448,6 +454,48 @@ public class Player extends Character {
 
 	public void setGravity(int g) {
 		G = g;
+	}
+
+	public void setState(State state) {
+		if (state == State.IDLE) {
+			if (shooting) {
+				setState(State.SHOOTING);
+			} else if ((!jumping) || (!falling)) {
+				m_State = State.IDLE;
+				m_image_index = 0;
+				moving = false;
+			} else if (moving) {
+				setState(State.WALKING);
+			} else {
+				setState(State.JUMPING);
+			}
+		}
+		if (state == State.JUMPING) {
+			m_State = State.JUMPING;
+			m_image_index = 16;
+		}
+		if (state == State.SHOOTING) {
+			m_State = State.SHOOTING;
+			if (jumping || falling || moving) {
+				m_image_index = 9;
+			} else {
+				m_image_index = 2;
+			}
+			shooting = true;
+		}
+		if (state == State.WALKING) {
+			if (m_State != State.SHOOTING) {
+				if (falling || jumping) {
+					setState(State.JUMPING);
+				} else {
+					m_State = State.WALKING;
+					m_image_index = 8;
+					moving = true;
+				}
+			} else {
+				setState(State.SHOOTING);
+			}
+		}
 	}
 
 }

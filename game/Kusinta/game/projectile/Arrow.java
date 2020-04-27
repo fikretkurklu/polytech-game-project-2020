@@ -50,7 +50,7 @@ public class Arrow extends Projectile {
 	@Override
 	public boolean move(Direction dir) {
 		long now = System.currentTimeMillis();
-		if (now - m_creationTime > 600) {
+		if (now - m_creationTime > 700) {
 			if (moving == 0) {
 
 				if (m_direction.toString().equals("E")) {
@@ -69,7 +69,7 @@ public class Arrow extends Projectile {
 
 	public void paint(Graphics g) {
 		long now = System.currentTimeMillis();
-		if (now - m_creationTime > 600) {
+		if (now - m_creationTime > 700) {
 			if (image != null) {
 				int w = DIMENSION * m_width;
 				int h = m_height;
