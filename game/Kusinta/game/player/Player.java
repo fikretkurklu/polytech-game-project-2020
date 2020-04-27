@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
+import projectile.Projectile;
 import environnement.Element;
 
 public class Player extends Character {
@@ -331,7 +331,7 @@ public class Player extends Character {
 		m_automaton.step(this);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			m_projectiles.get(i).tick(elapsed);
+			((Arrow) m_projectiles.get(i)).tick(elapsed);
 		}
 	}
 
@@ -357,21 +357,11 @@ public class Player extends Character {
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
-
-		LinkedList<Arrow> listIndexToRemove = new LinkedList<Arrow>();
-
+				
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			long now = System.currentTimeMillis();
 
 			((Arrow) m_projectiles.get(i)).paint(g);
-
-			if (now - m_projectiles.get(i).getDeadTime() > 5000 && m_projectiles.get(i).getState() == 2) {
-				listIndexToRemove.add((Arrow) m_projectiles.get(i));
-			}
-		}
-
-		for (int i = 0; i < listIndexToRemove.size(); i++) {
-			m_projectiles.remove(listIndexToRemove.get(i));
 
 		}
 	}
@@ -423,6 +413,14 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
+		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
+	}
+	
+	public void removeProjectile(Projectile projectile) {
+		m_projectiles.remove(projectile);
 	}
 
 }

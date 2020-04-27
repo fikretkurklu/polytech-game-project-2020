@@ -90,7 +90,9 @@ public class Arrow extends Projectile {
 		if (now - getDeadTime() > 1000 && getState() == 2) {
 			setAlpha(this.getAlpha() * 0.95f);
 		}
+		
 	}
+
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
