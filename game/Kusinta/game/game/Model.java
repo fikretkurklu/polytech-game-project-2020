@@ -52,7 +52,7 @@ public class Model {
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		start();
-		setUnderworldEnv();
+		setRoomEnv();
 		setCenterScreenPlayer();
 	}
 	
