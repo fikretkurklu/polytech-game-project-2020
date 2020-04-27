@@ -1,5 +1,6 @@
 package player;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -18,14 +19,17 @@ public abstract class Character extends Entity {
 
 	int MAX_LIFE = 100;
 	int m_life;
-	int m_resistance, m_strength, m_attackSpeed;
+	protected int m_resistance, m_strength, m_attackSpeed;
+	protected int m_slowness;
+	
+	int m_width, m_height;
 	
 	protected LinkedList<Projectile> m_projectiles;
 
 	BufferedImage[] bI;
-	int m_image_index;
+	int m_image_index;	
 
-	// Sprite m_character;
+	Rectangle hitBox;
 
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);

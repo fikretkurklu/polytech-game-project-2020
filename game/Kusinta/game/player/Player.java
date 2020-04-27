@@ -19,7 +19,6 @@ public class Player extends Character {
 
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
-	int m_slowness;
 
 	int SPEED_WALK = 1;
 
@@ -28,8 +27,6 @@ public class Player extends Character {
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 	boolean falling, jumping, shooting, moving;
 
-	int m_width, m_height;
-
 	int y_gravity;
 	int dt_y;
 	double speed_y;
@@ -37,8 +34,6 @@ public class Player extends Character {
 	long m_ratio_x, m_ratio_y;
 
 	long m_time, m_shot_time;
-	
-	Rectangle hitBox;
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
