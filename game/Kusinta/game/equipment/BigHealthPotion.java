@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class BigHealthPotion extends Consumable {
@@ -28,6 +29,12 @@ public class BigHealthPotion extends Consumable {
 	@Override
 	public void setImagePath() {
 		imagePath = "resources/Equipment/Potion/Red Potion 3.png";
+	}
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

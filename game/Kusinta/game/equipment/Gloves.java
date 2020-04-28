@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class Gloves extends Equipment{
@@ -16,6 +17,12 @@ public class Gloves extends Equipment{
 	@Override
 	public void setImagePath() {
 		imagePath = "resources/Equipment/Stuff/Wooden Shield.png";
+	}
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return Stuff.Gloves;
 	}
 	
 }
