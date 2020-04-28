@@ -12,18 +12,19 @@ import environnement.Element;
 public class Cloud extends Element{
 	
 	int m_width, m_height;
-//	int xMax, yMax;
 	int xHitbox[];
 	int yHitbox[];
 	String imagePath;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
 	long timeElapsed = 0;
+	PlayerSoul m_player;
 
-	public Cloud(Automaton automaton, Coord coord) {
+	public Cloud(Automaton automaton, Coord coord, PlayerSoul player) {
 		super(false, true, coord, automaton);
 		m_width = 2 * Element.SIZE;
 		m_height = 2 * Element.SIZE;
+		m_player = player;
 		xHitbox = new int[4];
 		yHitbox = new int[4];
 		calculateHitbox();
@@ -60,9 +61,21 @@ public class Cloud extends Element{
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			return (getCoord().X() + m_width <= 0) || (getCoord().Y() + m_height <= 0);
+			int centerX = m_player.centerX();
+			int centerY = m_player.centerY();
+			return ((xHitbox[0] <= centerX) && (xHitbox[1] >= centerX) && (yHitbox[0] <= centerY) && (yHitbox[2] >= centerY));
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean pop(Direction dir) {
+		return m_player.setVisibility(true);
+	}
+	
+	@Override
+	public boolean wizz(Direction dir) {
+		return m_player.setVisibility(false);
 	}
 	
 	@Override

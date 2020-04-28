@@ -1,18 +1,12 @@
 package underworld;
 
 import java.io.IOException;
-
-
-
 import javax.imageio.ImageIO;
-
 import java.io.File;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Controller;
@@ -28,35 +22,29 @@ public class PlayerSoul extends Character {
 	boolean hidden;
 	Image m_images[];
 	long m_imageElapsed;
+	long m_dashTimer;
+	long m_lureTimer;
 	
 	int xHitbox[];
 	int yHitbox[];
+	int m_centerX, m_centerY;
 	
 	boolean qPressed, zPressed, dPressed, sPressed, vPressed, spacePressed;
 	boolean leftOrientation;
+	boolean dashAvailable;
+	
+	Lure lure;
 	
 	/* A faire :
-	 * Animation dash (Jump)
 	 * Animation leurre (Egg)
 	 */
 	
 	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
-		hidden = false;
-		loadImage();
-		xHitbox = new int[4];
-		yHitbox = new int[4];
-		calculateHitbox();
-	}
-	
-	private void loadImage() {
 		m_width = SIZE; 
 		m_height = SIZE;
-		m_images = new Image[4];
-		File imageFile;
-		Image image;
-		m_image_index = 0;	
-		m_imageElapsed = 0;
+		hidden = false;
+		m_dashTimer = 0;
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -64,6 +52,19 @@ public class PlayerSoul extends Character {
 		vPressed = false;
 		spacePressed = false;
 		leftOrientation = false;
+		dashAvailable = false;
+		loadImage();
+		xHitbox = new int[4];
+		yHitbox = new int[4];
+		calculateHitbox();
+	}
+	
+	private void loadImage() {
+		m_images = new Image[UnderworldParam.playerSoulImage.length];
+		File imageFile;
+		Image image;
+		m_image_index = 0;	
+		m_imageElapsed = 0;
 		try {
 			for (int i = 0 ; i < 4 ; i++) {
 				imageFile = new File(UnderworldParam.playerSoulImage[i]);
@@ -90,24 +91,23 @@ public class PlayerSoul extends Character {
 			yHitbox[1] = y + (m_width / 7);
 			yHitbox[2] = y + m_height - (m_width / 7);
 			yHitbox[3] = y + m_height - (m_width / 7);
+			
+			m_centerX = xHitbox[0] + (xHitbox[1] - xHitbox[0]) / 2;
+			m_centerY = yHitbox[0] + (yHitbox[1] - yHitbox[0]) / 2;
 		
 	}
 	
-	
-	private boolean contains(Cloud cloud) {
-		return ((xHitbox[0] >= cloud.xHitbox[0]) && (xHitbox[0] <= cloud.xHitbox[1]) && (yHitbox[0] >= cloud.yHitbox[0]) && (yHitbox[0] <= cloud.yHitbox[1]));
+	public int centerX() {
+		return m_centerX;
 	}
 	
-	@Override
-	public boolean cell(Direction dir, Category cat) {
-		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			Cloud clouds[] = getModel().m_underworld.m_clouds;
-			for (int i = 0 ; i < clouds.length ; i++) {
-				if  (contains(clouds[i]))
-					return true;
-			}
-		}
-		return false;
+	public int centerY() {
+		return m_centerY;
+	}
+
+	public boolean setVisibility(boolean visibility) {
+		hidden = visibility;
+		return true;
 	}
 	
 	public void setPressed(int keyCode, boolean pressed) {
@@ -158,70 +158,28 @@ public class PlayerSoul extends Character {
 	}
 	
 	@Override
-	public boolean pop(Direction dir) {
-		hidden = true;
-		return true;
-	}
-	
-	@Override
-	public boolean wizz(Direction dir) {
-		hidden = false;
-		return true;
-	}
-	
-	@Override
 	public boolean turn(Direction dir) {
 		return super.turn(dir);
 	}
 	
-	public static final int DISTANCE = 5;
+	public static final int DISTANCE = 2;
+	public static final int DASH = 500;
 	
 	@Override
 	public boolean move(Direction dir) {
 		turn(dir);
-		if ((sPressed) && (zPressed) && (qPressed) && (dPressed)) {
-			return false;
-		}
 		switch (m_direction.toString()) {
 			case "N" : 
-				if ((sPressed) || ((qPressed) && (dPressed)))
-					return false;
-				if (qPressed)
-					getCoord().translate(-DISTANCE, - DISTANCE);
-				else if (dPressed)
-					getCoord().translate(DISTANCE, - DISTANCE);
-				else 
-					getCoord().translate(0, - DISTANCE);
+				getCoord().translate(0, - DISTANCE);
 				return true;
 			case "S" : 
-				if ((zPressed) || ((qPressed) && (dPressed)))
-					return false;
-				if (qPressed)
-					getCoord().translate(-DISTANCE, DISTANCE);
-				else if (dPressed)
-					getCoord().translate(DISTANCE, DISTANCE);
-				else 
-					getCoord().translate(0, DISTANCE);
+				getCoord().translate(0, DISTANCE);
 				return true;
 			case "E" :
-				if ((qPressed) || ((zPressed) && (sPressed)))
-					return false;
-				if (zPressed)
-					getCoord().translate(DISTANCE, - DISTANCE);
-				else if (sPressed)
-					getCoord().translate(DISTANCE, DISTANCE);
-				else
-					getCoord().translate(DISTANCE, 0);
+				getCoord().translate(DISTANCE, 0);
 				return true;
 			case "W" :
-				if ((dPressed) || ((zPressed) && (sPressed)))
-					return false;
-				if (zPressed)
-					getCoord().translate(-DISTANCE, - DISTANCE);
-				else if (sPressed)
-					getCoord().translate(-DISTANCE, DISTANCE);
-				else
-					getCoord().translate(-DISTANCE, 0);
+				getCoord().translate(-DISTANCE, 0);
 				return true;
 			default :
 				return false;
@@ -230,23 +188,59 @@ public class PlayerSoul extends Character {
 	
 	@Override
 	public boolean jump(Direction dir) {
-		switch (m_direction.toString()) {
-		case "N" : 
-			getCoord().translate(0, - 40);
-			return true;
-		case "S" : 
-			getCoord().translate(0, 40);
-			return true;
-		case "E" :
-			getCoord().translate(40, 0);
-			return true;
-		case "W" :
-			getCoord().translate(-40, 0);
-			return true;
-		default :
-			return false;
+		if (dashAvailable) {
+			dashAvailable = false;
+			switch (m_direction.toString()) {
+			case "N" : 
+				getCoord().translate(0, -DASH);
+				return true;
+			case "S" : 
+				getCoord().translate(0, DASH);
+				return true;
+			case "E" :
+				getCoord().translate(DASH, 0);
+				return true;
+			case "W" :
+				getCoord().translate(-DASH, 0);
+				return true;
+			default :
+				return false;
+			}
 		}
+		return false;
 	}
+	
+	@Override
+	public boolean egg(Direction dir) {
+		if (lure == null) {
+			int x = getCoord().X();
+			int y = getCoord().Y();
+			switch (m_direction.toString()) {
+			case "N":
+				y = y - 500;
+				break;
+			case "S" :
+				y = y + 500;
+				break;
+			case "E" :
+				x = x + 500;
+				break;
+			case "W" :
+				x = x - 500;
+				break;
+			default :
+				return false;
+			}
+			lure = new Lure(m_model.lureAutomaton, x, y, 0, this, m_model);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean checkBlock(int x, int y) {
+		return m_model.m_room.isBlocked(x, y);
+	}
+    
 	
 	public void paint(Graphics g) {
 		if (m_images != null) {
@@ -258,8 +252,8 @@ public class PlayerSoul extends Character {
 				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), -SIZE, SIZE, null);
 			else
 				g.drawImage(m_images[m_image_index], m_coord.X() - SIZE , m_coord.Y(), SIZE, SIZE, null);
-			if (hidden)
-				g.drawOval( m_coord.X() , m_coord.Y(), SIZE / 2, SIZE / 2);
+			if (lure != null) 
+				lure.paint(g);
 			g.setColor(Color.blue);
 			g.drawPolygon(xHitbox, yHitbox, 4);
 		}
@@ -267,18 +261,29 @@ public class PlayerSoul extends Character {
 	
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
+		m_dashTimer += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_image_index++;
 		}
+		if (m_dashTimer > 5000) {
+			dashAvailable = true;
+			m_dashTimer = 0;
+		}
+		if (lure != null) {
+			lure.tick(elapsed);
+			m_lureTimer += elapsed;
+			if (lure.isDestroying()) {
+				// On ne fait rien
+			} else if (lure.isDestroyed()) {
+				m_lureTimer = 0;
+				lure = null;
+			} else if (m_lureTimer >= 10000) {
+				m_lureTimer = 0;
+				lure.elapsed();
+			}
+		}
 		m_automaton.step(this);
-		
 	}
-	
-	
-	
-	
-	
-
 	
 }

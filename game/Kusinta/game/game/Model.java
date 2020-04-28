@@ -38,6 +38,7 @@ public class Model {
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
+	public Automaton lureAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
 	boolean set = false;
@@ -51,6 +52,7 @@ public class Model {
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
+		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
 		setUnderworldEnv();
 		setCenterScreenPlayer();
@@ -64,11 +66,12 @@ public class Model {
 	
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
-		m_underworld = new Underworld(m_AL, m_width, m_height);
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
-		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(), m_underworld.getStartCoord().Y(), 
+		
+		m_playerSave = new PlayerSoul(playerSoulAutomaton, 1000, 1000, 
 				new Direction("E"), this);
+		m_underworld = new Underworld(m_AL, m_width, m_height, (PlayerSoul) m_playerSave);
 		mode = ROOM;
 	}
 	
@@ -109,11 +112,11 @@ public class Model {
 		switch(mode) {
 		case ROOM:
 			m_room.paint(gp, width, height);
+			m_player.paint(gp);
 			break;
 		case UNDERWORLD:
-			m_underworld.paint(gp, width, height);
+			m_underworld.paint(gp, width, height, (PlayerSoul) m_player);
 		}
-		m_player.paint(gp);
 		gp.dispose();
 	}
 

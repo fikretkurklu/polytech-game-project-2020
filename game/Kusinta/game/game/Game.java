@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020  Pr. Olivier Gruber
+d * Copyright (C) 2020  Pr. Olivier Gruber
  * Educational software for a basic game development
  * 
  *  This program is free software: you can redistribute it and/or modify

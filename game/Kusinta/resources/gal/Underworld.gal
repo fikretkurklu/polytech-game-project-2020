@@ -1,19 +1,30 @@
 Cloud (Init){	
   * (Init)
-  | Cell(H,O) ? Explode : ()
+  | Cell(B,O) ? Explode : ()
+  | Cell(H,O) ? Pop : (Actions)
+  | True ? Wizz : (Actions)
+  * (Actions)
   | True ? Move : (Init)     
   * ()
 }
 
-PlayerSoul (Visible){
-  * (Visible)
-  | Cell(H,O) ? Pop : (Actions)
-  | !Cell(H,O) ? Wizz : (Actions)
+PlayerSoul (Init){
+  * (Init)
+  | Key(z) & Key(s) ? : (Init)
+  | Key(q) & Key(d) ? : (Init)
+  | Key(z) ? Move(N) : (Actions)
+  | Key(s) ? Move(S) : (Actions)
+  | Key(q) ? Move(W) : (Actions)
+  | Key(d) ? Move(E) : (Actions)
+  | True ? : (Actions)
   * (Actions)
-  | Key(z) ? Move(N) : (Visible)
-  | Key(s) ? Move(S) : (Visible)
-  | Key(q) ? Move(W) : (Visible)
-  | Key(d) ? Move(E) : (Visible)
-  | Key(SPACE) ? Jump : (Visible)
-  | Key(v) ? Egg : (Visible)
+  | Key(SPACE) ? Jump : (Init)
+  | Key(v) ? Egg : (Init)
+  | True ? : (Init)
+}
+
+Lure (Init){
+	* (Init)
+	| True ? : (Init)
+	*()
 }

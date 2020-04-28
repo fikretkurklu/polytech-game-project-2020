@@ -30,13 +30,16 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	
+	PlayerSoul m_player;
+	
 	
 	
 
-	public Underworld(AutomatonLibrary AL, int width, int height) {
+	public Underworld(AutomatonLibrary AL, int width, int height, PlayerSoul player) {
 		m_al = AL;
 		m_width = width;
 		m_height = height;
+		m_player = player;
 		startCoord = new Coord();
 		ambiance = (int) (Math.random() * UnderworldParam.nbAmbiance) + 1;
 		BufferedReader f;
@@ -79,7 +82,7 @@ public class Underworld {
 
 	private void generateClouds(Cloud[] clouds) {
 		for (int i = 0; i < clouds.length; i++) {
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(200, 1000));
+			clouds[i] = new Cloud(cloudAutomaton, new Coord(1000, 1000), m_player);
 		}
 
 	}
@@ -121,10 +124,11 @@ public class Underworld {
 		throw new Exception("Code room err: " + code);
 	}
 
-	public void paint(Graphics g, int width, int height) {
+	public void paint(Graphics g, int width, int height, PlayerSoul player) {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+		player.paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
@@ -140,7 +144,7 @@ public class Underworld {
 			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
 					Coord newCoord = new Coord(1024, m_clouds[i].getCoord().Y());
-					m_clouds[i] = new Cloud(cloudAutomaton, newCoord);
+					m_clouds[i] = new Cloud(cloudAutomaton, newCoord, m_player);
 				}
 				m_clouds[i].tick(elapsed);
 				m_clouds[i].getAutomaton().step(m_clouds[i]);
