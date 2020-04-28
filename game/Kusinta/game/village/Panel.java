@@ -13,6 +13,7 @@ public abstract class Panel {
 	int m_x, m_y;
 	LinkedList<Button> m_elem;
 	Image m_bg;
+	protected Scroll m_scroll;
 	
 	boolean focus;
 
@@ -46,6 +47,9 @@ public abstract class Panel {
 		if (m_bg != null) {
 			m_bg = m_bg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
+		if (m_scroll != null) {
+			m_scroll.resized(dw, dh);
+		}
 	}
 
 	public void paint(Graphics g) {
@@ -55,6 +59,9 @@ public abstract class Panel {
 		}
 		for (int i = 0; i < m_elem.size(); i++) {
 			m_elem.get(i).paint(bg);
+		}
+		if (m_scroll != null) {
+			m_scroll.paint(bg);
 		}
 		bg.dispose();
 	}
