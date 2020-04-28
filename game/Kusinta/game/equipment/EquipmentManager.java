@@ -2,32 +2,37 @@ package equipment;
 
 public class EquipmentManager {
 
-	protected enum Conso{HealthPotion, StatPotion};
-	protected enum Stuff{Armor, Belt, Gloves, Grieves, Helmet, LongBow, ShortBow};
-	
+	protected enum Conso {
+		HealthPotion, StatPotion
+	};
+
+	protected enum Stuff {
+		Armor, Belt, Gloves, Grieves, Helmet, LongBow, ShortBow
+	};
+
 	public Equipment newEquipment() throws Exception {
 		Stuff[] equipmentTable = Stuff.values();
-		Stuff equipment = equipmentTable[(int) (Math.random()*(equipmentTable.length))];
-		switch(equipment) {
-		case Armor :
+		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
+		switch (equipment) {
+		case Armor:
 			System.out.println("Armor created");
 			return new Armor();
-		case Belt :
+		case Belt:
 			System.out.println("Belt created");
 			return new Belt();
-		case Gloves :
+		case Gloves:
 			System.out.println("Gloves created");
 			return new Gloves();
-		case Grieves :
+		case Grieves:
 			System.out.println("Grieves created");
 			return new Grieves();
-		case Helmet :
+		case Helmet:
 			System.out.println("Helmet created");
 			return new Helmet();
-		case LongBow :
+		case LongBow:
 			System.out.println("LongBow created");
 			return new LongBow();
-		case ShortBow :
+		case ShortBow:
 			System.out.println("ShortBow created");
 			return new ShortBow();
 		default:
@@ -35,31 +40,21 @@ public class EquipmentManager {
 			return null;
 		}
 	}
-	
-	public Equipment newEquipement(String equipment) throws Exception {
-		switch(equipment) {
-		case ("Armor") :
-			return new Armor();
-		case ("Helmet") :
-			return new Helmet();
-		case ("Gloves") :
-			return new Gloves();
-		case ("Grieves") :
-			return new Grieves();
-		case ("Belt") :
-			return new Belt();
-		case ("LongBow") :
-			return new LongBow();
-		case("ShortBow") :
-			return new ShortBow();
-		default :
-			System.out.println("The given name is not an equipement");
+
+	public Consumable newConsumable() throws Exception {
+		Conso[] conso = Conso.values();
+		Conso consumable = conso[(int) (Math.random() * (conso.length))];
+		switch (consumable) {
+		case HealthPotion:
+			System.out.println("HealthPotion created");
+			return new HealthPotion();
+		case StatPotion:
+			System.out.println("StatPotion created");
+			return new StatPotion();
+		default:
+			System.out.println("This consumable doesn't exist");
 			return null;
 		}
 	}
-	
-	//public Consumable newConsumable();
-	
-	//public Consumable newConsumable(String consumable);
-	
+
 }
