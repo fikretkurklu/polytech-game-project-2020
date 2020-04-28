@@ -14,7 +14,6 @@ public class LongBow extends Equipment {
 		setImagePath();
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
-		statTable.put(Stats.Weight, 100-10*rarity);
 		statTable.put(Stats.Strengh, 20);
 		statTable.put(Stats.AttackSpeed, 5);
 		
@@ -22,6 +21,6 @@ public class LongBow extends Equipment {
 
 	@Override
 	public void setImagePath() {
-		imagePath = "resources/Pixel Art Icon Pack - RPG/Weapon & Tool/Bow.png";
+		imagePath = "resources/Equipment/Stuff/Bow.png";
 	}
 }

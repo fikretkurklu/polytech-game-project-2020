@@ -42,7 +42,7 @@ public abstract class Consumable extends Equipment {
 		inUse = true;
 		setModification();
 	}
-		
+	
 	/*
 	 * This method is used to set the modification of the potion. Those
 	 * modifications are not set in the constructor because the stat modication
@@ -51,11 +51,6 @@ public abstract class Consumable extends Equipment {
 	 */
 
 	public abstract void setModification();
+		
 
-	/*
-	 * This method resets all the stats used by the consumable to 0
-	 * 
-	 */
-	
-	public abstract void resetModification();
 }

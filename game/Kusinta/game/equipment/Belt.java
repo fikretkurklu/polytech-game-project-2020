@@ -9,14 +9,14 @@ public class Belt extends Equipment {
 		setImagePath();
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 50+rarity*25);
-		statTable.put(Stats.Weight, 30-3*rarity);
 		statTable.put(Stats.Health, 5);
 		statTable.put(Stats.Resistance, 5);
+		statTable.put(Stats.Strengh, 5);
 	}
 
 	@Override
 	public void setImagePath() {
-		imagePath = "resources/Pixel Art Icon Pack - RPG/Equipment/Belt.png";
+		imagePath = "resources/Equipment/Stuff/Belt.png";
 	}
 
 }

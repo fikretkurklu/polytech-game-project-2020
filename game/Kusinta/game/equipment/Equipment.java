@@ -22,13 +22,20 @@ public abstract class Equipment {
 		statTable = new HashMap<Stats, Integer>();
 		statTable.put(Stats.Rarity, rarity);
 		statTable.put(Stats.Price, 0);
-		statTable.put(Stats.Weight, 0);
 		statTable.put(Stats.Resistance, 0);
 		statTable.put(Stats.Strengh, 0);
 		statTable.put(Stats.AttackSpeed, 0);
 		statTable.put(Stats.Health, 0);
-		statTable.put(Stats.WeightReduction, 0);
-
+	}
+	
+	public Equipment(int rarity) {
+		statTable = new HashMap<Stats, Integer>();
+		statTable.put(Stats.Rarity, rarity);
+		statTable.put(Stats.Price, 0);
+		statTable.put(Stats.Resistance, 0);
+		statTable.put(Stats.Strengh, 0);
+		statTable.put(Stats.AttackSpeed, 0);
+		statTable.put(Stats.Health, 0);
 	}
 
 	/*
@@ -59,7 +66,7 @@ public abstract class Equipment {
 			if (s != null) {
 				int val_init = statTable.get(s);
 				int val_price = statTable.get(Stats.Price);
-				if (!s.equals(Stats.Weight) && !s.equals(Stats.Rarity)) {
+				if (!s.equals(Stats.Rarity)) {
 					statTable.put(s, (int) (val_init * multiplier));
 					if (val_init != 0) {
 						statTable.put(Stats.Price, (int) (val_price + 20 * multiplier));
@@ -95,4 +102,22 @@ public abstract class Equipment {
 		return imagePath;
 	}
 
+	/*
+	 * This method resets all the stats used by the consumable to 0
+	 * 
+	 */
+	
+	public void resetModification() {
+		Stats[] statistic = Stats.values();
+		for (int i = 0; i < statistic.length - 1; i++) {
+			Stats s = statistic[i];
+			if (s != null) {
+				int val_init = statTable.get(s);
+				if (!s.equals(Stats.Rarity)) {
+					statTable.put(s, -val_init);
+				}
+			}
+		}
+	}
+	
 }

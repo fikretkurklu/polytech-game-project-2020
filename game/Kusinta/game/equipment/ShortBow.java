@@ -9,7 +9,6 @@ public class ShortBow extends Equipment {
 		setImagePath();
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
-		statTable.put(Stats.Weight, 200-20*rarity);
 		statTable.put(Stats.Strengh, 5);
 		statTable.put(Stats.AttackSpeed, 20);
 		
@@ -17,7 +16,7 @@ public class ShortBow extends Equipment {
 
 	@Override
 	public void setImagePath() {
-		imagePath = "resources/Pixel Art Icon Pack - RPG/Weapon & Tool/Bow.png";
+		imagePath = "resources/Equipment/Stuff/Bow.png";
 		
 	}
 	

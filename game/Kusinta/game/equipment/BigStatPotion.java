@@ -2,7 +2,7 @@ package equipment;
 
 import equipment.Stat.Stats;
 
-public class StatPotion extends Consumable {
+public class BigStatPotion extends Consumable {
 
 	/*
 	 * StatPotion give a random stat to the player between Strength, AttackSpeed and Resistance  
@@ -11,9 +11,10 @@ public class StatPotion extends Consumable {
 	
 	int statChoice;
 
-	public StatPotion() throws Exception {
+	public BigStatPotion() throws Exception {
 		super();
 		setImagePath();
+		statTable.put(Stats.Price, 100);
 		statChoice = (int) (Math.random() * 3);
 	}
 
@@ -21,12 +22,12 @@ public class StatPotion extends Consumable {
 	public void setModification() {
 		switch (statChoice) {
 		case (0):
-			statTable.put(Stats.Strengh, 20);
+			statTable.put(Stats.Strengh, 50);
 			break;
 		case (1):
-			statTable.put(Stats.Resistance, 20);
+			statTable.put(Stats.Resistance, 50);
 		case (2):
-			statTable.put(Stats.AttackSpeed, 10);
+			statTable.put(Stats.AttackSpeed, 30);
 		}
 
 	}
@@ -35,24 +36,24 @@ public class StatPotion extends Consumable {
 	public void resetModification() {
 		switch (statChoice) {
 		case (0):
-			statTable.put(Stats.Strengh, 0);
+			statTable.put(Stats.Strengh, -50);
 			break;
 		case (1):
-			statTable.put(Stats.Resistance, 0);
+			statTable.put(Stats.Resistance, -50);
 		case (2):
-			statTable.put(Stats.AttackSpeed, 0);
+			statTable.put(Stats.AttackSpeed, -30);
 		}
 
 	}
 
 	@Override
 	public void setImagePath() {
-		imagePath = "resources/Pixel Art Icon Pack - RPG/Potion/Green Potion 2.png";
+		imagePath = "resources/Equipment/Potion/Green Potion 3.png";
 	}
 
 	@Override
 	public String getImagePath() {
 		return imagePath;
 	}
-
+	
 }

@@ -2,11 +2,11 @@ package equipment;
 
 public class EquipmentManager {
 
-	protected enum Conso {
-		HealthPotion, StatPotion
+	public static enum Conso {
+		SmallHealthPotion, BigHealthPotion, SmallStatPotion, BigStatPotion
 	};
 
-	protected enum Stuff {
+	public static enum Stuff {
 		Armor, Belt, Gloves, Grieves, Helmet, LongBow, ShortBow
 	};
 
@@ -16,25 +16,39 @@ public class EquipmentManager {
 		switch (equipment) {
 		case Armor:
 			System.out.println("Armor created");
-			return new Armor();
+			Armor armor = new Armor();
+			armor.applyMultiplier();
+			return armor;
 		case Belt:
 			System.out.println("Belt created");
-			return new Belt();
+			Belt belt = new Belt();
+			belt.applyMultiplier();
+			return belt;
 		case Gloves:
 			System.out.println("Gloves created");
-			return new Gloves();
+			Gloves gloves = new Gloves();
+			gloves.applyMultiplier();
+			return gloves;
 		case Grieves:
 			System.out.println("Grieves created");
-			return new Grieves();
+			Grieves grieves = new Grieves();
+			grieves.applyMultiplier();
+			return grieves;
 		case Helmet:
 			System.out.println("Helmet created");
-			return new Helmet();
+			Helmet helmet = new Helmet();
+			helmet.applyMultiplier();
+			return helmet;
 		case LongBow:
 			System.out.println("LongBow created");
-			return new LongBow();
+			LongBow longbow = new LongBow();
+			longbow.applyMultiplier();
+			return longbow;
 		case ShortBow:
 			System.out.println("ShortBow created");
-			return new ShortBow();
+			ShortBow shortbow = new ShortBow();
+			shortbow.applyMultiplier();
+			return shortbow;
 		default:
 			System.out.println("The current equipment is not part of the equipment list");
 			return null;
@@ -45,12 +59,18 @@ public class EquipmentManager {
 		Conso[] conso = Conso.values();
 		Conso consumable = conso[(int) (Math.random() * (conso.length))];
 		switch (consumable) {
-		case HealthPotion:
+		case SmallHealthPotion :
 			System.out.println("HealthPotion created");
-			return new HealthPotion();
-		case StatPotion:
+			return new SmallHealthPotion();
+		case BigHealthPotion :
+			System.out.println("BigHealthPotion created");
+			return new BigHealthPotion();
+		case SmallStatPotion :
 			System.out.println("StatPotion created");
-			return new StatPotion();
+			return new SmallStatPotion();
+		case BigStatPotion :
+			System.out.println("BigStatPotion created");
+			return new BigStatPotion();
 		default:
 			System.out.println("This consumable doesn't exist");
 			return null;

@@ -9,14 +9,12 @@ public class Grieves extends Equipment {
 		setImagePath();
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 50+25*rarity);
-		statTable.put(Stats.Weight, 50-5*rarity);
-		statTable.put(Stats.WeightReduction, 5);
-		statTable.put(Stats.Resistance, 5);
-		
+		statTable.put(Stats.Resistance, 10);
+		statTable.put(Stats.Health, 5);
 	}
 
 	@Override
 	public void setImagePath() {
-		imagePath = "resources/Pixel Art Icon Pack - RPG/Equipment/Iron Boot.png";
+		imagePath = "resources/Equipment/Stuff/Iron Boot.png";
 	}
 }
