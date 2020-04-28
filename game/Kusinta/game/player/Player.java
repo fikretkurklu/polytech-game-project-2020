@@ -114,6 +114,10 @@ public class Player extends Character {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
+			if(shooting) {
+				if(m_image_index<= 5)
+					m_image_index = m_image_index + 6;
+			}
 			if (!shooting)
 				m_image_index = 16;
 			m_time = m_ratio_y;
@@ -359,7 +363,6 @@ public class Player extends Character {
 		}
 				
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			long now = System.currentTimeMillis();
 
 			((Arrow) m_projectiles.get(i)).paint(g);
 
