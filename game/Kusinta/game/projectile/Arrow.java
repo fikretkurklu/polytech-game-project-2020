@@ -96,11 +96,6 @@ public class Arrow extends Projectile {
 				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
 			}
 		}
-//		g.setColor(Color.blue);
-//		Rectangle H = new Rectangle(hitBox.X() - 5, hitBox.Y() - 5, 10, 10);
-//		g.fillRect(H.x, H.y, H.width, H.height);
-//		g.setColor(Color.red);
-//		g.fillRect(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
 		if (now - getDeadTime() > 1000 && getState() == 2) {
 			setAlpha(this.getAlpha() * 0.95f);
