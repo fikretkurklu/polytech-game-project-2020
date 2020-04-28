@@ -130,7 +130,11 @@ public class Player extends Character {
 
 	@Override
 	public boolean pop(Direction dir) {
-//		m_model.m_room.setVillageEnv();
+		try {
+			m_model.setVillageEnv();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println("setVillageEnv");
 		return true;
 	}
