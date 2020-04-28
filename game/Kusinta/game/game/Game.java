@@ -52,14 +52,14 @@ public class Game {
 	Sound m_music;
 
 	Game() throws Exception {
-		m_controller = new Controller(this);
-		m_view = new View(m_controller);
-		m_model = new Model(m_view);
-		// creating frame
-		Dimension d = new Dimension(1024, 768);
-		m_frame = m_view.createFrame(d);
-		setupFrame();
-	}
+        Dimension d = new Dimension(1024, 768);
+        m_controller = new Controller(this);
+        m_view = new View(m_controller);
+        m_model = new Model(m_view, d.width, d.height);
+        // creating frame
+        m_frame = m_view.createFrame(d);
+        setupFrame();
+    }
 
 	/*
 	 * Then it lays out the frame, with a border layout, adding a label to the north

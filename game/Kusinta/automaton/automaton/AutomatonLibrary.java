@@ -11,7 +11,7 @@ public class AutomatonLibrary {
 	
 	public static String PATH = "resources/gal/";
 	
-	String files[] = {"automata.gal"}; // Nom des fichiers
+	String files[] = {"automata.gal", "Underworld.gal"}; // Nom des fichiers
 	LinkedList<String> automatonNames;
 	
 	
