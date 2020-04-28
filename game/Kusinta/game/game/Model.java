@@ -12,11 +12,13 @@ import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
+import automaton.Direction;
 import game.graphics.View;
 import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
 import underworld.Underworld;
+import village.Village;
 import player.Character;
 
 public class Model {
@@ -39,6 +41,7 @@ public class Model {
 	public Automaton playerSoulAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
+	public Village m_village;
 	boolean set = false;
 //	Opponent[] m_opponents;
 
@@ -53,6 +56,7 @@ public class Model {
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),new Direction("E"), this);
 		setCenterScreenPlayer();
+		setVillageEnv();
 	}
 	
 	private void switchPlayer() {
@@ -80,6 +84,11 @@ public class Model {
 			switchPlayer();
 		mode = UNDERWORLD;
 	}
+	
+	public void setVillageEnv() throws Exception {
+		m_village = new Village(m_width, m_height, this);
+		mode = VILLAGE;
+	}
 
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
@@ -95,6 +104,7 @@ public class Model {
 			break;
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
+			break;
 		}	
 	}
 
@@ -109,12 +119,13 @@ public class Model {
 			break;
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height);
+			break;
+		case VILLAGE:
+			m_village.paint(gp, width, height);
+			break;
 		}
 		m_player.paint(gp);
 		gp.dispose();
-			break;
-		case VILLAGE:
-			m_village.paint(g, m_width, m_height);
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
