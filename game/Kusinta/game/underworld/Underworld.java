@@ -169,12 +169,12 @@ public class Underworld {
 		}
 	}
 
-	public int blockBot(int x, int y) {
+	public Coord blockBot(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord().Y() + Element.SIZE;
+			return m_elements[n].getCoord();
 		} else {
-			return 0;
+			return null;
 		}
 	}
 
