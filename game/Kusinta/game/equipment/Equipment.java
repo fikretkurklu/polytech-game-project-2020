@@ -52,7 +52,8 @@ public abstract class Equipment {
 
 	/*
 	 * This method is used to apply a different multiplier to all Statistic of the
-	 * equipment
+	 * equipment (the price will evolve with the different multiplier encountered)
+	 * The weight and the rarity will not change with the different mutipliers
 	 * 
 	 */
 

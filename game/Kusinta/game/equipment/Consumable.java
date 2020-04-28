@@ -2,10 +2,6 @@ package equipment;
 
 
 public abstract class Consumable extends Equipment {
-
-	//TODO discussion sur les consommables
-	//Faut-il que le joueur vérifie à chaque tick s'il a des modication de stats ?
-	
 	
 	/*
 	 * Consumable grants the player a temporary bonus
@@ -29,7 +25,7 @@ public abstract class Consumable extends Equipment {
 	public void tick(long elapsed) {
 		if (inUse) {
 			duration += elapsed;
-			if (elapsed >= 1000) {
+			if (elapsed >= 10000) {
 				resetModification();
 				inUse = false;
 				duration = 0;
