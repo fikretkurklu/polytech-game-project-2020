@@ -9,11 +9,9 @@ public class HealthPotion extends Consumable {
 	 * 
 	 */
 	
-	private final static String imagePath = "";
-	
 	public HealthPotion() throws Exception {
 		super();
-		loadImage(imagePath);
+		setImagePath();
 	}
 
 	@Override
@@ -24,6 +22,11 @@ public class HealthPotion extends Consumable {
 	@Override
 	public void resetModification() {
 		statTable.put(Stats.Health, 0);
+	}
+
+	@Override
+	public void setImagePath() {
+		imagePath = "resources/Pixel Art Icon Pack - RPG/Potion/Red Potion 2.png";
 	}
 
 }

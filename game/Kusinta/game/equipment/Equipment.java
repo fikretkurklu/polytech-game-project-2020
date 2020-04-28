@@ -1,21 +1,15 @@
 package equipment;
 
-import java.awt.Image;
-import java.io.File;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
 
 import equipment.Stat.Stats;
 
 public abstract class Equipment {
 
-	public static final int SIZE = 86;
-
 	// This HashMap is used to contain the bonus that the equipment will give
 	protected HashMap<Stats, Integer> statTable;
-	protected Image __img;
-
+	protected String imagePath;
+	
 	/*
 	 * The equipment is built by randomly picking a rarity The rarity will affect
 	 * the object drop of stats The basic price and stats of an object depend of his
@@ -84,31 +78,21 @@ public abstract class Equipment {
 	public int getModification(Stats s) {
 		return statTable.get(s);
 	}
-
+	
 	/*
-	 * This method is used to load the image for the equipment and resize it to the
-	 * given size
-	 */
-
-	public void loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			__img = ImageIO.read(imageFile);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
-
-	/*
-	 * This method allow to resize the object to follow the window resize
+	 * This method is used to set the imagePath to the equipment imagePath
 	 * 
 	 */
-
-	public Image resize(int width, int height) {
-		if (__img.getHeight(null) != height || __img.getWidth(null) != width) {
-			__img = __img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-		}
-		return __img;
+	
+	public abstract void setImagePath();
+	
+	/*
+	 * This method is used to get the imagePath of the equipment
+	 * 
+	 */
+	
+	public String getImagePath() {
+		return imagePath;
 	}
 
 }
