@@ -71,7 +71,7 @@ public class Model {
 		
 		m_playerSave = new PlayerSoul(playerSoulAutomaton, 1000, 1000, 
 				new Direction("E"), this);
-		m_underworld = new Underworld(m_AL, m_width, m_height, (PlayerSoul) m_playerSave);
+		m_underworld = new Underworld(m_AL, m_width, m_height, (PlayerSoul) m_playerSave, this);
 		mode = ROOM;
 	}
 	
@@ -149,6 +149,10 @@ public class Model {
 			return images;
 		}
 		return null;
+	}
+	
+	public Character getPlayer() {
+		return m_player;
 	}
 
 }
