@@ -13,12 +13,15 @@ import javax.imageio.ImageIO;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity;
 import environnement.Element;
 import game.Coord;
 import game.Model;
 import player.Character;
 
-public class Ghost extends Element {
+public class Ghost extends Entity {
+	
+	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	Coord m_coord;
 	Model m_model;
@@ -33,10 +36,10 @@ public class Ghost extends Element {
 	boolean leftOrientation;
 	int m_image_index;
 	boolean isAttacking = false;
-	int m_range = 800;
+	int m_range = 300;
 	
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) {
-		super(false, true, coord, automaton);
+		super(automaton);
 		m_model = model;
 		m_coord = coord;
 		loadImage();
@@ -85,6 +88,10 @@ public class Ghost extends Element {
 
 	}
 
+	private Coord getCoord() {
+		return m_coord;
+	}
+
 	public static final int DISTANCE = 1;
 
 	@Override
@@ -116,44 +123,41 @@ public class Ghost extends Element {
 		int d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 				+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 		boolean flag = false;
-		if (m_direction.toString().equals("N") || m_direction.toString().equals("S")
-				|| m_direction.toString().equals("W") || m_direction.toString().equals("E")) {	
 			if (dir.toString().equals("W")) {
 				m_direction = new Direction("W");
-				m_coord.translateX(-d/50);
+				m_coord.translateX(-d/80);
 				leftOrientation = true;
 				flag = true;
 			}else if (dir.toString().equals("E")) {
-				m_direction = new Direction("E");
-				m_coord.translateX(d/50);
+				m_direction = dir;
+				m_coord.translateX(d/80);
 				leftOrientation = false;
 				flag = true;
 			}else if (dir.toString().equals("N")) {
 				m_direction = new Direction("N");
-				m_coord.translateY(-d/50);
+				m_coord.translateY(-d/80);
 				flag = true;
 			}else if (dir.toString().equals("S")) {
 				m_direction = new Direction("S");
-				m_coord.translateY(d/50);
+				m_coord.translateY(d/80);
 				flag = true;
 			}else if (dir.toString().equals("NE")) {
 				m_direction = new Direction("N");
-				m_coord.translate(-d/50, -d/50);
+				m_coord.translate(d/80, -d/80);
 				flag = true;
 			}else if (dir.toString().equals("NW")) {
 				m_direction = new Direction("N");
-				m_coord.translate(d/50, -d/50);
+				m_coord.translate(-d/80, -d/80);
 				flag = true;
 			}else if (dir.toString().equals("SW")) {
 				m_direction = new Direction("S");
-				m_coord.translate(-d/50, d/50);
+				m_coord.translate(-d/80, d/80);
 				flag = true;
 			}else if (dir.toString().equals("SE")) {
 				m_direction = new Direction("S");
-				m_coord.translate(d/50, d/50);
+				m_coord.translate(d/80, d/80);
 				flag = true;
 			}
-		}
 		return flag;
 	}
 /*		case "S":
@@ -226,35 +230,35 @@ public class Ghost extends Element {
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			if (dir.toString().equals("N")) {
 				d = m_coord.Y() - playerCoord.Y();
-				return (playerCoord.X() == m_coord.X()) && (0 <= d && d <= m_range);
+				return (playerCoord.X() == m_coord.X()) && (0 < d && d <= m_range);
 			}else if (dir.toString().equals("S")){
 				d = playerCoord.Y() - m_coord.Y();
-				return (playerCoord.X() == m_coord.X()) && (0 <= d && d <= m_range);
+				return (playerCoord.X() == m_coord.X()) && (0 < d && d <= m_range);
 			}else if (dir.toString().equals("E")) {
 				d = playerCoord.X() - m_coord.X();
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
+				return (playerCoord.Y() == m_coord.Y()) && (0 < d && d <= m_range);
 			}else if (dir.toString().equals("W")) {
 				d = m_coord.X() - playerCoord.X();
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
+				return (playerCoord.Y() == m_coord.Y()) && (0 < d && d <= m_range);
 			}else if (dir.toString().equals("N")) {
 				d = playerCoord.X() - m_coord.X();
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
+				return (playerCoord.Y() == m_coord.Y()) && (0 < d && d <= m_range);
 			}else if (dir.toString().equals("NE")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
-				return (playerCoord.Y() <= m_coord.Y()) && (playerCoord.X() <= m_coord.X()) && (d <= m_range);
+				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
 			}else if (dir.toString().equals("SE")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
+				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() > m_coord.X())  && (d <= m_range);
 			}else if (dir.toString().equals("SW")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
+				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() < m_coord.X())  && (d <= m_range);
 			}else if (dir.toString().equals("NW")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
+				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() < m_coord.X())  && (d <= m_range);
 			}
 		}
 		return false;
@@ -277,7 +281,7 @@ public class Ghost extends Element {
 	
 	public void attackMode() {
 		isAttacking = true;
-		m_range = m_range * 2;
+	//	m_range = m_range * 2;
 	}
 	
 	public void quitAttackMode() {
