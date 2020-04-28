@@ -7,18 +7,17 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Button {
+public abstract class Button {
 
 	Image m_img;
 	int m_width, m_height, m_x, m_y;
-	Village.ID_ENV ID;
 	
-	public Button(int x, int y, int w, int h, Village.ID_ENV id) {
+	
+	public Button(int x, int y, int w, int h) {
 		m_width = w;
 		m_height = h;
 		m_x = x;
 		m_y = y;
-		this.ID = id;
 	}
 	
 	public void paint(Graphics g) {
@@ -69,5 +68,7 @@ public class Button {
 		m_height = (int)(m_height / 1.2);
 		m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 	}
+	
+	public abstract void action() throws Exception;
 
 }

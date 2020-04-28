@@ -2,13 +2,11 @@ package game;
 
 import java.awt.Graphics;
 
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -30,7 +28,6 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	
 	Character m_player;
 	Character m_playerSave;
 	View m_view;
@@ -46,45 +43,46 @@ public class Model {
 //	Opponent[] m_opponents;
 
 	public Model(View view, int w, int h) throws Exception {
-        m_view = view;
-        m_width = w;
-        m_height = h;
+		m_view = view;
+		m_width = w;
+		m_height = h;
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		start();
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),new Direction("E"), this);
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
+				new Direction("E"), this);
 		setCenterScreenPlayer();
 		setVillageEnv();
 	}
-	
+
 	private void switchPlayer() {
 		Character tmp = m_player;
 		m_player = m_playerSave;
 		m_playerSave = tmp;
 	}
-	
+
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height);
-		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(), m_underworld.getStartCoord().Y(), 
-				new Direction("E"), this);
+		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
+				m_underworld.getStartCoord().Y(), new Direction("E"), this);
 		mode = ROOM;
 	}
 
 	public void setRoomEnv() throws Exception {
-			if (!(m_player instanceof Player))
-				switchPlayer();
+		if (!(m_player instanceof Player))
+			switchPlayer();
 		mode = ROOM;
 	}
-	
+
 	public void setUnderworldEnv() throws Exception {
 		if (!(m_player instanceof PlayerSoul))
 			switchPlayer();
 		mode = UNDERWORLD;
 	}
-	
+
 	public void setVillageEnv() throws Exception {
 		m_village = new Village(m_width, m_height, this);
 		mode = VILLAGE;
@@ -105,7 +103,7 @@ public class Model {
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
 			break;
-		}	
+		}
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -116,22 +114,23 @@ public class Model {
 		switch (mode) {
 		case ROOM:
 			m_room.paint(gp, width, height);
+			m_player.paint(gp);
 			break;
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height);
 			break;
 		case VILLAGE:
-			m_village.paint(gp, width, height);
+			m_village.paint(g, width, height);
 			break;
 		}
-		m_player.paint(gp);
+
 		gp.dispose();
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
 	}
-	
+
 	public void setPressed(int keyChar, boolean b) {
 		m_player.setPressed(keyChar, b);
 	}
@@ -158,11 +157,11 @@ public class Model {
 		}
 		return null;
 	}
-	
+
 	public int getXDecalage() {
 		return x_decalage;
 	}
-	
+
 	public int getYDecalage() {
 		return y_decalage;
 	}

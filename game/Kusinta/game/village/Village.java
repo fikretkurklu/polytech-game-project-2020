@@ -2,37 +2,29 @@ package village;
 
 import java.awt.Graphics;
 
-import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
-
 import game.Model;
 
 public class Village {
 
 	private double DIVISOR = 0.2;
-	
-	public static enum ID_ENV {
-		ADVENTURE,
-		INVENTORY,
-		MAGIC_SHOP,
-		WEAPON_SHOP,
-		INFIRMARY,
-		EQUIPEMENT,
-		DEFAULT
-	}
 
-	
-	private String IMAGE_WEAPON_SHOP = "resources/Village/HUD/weaponShopBG.jpg";
-	private String IMAGE_MAGIC_SHOP = "resources/Village/HUD/magicShopBG.jpg";
+	public static enum ID_ENV {
+		ADVENTURE, INVENTORY, MAGIC_SHOP, WEAPON_SHOP, INFIRMARY, DEFAULT
+	}
 
 	int m_width, m_height;
 
 	MenuPanel menuPanel;
 	VillagePanel villagePanel;
-	
+	WeaponPanel weaponPanel;
+	MagicPanel magicPanel;
+	InfirmaryPanel infirmaryPanel;
+	InventoryPanel inventoryPanel;
+
 	Button m_focus;
-	Model m_model;
-	
-	ID_ENV env;
+	static Model m_model;
+
+	static ID_ENV env;
 
 	public Village(int w, int h, Model model) {
 		m_width = w;
@@ -40,8 +32,11 @@ public class Village {
 		m_model = model;
 		menuPanel = new MenuPanel(0, 0, (int) (m_width * DIVISOR), m_height);
 		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 		setEnv(ID_ENV.DEFAULT);
-		
 	}
 
 	public boolean resized(int w, int h) {
@@ -50,6 +45,10 @@ public class Village {
 			m_height = h;
 			menuPanel.resized(0, 0, (int) (m_width * DIVISOR), m_height);
 			villagePanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+			weaponPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+			infirmaryPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+			magicPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+			inventoryPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 			return true;
 		}
 		return false;
@@ -62,11 +61,23 @@ public class Village {
 		case DEFAULT:
 			villagePanel.paint(g);
 			break;
+		case INFIRMARY:
+			infirmaryPanel.paint(g);
+			break;
+		case INVENTORY:
+			inventoryPanel.paint(g);
+			break;
+		case WEAPON_SHOP:
+			weaponPanel.paint(g);
+			break;
+		case MAGIC_SHOP:
+			magicPanel.paint(g);
+			break;
 		default:
 			villagePanel.paint(g);
 			break;
 		}
-		
+
 	}
 
 	public void mouseMoved(int x, int y) {
@@ -74,8 +85,26 @@ public class Village {
 		if (menuPanel.isInside(x, y)) {
 			b = menuPanel.mouseMoved(x, y);
 		} else {
-			
-			b = immagePanel.mouseMoved(x, y);
+			switch (env) {
+			case DEFAULT:
+				b = villagePanel.mouseMoved(x, y);
+				break;
+			case INFIRMARY:
+				b = infirmaryPanel.mouseMoved(x, y);
+				break;
+			case INVENTORY:
+				b = inventoryPanel.mouseMoved(x, y);
+				break;
+			case WEAPON_SHOP:
+				b = weaponPanel.mouseMoved(x, y);
+				break;
+			case MAGIC_SHOP:
+				b = magicPanel.mouseMoved(x, y);
+				break;
+			default:
+				b = null;
+				break;
+			}
 		}
 		if (b != m_focus) {
 			if (m_focus instanceof Button) {
@@ -90,28 +119,20 @@ public class Village {
 
 	public void Clicked() {
 		if (m_focus != null) {
-			setEnv(m_focus.ID);
+			try {
+				m_focus.action();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void setEnv(ID_ENV ID) {
-		switch (ID) {
-		case ADVENTURE:
-			break;
-		case INFIRMARY:
-			break;
-		case EQUIPEMENT:
-			break;
-		case WEAPON_SHOP:
-			immagePanel.setImage(IMAGE_WEAPON_SHOP);
-			break;
-		case MAGIC_SHOP:
-			immagePanel.setImage(IMAGE_MAGIC_SHOP);
-			break;
-		default:
-			immagePanel.setImage(IMAGE_VILLAGE);
-			break;
-		}
+	public static void setEnv(ID_ENV ID) {
 		env = ID;
+	}
+
+	public static void leaveVillage() throws Exception {
+		m_model.setRoomEnv();
 	}
 }
