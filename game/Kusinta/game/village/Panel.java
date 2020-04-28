@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
-public class Panel {
+public abstract class Panel {
 	int m_width, m_height;
 	int m_x, m_y;
 	LinkedList<Button> m_elem;
@@ -65,7 +65,6 @@ public class Panel {
 			File f = new File(path);
 			if (f == null)
 				System.out.println("Erreur while loading image at : " + path);
-
 			m_bg = ImageIO.read(f);
 			m_bg = m_bg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e) {

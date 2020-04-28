@@ -9,22 +9,22 @@ import javax.imageio.ImageIO;
 
 public class Button {
 
-	Village.ID_BUTTON ID;
 	Image m_img;
 	int m_width, m_height, m_x, m_y;
+	Village.ID_ENV ID;
 	
-	public Button(int x, int y, int w, int h, Village.ID_BUTTON id) {
+	public Button(int x, int y, int w, int h, Village.ID_ENV id) {
 		m_width = w;
 		m_height = h;
 		m_x = x;
 		m_y = y;
 		this.ID = id;
 	}
+	
 	public void paint(Graphics g) {
 		if (m_img != null) {
 			g.drawImage(m_img, m_x, m_y, null);
 		}
-		
 	}
 
 	@SuppressWarnings("unused")
@@ -33,7 +33,6 @@ public class Button {
 			File f = new File(path);
 			if (f == null)
 				System.out.println("Erreur while loading image at : "+ path);
-			
 			m_img = ImageIO.read(f);
 			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		} catch (IOException e) {
@@ -49,7 +48,6 @@ public class Button {
 		if (m_img != null) {
 			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
-		
 	}
 	
 	public Button mouseMoved(int x, int y) {
