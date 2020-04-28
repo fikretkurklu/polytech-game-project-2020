@@ -135,7 +135,6 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("setVillageEnv");
 		return true;
 	}
 
