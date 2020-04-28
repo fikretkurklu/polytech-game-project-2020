@@ -14,6 +14,7 @@ public abstract class Panel {
 	LinkedList<Button> m_elem;
 	Image m_bg;
 	protected Scroll m_scroll;
+	protected EquipementScroll m_EquipemenScroll;
 	
 	boolean focus;
 
@@ -50,6 +51,9 @@ public abstract class Panel {
 		if (m_scroll != null) {
 			m_scroll.resized(dw, dh);
 		}
+		if (m_EquipemenScroll != null) {
+			m_EquipemenScroll.resized(dw, dh);
+		}
 	}
 
 	public void paint(Graphics g) {
@@ -62,6 +66,9 @@ public abstract class Panel {
 		}
 		if (m_scroll != null) {
 			m_scroll.paint(bg);
+		}
+		if (m_EquipemenScroll != null) {
+			m_EquipemenScroll.paint(bg);
 		}
 		bg.dispose();
 	}

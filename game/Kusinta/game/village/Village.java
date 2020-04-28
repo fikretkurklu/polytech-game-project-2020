@@ -3,6 +3,7 @@ package village;
 import java.awt.Graphics;
 
 import game.Model;
+import player.Player;
 
 public class Village {
 
@@ -23,16 +24,16 @@ public class Village {
 
 	Button m_focus;
 	static Model m_model;
-
+ 
 	static ID_ENV env;
 
-	public Village(int w, int h, Model model) {
+	public Village(int w, int h, Model model, Player p) {
 		m_width = w;
 		m_height = h;
 		m_model = model;
 		menuPanel = new MenuPanel(0, 0, (int) (m_width * DIVISOR), m_height);
 		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
-		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
