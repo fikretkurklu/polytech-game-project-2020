@@ -33,7 +33,7 @@ public class Ghost extends Element {
 	boolean leftOrientation;
 	int m_image_index;
 	boolean isAttacking = false;
-	int m_range = 400;
+	int m_range = 800;
 	
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) {
 		super(false, true, coord, automaton);
@@ -136,6 +136,22 @@ public class Ghost extends Element {
 				m_direction = new Direction("S");
 				m_coord.translateY(d/50);
 				flag = true;
+			}else if (dir.toString().equals("NE")) {
+				m_direction = new Direction("N");
+				m_coord.translate(-d/50, -d/50);
+				flag = true;
+			}else if (dir.toString().equals("NW")) {
+				m_direction = new Direction("N");
+				m_coord.translate(d/50, -d/50);
+				flag = true;
+			}else if (dir.toString().equals("SW")) {
+				m_direction = new Direction("S");
+				m_coord.translate(-d/50, d/50);
+				flag = true;
+			}else if (dir.toString().equals("SE")) {
+				m_direction = new Direction("S");
+				m_coord.translate(d/50, d/50);
+				flag = true;
 			}
 		}
 		return flag;
@@ -220,6 +236,25 @@ public class Ghost extends Element {
 			}else if (dir.toString().equals("W")) {
 				d = m_coord.X() - playerCoord.X();
 				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
+			}else if (dir.toString().equals("N")) {
+				d = playerCoord.X() - m_coord.X();
+				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
+			}else if (dir.toString().equals("NE")) {
+				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				return (playerCoord.Y() <= m_coord.Y()) && (playerCoord.X() <= m_coord.X()) && (d <= m_range);
+			}else if (dir.toString().equals("SE")) {
+				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
+			}else if (dir.toString().equals("SW")) {
+				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
+			}else if (dir.toString().equals("NW")) {
+				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range) && (d <= m_range);
 			}
 		}
 		return false;

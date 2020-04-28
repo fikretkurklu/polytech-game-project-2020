@@ -33,13 +33,14 @@ public class Underworld {
 	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
-	
+	Model m_model;
 	PlayerSoul m_player;
 	
 	
 	
 
-	public Underworld(AutomatonLibrary AL, int width, int height, PlayerSoul player, Model m_model) {
+	public Underworld(AutomatonLibrary AL, int width, int height, PlayerSoul player, Model model) {
+		m_model = model;
 		m_al = AL;
 		m_width = width;
 		m_height = height;
