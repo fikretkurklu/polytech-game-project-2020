@@ -2,11 +2,14 @@ package automaton;
 
 import automaton.Automaton;
 import automaton.State;
+import game.Coord;
 
 public abstract class Entity {
 
 	private State m_state;
 	protected Automaton m_automaton;
+	
+	protected Coord m_coord;
 	
 	public Entity() {}
 	

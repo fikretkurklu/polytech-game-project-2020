@@ -2,22 +2,22 @@ Player_donjon(Init){
   * (Init)
   | Cell(H,A) ? Power() : (Init)       
   | ! GotPower() ? Explode () : ()     
-  | Key(z) ? Jump: (Jumping)
+  | Key(SPACE) ? Egg() : (Doing)
+  | Key(z) ? Jump: (Doing)
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
-  | Key(SPACE) ? Egg() : (Init)
   | Key(v) ? Pop() : (Init)    
   
-  * (Jumping)
+  * (Doing)
   | Cell(H,A) ? Power() : (Init)       
-  | ! GotPower() ? Explode () : ()     
+  | ! GotPower() ? Explode () : ()  
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
-  | Key(SPACE) ? Egg() : (Init)
   | Key(v) ? Pop() : (Init)  
-  | Key(z) ? Jump: (Jumping)
+  | Key(z) ? Jump: (Doing)
+  | Key(SPACE) ? Egg() : (Doing)
 }
 
 Block (Inactif) {                
@@ -28,7 +28,7 @@ Block (Inactif) {
 Fleche (Init) {
   *(Init)
   | Cell(H,V) ? Move : (Init)
-  | Cell(H,_) ? Explode : ( )
+  | Cell(H,_) ? Explode() : ()
 }
 
 Decor (Inactif) {                

@@ -50,6 +50,14 @@ public class Coord {
 		y += dy;
 	}
 	
+	public void translateX(int dx) {
+		x += dx;
+	}
+	
+	public void translateY(int dy) {
+		y += dy;
+	}
+	
 	
 	
 }

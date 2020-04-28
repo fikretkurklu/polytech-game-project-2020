@@ -15,7 +15,7 @@ import game.Coord;
  * Cette classe abstraite représente la base d'un élément affiché dans la salle, 
  * avec son image, ses coordonnées, ainsi que 2 booléen __isVisible et __isSolid
  * __image contient le sprite de l'élément
- * __coord contient les coordonnées de l'élément dans la room
+ * m_coord contient les coordonnées de l'élément dans la room
  * __isVisible permet de savoir si l'élément doit être affiché à l'écran
  * __isSolide permet de savoir si l'élément peut être traversé
  * 
@@ -26,20 +26,19 @@ public abstract class Element extends Entity{
 	public static final int SIZE = 86;
 
 	protected Image __image;
-	private Coord __coord;
 	protected boolean __isVisible;
 	protected boolean __isSolid;
 	
 	
 	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton) {
 		super(automaton);
-		__coord = coord;
+		m_coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
 	
 	public Element(boolean isSolid, boolean isVisible, Coord coord) {
-		__coord = coord;
+		m_coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
@@ -64,11 +63,11 @@ public abstract class Element extends Entity{
 	}
 	
 	public void setCoord(Coord coord) {
-		__coord = coord;
+		m_coord = coord;
 	}
 
 	public Coord getCoord() {
-		return __coord;
+		return m_coord;
 	}
 	
 	public void paint(Graphics g) {
