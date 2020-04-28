@@ -135,7 +135,6 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("setVillageEnv");
 		return true;
 	}
 
@@ -201,10 +200,12 @@ public class Player extends Character {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
 			if (pressed) {
+				if(!shooting && !falling && !moving)
+					m_image_index = 8;
 				moving = true;
 			} else {
 				moving = false;
-				if(!falling && shooting && m_image_index > 7)
+				if (!falling && shooting && m_image_index > 7)
 					m_image_index = m_image_index - 6;
 			}
 		}
@@ -217,10 +218,12 @@ public class Player extends Character {
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
 			if (pressed) {
+				if(!shooting && !falling && !moving)
+					m_image_index = 8;
 				moving = true;
 			} else {
 				moving = false;
-				if(!falling && shooting && m_image_index > 7)
+				if (!falling && shooting && m_image_index > 7)
 					m_image_index = m_image_index - 6;
 			}
 		}
@@ -326,7 +329,7 @@ public class Player extends Character {
 					shoot();
 					shooting = false;
 				}
-				if(m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
+				if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
 					shoot();
 					shooting = false;
 				}
@@ -360,7 +363,7 @@ public class Player extends Character {
 
 			BufferedImage img;
 			if (shooting) {
-				if(m_image_index > 12)
+				if (m_image_index > 12)
 					m_image_index = 9;
 				img = bIShooting[m_image_index];
 			} else {
