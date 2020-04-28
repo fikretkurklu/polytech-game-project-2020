@@ -154,9 +154,10 @@ public class Player extends Character {
 				jumping = false;
 				t = (long) 0.1;
 				m_time = t;
-				if (!shooting)
-					m_image_index = 23;
 			}
+
+			if (!jumping && !shooting)
+				m_image_index = 23;
 
 			double C;
 			if (jumping) {
@@ -178,7 +179,7 @@ public class Player extends Character {
 
 		long now = System.currentTimeMillis();
 
-		if (now - m_shot_time > m_attackSpeed) {
+		if (now - m_shot_time > m_attackSpeed && !shooting) {
 
 			shooting = true;
 
@@ -200,7 +201,7 @@ public class Player extends Character {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
 			if (pressed) {
-				if(!shooting && !falling && !moving)
+				if (!shooting && !falling && !moving)
 					m_image_index = 8;
 				moving = true;
 			} else {
@@ -218,7 +219,7 @@ public class Player extends Character {
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
 			if (pressed) {
-				if(!shooting && !falling && !moving)
+				if (!shooting && !falling && !moving)
 					m_image_index = 8;
 				moving = true;
 			} else {
@@ -230,7 +231,6 @@ public class Player extends Character {
 		if (keyCode == Controller.K_SPACE) {
 			espPressed = pressed;
 			if (pressed) {
-				shooting = true;
 				if (!shooting) {
 					if (jumping || falling || moving) {
 						m_image_index = 9;
@@ -238,6 +238,7 @@ public class Player extends Character {
 						m_image_index = 2;
 					}
 				}
+				shooting = true;
 			}
 		}
 		if (keyCode == Controller.K_A)
@@ -252,20 +253,17 @@ public class Player extends Character {
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
 			return qPressed;
-		}
-		if (keyCode == Controller.K_Z) {
+		}else if (keyCode == Controller.K_Z) {
 			return zPressed;
-		}
-		if (keyCode == Controller.K_D) {
+		} else if (keyCode == Controller.K_D) {
 			return dPressed;
-		}
-		if (keyCode == Controller.K_SPACE)
+		}else if (keyCode == Controller.K_SPACE) {
 			return espPressed;
-		if (keyCode == Controller.K_A)
+		}else if (keyCode == Controller.K_A) {
 			return aPressed;
-		if (keyCode == Controller.K_E)
+		}else if (keyCode == Controller.K_E) {
 			return ePressed;
-		if (keyCode == Controller.K_V)
+		} else if (keyCode == Controller.K_V)
 			return vPressed;
 		return false;
 	}
@@ -300,6 +298,11 @@ public class Player extends Character {
 
 		if (!moving && !falling) {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			m_coord.setY(topBlock);
+		}
+		if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - m_height / 2)) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - m_height / 2);
+			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 		}
 
@@ -405,35 +408,39 @@ public class Player extends Character {
 	}
 
 	public void shoot() {
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y() - m_height / 2;
+		if (shooting) {
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y() - m_height / 2;
 
-		Direction direc;
-		float angle;
-		double r;
-		int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-		int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+			Direction direc;
+			float angle;
+			double r;
+			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
 
-		int x = mouse_x - m_x;
-		int y = m_y - mouse_y;
+			int x = mouse_x - m_x;
+			int y = m_y - mouse_y;
 
-		if (mouse_x > m_x) {
-			direc = new Direction("E");
-		} else {
-			direc = new Direction("W");
-		}
+			if (mouse_x > m_x) {
+				direc = new Direction("E");
+			} else {
+				direc = new Direction("W");
+			}
 
-		r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-		angle = (float) Math.asin(Math.abs(y) / r);
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			angle = (float) Math.asin(Math.abs(y) / r);
 
-		if (mouse_y > m_y) {
-			angle = -angle;
-		}
+			if (mouse_y > m_y) {
+				angle = -angle;
+			}
+			
+			shooting = false;
 
-		try {
-			addProjectile(m_x, m_y, angle, this, direc);
-		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				addProjectile(m_x, m_y, angle, this, direc);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
