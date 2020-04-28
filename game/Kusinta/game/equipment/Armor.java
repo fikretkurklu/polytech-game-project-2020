@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class Armor extends Equipment {
@@ -16,6 +17,11 @@ public class Armor extends Equipment {
 	@Override
 	public void setImagePath() {
 		imagePath = "resources/Equipment/Stuff/Iron Armor.png";	
+	}
+	
+	
+	public Stuff toStuff() {
+		return Stuff.Armor;
 	}
 	
 }

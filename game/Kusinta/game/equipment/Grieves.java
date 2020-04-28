@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class Grieves extends Equipment {
@@ -16,5 +17,11 @@ public class Grieves extends Equipment {
 	@Override
 	public void setImagePath() {
 		imagePath = "resources/Equipment/Stuff/Iron Boot.png";
+	}
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return Stuff.Grieves;
 	}
 }

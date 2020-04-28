@@ -2,6 +2,7 @@ package equipment;
 
 import java.util.HashMap;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public abstract class Equipment {
@@ -101,5 +102,7 @@ public abstract class Equipment {
 	public String getImagePath() {
 		return imagePath;
 	}
+	
+	public abstract Stuff toStuff();
 	
 }

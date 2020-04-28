@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class LongBow extends Equipment {
@@ -22,5 +23,11 @@ public class LongBow extends Equipment {
 	@Override
 	public void setImagePath() {
 		imagePath = "resources/Equipment/Stuff/Bow.png";
+	}
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return Stuff.LongBow;
 	}
 }

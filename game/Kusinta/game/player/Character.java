@@ -5,11 +5,15 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import equipment.Equipment;
+import equipment.EquipmentManager;
+import equipment.EquipmentManager.Stuff;
 import game.Coord;
 import game.Model;
 import projectile.Projectile;
@@ -23,15 +27,18 @@ public abstract class Character extends Entity {
 	int m_life;
 	protected int m_resistance, m_strength, m_attackSpeed;
 	protected int m_slowness;
-	
+
 	int m_width, m_height;
-	
+
 	protected LinkedList<Projectile> m_projectiles;
 
 	BufferedImage[] bI;
-	protected int m_image_index;	
+	protected int m_image_index;
 
 	Rectangle hitBox;
+
+	int m_money;
+	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
@@ -52,21 +59,29 @@ public abstract class Character extends Entity {
 		m_model = model;
 		
 		m_image_index = 0;
+		
+		m_equipments = new HashMap<>();
+		
+		Stuff[] stuffTable = Stuff.values();
+		
+		for(int i = 0; i < stuffTable.length; i++) {
+			m_equipments.put(stuffTable[i], null);
+		}
 	}
-	
+
 	public Coord getCoord() {
 		return m_coord;
 	}
-	
+
 	public Direction getDirection() {
 		return m_direction;
 	}
-	
+
 	public Model getModel() {
 		return m_model;
 	}
-	
-	public LinkedList<Projectile> getProjectiles(){
+
+	public LinkedList<Projectile> getProjectiles() {
 		return m_projectiles;
 	}
 
@@ -92,13 +107,13 @@ public abstract class Character extends Entity {
 			m_life = l;
 		}
 	}
-	
+
 	public void setResistance(int resistance) {
-			m_resistance= resistance;
+		m_resistance = resistance;
 	}
-	
+
 	public void setStrength(int strength) {
-			m_strength = strength;
+		m_strength = strength;
 	}
 
 	public abstract void tick(long elapsed);
@@ -106,5 +121,6 @@ public abstract class Character extends Entity {
 	public abstract void paint(Graphics gp);
 
 	public abstract void setPressed(int keyChar, boolean b);
+	
 
 }
