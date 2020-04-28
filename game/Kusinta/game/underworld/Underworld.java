@@ -9,11 +9,14 @@ import java.io.FileReader;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
+import automaton.Direction;
 import game.Coord;
+import game.Model;
 import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 1;
+	public final static int MAX_GHOSTS = 1;
 
 	AutomatonLibrary m_al;
 	String mapFile;
@@ -24,35 +27,40 @@ public class Underworld {
 	int nbRow;
 	int nbCol;
 	Cloud[] m_clouds;
+	Ghost[] m_ghosts;
 	UnderworldEmptySpaceImageManager ESIM;
 	UndInnerWallManager UIWM;
-	Automaton cloudAutomaton, wallAutomaton;
+	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
-	
+	Model m_model;
 	
 	
 
-	public Underworld(AutomatonLibrary AL, int width, int height) {
+	public Underworld(AutomatonLibrary AL, int width, int height, Model model) {
+		m_model = model;
 		m_al = AL;
 		m_width = width;
 		m_height = height;
-		startCoord = new Coord();
+		startCoord = new Coord(1150, 1500);
 		ambiance = (int) (Math.random() * UnderworldParam.nbAmbiance) + 1;
 		BufferedReader f;
 		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
 		UWIM = new UndWallImageManager(ambiance);
 		UIWM = new UndInnerWallManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
+		m_ghosts = new Ghost[MAX_GHOSTS];
 		m_AL = AL;
 		try {
 			wallAutomaton = m_AL.getAutomaton("Block");
 			cloudAutomaton = m_AL.getAutomaton("Cloud");
+			ghostAutomaton = m_AL.getAutomaton("Ghost");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		generateClouds(m_clouds);
+		generateGhosts(m_ghosts);
 		try {
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
@@ -74,6 +82,14 @@ public class Underworld {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void generateGhosts(Ghost[] ghosts) {
+		String[] dirs = {"N", "E", "W", "S"};
+		// new Direction(dirs[(int) (Math.random()*dirs.length)]
+		for (int i = 0; i < ghosts.length; i++) {
+			ghosts[i] = new Ghost(new Direction("W"), new Coord(770, 190), ghostAutomaton, m_model);
 		}
 	}
 
@@ -128,6 +144,9 @@ public class Underworld {
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
+		for(int i = 0; i < m_ghosts.length; i++) {
+			m_ghosts[i].paint(g);
+		}
 	}
 
 	public Coord getStartCoord() {
@@ -145,6 +164,10 @@ public class Underworld {
 				m_clouds[i].tick(elapsed);
 				m_clouds[i].getAutomaton().step(m_clouds[i]);
 			}
+		}
+		for (int i = 0; i < m_ghosts.length; i++) {
+			m_ghosts[i].tick(elapsed);
+			m_ghosts[i].getAutomaton().step(m_ghosts[i]);
 		}
 	}
 

@@ -64,7 +64,7 @@ public class Model {
 	
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
-		m_underworld = new Underworld(m_AL, m_width, m_height);
+		m_underworld = new Underworld(m_AL, m_width, m_height, this);
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(), m_underworld.getStartCoord().Y(), 
@@ -146,6 +146,10 @@ public class Model {
 			return images;
 		}
 		return null;
+	}
+	
+	public Character getPlayer() {
+		return m_player;
 	}
 
 }

@@ -17,3 +17,19 @@ PlayerSoul (Visible){
   | Key(SPACE) ? Jump : (Visible)
   | Key(v) ? Egg : (Visible)
 }
+
+Ghost (State1){
+	*(State1)
+  | Cell(N, @) ? : (State1)
+  | Cell(S, @) ? : (State1)
+  | Cell(E, @) ? : (State1)
+  | Cell(W, @) ? : (State1)
+  | Closest(@, N) ? Pop(N) : (State1)
+  | Closest(@, W) ? Pop(W) : (State1)
+  | Closest(@, S) ? Pop(S) : (State1)
+  | Closest(@, E) ? Pop(E) : (State1)
+  | Cell(F, O) ? Turn : (ExtraMove)  
+  | True ? Move : (State1)
+  *(ExtraMove)
+  |True ? Move :(State1)
+}

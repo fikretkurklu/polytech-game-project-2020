@@ -42,7 +42,7 @@ public class PlayerSoul extends Character {
 	
 	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
-		hidden = false;
+		hidden = false;		
 		loadImage();
 		xHitbox = new int[4];
 		yHitbox = new int[4];
