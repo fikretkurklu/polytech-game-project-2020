@@ -10,11 +10,10 @@ public class StatPotion extends Consumable {
 	 */
 	
 	int statChoice;
-	private final static String imagePath = "";
 
 	public StatPotion() throws Exception {
 		super();
-		loadImage(imagePath);
+		setImagePath();
 		statChoice = (int) (Math.random() * 3);
 	}
 
@@ -44,6 +43,16 @@ public class StatPotion extends Consumable {
 			statTable.put(Stats.AttackSpeed, 0);
 		}
 
+	}
+
+	@Override
+	public void setImagePath() {
+		imagePath = "resources/Pixel Art Icon Pack - RPG/Potion/Green Potion 2.png";
+	}
+
+	@Override
+	public String getImagePath() {
+		return imagePath;
 	}
 
 }
