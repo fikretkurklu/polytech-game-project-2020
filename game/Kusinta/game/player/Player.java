@@ -51,8 +51,9 @@ public class Player extends Character {
 
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
-		
-		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height + 3 * DIMENSION), 2 * (m_width / 2 + 3 * DIMENSION), m_height + 3 * DIMENSION);
+
+		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height + 3 * DIMENSION),
+				2 * (m_width / 2 + 3 * DIMENSION), m_height + 3 * DIMENSION);
 
 		m_shot_time = System.currentTimeMillis();
 
@@ -75,9 +76,9 @@ public class Player extends Character {
 		if (random < m_slowness) {
 
 			moving = true;
-			
-			if(shooting) {
-				if(m_image_index<= 5)
+
+			if (shooting) {
+				if (m_image_index <= 5)
 					m_image_index = m_image_index + 6;
 			}
 
@@ -89,8 +90,9 @@ public class Player extends Character {
 			}
 
 			if (dir.toString().equals("E")) {
-				if (!checkBlock((hitBox.x+hitBox.width), m_y - 1) && !checkBlock((hitBox.x+hitBox.width), m_y - m_height)
-						&& !checkBlock((hitBox.x+hitBox.width), m_y - m_height / 2)) {
+				if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
 					m_x += SPEED_WALK;
 					m_coord.setX(m_x);
 					hitBox.translate(SPEED_WALK, 0);
@@ -114,8 +116,8 @@ public class Player extends Character {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
-			if(shooting) {
-				if(m_image_index<= 5)
+			if (shooting) {
+				if (m_image_index <= 5)
 					m_image_index = m_image_index + 6;
 			}
 			if (!shooting)
@@ -128,21 +130,25 @@ public class Player extends Character {
 
 	@Override
 	public boolean pop(Direction dir) {
-		// m_model.m_room.setupVillageMode();
-		System.out.println("setupVillageMode");
+		try {
+			m_model.setVillageEnv();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
 
 	private void gravity(long t) {
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x+hitBox.width) - 1, m_coord.Y())
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
 				&& !checkBlock(hitBox.x - 2, m_coord.Y()) || falling) {
 
 			falling = true;
 
-			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock((hitBox.x+hitBox.width) - 2, m_coord.Y() - m_height)
+			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
+					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
 					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
 				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
-				hitBox.translate(0, -(m_coord.Y()-botBlock));
+				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
 				jumping = false;
@@ -160,7 +166,7 @@ public class Player extends Character {
 			}
 
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
-			hitBox.translate(0, -(m_coord.Y()-newY));
+			hitBox.translate(0, -(m_coord.Y() - newY));
 			m_coord.setY(newY);
 		} else {
 			m_time = 0;
@@ -175,7 +181,7 @@ public class Player extends Character {
 		if (now - m_shot_time > m_attackSpeed) {
 
 			shooting = true;
-			
+
 			if (jumping || falling || moving) {
 				m_image_index = 9;
 			} else {
@@ -194,9 +200,13 @@ public class Player extends Character {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
 			if (pressed) {
+				if(!shooting && !falling && !moving)
+					m_image_index = 8;
 				moving = true;
 			} else {
 				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
 			}
 		}
 		if (keyCode == Controller.K_Z) {
@@ -208,21 +218,26 @@ public class Player extends Character {
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
 			if (pressed) {
+				if(!shooting && !falling && !moving)
+					m_image_index = 8;
 				moving = true;
 			} else {
 				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
 			}
 		}
 		if (keyCode == Controller.K_SPACE) {
 			espPressed = pressed;
 			if (pressed) {
 				shooting = true;
-				if (jumping || falling || moving) {
-					m_image_index = 9;
-				} else {
-					m_image_index = 2;
+				if (!shooting) {
+					if (jumping || falling || moving) {
+						m_image_index = 9;
+					} else {
+						m_image_index = 2;
+					}
 				}
-
 			}
 		}
 		if (keyCode == Controller.K_A)
@@ -258,7 +273,7 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x+hitBox.width) - 1, m_coord.Y())
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
 				&& !checkBlock(hitBox.x + 1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
@@ -271,7 +286,7 @@ public class Player extends Character {
 				gravity(m_time);
 		} else if (falling) {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			hitBox.translate(0, -(m_coord.Y()-topBlock));
+			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
@@ -279,16 +294,16 @@ public class Player extends Character {
 			jumping = false;
 			falling = false;
 			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			hitBox.translate(0, -(m_coord.Y()-botBlock));
+			hitBox.translate(0, -(m_coord.Y() - botBlock));
 			m_coord.setY(botBlock);
 		}
-		
-		if(!moving && !falling) {
+
+		if (!moving && !falling) {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			m_coord.setY(topBlock);
 		}
-		
-		if(shooting) {
+
+		if (shooting) {
 			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
 			Direction direc;
 
@@ -297,7 +312,7 @@ public class Player extends Character {
 			} else {
 				direc = new Direction("W");
 			}
-			
+
 			turn(direc);
 		}
 
@@ -307,14 +322,17 @@ public class Player extends Character {
 
 			if (shooting) {
 				m_image_index++;
-				if ((moving || falling) && m_image_index > 12) {
+				if ((moving || falling || jumping) && m_image_index > 12) {
 					shoot();
 					shooting = false;
-				} else if(m_image_index > 6 && !falling && !moving) {
+				} else if (m_image_index > 6 && !falling && !moving) {
 					shoot();
 					shooting = false;
 				}
-				System.out.println("m_image_index = " + m_image_index);
+				if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
+					shoot();
+					shooting = false;
+				}
 			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
@@ -323,7 +341,6 @@ public class Player extends Character {
 					m_image_index = 22;
 				if (m_image_index >= 22)
 					m_image_index = 22;
-				System.out.println(m_image_index);
 			} else if (moving) {
 				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
 				if (m_image_index < 8)
@@ -346,6 +363,8 @@ public class Player extends Character {
 
 			BufferedImage img;
 			if (shooting) {
+				if (m_image_index > 12)
+					m_image_index = 9;
 				img = bIShooting[m_image_index];
 			} else {
 				img = bI[m_image_index];
@@ -361,7 +380,7 @@ public class Player extends Character {
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
-				
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
 
 			((Arrow) m_projectiles.get(i)).paint(g);
@@ -412,16 +431,16 @@ public class Player extends Character {
 		}
 
 		try {
-			m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this, direc));
+			addProjectile(m_x, m_y, angle, this, direc);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
 		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
 	}
-	
+
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
 	}

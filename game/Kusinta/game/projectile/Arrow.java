@@ -1,10 +1,8 @@
 package projectile;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -43,7 +41,7 @@ public class Arrow extends Projectile {
 			hitBox = new Coord((int) (m_coord.X() - (m_width / 2) * Math.cos(m_angle)),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		}
-		
+
 		m_dead_time = 0;
 
 		moving = 0;
@@ -115,5 +113,5 @@ public class Arrow extends Projectile {
 		}
 		return c;
 	}
-	
+
 }
