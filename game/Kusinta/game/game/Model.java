@@ -155,5 +155,6 @@ public class Model {
 	public int getYDecalage() {
 		return y_decalage;
 	}
-
+	
+	
 }

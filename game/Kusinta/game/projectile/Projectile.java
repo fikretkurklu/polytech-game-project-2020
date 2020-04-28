@@ -1,6 +1,7 @@
 package projectile;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -30,8 +31,11 @@ public abstract class Projectile extends Entity {
 	
 	protected float m_alpha;
 	
+	protected Coord hitBox;
 	
-	Image image;
+	protected BufferedImage bImage;
+	
+	protected Image image;
 
 	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);

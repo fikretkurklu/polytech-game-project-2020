@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
 
 import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
+import projectile.Projectile;
 import environnement.Element;
 
 public class Player extends Character {
@@ -75,6 +75,11 @@ public class Player extends Character {
 		if (random < m_slowness) {
 
 			moving = true;
+			
+			if(shooting) {
+				if(m_image_index<= 5)
+					m_image_index = m_image_index + 6;
+			}
 
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
@@ -109,6 +114,10 @@ public class Player extends Character {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
+			if(shooting) {
+				if(m_image_index<= 5)
+					m_image_index = m_image_index + 6;
+			}
 			if (!shooting)
 				m_image_index = 16;
 			m_time = m_ratio_y;
@@ -132,7 +141,9 @@ public class Player extends Character {
 
 			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock((hitBox.x+hitBox.width) - 2, m_coord.Y() - m_height)
 					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
-				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height);
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				hitBox.translate(0, -(m_coord.Y()-botBlock));
+				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
 				jumping = false;
 				t = (long) 0.1;
@@ -186,9 +197,6 @@ public class Player extends Character {
 				moving = true;
 			} else {
 				moving = false;
-				if(shooting && !falling) {
-					m_image_index = m_image_index - 7;
-				}
 			}
 		}
 		if (keyCode == Controller.K_Z) {
@@ -267,14 +275,17 @@ public class Player extends Character {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			if(shooting && !moving)
-				m_image_index = m_image_index - 7;
 		} else {
 			jumping = false;
 			falling = false;
 			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y()-botBlock));
 			m_coord.setY(botBlock);
+		}
+		
+		if(!moving && !falling) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			m_coord.setY(topBlock);
 		}
 		
 		if(shooting) {
@@ -324,7 +335,7 @@ public class Player extends Character {
 		m_automaton.step(this);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			m_projectiles.get(i).tick(elapsed);
+			((Arrow) m_projectiles.get(i)).tick(elapsed);
 		}
 	}
 
@@ -350,21 +361,10 @@ public class Player extends Character {
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
-
-		LinkedList<Arrow> listIndexToRemove = new LinkedList<Arrow>();
-
+				
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			long now = System.currentTimeMillis();
 
 			((Arrow) m_projectiles.get(i)).paint(g);
-
-			if (now - m_projectiles.get(i).getDeadTime() > 5000 && m_projectiles.get(i).getState() == 2) {
-				listIndexToRemove.add((Arrow) m_projectiles.get(i));
-			}
-		}
-
-		for (int i = 0; i < listIndexToRemove.size(); i++) {
-			m_projectiles.remove(listIndexToRemove.get(i));
 
 		}
 	}
@@ -416,6 +416,14 @@ public class Player extends Character {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
+		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
+	}
+	
+	public void removeProjectile(Projectile projectile) {
+		m_projectiles.remove(projectile);
 	}
 
 }
