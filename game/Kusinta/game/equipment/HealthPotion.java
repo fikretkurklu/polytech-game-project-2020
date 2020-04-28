@@ -9,8 +9,11 @@ public class HealthPotion extends Consumable {
 	 * 
 	 */
 	
-	public HealthPotion() {
+	private final static String imagePath = "";
+	
+	public HealthPotion() throws Exception {
 		super();
+		loadImage(imagePath);
 	}
 
 	@Override

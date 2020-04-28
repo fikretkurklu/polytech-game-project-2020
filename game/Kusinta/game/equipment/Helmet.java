@@ -4,9 +4,11 @@ import equipment.Stat.Stats;
 
 public class Helmet extends Equipment{
 
-	public Helmet() {
+	private final static String imagePath = "";
+	
+	public Helmet() throws Exception {
 		super();
-		
+		loadImage(imagePath);
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 100+50*rarity);
 		statTable.put(Stats.Weight, 100-10*rarity);

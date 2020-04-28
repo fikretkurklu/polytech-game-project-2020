@@ -10,9 +10,11 @@ public class StatPotion extends Consumable {
 	 */
 	
 	int statChoice;
+	private final static String imagePath = "";
 
-	public StatPotion() {
+	public StatPotion() throws Exception {
 		super();
+		loadImage(imagePath);
 		statChoice = (int) (Math.random() * 3);
 	}
 

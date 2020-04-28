@@ -94,7 +94,6 @@ public abstract class Equipment {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			__img = ImageIO.read(imageFile);
-			__img = __img.getScaledInstance(SIZE, SIZE, java.awt.Image.SCALE_SMOOTH);
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
@@ -105,10 +104,11 @@ public abstract class Equipment {
 	 * 
 	 */
 
-	public void resize(int width, int height) {
+	public Image resize(int width, int height) {
 		if (__img.getHeight(null) != height || __img.getWidth(null) != width) {
 			__img = __img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
 		}
+		return __img;
 	}
 
 }

@@ -8,9 +8,12 @@ public class LongBow extends Equipment {
 	 * The LongBow is a dealing good damage but his attack speed is low
 	 * 
 	 */
+
+	private final static String imagePath = "";
 	
-	public LongBow() {
+	public LongBow() throws Exception {
 		super();
+		loadImage(imagePath);
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
 		statTable.put(Stats.Weight, 100-10*rarity);
