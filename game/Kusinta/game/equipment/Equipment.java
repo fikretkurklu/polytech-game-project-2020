@@ -101,23 +101,5 @@ public abstract class Equipment {
 	public String getImagePath() {
 		return imagePath;
 	}
-
-	/*
-	 * This method resets all the stats used by the consumable to 0
-	 * 
-	 */
-	
-	public void resetModification() {
-		Stats[] statistic = Stats.values();
-		for (int i = 0; i < statistic.length - 1; i++) {
-			Stats s = statistic[i];
-			if (s != null) {
-				int val_init = statTable.get(s);
-				if (!s.equals(Stats.Rarity)) {
-					statTable.put(s, -val_init);
-				}
-			}
-		}
-	}
 	
 }

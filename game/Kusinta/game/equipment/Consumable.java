@@ -51,6 +51,13 @@ public abstract class Consumable extends Equipment {
 	 */
 
 	public abstract void setModification();
+	
+	/*
+	 * This method resets all the stats used by the consumable to 0
+	 * 
+	 */
+	
+	public abstract void resetModification();
 		
 
 }
