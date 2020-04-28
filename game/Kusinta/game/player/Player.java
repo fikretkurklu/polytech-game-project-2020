@@ -314,7 +314,6 @@ public class Player extends Character {
 					shoot();
 					shooting = false;
 				}
-				System.out.println("m_image_index = " + m_image_index);
 			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
@@ -323,7 +322,6 @@ public class Player extends Character {
 					m_image_index = 22;
 				if (m_image_index >= 22)
 					m_image_index = 22;
-				System.out.println(m_image_index);
 			} else if (moving) {
 				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
 				if (m_image_index < 8)
