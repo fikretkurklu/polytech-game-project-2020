@@ -28,7 +28,7 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	Character m_player;
+	public Character m_player;
 	Character m_playerSave;
 	View m_view;
 	public int mode;
@@ -84,7 +84,7 @@ public class Model {
 	}
 
 	public void setVillageEnv() throws Exception {
-		m_village = new Village(m_width, m_height, this);
+		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		mode = VILLAGE;
 	}
 

@@ -89,7 +89,7 @@ public class Arrow extends Projectile {
 			}
 		}
 
-		if (now - getDeadTime() > 1000 && getState() == 2) {
+		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.95f);
 		}
 
@@ -99,11 +99,11 @@ public class Arrow extends Projectile {
 	public boolean cell(Direction dir, Category cat) {
 		boolean c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
 				|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-		if (m_State == HIT_STATE) {
+		if (m_State.equals(State.HIT_STATE)) {
 			return !c;
 		}
 		if (!c) {
-			m_State = HIT_STATE;
+			m_State = State.HIT_STATE;
 		}
 		return c;
 	}

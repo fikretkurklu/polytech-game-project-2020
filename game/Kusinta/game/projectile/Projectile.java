@@ -12,14 +12,14 @@ import game.Model;
 import player.Character;
 
 public abstract class Projectile extends Entity {
-	static final int OK_STATE = 1;
-	static final int HIT_STATE = 2;
+	
+	protected enum State {OK_STATE, HIT_STATE};
 	public static final int SIZE = 86;
 
 	protected double m_angle;
 	protected Direction m_direction;
 	
-	protected int m_State;
+	protected State m_State;
 	
 	protected Character m_shooter;
 	protected Model m_model;
@@ -45,7 +45,7 @@ public abstract class Projectile extends Entity {
 		m_shooter = shooter;
 		m_model = model;
 		
-		m_State = OK_STATE;
+		m_State = State.OK_STATE;
 		
 		m_alpha = 1f;
 		
@@ -54,11 +54,11 @@ public abstract class Projectile extends Entity {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
-		if (m_State == HIT_STATE) {
+		if (m_State.equals(State.HIT_STATE)) {
 			return !c;
 		}
 		if (!c) {
-			m_State = HIT_STATE;
+			m_State = State.HIT_STATE;
 		}
 		return c;
 	}
@@ -71,7 +71,7 @@ public abstract class Projectile extends Entity {
 		return m_dead_time;
 	}
 	
-	public int getState() {
+	public State getState() {
 		return m_State;
 	}
 	

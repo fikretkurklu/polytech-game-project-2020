@@ -24,6 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -52,13 +53,15 @@ public class Game {
 	Sound m_music;
 
 	Game() throws Exception {
-        Dimension d = new Dimension(1024, 768);
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         m_controller = new Controller(this);
         m_view = new View(m_controller);
         m_model = new Model(m_view, d.width, d.height);
         // creating frame
         m_frame = m_view.createFrame(d);
         setupFrame();
+        
+        
     }
 
 	/*
@@ -79,6 +82,8 @@ public class Game {
 		// center the window on the screen
 		m_frame.setLocationRelativeTo(null);
 
+		m_frame.setUndecorated(true);
+		
 		// make the vindow visible
 		m_frame.setVisible(true);
 	}

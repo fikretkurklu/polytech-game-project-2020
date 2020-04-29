@@ -7,7 +7,7 @@ public class EquipmentManager {
 	};
 
 	public static enum Stuff {
-		Armor, Belt, Gloves, Grieves, Helmet, LongBow, ShortBow
+		Armor, Belt, Gloves, Grieves, Helmet, Bow
 	};
 
 	public Equipment newEquipment() throws Exception {
@@ -39,16 +39,18 @@ public class EquipmentManager {
 			Helmet helmet = new Helmet();
 			helmet.applyMultiplier();
 			return helmet;
-		case LongBow:
-			System.out.println("LongBow created");
-			LongBow longbow = new LongBow();
-			longbow.applyMultiplier();
-			return longbow;
-		case ShortBow:
-			System.out.println("ShortBow created");
-			ShortBow shortbow = new ShortBow();
-			shortbow.applyMultiplier();
-			return shortbow;
+		case Bow:
+			if ((int)(Math.random() * 2) == 0) {
+				System.out.println("LongBow created");
+				LongBow bow = new LongBow();
+				bow.applyMultiplier();
+				return bow;
+			} else {
+				System.out.println("ShortBow created");
+				ShortBow bow = new ShortBow();
+				bow.applyMultiplier();
+				return bow;
+			}
 		default:
 			System.out.println("The current equipment is not part of the equipment list");
 			return null;
