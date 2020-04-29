@@ -310,6 +310,7 @@ public class Player extends Character {
 			hitBox.translate(0, -(m_coord.Y() - botBlock));
 			m_coord.setY(botBlock);
 		}
+		/*
 		if (!moving && !falling) {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			m_coord.setY(topBlock);
@@ -318,7 +319,7 @@ public class Player extends Character {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - m_height / 2);
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
-		}
+		}*/
 
 		if (shooting) {
 			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
