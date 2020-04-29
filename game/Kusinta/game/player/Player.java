@@ -79,7 +79,6 @@ public class Player extends Character {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		int random = (int) (Math.random() * 10);
 
 		moving = true;
 
