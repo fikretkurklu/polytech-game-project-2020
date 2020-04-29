@@ -89,10 +89,11 @@ public class Underworld {
 	}
 
 	private void generateGhosts(Ghost[] ghosts) {
-		String[] dirs = {"N", "E", "W", "S"};
+//		String[] dirs = {"N", "E", "W", "S"};
 		// new Direction(dirs[(int) (Math.random()*dirs.length)]
 		for (int i = 0; i < ghosts.length; i++) {
 			ghosts[i] = new Ghost(new Direction("W"), new Coord(770, 190), ghostAutomaton, m_model);
+			ghosts[i].leftOrientation = true;
 		}
 	}
 
@@ -171,7 +172,6 @@ public class Underworld {
 		}
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);
-			m_ghosts[i].getAutomaton().step(m_ghosts[i]);
 		}
 	}
 

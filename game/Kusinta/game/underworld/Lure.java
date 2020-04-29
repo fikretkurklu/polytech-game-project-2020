@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import environnement.Element;
+import game.Coord;
 import game.Model;
 import player.Character;
 import projectile.Projectile;
@@ -117,5 +118,9 @@ public class Lure extends Projectile {
 			}
 		}
 		m_automaton.step(this);
+	}
+	
+	public Coord getCoord() {
+		return m_coord;
 	}
 }

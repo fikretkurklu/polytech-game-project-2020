@@ -162,7 +162,7 @@ public class PlayerSoul extends Character {
 		return super.turn(dir);
 	}
 	
-	public static final int DISTANCE = 2;
+	public static final int DISTANCE = 3;
 	public static final int DASH = 500;
 	
 	@Override
