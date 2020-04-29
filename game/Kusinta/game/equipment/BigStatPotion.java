@@ -1,5 +1,6 @@
 package equipment;
 
+import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class BigStatPotion extends Consumable {
@@ -54,6 +55,12 @@ public class BigStatPotion extends Consumable {
 	@Override
 	public String getImagePath() {
 		return imagePath;
+	}
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

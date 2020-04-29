@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import automaton.*;
 import game.Controller;
@@ -12,6 +13,9 @@ import game.Model;
 import projectile.Arrow;
 import projectile.Projectile;
 import environnement.Element;
+import equipment.Equipment;
+import equipment.EquipmentManager.Stuff;
+import equipment.Stat.Stats;
 
 public class Player extends Character {
 
@@ -37,6 +41,8 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
+
+	public HashMap<Stats, Integer> m_default_stat_map;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -68,6 +74,16 @@ public class Player extends Character {
 		vPressed = false;
 
 		m_slowness = 10;
+
+		m_default_stat_map = new HashMap<>();
+
+		Stats[] statsTable = Stats.values();
+
+		for (int i = 0; i < statsTable.length; i++) {
+			m_default_stat_map.put(statsTable[i], 0);
+		}
+
+		setStat();
 	}
 
 	@Override
@@ -253,15 +269,15 @@ public class Player extends Character {
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
 			return qPressed;
-		}else if (keyCode == Controller.K_Z) {
+		} else if (keyCode == Controller.K_Z) {
 			return zPressed;
 		} else if (keyCode == Controller.K_D) {
 			return dPressed;
-		}else if (keyCode == Controller.K_SPACE) {
+		} else if (keyCode == Controller.K_SPACE) {
 			return espPressed;
-		}else if (keyCode == Controller.K_A) {
+		} else if (keyCode == Controller.K_A) {
 			return aPressed;
-		}else if (keyCode == Controller.K_E) {
+		} else if (keyCode == Controller.K_E) {
 			return ePressed;
 		} else if (keyCode == Controller.K_V)
 			return vPressed;
@@ -380,8 +396,8 @@ public class Player extends Character {
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
-			g.setColor(Color.blue);
-			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//			g.setColor(Color.blue);
+//			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
@@ -433,7 +449,7 @@ public class Player extends Character {
 			if (mouse_y > m_y) {
 				angle = -angle;
 			}
-			
+
 			shooting = false;
 
 			try {
@@ -450,6 +466,47 @@ public class Player extends Character {
 
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
+	}
+
+	public Equipment addEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		Equipment res = null;
+		
+		if (m_equipments.get(stuff) != null) {
+			res = m_equipments.get(stuff);
+		}
+		
+		m_equipments.put(stuff, equipment);
+		
+		Stuff[] stuffTable = Stuff.values();
+
+		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
+		m_resistance = m_default_stat_map.get(Stats.Resistance);
+		m_strength = m_default_stat_map.get(Stats.Strengh);
+		MAX_LIFE = m_default_stat_map.get(Stats.Health);
+
+		for (int i = 0; i < stuffTable.length; i++) {
+			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
+			if (tmpEquipment != null) {
+				m_attackSpeed += tmpEquipment.getModification(Stats.AttackSpeed);
+				m_resistance += tmpEquipment.getModification(Stats.Resistance);
+				m_strength += tmpEquipment.getModification(Stats.Strengh);
+				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
+			}
+		}
+		
+		return res;
+	}
+	
+	public void setMoney(int money) {
+		m_money += money;
+	}
+
+	public void setStat() {
+		m_default_stat_map.put(Stats.AttackSpeed, 1000);
+		m_default_stat_map.put(Stats.Health, 100);
+		m_default_stat_map.put(Stats.Resistance, 0);
+		m_default_stat_map.put(Stats.Strengh, 1);
 	}
 
 }
