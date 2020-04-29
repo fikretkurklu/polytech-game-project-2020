@@ -1,5 +1,6 @@
 package projectile;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -82,4 +83,6 @@ public abstract class Projectile extends Entity {
 	public void setAlpha(float alpha) {
 		m_alpha = alpha;
 	}
+	
+	public abstract void paint(Graphics g) ;
 }

@@ -149,11 +149,8 @@ public class Player extends Character {
 	}
 
 	private void gravity(long t) {
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
-				&& !checkBlock(hitBox.x - 2, m_coord.Y()) || falling) {
-
+		if (falling) {
 			falling = true;
-
 			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
 					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
 					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
@@ -310,27 +307,15 @@ public class Player extends Character {
 			hitBox.translate(0, -(m_coord.Y() - botBlock));
 			m_coord.setY(botBlock);
 		}
-		/*
-		if (!moving && !falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			m_coord.setY(topBlock);
-		}
-		if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - m_height / 2)) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - m_height / 2);
-			hitBox.translate(0, -(m_coord.Y() - topBlock));
-			m_coord.setY(topBlock);
-		}*/
 
 		if (shooting) {
 			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
 			Direction direc;
-
 			if (mouse_x > m_coord.X()) {
 				direc = new Direction("E");
 			} else {
 				direc = new Direction("W");
 			}
-
 			turn(direc);
 		}
 
@@ -375,7 +360,7 @@ public class Player extends Character {
 		m_automaton.step(this);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			((Arrow) m_projectiles.get(i)).tick(elapsed);
+			m_projectiles.get(i).tick(elapsed);
 		}
 	}
 
@@ -400,14 +385,10 @@ public class Player extends Character {
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
-//			g.setColor(Color.blue);
-//			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-
-			((Arrow) m_projectiles.get(i)).paint(g);
-
+			 m_projectiles.get(i).paint(g);
 		}
 	}
 
@@ -423,9 +404,8 @@ public class Player extends Character {
 		if (shooting) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y() - m_height / 2;
-
 			Direction direc;
-			float angle;
+			double angle;
 			double r;
 			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
 			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
@@ -440,7 +420,7 @@ public class Player extends Character {
 			}
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
+			angle = Math.asin(Math.abs(y) / r);
 
 			if (mouse_y > m_y) {
 				angle = -angle;

@@ -91,6 +91,16 @@ public class Model {
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
+		if (m_x + x_decalage > 0) {
+			x_decalage = -m_x;
+		} else if (- x_decalage > m_room.getWitdh() - m_width) {
+			x_decalage = -(m_room.getWitdh() - m_width);
+		}
+		if (m_y + y_decalage > 0) {
+			y_decalage = m_y;
+		} else if (- y_decalage > m_room.getHeight() - m_height) {
+			y_decalage = - (m_room.getHeight() - m_height);
+		}
 
 	}
 

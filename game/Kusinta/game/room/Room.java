@@ -43,6 +43,7 @@ public class Room{
 	Automaton StaticDecorAutomaton = null;
 	
 	int m_BlockAElapsed = 0;
+	int m_RealWidth, m_RealHeight;
 
 	public Room(AutomatonLibrary AL, int width, int height) throws Exception {
 		m_AL = AL;
@@ -78,6 +79,8 @@ public class Room{
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
+			m_RealWidth = nbCol * Element.SIZE;
+			m_RealHeight = nbRow * Element.SIZE;
 			//m_background = new Element[i * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
@@ -251,5 +254,11 @@ public class Room{
 			
 		}
 	}
-
+	
+	public int getWitdh() {
+		return m_RealWidth;
+	}
+	public int getHeight() {
+		return m_RealHeight;
+	}
 }
