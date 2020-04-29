@@ -1,16 +1,20 @@
 package village;
 
+import java.awt.Graphics;
+import player.Player;
 import village.Village.ID_ENV;
 
 public class MenuPanel extends Panel {
 
-	private String INVENTORY_ICO = "resources/Village/HUD/Chest.png";
+	private String INVENTORY_ICO = "resources/Village/HUD/inventory.png";
 	private String ADVENTURE_ICO = "resources/Village/HUD/adventure.png";
 	private String MAGIC_SHOP_ICO = "resources/Village/HUD/magicShop.png";
 	private String WEAPON_SHOP_ICO = "resources/Village/HUD/weaponShop.png";
 	private String INFIRMARY_ICO = "resources/Village/HUD/infirmary.png";
-
-	public MenuPanel(int x, int y, int w, int h) {
+	
+	CoinDraw coinDraw;
+	
+	public MenuPanel(int x, int y, int w, int h, Player p) {
 		super(x, y, w, h);
 		int MenuButtonSizeW = (int) (m_width * 0.5);
 		int MenuButtonSizeH = m_height / 12;
@@ -41,6 +45,20 @@ public class MenuPanel extends Panel {
 				ID_ENV.INFIRMARY);
 		b.setImage(INFIRMARY_ICO);
 		add(b);
+		
+		coinDraw = new CoinDraw(m_width / 8, m_height - m_height / 10, m_width / 2, m_height / 10, p);
+		
+	}
+	
+	public void paint(Graphics g) {
+		super.paint(g);
+		coinDraw.paint(g);
+	}
+	
+	@Override
+	public void resized(int x, int y, int w, int h) {
+		coinDraw.resized((double) w / (double) m_width, (double) h / (double) m_height);
+		super.resized(x, y, w, h);
 	}
 
 }

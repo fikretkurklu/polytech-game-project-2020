@@ -21,11 +21,14 @@ public class EquipementButton extends Button {
 	@Override
 	public void action() throws Exception {
 		if (isActif) {
-			Equipment lastEquipement = m_player.addEquipment(m_equipement);
-			if (lastEquipement != null) {
-				m_player.setMoney(lastEquipement.getModification(Stats.Price));
+			if (m_player.getMoney() >= m_equipement.getModification(Stats.Price)) {
+				Equipment lastEquipement = m_player.addEquipment(m_equipement);
+				if (lastEquipement != null) {
+					m_player.setMoney(lastEquipement.getModification(Stats.Price));
+				}
+				isActif = false;
+				m_player.setMoney(- m_equipement.getModification(Stats.Price));
 			}
-			isActif = false;
 		}
 
 	}

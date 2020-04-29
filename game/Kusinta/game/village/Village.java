@@ -31,7 +31,7 @@ public class Village {
 		m_width = w;
 		m_height = h;
 		m_model = model;
-		menuPanel = new MenuPanel(0, 0, (int) (m_width * DIVISOR), m_height);
+		menuPanel = new MenuPanel(0, 0, (int) (m_width * DIVISOR), m_height, p);
 		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
