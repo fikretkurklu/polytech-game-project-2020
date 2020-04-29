@@ -31,8 +31,15 @@ Lure (Init){
 
 Ghost (State1){
 	*(State1)
-  | Cell(H, A) ? Hit(N): (State1)
-  | Cell(H, C) ? Hit(S): (State1)
+  | Cell(N, A) ? Hit(N): (State1)
+  | Cell(S, A) ? Hit(S): (State1)
+  | Cell(E, A) ? Hit(E): (State1)
+  | Cell(W, A) ? Hit(W): (State1)
+  | Cell(H, A) ? Hit(H): (State1)
+  | Cell(N, C) ? Hit(N): (State1)
+  | Cell(S, C) ? Hit(S): (State1)
+  | Cell(E, C) ? Hit(E): (State1)
+  | Cell(W, C) ? Hit(W): (State1)
   | Closest(C, NE) ? Wizz(NE): (State1)
   | Closest(C, NW) ? Wizz(NW): (State1)
   | Closest(C, SE) ? Wizz(SE): (State1)
