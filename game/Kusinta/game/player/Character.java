@@ -116,6 +116,10 @@ public abstract class Character extends Entity {
 		m_strength = strength;
 	}
 
+	public int getMoney() {
+		return m_money;
+	}
+	
 	public abstract void tick(long elapsed);
 
 	public abstract void paint(Graphics gp);
