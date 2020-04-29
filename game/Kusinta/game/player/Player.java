@@ -83,7 +83,7 @@ public class Player extends Character {
 		}
 
 		setStat();
-		setMoney(1000);
+		setMoney(10000);
 	}
 
 	@Override

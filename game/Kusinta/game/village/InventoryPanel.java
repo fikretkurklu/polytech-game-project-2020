@@ -44,10 +44,10 @@ public class InventoryPanel extends Panel {
 		for (Map.Entry<Stuff, Equipment> e :  equipements.entrySet()) {
 			Stuff k = e.getKey();
 			if (e.getValue() != null) {
-				for (int i = 0; i < m_elem.size(); i ++) {
-					InventoryButton b = ((InventoryButton) (m_elem.get(i)));
-					if (b.ID == k) {
-						b.setEquipement(e.getValue());
+				for (Button b : m_elem) {
+					InventoryButton Ib = ((InventoryButton) b);
+					if (Ib.ID == k) {
+						Ib.setEquipement(e.getValue());
 						break;
 					}
 				}

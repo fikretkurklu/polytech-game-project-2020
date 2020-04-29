@@ -11,15 +11,20 @@ public class EquipementButton extends Button {
 	EquipementScroll scroll;
 	private final String EmptyImg = "resources/Village/HUD/EmptyCase.png";
 
-	public EquipementButton(int x, int y, int w, int h, Player p, Equipment equipement, EquipementScroll scroll) {
+	public EquipementButton(int x, int y, int w, int h, Player p, EquipementScroll scroll) {
 		super(x, y, w, h);
 		m_player = p;
-		m_equipement = equipement;
+		m_equipement = null;
 		this.scroll = scroll;
 		setBgImage(EmptyImg);
+		
+	}
+	
+	public void setEquipement(Equipment equipement) {
+		m_equipement = equipement;
 		setFgImage(equipement.getImagePath());
 	}
-
+	
 	@Override
 	public void action() throws Exception {
 		if (m_equipement != null) {
