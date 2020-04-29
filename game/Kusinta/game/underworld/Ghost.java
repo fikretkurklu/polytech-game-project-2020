@@ -21,7 +21,7 @@ import player.Character;
 
 public class Ghost extends Entity {
 
-	public static final int SIZE = (int) (1.5*Element.SIZE);
+	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	Coord m_coord;
 	Model m_model;
@@ -183,7 +183,7 @@ public class Ghost extends Entity {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() < m_coord.X()) && (d <= m_range);
-			} 
+			}
 		}
 		return false;
 	}
@@ -212,55 +212,70 @@ public class Ghost extends Entity {
 	public boolean cell(Direction dir, Category cat) {
 		Coord coord = null;
 		if (cat.toString().equals("O")) {
-			return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
+			if (dir.toString().equals("F")) {
+				if (m_direction.toString().equals("N")) {
+					Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y() - SIZE);
+					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+				} else if (m_direction.toString().equals("S")) {
+					Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y() + SIZE);
+					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+				} else if (m_direction.toString().equals("W")) {
+					Coord block = m_model.m_underworld.blockCoord(m_coord.X() - SIZE, m_coord.Y());
+					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+				} else if (m_direction.toString().equals("E")) {
+					Coord block = m_model.m_underworld.blockCoord(m_coord.X() + SIZE, m_coord.Y());
+					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+				}
+			}
+			// return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
 		} else if (cat.toString().equals("A")) {
 			if (((PlayerSoul) m_model.getPlayer()).hidden) {
 				return false;
 			}
 			coord = m_model.getPlayer().getCoord();
-			//return m_model.getPlayer().getCoord().isEqual(m_coord);
+			// return m_model.getPlayer().getCoord().isEqual(m_coord);
 		} else if (cat.toString().equals("C")) {
 			if (((PlayerSoul) m_model.getPlayer()).lure != null && !((PlayerSoul) m_model.getPlayer()).lure.disapered) {
-				coord =  ((PlayerSoul) m_model.getPlayer()).lure.getCoord();
-				//return ((PlayerSoul) m_model.getPlayer()).lure.getCoord().isEqual(m_coord);
+				coord = ((PlayerSoul) m_model.getPlayer()).lure.getCoord();
+				// return ((PlayerSoul) m_model.getPlayer()).lure.getCoord().isEqual(m_coord);
 			}
 			return false;
 		}
-		//Modifier egalités de coord pour garder une distance
+		// Modifier egalités de coord pour garder une distance
 
 		if (dir.toString().equals("N")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y()-SIZE);
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y() - SIZE);
+			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && m_coord.Y() == coord.Y();
+		} else if (dir.toString().equals("S")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y() + SIZE);
+			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && m_coord.Y() == coord.Y();
+		} else if (dir.toString().equals("E")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() + SIZE, m_coord.Y());
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("S")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X(), m_coord.Y()+SIZE);
+		} else if (dir.toString().equals("W")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() - SIZE, m_coord.Y());
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("E")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()+SIZE, m_coord.Y());
+		} else if (dir.toString().equals("NE")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() + SIZE, m_coord.Y() - SIZE);
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("W")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()-SIZE, m_coord.Y());
+		} else if (dir.toString().equals("NW")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() - SIZE, m_coord.Y() - SIZE);
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("NE")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()+SIZE, m_coord.Y()-SIZE);
+		} else if (dir.toString().equals("SE")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() + SIZE, m_coord.Y() + SIZE);
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("NW")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()-SIZE, m_coord.Y()-SIZE);
+		} else if (dir.toString().equals("SW")) {
+			Coord block = m_model.m_underworld.blockCoord(m_coord.X() - SIZE, m_coord.Y() + SIZE);
 			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
 			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("SE")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()+SIZE, m_coord.Y()+SIZE);
-			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("SW")) {
-			Coord block = m_model.m_underworld.blockCoord(m_coord.X()-SIZE, m_coord.Y()+SIZE);
-			Coord playerBlock = m_model.m_underworld.blockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && m_coord.X() == coord.X();
-		}else if (dir.toString().equals("H")) {
+		} else if (dir.toString().equals("H")) {
 			return coord.isEqual(m_coord);
 		}
 		return false;
@@ -344,7 +359,8 @@ public class Ghost extends Entity {
 		} else if (dir.toString().equals("SE")) {
 			leftOrientation = false;
 			movingUp = false;
-			movingDown = true;;
+			movingDown = true;
+			;
 		} else if (dir.toString().equals("H")) {
 
 		}

@@ -56,7 +56,7 @@ Ghost (State1){
   | Closest(A, W) ? Pop(W) : (State1)
   | Closest(A, S) ? Pop(S) : (State1)
   | Closest(A, E) ? Pop(E) : (State1)
-  | Cell(H, O) ? Turn : (ExtraMove)  
+  | Cell(F, O) ? Turn : (ExtraMove)   
   | True ? Move : (State1)
   *(ExtraMove)
   |True ? Move :(State1)

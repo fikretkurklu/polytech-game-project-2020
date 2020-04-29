@@ -97,7 +97,8 @@ public class Underworld {
 		for (int i = 0; i < ghosts.length; i++) {
 			x = (int)(Math.random()*(4558));
 			y = (int)(Math.random()*(3956));
-			while (isBlocked(x, y)) {
+			while (isBlocked(x, y) || isBlocked(x, y-Element.SIZE)
+					|| isBlocked(x, y+Element.SIZE) || isBlocked(x-Element.SIZE, y) || isBlocked(x+Element.SIZE, y)) {
 				x = (int)(Math.random()*4558);
 				y = (int)(Math.random()*3956);
 			}
