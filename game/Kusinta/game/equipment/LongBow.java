@@ -16,7 +16,7 @@ public class LongBow extends Equipment {
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
 		statTable.put(Stats.Strengh, 20);
-		statTable.put(Stats.AttackSpeed, 5);
+		statTable.put(Stats.AttackSpeed, 1200);
 		
 	}
 
