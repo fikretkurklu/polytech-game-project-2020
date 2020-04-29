@@ -74,7 +74,7 @@ public class Player extends Character {
 		for (int i = 0; i < statsTable.length; i++) {
 			m_default_stat_map.put(statsTable[i], 0);
 		}
-
+		setMoney(10000);
 	}
 
 	@Override
@@ -305,7 +305,6 @@ public class Player extends Character {
 			hitBox.translate(0, -(m_coord.Y() - botBlock));
 			m_coord.setY(botBlock);
 		}
-
 		if (!moving && !falling) {
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			m_coord.setY(topBlock);

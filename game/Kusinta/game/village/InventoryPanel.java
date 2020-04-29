@@ -26,17 +26,17 @@ public class InventoryPanel extends Panel {
 		m_EquipemenScroll = new EquipementScroll(0, h - Scroll_h, Scroll_w, Scroll_h);
 		Coord center = new Coord(m_width / 2 - buttonSize / 2, m_height / 2 - buttonSize / 2);
 		Button b;
-		b = new InventoryButton(center.X(), center.Y(), buttonSize, buttonSize, Stuff.Armor, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X(), center.Y(), buttonSize, buttonSize, Stuff.Armor, m_player, m_EquipemenScroll);
 		add(b);
-		b = new InventoryButton(center.X(), center.Y() - buttonSize, buttonSize, buttonSize, Stuff.Helmet, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X(), center.Y() - buttonSize, buttonSize, buttonSize, Stuff.Helmet, m_player, m_EquipemenScroll);
 		add(b);
-		b = new InventoryButton(center.X(), center.Y() + buttonSize, buttonSize, buttonSize, Stuff.Belt, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X(), center.Y() + buttonSize, buttonSize, buttonSize, Stuff.Belt, m_player, m_EquipemenScroll);
 		add(b);
-		b = new InventoryButton(center.X(), center.Y() + 2 * buttonSize, buttonSize, buttonSize, Stuff.Grieves, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X(), center.Y() + 2 * buttonSize, buttonSize, buttonSize, Stuff.Grieves, m_player, m_EquipemenScroll);
 		add(b);
-		b = new InventoryButton(center.X() - buttonSize, center.Y(), buttonSize, buttonSize, Stuff.Gloves, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X() - buttonSize, center.Y(), buttonSize, buttonSize, Stuff.Gloves, m_player, m_EquipemenScroll);
 		add(b);
-		b = new InventoryButton(center.X() + buttonSize, center.Y(), buttonSize, buttonSize, Stuff.Bow, null, m_EquipemenScroll);
+		b = new InventoryButton(center.X() + buttonSize, center.Y(), buttonSize, buttonSize, Stuff.Bow, m_player, m_EquipemenScroll);
 		add(b);
 	}
 	
