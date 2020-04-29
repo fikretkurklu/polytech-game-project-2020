@@ -37,7 +37,7 @@ public abstract class Character extends Entity {
 
 	Rectangle hitBox;
 
-	int m_money;
+	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
