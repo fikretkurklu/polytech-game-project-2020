@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import automaton.Automaton;
+import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Controller;
+import game.Coord;
 import game.Model;
 import player.Character;
 
@@ -29,20 +31,21 @@ public class PlayerSoul extends Character {
 	int yHitbox[];
 	int m_centerX, m_centerY;
 	
+	int hitboxRad; // Unité utilisée afin de centrer la hitbox
+	
 	boolean qPressed, zPressed, dPressed, sPressed, vPressed, spacePressed;
 	boolean leftOrientation;
 	boolean dashAvailable;
 	
-	Lure lure;
+	boolean setN, setS, setE, setW;
 	
-	/* A faire :
-	 * Animation leurre (Egg)
-	 */
+	Lure lure;
 	
 	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
 		m_width = SIZE; 
 		m_height = SIZE;
+		hitboxRad = SIZE / 7;
 		hidden = false;
 		m_dashTimer = 0;
 		qPressed = false;
@@ -82,18 +85,20 @@ public class PlayerSoul extends Character {
 			int x = getCoord().X();
 			int y = getCoord().Y();
 			
-			xHitbox[0] = x - m_width + (m_width / 7);
-			xHitbox[1] = x - (m_width / 7);
-			xHitbox[2] = x - (m_width / 7);
-			xHitbox[3] = x - m_width + (m_width / 7);
+			xHitbox[0] = x - m_width + hitboxRad;
+			xHitbox[1] = x - hitboxRad;
+			xHitbox[2] = x - hitboxRad;
+			xHitbox[3] = x - m_width + hitboxRad;
 			
-			yHitbox[0] = y + (m_width / 7);
-			yHitbox[1] = y + (m_width / 7);
-			yHitbox[2] = y + m_height - (m_width / 7);
-			yHitbox[3] = y + m_height - (m_width / 7);
+			yHitbox[0] = y + hitboxRad;
+			yHitbox[1] = y + hitboxRad;
+			yHitbox[2] = y + m_height - hitboxRad;
+			yHitbox[3] = y + m_height - hitboxRad;
 			
 			m_centerX = xHitbox[0] + (xHitbox[1] - xHitbox[0]) / 2;
 			m_centerY = yHitbox[0] + (yHitbox[1] - yHitbox[0]) / 2;
+			
+			
 		
 	}
 	
@@ -171,18 +176,92 @@ public class PlayerSoul extends Character {
 		switch (m_direction.toString()) {
 			case "N" : 
 				getCoord().translate(0, - DISTANCE);
-				return true;
+				break;
 			case "S" : 
 				getCoord().translate(0, DISTANCE);
-				return true;
+				break;
 			case "E" :
 				getCoord().translate(DISTANCE, 0);
-				return true;
+				break;
 			case "W" :
 				getCoord().translate(-DISTANCE, 0);
-				return true;
+				break;
 			default :
 				return false;
+		}
+		calculateHitbox();
+		return true;
+	}
+	
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		switch (dir.toString()) {
+		case "N" :
+			int xUp = (xHitbox[1] + xHitbox[0])/2;
+			if (!setN) {
+				if (checkBlock(xUp, yHitbox[0] - DISTANCE)) {
+					getCoord().setY(getBlockCoord(xUp, yHitbox[0] - DISTANCE).Y() + Element.SIZE - hitboxRad);
+					setN = true;
+					return true;
+				}
+				return false;
+			} else {
+				if (!(checkBlock(xUp, yHitbox[0] - DISTANCE))) {
+					setN = false;
+					return false;
+				} 
+				return true;
+			}
+		case "S" :
+			int xDown = (xHitbox[2] + xHitbox[3])/2;
+			if (!setS) {
+				if (checkBlock(xDown, yHitbox[2] + DISTANCE)) {
+					getCoord().setY(getBlockCoord(xDown, yHitbox[2] + DISTANCE).Y() - Element.SIZE - hitboxRad);
+					setS = true;
+					return true;
+				}
+				return false;
+			} else {
+				if (!(checkBlock(xDown, yHitbox[2] + DISTANCE)))  {
+					setS = false;
+					return false;
+				}
+				return true;
+			}
+		case "E" :
+			int yRight = (yHitbox[1] + yHitbox[2])/2;
+			if (!setE) {
+				if (checkBlock(xHitbox[1] + DISTANCE, yRight)) {
+					getCoord().setX(getBlockCoord(xHitbox[1] + DISTANCE, yRight).X() + hitboxRad);
+					setE = true;
+					return true;
+				}
+				return false;
+			} else {
+				if (!(checkBlock(xHitbox[1] + DISTANCE, yRight))) {
+					setE = false;
+					return false;
+				}
+				return true;
+			}
+		case "W" :
+			int yLeft = (yHitbox[0] + yHitbox[3])/2;
+			if (!setW) {
+				if (checkBlock(xHitbox[0] - DISTANCE, yLeft)) {
+					getCoord().setX(getBlockCoord(xHitbox[0] - DISTANCE, yLeft).X() + 2 * Element.SIZE + hitboxRad);
+					setW = true;
+					return true;
+				}
+				return false;
+			} else {
+				if (!(checkBlock(xHitbox[0] - DISTANCE, yLeft))) {
+					setW = false;
+					return false;
+				}
+				return true;
+			}
+		default :
+			return true;
 		}
 	}
 	
@@ -213,7 +292,7 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean egg(Direction dir) {
 		if (lure == null) {
-			int x = getCoord().X();
+			int x = getCoord().X() - SIZE;
 			int y = getCoord().Y();
 			switch (m_direction.toString()) {
 			case "N":
@@ -238,13 +317,16 @@ public class PlayerSoul extends Character {
 	}
 	
 	public boolean checkBlock(int x, int y) {
-		return m_model.m_room.isBlocked(x, y);
+		return m_model.m_underworld.isBlocked(x, y);
+	}
+	
+	public Coord getBlockCoord(int x, int y) {
+		return m_model.m_underworld.blockBot(x, y);
 	}
     
 	
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			calculateHitbox();
 			if (m_image_index >= 4) {
 				m_image_index = 0;
 			}
