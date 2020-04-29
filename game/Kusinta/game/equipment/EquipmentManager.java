@@ -15,38 +15,31 @@ public class EquipmentManager {
 		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
 		switch (equipment) {
 		case Armor:
-			System.out.println("Armor created");
 			Armor armor = new Armor();
 			armor.applyMultiplier();
 			return armor;
 		case Belt:
-			System.out.println("Belt created");
 			Belt belt = new Belt();
 			belt.applyMultiplier();
 			return belt;
 		case Gloves:
-			System.out.println("Gloves created");
 			Gloves gloves = new Gloves();
 			gloves.applyMultiplier();
 			return gloves;
 		case Grieves:
-			System.out.println("Grieves created");
 			Grieves grieves = new Grieves();
 			grieves.applyMultiplier();
 			return grieves;
 		case Helmet:
-			System.out.println("Helmet created");
 			Helmet helmet = new Helmet();
 			helmet.applyMultiplier();
 			return helmet;
 		case Bow:
 			if ((int)(Math.random() * 2) == 0) {
-				System.out.println("LongBow created");
 				LongBow bow = new LongBow();
 				bow.applyMultiplier();
 				return bow;
 			} else {
-				System.out.println("ShortBow created");
 				ShortBow bow = new ShortBow();
 				bow.applyMultiplier();
 				return bow;
