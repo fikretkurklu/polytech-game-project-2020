@@ -1,16 +1,20 @@
 package player;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
+
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import environnement.Element;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
@@ -41,6 +45,8 @@ public abstract class Character extends Entity {
 	
 	public HashMap<Stats, Integer> m_default_stat_map;
 
+	Image imageProjectile;
+	
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
 		
@@ -190,6 +196,15 @@ public abstract class Character extends Entity {
 		m_money += money;
 	}
 	
-	
+	public void loadImageProjectile(String path) throws Exception {
+		File imageFile = new File(path);
+		if (imageFile.exists()) {
+			imageProjectile = ImageIO.read(imageFile);
+			double ratio = (double)imageProjectile.getHeight(null)/(double)imageProjectile.getWidth(null);
+			imageProjectile = imageProjectile.getScaledInstance((int)(1.5*Element.SIZE*ratio), (int)(1.5*Element.SIZE), 0);
+		} else {
+			throw new Exception("Error while loading image: path = " + path);
+		}
+	}
 	
 }

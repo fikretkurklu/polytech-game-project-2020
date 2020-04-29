@@ -3,6 +3,7 @@ package projectile;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -16,23 +17,16 @@ public class Arrow extends Projectile {
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	static final int SPEED = 9;
 	int moving;
-	int DIMENSION;
 
 	int m_height;
 	int m_width;
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction)
+	public Arrow(Image ArrowImage, Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction)
 			throws Exception {
-		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
+		super(ArrowImage, arrowAutomaton, x, y, angle, player, player.getModel(), direction);
 
-		loadImage("resources/Player/spriteArrow.png");
-
-		DIMENSION = SIZE / (image.getHeight(null));
-
-		float ratio = (float) (image.getWidth(null) * 4) / (float) (5 * image.getHeight(null));
-
-		m_height = DIMENSION * image.getHeight(null);
-		m_width = (int) (ratio * image.getWidth(null));
+		m_height = image.getHeight(null);
+		m_width = image.getWidth(null);
 
 		if (m_direction.toString().equals("E")) {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
@@ -81,7 +75,7 @@ public class Arrow extends Projectile {
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 
 		if (image != null) {
-			int w = DIMENSION * m_width;
+			int w = m_width;
 			int h = m_height;
 			Graphics2D g2D = (Graphics2D) g;
 			if (m_direction.toString().equals("E")) {

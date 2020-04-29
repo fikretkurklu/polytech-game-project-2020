@@ -16,7 +16,10 @@ import equipment.Stat.Stats;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-
+	private final String PATH_ARROW="resources/Player/spriteArrow.png";
+	private final String PATH_SPRITE_PLAYER="resources/Player/spritePlayer.png";
+	private final String PATH_SPRITE_TIR = "resources/Player/spriteArcher.png";
+	
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
@@ -37,12 +40,15 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
+	
+	
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
-		bI = m_model.loadSprite("resources/Player/spritePlayer.png", 16, 7);
-		bIShooting = m_model.loadSprite("resources/Player/spriteArcher.png", 4, 4);
-
+		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 16, 7);
+		bIShooting = m_model.loadSprite(PATH_SPRITE_TIR, 4, 4);
+		
+		loadImageProjectile(PATH_ARROW);
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
 
@@ -329,15 +335,12 @@ public class Player extends Character {
 		}
 
 		m_imageElapsed += elapsed;
+		float attackspeed = 200;
 		if (shooting) {
-			float attackspeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
-			attackspeed = attackspeed/1000;
-			
-		} else {
-			
+			attackspeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
+			attackspeed = 200/(attackspeed/1000);
 		}
-		
-		if (m_imageElapsed > 200) {
+		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
 			if (shooting) {
@@ -454,7 +457,7 @@ public class Player extends Character {
 	}
 
 	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
-		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
+		m_projectiles.add(new Arrow(imageProjectile, m_model.arrowAutomaton, x, y, angle, player, direction));
 	}
 
 	public void removeProjectile(Projectile projectile) {

@@ -2,9 +2,6 @@ package projectile;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -37,9 +34,10 @@ public abstract class Projectile extends Entity {
 	
 	protected Image image;
 
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
+	public Projectile(Image projectileImage, Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);
 		
+		image = projectileImage;
 		m_coord = new Coord(x,y);
 		m_angle = angle;
 		m_direction = direction;
@@ -63,16 +61,6 @@ public abstract class Projectile extends Entity {
 			m_State = HIT_STATE;
 		}
 		return c;
-	}
-
-	public void loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
 	}
 	
 	public void tick(long elapsed) {
