@@ -329,6 +329,14 @@ public class Player extends Character {
 		}
 
 		m_imageElapsed += elapsed;
+		if (shooting) {
+			float attackspeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
+			attackspeed = attackspeed/1000;
+			
+		} else {
+			
+		}
+		
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
