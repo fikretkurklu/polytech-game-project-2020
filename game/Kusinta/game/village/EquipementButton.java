@@ -1,6 +1,7 @@
 package village;
 
 import equipment.Equipment;
+import equipment.Stat.Stats;
 import player.Player;
 
 public class EquipementButton extends Button {
@@ -19,18 +20,30 @@ public class EquipementButton extends Button {
 
 	@Override
 	public void action() throws Exception {
-		// TODO Auto-generated method stub
+		if (isActif) {
+			Equipment lastEquipement = m_player.addEquipment(m_equipement);
+			if (lastEquipement != null) {
+				m_player.setMoney(lastEquipement.getModification(Stats.Price));
+			}
+			isActif = false;
+		}
 
 	}
 
 	@Override
 	public void growImg() {
-		super.growImg();
-		scroll.setEquipement(m_equipement);
+		if (isActif) {
+			super.growImg();
+			scroll.setEquipement(m_equipement);
+		}
+
 	}
+
 	@Override
 	public void reduceImg() {
-		super.reduceImg();
-		scroll.setEquipement(null);
+		if (isActif) {
+			super.reduceImg();
+			scroll.setEquipement(null);
+		}
 	}
 }
