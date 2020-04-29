@@ -16,21 +16,8 @@ public class WalkingOpponent extends Opponent {
 	}
 
 	@Override
-	public void tick(long elapsed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void paint(Graphics gp) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void setPressed(int keyChar, boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

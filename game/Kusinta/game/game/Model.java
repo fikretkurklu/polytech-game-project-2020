@@ -166,5 +166,9 @@ public class Model {
 		return y_decalage;
 	}
 	
+	public Player getPlayer() {
+		return (Player)m_player;
+	}
+	
 	
 }

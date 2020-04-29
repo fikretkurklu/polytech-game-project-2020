@@ -34,6 +34,8 @@ public abstract class Character extends Entity {
 
 	BufferedImage[] bI;
 	protected int m_image_index;
+	
+	Character collidingWith;
 
 	Rectangle hitBox;
 
@@ -59,6 +61,8 @@ public abstract class Character extends Entity {
 		m_model = model;
 		
 		m_image_index = 0;
+		
+		collidingWith = null;
 		
 		m_equipments = new HashMap<>();
 		
@@ -90,6 +94,15 @@ public abstract class Character extends Entity {
 		if (m_direction != dir)
 			m_direction = dir;
 		return true;
+	}
+	
+	public boolean power(){
+		collidingWith.loseLife(m_strength);
+		return false;
+	}
+	
+	public void loseLife(int l) {
+		m_life-=l;
 	}
 
 	@Override
