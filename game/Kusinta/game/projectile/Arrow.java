@@ -81,14 +81,15 @@ public class Arrow extends Projectile {
 			if (m_direction.toString().equals("E")) {
 				bg.rotate(-m_angle, m_width / 2, m_height/2);
 				bg.drawImage(image, 0, 0, w, h, null);
-				bg.rotate(m_angle, m_width / 2, m_height/2);
+				//bg.rotate(m_angle, m_width / 2, m_height/2);
 			} else {
 				bg.rotate(m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(image, m_width * 3 / 2, 0, -w, h, null);
+				bg.drawImage(image, m_width, 0, -w, h, null);
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
 			}
 		}
 		bg.dispose();
+		g.drawRect(m_coord.X()- m_width/2, m_coord.Y() - m_height / 2, m_width, m_height);
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.95f);
 		}
