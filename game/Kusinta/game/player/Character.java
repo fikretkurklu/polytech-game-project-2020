@@ -120,6 +120,10 @@ public abstract class Character extends Entity {
 		return m_money;
 	}
 	
+	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment(){
+		return m_equipments;
+	}
+	
 	public abstract void tick(long elapsed);
 
 	public abstract void paint(Graphics gp);
