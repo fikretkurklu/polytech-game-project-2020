@@ -73,8 +73,6 @@ public class Player extends Character {
 		ePressed = false;
 		vPressed = false;
 
-		m_slowness = 10;
-
 		m_default_stat_map = new HashMap<>();
 
 		Stats[] statsTable = Stats.values();
@@ -89,37 +87,35 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		int random = (int) (Math.random() * 10);
-		if (random < m_slowness) {
 
-			moving = true;
+		moving = true;
 
-			if (shooting) {
-				if (m_image_index <= 5)
-					m_image_index = m_image_index + 6;
+		if (shooting) {
+			if (m_image_index <= 5)
+				m_image_index = m_image_index + 6;
+		}
+
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
+
+		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
+			turn(dir);
+		}
+
+		if (dir.toString().equals("E")) {
+			if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
+					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
+					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
+				m_x += SPEED_WALK;
+				m_coord.setX(m_x);
+				hitBox.translate(SPEED_WALK, 0);
 			}
-
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y();
-
-			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
-				turn(dir);
-			}
-
-			if (dir.toString().equals("E")) {
-				if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
-						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
-						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
-					m_x += SPEED_WALK;
-					m_coord.setX(m_x);
-					hitBox.translate(SPEED_WALK, 0);
-				}
-			} else if (dir.toString().equals("W")) {
-				if (!checkBlock(hitBox.x, m_y - 1) && !checkBlock(hitBox.x, m_y - m_height)
-						&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
-					m_x -= SPEED_WALK;
-					m_coord.setX(m_x);
-					hitBox.translate(-SPEED_WALK, 0);
-				}
+		} else if (dir.toString().equals("W")) {
+			if (!checkBlock(hitBox.x, m_y - 1) && !checkBlock(hitBox.x, m_y - m_height)
+					&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
+				m_x -= SPEED_WALK;
+				m_coord.setX(m_x);
+				hitBox.translate(-SPEED_WALK, 0);
 			}
 		}
 		return true;
@@ -214,7 +210,8 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		if (keyCode == Controller.K_Q) {
+		switch (keyCode) {
+		case Controller.K_Q:
 			qPressed = pressed;
 			if (pressed) {
 				if (!shooting && !falling && !moving)
@@ -225,14 +222,14 @@ public class Player extends Character {
 				if (!falling && shooting && m_image_index > 7)
 					m_image_index = m_image_index - 6;
 			}
-		}
-		if (keyCode == Controller.K_Z) {
+			break;
+		case Controller.K_Z:
 			zPressed = pressed;
 			if (pressed && !falling) {
 				jumping = true;
 			}
-		}
-		if (keyCode == Controller.K_D) {
+			break;
+		case Controller.K_D:
 			dPressed = pressed;
 			if (pressed) {
 				if (!shooting && !falling && !moving)
@@ -243,8 +240,8 @@ public class Player extends Character {
 				if (!falling && shooting && m_image_index > 7)
 					m_image_index = m_image_index - 6;
 			}
-		}
-		if (keyCode == Controller.K_SPACE) {
+			break;
+		case Controller.K_SPACE:
 			espPressed = pressed;
 			if (pressed) {
 				if (!shooting) {
@@ -256,13 +253,17 @@ public class Player extends Character {
 				}
 				shooting = true;
 			}
-		}
-		if (keyCode == Controller.K_A)
+			break;
+		case Controller.K_A:
 			aPressed = pressed;
-		if (keyCode == Controller.K_E)
+			break;
+		case Controller.K_E:
 			ePressed = pressed;
-		if (keyCode == Controller.K_V)
+			break;
+		case Controller.K_V:
 			vPressed = pressed;
+			break;
+		}
 	}
 
 	@Override
@@ -411,14 +412,6 @@ public class Player extends Character {
 		return m_model.m_room.isBlocked(x, y);
 	}
 
-	public void setSlowness(int s) {
-		if (s < 6) {
-			m_slowness = 6;
-		} else {
-			m_slowness = s;
-		}
-	}
-
 	public void setGravity(int g) {
 		G = g;
 	}
@@ -471,13 +464,13 @@ public class Player extends Character {
 	public Equipment addEquipment(Equipment equipment) {
 		Stuff stuff = equipment.toStuff();
 		Equipment res = null;
-		
+
 		if (m_equipments.get(stuff) != null) {
 			res = m_equipments.get(stuff);
 		}
-		
+
 		m_equipments.put(stuff, equipment);
-		
+
 		Stuff[] stuffTable = Stuff.values();
 
 		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
@@ -494,10 +487,10 @@ public class Player extends Character {
 				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
 			}
 		}
-		
+
 		return res;
 	}
-	
+
 	public void setMoney(int money) {
 		m_money += money;
 	}

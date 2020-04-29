@@ -26,7 +26,6 @@ public abstract class Character extends Entity {
 	int MAX_LIFE = 100;
 	int m_life;
 	protected int m_resistance, m_strength, m_attackSpeed;
-	protected int m_slowness;
 
 	int m_width, m_height;
 
