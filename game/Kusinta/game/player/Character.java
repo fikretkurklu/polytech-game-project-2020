@@ -14,6 +14,7 @@ import automaton.Entity;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
+import equipment.Stat.Stats;
 import game.Coord;
 import game.Model;
 import projectile.Projectile;
@@ -38,6 +39,8 @@ public abstract class Character extends Entity {
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
+	
+	public HashMap<Stats, Integer> m_default_stat_map;
 
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
@@ -129,5 +132,38 @@ public abstract class Character extends Entity {
 
 	public abstract void setPressed(int keyChar, boolean b);
 	
+	public Equipment addEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		Equipment res = null;
 
+		if (m_equipments.get(stuff) != null) {
+			res = m_equipments.get(stuff);
+		}
+
+		m_equipments.put(stuff, equipment);
+
+		Stuff[] stuffTable = Stuff.values();
+
+		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
+		m_resistance = m_default_stat_map.get(Stats.Resistance);
+		m_strength = m_default_stat_map.get(Stats.Strengh);
+		MAX_LIFE = m_default_stat_map.get(Stats.Health);
+
+		for (int i = 0; i < stuffTable.length; i++) {
+			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
+			if (tmpEquipment != null) {
+				m_attackSpeed += tmpEquipment.getModification(Stats.AttackSpeed);
+				m_resistance += tmpEquipment.getModification(Stats.Resistance);
+				m_strength += tmpEquipment.getModification(Stats.Strengh);
+				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
+			}
+		}
+
+		return res;
+	}
+	
+	public void removeEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		m_equipments.put(stuff, null);
+	}
 }

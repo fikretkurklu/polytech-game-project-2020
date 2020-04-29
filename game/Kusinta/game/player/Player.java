@@ -42,8 +42,6 @@ public class Player extends Character {
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 
-	public HashMap<Stats, Integer> m_default_stat_map;
-
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite("resources/Player/spritePlayer.png", 16, 7);
@@ -461,35 +459,6 @@ public class Player extends Character {
 		m_projectiles.remove(projectile);
 	}
 
-	public Equipment addEquipment(Equipment equipment) {
-		Stuff stuff = equipment.toStuff();
-		Equipment res = null;
-
-		if (m_equipments.get(stuff) != null) {
-			res = m_equipments.get(stuff);
-		}
-
-		m_equipments.put(stuff, equipment);
-
-		Stuff[] stuffTable = Stuff.values();
-
-		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
-		m_resistance = m_default_stat_map.get(Stats.Resistance);
-		m_strength = m_default_stat_map.get(Stats.Strengh);
-		MAX_LIFE = m_default_stat_map.get(Stats.Health);
-
-		for (int i = 0; i < stuffTable.length; i++) {
-			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
-			if (tmpEquipment != null) {
-				m_attackSpeed += tmpEquipment.getModification(Stats.AttackSpeed);
-				m_resistance += tmpEquipment.getModification(Stats.Resistance);
-				m_strength += tmpEquipment.getModification(Stats.Strengh);
-				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
-			}
-		}
-
-		return res;
-	}
 
 	public void setMoney(int money) {
 		m_money += money;
