@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -12,6 +13,8 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import opponent.FlyingOpponent;
+import opponent.Opponent;
 import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
@@ -36,11 +39,12 @@ public class Model {
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
+	public Automaton flyingOpponentAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
 	boolean set = false;
-//	Opponent[] m_opponents;
+	LinkedList<Opponent> m_opponents;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
@@ -50,9 +54,12 @@ public class Model {
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
+		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
+		m_opponents = new LinkedList<Opponent>();
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 430, 750, new Direction("E"), this, 100, 100, 1000, 100, 100));
 		setCenterScreenPlayer();
 		setVillageEnv();
 	}
@@ -96,6 +103,9 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
+		for (Opponent op : m_opponents) {
+			op.tick(elapsed);
+		}
 		switch (mode) {
 		case ROOM:
 			m_room.tick(elapsed);
@@ -115,6 +125,9 @@ public class Model {
 		case ROOM:
 			m_room.paint(gp, width, height);
 			m_player.paint(gp);
+			for (Opponent op : m_opponents) {
+				op.paint(gp);
+			}
 			break;
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height);

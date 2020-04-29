@@ -37,7 +37,7 @@ public abstract class Character extends Entity {
 	
 	Character collidingWith;
 
-	Rectangle hitBox;
+	protected Rectangle hitBox;
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -91,7 +91,7 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
-		if (m_direction != dir)
+		if (!m_direction.toString().equals(dir.toString()))
 			m_direction = dir;
 		return true;
 	}

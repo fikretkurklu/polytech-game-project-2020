@@ -1,5 +1,6 @@
 package opponent;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 
 import automaton.Automaton;
@@ -10,6 +11,8 @@ import player.Character;
 public abstract class Opponent extends Character {
 	
 	int m_width, m_height;
+	
+	Rectangle hotBox;
 
 	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
@@ -20,6 +23,7 @@ public abstract class Opponent extends Character {
 	@Override
 	public void tick(long elapsed) {
 		m_automaton.step(this);
+		
 	}
 	
 

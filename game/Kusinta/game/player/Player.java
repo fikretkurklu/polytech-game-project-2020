@@ -374,6 +374,8 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
+//		System.out.println(m_coord.X());
+//		System.out.println(m_coord.Y());
 		if (bI != null) {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
