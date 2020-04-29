@@ -69,7 +69,7 @@ public class FlyingOpponent extends Opponent {
 
 	public boolean move(Direction dir) {
 
-		System.out.println("moving");
+//		System.out.println("moving");
 
 		int m_x = m_coord.X();
 
@@ -84,9 +84,10 @@ public class FlyingOpponent extends Opponent {
 			m_coord.setX(m_x);
 		} else {
 			m_x -= SPEED_FLY;
-			hitBox.translate(m_coord.X() - m_x, 0);
+			hitBox.translate(-(m_coord.X() - m_x), 0);
 			m_coord.setX(m_x);
 		}
+//		}
 		return true;
 	}
 
@@ -116,8 +117,6 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-//		System.out.println("m_x = " + m_coord.X());
-//		System.out.println(m_direction.toString());
 		g.setColor(Color.blue);
 		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
@@ -131,13 +130,15 @@ public class FlyingOpponent extends Opponent {
 		if (m_direction.toString().equals("E")) {
 			g.drawImage(image, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
-			g.drawImage(image, m_coord.X() - (m_width / 2) + m_width, m_coord.Y() - m_height, -m_width, m_height, null);
+			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
 	}
 
 	@Override
 	public void tick(long elapsed) {
 		m_automaton.step(this);
+		System.out.println(m_direction.toString());
+
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
@@ -159,59 +160,63 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 
-		if (cat.toString().equals("O")) {
-				if (dir.toString().equals("E") && !m_direction.toString().equals("E")) {
-					System.out.println(dir.toString());
+		if (m_direction.toString().equals(dir.toString())) {
+			System.out.println("dir = "+dir.toString());
+			if (dir.toString().equals("E")) {
 
-					int x = hitBox.x + hitBox.width;
-					System.out.println(x);
-					if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)) {
-						return true;
-					} else {
-						return false;
-					}
+				int x = hitBox.x + hitBox.width + 1;
+				System.out.println(x);
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2) || 
+						m_model.m_room.isBlocked(x, m_coord.Y() - 1) ||
+						m_model.m_room.isBlocked(x, m_coord.Y() - m_height +1) ) {
+					return true;
 				} else {
-					int x = hitBox.x;
-					if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)) {
-						return true;
-					} else {
-						return false;
-					}
+					return false;
 				}
-		}
-
-		if (cat.toString().equals("A")) {
-			Coord playerCoord = m_model.getPlayer().getCoord();
-			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y();
-			int x = player_x - m_coord.X();
-			int y = m_coord.Y() - m_height - player_y;
-
-			int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-
-			if (distance <= 400) {
-
-				double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-				double angle = (float) Math.asin(Math.abs(y) / r);
-				int i = 0;
-
-				while (i < distance) {
-					int checkX;
-					if (player_x > m_coord.X()) {
-						checkX = (int) (m_coord.X() + i * Math.cos(angle));
-					} else {
-						checkX = (int) (m_coord.X() - i * Math.cos(angle));
-					}
-					if (m_model.m_room.isBlocked(checkX, (int) (m_coord.Y() - m_height - i * Math.sin(angle)))) {
-						return false;
-					}
-					i += 40;
+			} else if (dir.toString().equals("W")) {
+				int x = hitBox.x;
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2) || 
+						m_model.m_room.isBlocked(x, m_coord.Y() - 1) ||
+						m_model.m_room.isBlocked(x, m_coord.Y() - m_height +1)) {
+					return true;
+				} else {
+					return false;
 				}
-				return true;
-
 			}
-			return false;
 		}
+
+//		if (cat.toString().equals("A")) {
+//			Coord playerCoord = m_model.getPlayer().getCoord();
+//			int player_x = playerCoord.X();
+//			int player_y = playerCoord.Y();
+//			int x = player_x - m_coord.X();
+//			int y = m_coord.Y() - m_height - player_y;
+//
+//			int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+//
+//			if (distance <= 400) {
+//
+//				double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+//				double angle = (float) Math.asin(Math.abs(y) / r);
+//				int i = 0;
+//
+//				while (i < distance) {
+//					int checkX;
+//					if (player_x > m_coord.X()) {
+//						checkX = (int) (m_coord.X() + i * Math.cos(angle));
+//					} else {
+//						checkX = (int) (m_coord.X() - i * Math.cos(angle));
+//					}
+//					if (m_model.m_room.isBlocked(checkX, (int) (m_coord.Y() - m_height - i * Math.sin(angle)))) {
+//						return false;
+//					}
+//					i += 40;
+//				}
+//				return true;
+//
+//			}
+//			return false;
+//		}
 		return false;
 	}
 
