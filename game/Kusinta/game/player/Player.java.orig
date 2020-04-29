@@ -1,5 +1,9 @@
 package player;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -75,6 +79,11 @@ public class Player extends Character {
 			m_default_stat_map.put(statsTable[i], 0);
 		}
 
+<<<<<<< HEAD
+		setStat();
+		setMoney(10000);
+=======
+>>>>>>> master
 	}
 
 	@Override
