@@ -23,11 +23,10 @@ public abstract class Character extends Entity {
 
 	public Model m_model;
 	protected Direction m_direction;
+	protected enum CurrentStat { m_resistance, m_strength, m_attackspeed, m_maxLife, m_life };
 
-	int MAX_LIFE = 100;
-	int m_life;
-	protected int m_resistance, m_strength, m_attackSpeed;
-
+	protected HashMap<CurrentStat, Integer> m_current_stat_map;
+	
 	int m_width, m_height;
 
 	protected LinkedList<Projectile> m_projectiles;
@@ -45,16 +44,12 @@ public abstract class Character extends Entity {
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
 		
+		setStat(attackSpeed, maxLife, resistance, strength);
+		setCurrentStat(attackSpeed, maxLife, resistance, strength);
+		
 		m_coord = new Coord(x,y);
 		
 		m_direction = dir;
-		
-		MAX_LIFE = maxLife;
-
-		m_life = life;
-		m_resistance = resistance;
-		m_strength = strength;
-		m_attackSpeed = attackSpeed;
 		
 		m_projectiles = new LinkedList<Projectile>();
 		
@@ -96,26 +91,27 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean gotpower() { // mort
-		if (m_life > 0) {
+		if (m_current_stat_map.get(CurrentStat.m_life) > 0) {
 			return true;
 		}
 		return false;
 	}
 
 	public void setLife(int l) {
-		if (l > MAX_LIFE) {
-			m_life = MAX_LIFE;
+		int maxLife = m_current_stat_map.get(CurrentStat.m_maxLife);
+		if (l > maxLife) {
+			m_current_stat_map.put(CurrentStat.m_life, maxLife);
 		} else {
-			m_life = l;
+			m_current_stat_map.put(CurrentStat.m_life, l);
 		}
 	}
 
 	public void setResistance(int resistance) {
-		m_resistance = resistance;
+		m_current_stat_map.put(CurrentStat.m_resistance, resistance);
 	}
 
 	public void setStrength(int strength) {
-		m_strength = strength;
+		m_current_stat_map.put(CurrentStat.m_strength, strength);
 	}
 
 	public int getMoney() {
@@ -143,20 +139,25 @@ public abstract class Character extends Entity {
 		m_equipments.put(stuff, equipment);
 
 		Stuff[] stuffTable = Stuff.values();
-
-		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
-		m_resistance = m_default_stat_map.get(Stats.Resistance);
-		m_strength = m_default_stat_map.get(Stats.Strengh);
-		MAX_LIFE = m_default_stat_map.get(Stats.Health);
+		m_current_stat_map.put(CurrentStat.m_attackspeed, m_default_stat_map.get(Stats.AttackSpeed));
+		m_current_stat_map.put(CurrentStat.m_resistance, m_default_stat_map.get(Stats.Resistance));
+		m_current_stat_map.put(CurrentStat.m_strength, m_default_stat_map.get(Stats.Strengh));
+		m_current_stat_map.put(CurrentStat.m_maxLife, m_default_stat_map.get(Stats.Health));
+		m_current_stat_map.put(CurrentStat.m_life, m_default_stat_map.get(Stats.Health));
 
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
 			if (tmpEquipment != null) {
-				m_attackSpeed += tmpEquipment.getModification(Stats.AttackSpeed);
-				m_resistance += tmpEquipment.getModification(Stats.Resistance);
-				m_strength += tmpEquipment.getModification(Stats.Strengh);
-				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
+				int attackSpeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
+				int resistance = m_current_stat_map.get(CurrentStat.m_resistance);
+				int strength = m_current_stat_map.get(CurrentStat.m_strength);
+				int maxlife = m_current_stat_map.get(CurrentStat.m_maxLife);
+				m_current_stat_map.put(CurrentStat.m_attackspeed, attackSpeed+tmpEquipment.getModification(Stats.AttackSpeed));
+				m_current_stat_map.put(CurrentStat.m_resistance, resistance+tmpEquipment.getModification(Stats.Resistance));
+				m_current_stat_map.put(CurrentStat.m_strength, strength+tmpEquipment.getModification(Stats.Strengh));
+				m_current_stat_map.put(CurrentStat.m_maxLife, maxlife+tmpEquipment.getModification(Stats.Health));
 			}
+			m_current_stat_map.put(CurrentStat.m_life, m_current_stat_map.get(CurrentStat.m_maxLife));
 		}
 
 		return res;
@@ -166,4 +167,29 @@ public abstract class Character extends Entity {
 		Stuff stuff = equipment.toStuff();
 		m_equipments.put(stuff, null);
 	}
+	
+	public void setStat(int attackspeed, int health, int resistance, int strength) {
+		m_default_stat_map = new HashMap<>();
+		m_default_stat_map.put(Stats.AttackSpeed, attackspeed);
+		m_default_stat_map.put(Stats.Health, health);
+		m_default_stat_map.put(Stats.Resistance, resistance);
+		m_default_stat_map.put(Stats.Strengh, strength);
+	}
+	
+	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
+		m_current_stat_map = new HashMap<>();
+		int life = health;
+		m_current_stat_map.put(CurrentStat.m_maxLife, health);
+		m_current_stat_map.put(CurrentStat.m_life, life);
+		m_current_stat_map.put(CurrentStat.m_resistance, resistance);
+		m_current_stat_map.put(CurrentStat.m_strength, strength);
+		m_current_stat_map.put(CurrentStat.m_attackspeed, attackspeed);
+	}
+	
+	public void setMoney(int money) {
+		m_money += money;
+	}
+	
+	
+	
 }

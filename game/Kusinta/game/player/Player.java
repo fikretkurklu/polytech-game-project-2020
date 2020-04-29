@@ -1,7 +1,5 @@
 package player;
 
-import java.awt.Color;
-
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -13,8 +11,6 @@ import game.Model;
 import projectile.Arrow;
 import projectile.Projectile;
 import environnement.Element;
-import equipment.Equipment;
-import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 
 public class Player extends Character {
@@ -79,7 +75,6 @@ public class Player extends Character {
 			m_default_stat_map.put(statsTable[i], 0);
 		}
 
-		setStat();
 	}
 
 	@Override
@@ -189,7 +184,7 @@ public class Player extends Character {
 
 		long now = System.currentTimeMillis();
 
-		if (now - m_shot_time > m_attackSpeed && !shooting) {
+		if (now - m_shot_time > m_current_stat_map.get(CurrentStat.m_attackspeed) && !shooting) {
 
 			shooting = true;
 
@@ -459,16 +454,5 @@ public class Player extends Character {
 		m_projectiles.remove(projectile);
 	}
 
-
-	public void setMoney(int money) {
-		m_money += money;
-	}
-
-	public void setStat() {
-		m_default_stat_map.put(Stats.AttackSpeed, 1000);
-		m_default_stat_map.put(Stats.Health, 100);
-		m_default_stat_map.put(Stats.Resistance, 0);
-		m_default_stat_map.put(Stats.Strengh, 1);
-	}
 
 }
