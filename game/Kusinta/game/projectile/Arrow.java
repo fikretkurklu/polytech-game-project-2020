@@ -15,7 +15,7 @@ import player.Player;
 public class Arrow extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	static final int SPEED = 9;
+	static final int SPEED = 12;
 	int moving;
 
 	int m_height;
@@ -63,7 +63,7 @@ public class Arrow extends Projectile {
 				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
 			}
 		}
-		moving = (moving + 1) % 3;
+		moving = (moving + 1) % 4;
 
 		hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
 
