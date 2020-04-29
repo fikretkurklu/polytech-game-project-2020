@@ -7,7 +7,7 @@ public class WeaponPanel extends Panel {
 
 	private String IMAGE_WEAPON_SHOP = "resources/Village/HUD/weaponShopBG.jpg";
 	EquipmentManager EM;
-	private final int NB_MAX_EQUIPEMENT = 12;
+	private final int NB_MAX_EQUIPEMENT = 14;
 	Player m_player;
 
 	public WeaponPanel(int x, int y, int w, int h, Player p) {

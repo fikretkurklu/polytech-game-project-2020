@@ -20,7 +20,7 @@ public class Village {
 	WeaponPanel weaponPanel;
 	MagicPanel magicPanel;
 	InfirmaryPanel infirmaryPanel;
-	InventoryPanel inventoryPanel;
+	static InventoryPanel inventoryPanel;
 
 	Button m_focus;
 	static Model m_model;
@@ -36,7 +36,7 @@ public class Village {
 		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
-		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		setEnv(ID_ENV.DEFAULT);
 	}
 
@@ -131,6 +131,9 @@ public class Village {
 
 	public static void setEnv(ID_ENV ID) {
 		env = ID;
+		if (ID == ID_ENV.INVENTORY) {
+			inventoryPanel.setButton();
+		}
 	}
 
 	public static void leaveVillage() throws Exception {

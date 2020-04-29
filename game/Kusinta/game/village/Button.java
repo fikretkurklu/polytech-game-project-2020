@@ -8,37 +8,48 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public abstract class Button {
-
-	Image m_img;
+	Image bgImg;
+	Image fgImg;
+	Image bgImgDrawned;
+	Image fgImgDrawned;
 	int m_width, m_height, m_x, m_y;
-	boolean isActif;
 
 	public Button(int x, int y, int w, int h) {
 		m_width = w;
 		m_height = h;
 		m_x = x;
 		m_y = y;
-		isActif = true;
 
 	}
 
 	public void paint(Graphics g) {
-		if (m_img != null && isActif) {
-			g.drawImage(m_img, m_x, m_y, null);
+		if (bgImgDrawned != null) {
+			g.drawImage(bgImgDrawned, m_x, m_y, null);
+		}
+		if (fgImgDrawned != null) {
+			g.drawImage(fgImgDrawned, m_x, m_y, null);
 		}
 	}
 
-	@SuppressWarnings("unused")
-	public void setImage(String path) {
+	public void setBgImage(String path) {
 		try {
 			File f = new File(path);
-			if (f == null)
-				System.out.println("Erreur while loading image at : " + path);
-			m_img = ImageIO.read(f);
-			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
-		} catch (IOException e) {
-			m_img = null;
-			e.printStackTrace();
+			bgImg = ImageIO.read(f);
+			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		} catch (Exception e) {
+			bgImgDrawned = null;
+			bgImg = null;
+		}
+	}
+
+	public void setFgImage(String path) {
+		try {
+			File f = new File(path);
+			fgImg = ImageIO.read(f);
+			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		} catch (Exception e) {
+			fgImgDrawned = null;
+			fgImg = null;
 		}
 	}
 
@@ -47,36 +58,45 @@ public abstract class Button {
 		m_height *= ratio_h;
 		m_x *= ratio_w;
 		m_y *= ratio_h;
-		if (m_img != null) {
-			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		if (fgImg != null) {
+			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		}
+		if (bgImg != null) {
+			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
 	}
 
 	public Button mouseMoved(int x, int y) {
-		if (isActif) {
-			if (x > m_x && x < m_x + m_width && y > m_y && y < m_y + m_height) {
-				return this;
-			} else {
-				return null;
-			}
+		if (x > m_x && x < m_x + m_width && y > m_y && y < m_y + m_height) {
+			return this;
+		} else {
+			return null;
 		}
-		return null;
 	}
 
+
 	public void growImg() {
-		if (isActif) {
-			m_width = (int) (m_width * 1.2);
-			m_height = (int) (m_height * 1.2);
-			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		m_width = (int) (m_width * 1.2);
+		m_height = (int) (m_height * 1.2);
+		if (bgImg != null) {
+			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
+		if (fgImg != null) {
+			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		}
+
 	}
 
 	public void reduceImg() {
-		if (isActif) {
-			m_width = (int) (m_width / 1.2);
-			m_height = (int) (m_height / 1.2);
-			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		m_width = (int) (m_width / 1.2);
+		m_height = (int) (m_height / 1.2);
+		if (bgImg != null) {
+			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
+		if (fgImg != null) {
+			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+		}
+
 	}
 
 	public abstract void action() throws Exception;
