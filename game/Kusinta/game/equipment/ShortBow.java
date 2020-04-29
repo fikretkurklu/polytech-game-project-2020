@@ -4,13 +4,18 @@ import equipment.Stat.Stats;
 
 public class ShortBow extends Equipment {
 	
+	/*
+	 * The short bow shoots quickly but with low dmg
+	 * 
+	 */
+	
 	public ShortBow() throws Exception {
 		super();
 		setImagePath();
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
 		statTable.put(Stats.Strengh, 5);
-		statTable.put(Stats.AttackSpeed, 20);
+		statTable.put(Stats.AttackSpeed, 600);
 		
 	}
 
