@@ -8,13 +8,10 @@ public class WeaponPanel extends Panel {
 	private String IMAGE_WEAPON_SHOP = "resources/Village/HUD/weaponShopBG.jpg";
 	EquipmentManager EM;
 	private final int NB_MAX_EQUIPEMENT = 14;
-	Player m_player;
+	
 
 	public WeaponPanel(int x, int y, int w, int h, Player p) {
-		super(x, y, w, h);
-		
-				
-		m_player = p;
+		super(x, y, w, h, p);
 		setImage(IMAGE_WEAPON_SHOP);
 		
 		int Scroll_w = w / Scroll.WIDTH_RATIO;
@@ -24,6 +21,7 @@ public class WeaponPanel extends Panel {
 		m_EquipemenScroll = new EquipementScroll(w / 3, (int)(Scroll_h * 1.5), w/3, h/3);
 		EM = new EquipmentManager();
 		drawEquipement();
+		add(new RollButton(m_width / 10, m_height / 10, m_width/8, m_width/8, this, p));
 		
 	}
 	

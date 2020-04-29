@@ -32,10 +32,10 @@ public class Village {
 		m_height = h;
 		m_model = model;
 		menuPanel = new MenuPanel(0, 0, (int) (m_width * DIVISOR), m_height, p);
-		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
-		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
-		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
+		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
+		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		setEnv(ID_ENV.DEFAULT);
 	}

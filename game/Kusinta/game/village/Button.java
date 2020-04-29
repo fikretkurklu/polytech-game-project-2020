@@ -3,7 +3,6 @@ package village;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +12,7 @@ public abstract class Button {
 	Image bgImgDrawned;
 	Image fgImgDrawned;
 	int m_width, m_height, m_x, m_y;
+	private static double RATIO_BG_FG = 0.8;
 
 	public Button(int x, int y, int w, int h) {
 		m_width = w;
@@ -27,7 +27,7 @@ public abstract class Button {
 			g.drawImage(bgImgDrawned, m_x, m_y, null);
 		}
 		if (fgImgDrawned != null) {
-			g.drawImage(fgImgDrawned, m_x, m_y, null);
+			g.drawImage(fgImgDrawned, m_x + (int)(m_width * (1-RATIO_BG_FG) / 2), (int)(m_y + m_height * (1-RATIO_BG_FG) / 2), null);
 		}
 	}
 
@@ -46,7 +46,7 @@ public abstract class Button {
 		try {
 			File f = new File(path);
 			fgImg = ImageIO.read(f);
-			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			fgImgDrawned = null;
 			fgImg = null;
@@ -59,7 +59,7 @@ public abstract class Button {
 		m_x *= ratio_w;
 		m_y *= ratio_h;
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		}
 		if (bgImg != null) {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
@@ -82,7 +82,7 @@ public abstract class Button {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		}
 
 	}
@@ -94,7 +94,7 @@ public abstract class Button {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		}
 
 	}

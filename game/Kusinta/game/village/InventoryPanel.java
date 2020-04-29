@@ -9,17 +9,15 @@ import game.Coord;
 import player.Player;
 
 public class InventoryPanel extends Panel {
-	
-	private Player m_player;
+	private final String BG = "resources/Village/HUD/inventoryBG.jpg";
 	private HashMap<Stuff, Equipment> equipements;
-	
-	private final String nullImg = "resources/Village/HUD/EmptyCase.png";
+
 	public InventoryPanel(int x, int y, int w, int h, Player p) {
-		super(x, y, w, h);
+		super(x, y, w, h, p);
 		int Scroll_w = w / Scroll.WIDTH_RATIO;
 		int Scroll_h = h / Scroll.HEIGHT_RATIO;
+		setImage(BG);
 		m_scroll = new Scroll(w / 2 - Scroll_w / 2 , 0 ,Scroll_w ,Scroll_h , "INVENTORY");
-		m_player = p;
 		equipements = m_player.getEquipment();
 		int buttonSize = m_width / 10;
 		

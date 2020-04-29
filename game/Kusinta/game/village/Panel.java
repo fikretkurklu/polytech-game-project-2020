@@ -8,6 +8,8 @@ import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
+import player.Player;
+
 public abstract class Panel {
 	int m_width, m_height;
 	int m_x, m_y;
@@ -17,14 +19,16 @@ public abstract class Panel {
 	protected EquipementScroll m_EquipemenScroll;
 	
 	boolean focus;
+	Player m_player;
 
-	public Panel(int x, int y, int w, int h) {
+	public Panel(int x, int y, int w, int h, Player p) {
 		m_width = w;
 		m_height = h;
 		m_x = x;
 		m_y = y;
 		m_elem = new LinkedList<Button>();
 		focus = false;
+		m_player = p;
 	}
 
 	public void add(Button elem) {
