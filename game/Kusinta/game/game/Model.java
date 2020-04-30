@@ -13,6 +13,7 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import opponent.WalkingOpponent;
 import opponent.FlyingOpponent;
 import opponent.Opponent;
 import hud.HUD;
@@ -41,6 +42,7 @@ public class Model {
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
+	public Automaton walkingOpponentAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
@@ -57,11 +59,13 @@ public class Model {
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
+		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		m_opponents = new LinkedList<Opponent>();
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1204, new Direction("E"), this, 100, 100, 1000, 100, 100));
 		setCenterScreenPlayer();
 		setVillageEnv();
 		int HUD_w = m_width / 3;
