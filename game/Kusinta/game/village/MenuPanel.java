@@ -13,7 +13,7 @@ public class MenuPanel extends Panel {
 	private String INFIRMARY_ICO = "resources/Village/HUD/infirmary.png";
 	private String BG = "resources/Village/HUD/MenuBG.png";
 	
-	CoinDraw coinDraw;
+	
 	
 	public MenuPanel(int x, int y, int w, int h, Player p) {
 		super(x, y, w, h, p);
@@ -50,21 +50,7 @@ public class MenuPanel extends Panel {
 				ID_ENV.INFIRMARY);
 		b.setFgImage(INFIRMARY_ICO);
 		b.setBgImage(BG);
-		add(b);
-		
-		coinDraw = new CoinDraw(m_width / 8, m_height - m_height / 10, m_width / 2, m_height / 10, p);
-		
-	}
-	
-	public void paint(Graphics g) {
-		super.paint(g);
-		coinDraw.paint(g);
-	}
-	
-	@Override
-	public void resized(int x, int y, int w, int h) {
-		coinDraw.resized((double) w / (double) m_width, (double) h / (double) m_height);
-		super.resized(x, y, w, h);
+		add(b);		
 	}
 
 }
