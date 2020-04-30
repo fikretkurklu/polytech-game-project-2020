@@ -104,16 +104,16 @@ public class Player extends Character {
 			}
 
 			if (dir.toString().equals("E")) {
-				if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
-						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
-						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
+				if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
+						&& !checkBlock((hitBox.x + hitBox.width)+ SPEED_WALK, m_y - m_height)
+						&& !checkBlock((hitBox.x + hitBox.width)+ SPEED_WALK, m_y - m_height / 2)) {
 					m_x += SPEED_WALK;
 					m_coord.setX(m_x);
 					hitBox.translate(SPEED_WALK, 0);
 				}
 			} else if (dir.toString().equals("W")) {
-				if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
-						&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
+				if (!checkBlock(hitBox.x - SPEED_WALK, m_y - 1) && !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height)
+						&& !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height / 2)) {
 					m_x -= SPEED_WALK;
 					m_coord.setX(m_x);
 					hitBox.translate(-SPEED_WALK, 0);
@@ -295,22 +295,9 @@ public class Player extends Character {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-		} else {
-			jumping = false;
-			falling = false;
-			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			hitBox.translate(0, -(m_coord.Y() - botBlock));
-			m_coord.setY(botBlock);
-		}
+		} 
 
-		if (shooting) {
-			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			if (mouse_x > m_coord.X()) {
-				turn(new Direction("E"));
-			} else {
-				turn(new Direction("W"));
-			}
-		}
+		
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
@@ -357,6 +344,14 @@ public class Player extends Character {
 		m_moveElapsed += elapsed;
 		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
+			if (shooting) {
+				int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+				if (mouse_x > m_coord.X()) {
+					turn(new Direction("E"));
+				} else {
+					turn(new Direction("W"));
+				}
+			}
 			m_automaton.step(this);
 		}
 		
