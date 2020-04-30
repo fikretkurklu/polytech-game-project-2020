@@ -31,9 +31,11 @@ public class CoinDraw {
 		m_height = h;
 		m_player = p;
 		try {
-			m_images = loadSprite(COIN_ICO_SPRITE, 1, 6);
+			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
+			for (Image i: m_images) {
+				i = i.getScaledInstance(m_width / 3, m_height / 2, java.awt.Image.SCALE_SMOOTH);
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		coinIco = m_images[0];
@@ -57,24 +59,5 @@ public class CoinDraw {
 		}
 	}
 	
-	public Image[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		File imageFile = new File(filename);
-		if (imageFile.exists()) {
-			BufferedImage image = ImageIO.read(imageFile);
-			int width = image.getWidth(null) / ncols;
-			int height = image.getHeight(null) / nrows;
-
-			Image[] images = new Image[nrows * ncols];
-			for (int i = 0; i < nrows; i++) {
-				for (int j = 0; j < ncols; j++) {
-					int x = j * width;
-					int y = i * height;
-					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
-					images[(i * ncols) + j] = images[(i * ncols) + j].getScaledInstance(m_width / 3, m_height / 2, java.awt.Image.SCALE_SMOOTH);
-				}
-			}
-			return images;
-		}
-		return null;
-	}
+	
 }
