@@ -38,8 +38,6 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
-	long m_moveElapsed;
-	
 	
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
@@ -63,8 +61,6 @@ public class Player extends Character {
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
-		
-		m_moveElapsed = 0;
 
 		reset();
 		setMoney(10000);
@@ -99,24 +95,23 @@ public class Player extends Character {
 		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 			turn(dir);
 		}
-		int realSpeed = (int) Math.min((SPEED_WALK * m_moveElapsed), 2);
+	
 		if (dir.toString().equals("E")) {
-			if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
+			if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
 					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
 					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
-				m_x += realSpeed;
+				m_x += SPEED_WALK;
 				m_coord.setX(m_x);
-				hitBox.translate(realSpeed, 0);
+				hitBox.translate(SPEED_WALK, 0);
 			}
 		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(hitBox.x, m_y - 1) && !checkBlock(hitBox.x, m_y - m_height)
+			if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
 					&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
-				m_x -= realSpeed;
+				m_x -= SPEED_WALK;
 				m_coord.setX(m_x);
-				hitBox.translate(-realSpeed, 0);
+				hitBox.translate(-SPEED_WALK, 0);
 			}
 		}
-		m_moveElapsed = 0;
 		return true;
 	}
 
@@ -343,8 +338,6 @@ public class Player extends Character {
 				m_image_index = (m_image_index + 1) % 4;
 			}
 		}
-		
-		m_moveElapsed += elapsed;
 
 		m_automaton.step(this);
 
