@@ -71,7 +71,12 @@ public abstract class Character extends Entity {
 			m_equipments.put(stuffTable[i], null);
 		}
 	}
-
+	
+	public Rectangle getHitBox() {
+		return hitBox;
+	}
+	public abstract void reset();
+	
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -87,6 +92,7 @@ public abstract class Character extends Entity {
 	public LinkedList<Projectile> getProjectiles() {
 		return m_projectiles;
 	}
+	
 
 	@Override
 	public boolean turn(Direction dir) {
@@ -143,13 +149,13 @@ public abstract class Character extends Entity {
 		}
 
 		m_equipments.put(stuff, equipment);
-
 		Stuff[] stuffTable = Stuff.values();
 		m_current_stat_map.put(CurrentStat.m_attackspeed, m_default_stat_map.get(Stats.AttackSpeed));
 		m_current_stat_map.put(CurrentStat.m_resistance, m_default_stat_map.get(Stats.Resistance));
 		m_current_stat_map.put(CurrentStat.m_strength, m_default_stat_map.get(Stats.Strengh));
 		m_current_stat_map.put(CurrentStat.m_maxLife, m_default_stat_map.get(Stats.Health));
 		m_current_stat_map.put(CurrentStat.m_life, m_default_stat_map.get(Stats.Health));
+		
 
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
@@ -165,7 +171,6 @@ public abstract class Character extends Entity {
 			}
 			m_current_stat_map.put(CurrentStat.m_life, m_current_stat_map.get(CurrentStat.m_maxLife));
 		}
-
 		return res;
 	}
 	

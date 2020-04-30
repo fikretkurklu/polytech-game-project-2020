@@ -72,8 +72,12 @@ public class Model {
 	}
 
 	public void setRoomEnv() throws Exception {
-		if (!(m_player instanceof Player))
+		if (!(m_player instanceof Player)) {
 			switchPlayer();
+			m_player.reset();
+		}
+			
+		
 		mode = ROOM;
 	}
 
@@ -123,7 +127,7 @@ public class Model {
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (mode) {
 		case ROOM:
-			m_room.paint(gp, width, height);
+			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			m_player.paint(gp);
 			break;
 		case UNDERWORLD:

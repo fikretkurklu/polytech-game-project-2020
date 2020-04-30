@@ -65,6 +65,11 @@ public class Player extends Character {
 
 		m_imageElapsed = 0;
 
+		reset();
+		setMoney(10000);
+	}
+
+	public void reset() {
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -72,17 +77,12 @@ public class Player extends Character {
 		aPressed = false;
 		ePressed = false;
 		vPressed = false;
-
-		m_default_stat_map = new HashMap<>();
-
-		Stats[] statsTable = Stats.values();
-
-		for (int i = 0; i < statsTable.length; i++) {
-			m_default_stat_map.put(statsTable[i], 0);
-		}
-		setMoney(10000);
+		m_imageElapsed = 0;
+		moving = false;
+		jumping = false;
+		falling = false;
+		shooting = false;
 	}
-
 	@Override
 	public boolean move(Direction dir) { // bouger
 
@@ -122,7 +122,6 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
-
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
@@ -183,11 +182,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-
-		long now = System.currentTimeMillis();
-
-		if (now - m_shot_time > m_current_stat_map.get(CurrentStat.m_attackspeed) && !shooting) {
-
+		if (!shooting) {
 			shooting = true;
 
 			if (jumping || falling || moving) {
@@ -195,12 +190,8 @@ public class Player extends Character {
 			} else {
 				m_image_index = 2;
 			}
-
-			m_shot_time = now;
-
 			return true;
 		}
-
 		return false;
 	}
 
@@ -220,9 +211,6 @@ public class Player extends Character {
 			break;
 		case Controller.K_Z:
 			zPressed = pressed;
-			if (pressed && !falling) {
-				jumping = true;
-			}
 			break;
 		case Controller.K_D:
 			dPressed = pressed;
@@ -246,7 +234,6 @@ public class Player extends Character {
 						m_image_index = 2;
 					}
 				}
-				shooting = true;
 			}
 			break;
 		case Controller.K_A:
@@ -310,13 +297,11 @@ public class Player extends Character {
 
 		if (shooting) {
 			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			Direction direc;
 			if (mouse_x > m_coord.X()) {
-				direc = new Direction("E");
+				turn(new Direction("E"));
 			} else {
-				direc = new Direction("W");
+				turn(new Direction("W"));
 			}
-			turn(direc);
 		}
 
 		m_imageElapsed += elapsed;
@@ -336,11 +321,11 @@ public class Player extends Character {
 				} else if (m_image_index > 6 && !falling && !moving) {
 					shoot();
 					shooting = false;
-				}
-				if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
+				} else if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
 					shoot();
 					shooting = false;
 				}
+				
 			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
