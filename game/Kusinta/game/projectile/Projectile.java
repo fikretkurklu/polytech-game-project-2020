@@ -1,6 +1,7 @@
 package projectile;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -18,112 +19,50 @@ public abstract class Projectile extends Entity {
 	static final int HIT_STATE = 2;
 	public static final int SIZE = 86;
 
-	protected Coord m_coord;
-	protected int m_state;
 	protected double m_angle;
-	protected Character m_shooter;
 	protected Direction m_direction;
+	
+	protected int m_State;
+	
+	protected Character m_shooter;
 	protected Model m_model;
+	
+	protected long m_dead_time;
+	
+	protected float m_alpha;
+	
+	protected Coord hitBox;
+	
+	protected BufferedImage bImage;
+	
+	protected Image image;
 
-	Image image;
-
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
+	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);
+		
 		m_coord = new Coord(x,y);
 		m_angle = angle;
+		m_direction = direction;
+		
 		m_shooter = shooter;
-		m_direction = m_shooter.getDirection();
 		m_model = model;
+		
+		m_State = OK_STATE;
+		
+		m_alpha = 1f;
+		
 	}
-
+	
 	@Override
-	public boolean jump(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pop(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean wizz(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean power() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean turn(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean get() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean store() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean egg(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hit(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mydir(Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean closest(Category cat, Direction dir) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotstuff() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean gotpower() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean key(int keyCode) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean cell(Direction dir, Category cat) {
+		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		if (m_State == HIT_STATE) {
+			return !c;
+		}
+		if (!c) {
+			m_State = HIT_STATE;
+		}
+		return c;
 	}
 
 	public void loadImage(String path) throws Exception {
@@ -138,5 +77,21 @@ public abstract class Projectile extends Entity {
 	
 	public void tick(long elapsed) {
 		m_automaton.step(this);
+	}
+	
+	public long getDeadTime() {
+		return m_dead_time;
+	}
+	
+	public int getState() {
+		return m_State;
+	}
+	
+	public float getAlpha() {
+		return m_alpha;
+	}
+	
+	public void setAlpha(float alpha) {
+		m_alpha = alpha;
 	}
 }

@@ -1,15 +1,19 @@
 package player;
 
-import java.awt.Color;
-
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
+import projectile.Projectile;
 import environnement.Element;
+import equipment.Equipment;
+import equipment.EquipmentManager.Stuff;
+import equipment.Stat.Stats;
 
 public class Player extends Character {
 
@@ -17,18 +21,13 @@ public class Player extends Character {
 
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
-	int m_slowness;
 
 	int SPEED_WALK = 1;
-	
-	enum State {WALKING, JUMPING, IDLE};
 
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping;
-
-	int m_width, m_height;
+	boolean falling, jumping, shooting, moving;
 
 	int y_gravity;
 	int dt_y;
@@ -38,19 +37,18 @@ public class Player extends Character {
 
 	long m_time, m_shot_time;
 
-	int[] x_hitBox, y_hitBox;
-
+	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 
-	State m_State;
+	public HashMap<Stats, Integer> m_default_stat_map;
 
-	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception{
+	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite("resources/Player/spritePlayer.png", 16, 7);
+		bIShooting = m_model.loadSprite("resources/Player/spriteArcher.png", 4, 4);
 
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
-		// System.out.println("ratio = " +ratio);
 
 		m_height = DIMENSION * bI[0].getHeight();
 		m_width = (int) (m_height * ratio);
@@ -58,13 +56,12 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
-				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
-		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
+		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height + 3 * DIMENSION),
+				2 * (m_width / 2 + 3 * DIMENSION), m_height + 3 * DIMENSION);
+
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
-		m_State = State.IDLE;
 
 		qPressed = false;
 		zPressed = false;
@@ -75,35 +72,51 @@ public class Player extends Character {
 		vPressed = false;
 
 		m_slowness = 10;
+
+		m_default_stat_map = new HashMap<>();
+
+		Stats[] statsTable = Stats.values();
+
+		for (int i = 0; i < statsTable.length; i++) {
+			m_default_stat_map.put(statsTable[i], 0);
+		}
+
+		setStat();
 	}
 
 	@Override
 	public boolean move(Direction dir) { // bouger
 		int random = (int) (Math.random() * 10);
-		System.out.println("random = " + random);
 		if (random < m_slowness) {
-			if (jumping || falling) {
-				m_State = State.JUMPING;
-			} else {
-				m_State = State.WALKING;
+
+			moving = true;
+
+			if (shooting) {
+				if (m_image_index <= 5)
+					m_image_index = m_image_index + 6;
 			}
+
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 
-			if (!dir.toString().equals(m_direction.toString())) {
+			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 				turn(dir);
 			}
+
 			if (dir.toString().equals("E")) {
-				if (!checkBlock(x_hitBox[2], m_y - 1) && !checkBlock(x_hitBox[2], m_y - m_height)
-						&& !checkBlock(x_hitBox[2], m_y - m_height / 2)) {
+				if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
 					m_x += SPEED_WALK;
 					m_coord.setX(m_x);
+					hitBox.translate(SPEED_WALK, 0);
 				}
 			} else if (dir.toString().equals("W")) {
-				if (!checkBlock(x_hitBox[0], m_y - 1) && !checkBlock(x_hitBox[0], m_y - m_height)
-						&& !checkBlock(x_hitBox[0], m_y - m_height / 2)) {
+				if (!checkBlock(hitBox.x, m_y - 1) && !checkBlock(hitBox.x, m_y - m_height)
+						&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
 					m_x -= SPEED_WALK;
 					m_coord.setX(m_x);
+					hitBox.translate(-SPEED_WALK, 0);
 				}
 			}
 		}
@@ -114,10 +127,15 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 
-			m_State = State.JUMPING;
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
+			if (shooting) {
+				if (m_image_index <= 5)
+					m_image_index = m_image_index + 6;
+			}
+			if (!shooting)
+				m_image_index = 16;
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -125,16 +143,36 @@ public class Player extends Character {
 	}
 
 	@Override
-	public boolean pop(Direction dir) { // sauter moins haut
-		// m_model.m_room.setupVillageMode();
-		System.out.println("setupVillageMode");
-			return true;
+	public boolean pop(Direction dir) {
+		try {
+			m_model.setVillageEnv();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	private void gravity(long t) {
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2] - 1, m_coord.Y())
-				&& !checkBlock(x_hitBox[0] - 2, m_coord.Y()) || falling) {
-			m_State = State.JUMPING;
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
+				&& !checkBlock(hitBox.x - 2, m_coord.Y()) || falling) {
+
+			falling = true;
+
+			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
+					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
+					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				hitBox.translate(0, -(m_coord.Y() - botBlock));
+				m_coord.setY(botBlock);
+				y_gravity = m_coord.Y();
+				jumping = false;
+				t = (long) 0.1;
+				m_time = t;
+			}
+
+			if (!jumping && !shooting)
+				m_image_index = 23;
+
 			double C;
 			if (jumping) {
 				C = ACCELERATION_JUMP;
@@ -142,18 +180,8 @@ public class Player extends Character {
 				C = 0;
 			}
 
-			if (checkBlock(m_coord.X(), m_coord.Y() - m_height) || checkBlock(x_hitBox[2] - 2, m_coord.Y() - m_height)
-					|| checkBlock(x_hitBox[0] + 2, m_coord.Y() - m_height)) {
-				C = 0;
-				m_coord.setY(m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height);
-				y_gravity = m_coord.Y();
-				jumping = false;
-				t = (long) 0.1;
-				m_time = t;
-				System.out.println(" ratio_y = " + m_ratio_y);
-			}
-
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
+			hitBox.translate(0, -(m_coord.Y() - newY));
 			m_coord.setY(newY);
 		} else {
 			m_time = 0;
@@ -162,21 +190,19 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
+
 		long now = System.currentTimeMillis();
 
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y() - m_height / 2;
+		if (now - m_shot_time > m_attackSpeed && !shooting) {
 
-		if (now - m_shot_time > m_attackSpeed) {
+			shooting = true;
 
-			double angle = Math.acos((m_model.m_mouseCoord.X() - m_x) / (Math.sqrt(Math.pow((m_model.m_mouseCoord.X() - m_x), 2) + Math.pow((m_model.m_mouseCoord.Y() - m_y), 2))));
-			try {
-				m_projectiles.add(new Arrow(m_model.arrowAutomaton, m_x, m_y, angle, this));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (jumping || falling || moving) {
+				m_image_index = 9;
+			} else {
+				m_image_index = 2;
 			}
-			
+
 			m_shot_time = now;
 
 			return true;
@@ -188,34 +214,47 @@ public class Player extends Character {
 	public void setPressed(int keyCode, boolean pressed) {
 		if (keyCode == Controller.K_Q) {
 			qPressed = pressed;
-			if (!(jumping || falling)) {
-				if (pressed == true && m_State != State.WALKING) {
+			if (pressed) {
+				if (!shooting && !falling && !moving)
 					m_image_index = 8;
-				} else {
-					m_State = State.IDLE;
-				}
+				moving = true;
+			} else {
+				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
 			}
 		}
 		if (keyCode == Controller.K_Z) {
 			zPressed = pressed;
-			if (pressed == true && m_State != State.JUMPING) {
-				m_image_index = 15;
-			} else {
-				m_State = State.IDLE;
+			if (pressed && !falling) {
+				jumping = true;
 			}
 		}
 		if (keyCode == Controller.K_D) {
 			dPressed = pressed;
-			if (!(jumping || falling)) {
-				if (pressed == true && m_State != State.WALKING) {
+			if (pressed) {
+				if (!shooting && !falling && !moving)
 					m_image_index = 8;
-				} else {
-					m_State = State.IDLE;
-				}
+				moving = true;
+			} else {
+				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
 			}
 		}
-		if (keyCode == Controller.K_SPACE)
+		if (keyCode == Controller.K_SPACE) {
 			espPressed = pressed;
+			if (pressed) {
+				if (!shooting) {
+					if (jumping || falling || moving) {
+						m_image_index = 9;
+					} else {
+						m_image_index = 2;
+					}
+				}
+				shooting = true;
+			}
+		}
 		if (keyCode == Controller.K_A)
 			aPressed = pressed;
 		if (keyCode == Controller.K_E)
@@ -228,20 +267,17 @@ public class Player extends Character {
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
 			return qPressed;
-		}
-		if (keyCode == Controller.K_Z) {
+		} else if (keyCode == Controller.K_Z) {
 			return zPressed;
-		}
-		if (keyCode == Controller.K_D) {
+		} else if (keyCode == Controller.K_D) {
 			return dPressed;
-		}
-		if (keyCode == Controller.K_SPACE)
+		} else if (keyCode == Controller.K_SPACE) {
 			return espPressed;
-		if (keyCode == Controller.K_A)
+		} else if (keyCode == Controller.K_A) {
 			return aPressed;
-		if (keyCode == Controller.K_E)
+		} else if (keyCode == Controller.K_E) {
 			return ePressed;
-		if (keyCode == Controller.K_V)
+		} else if (keyCode == Controller.K_V)
 			return vPressed;
 		return false;
 	}
@@ -249,8 +285,8 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock(x_hitBox[2] - 1, m_coord.Y())
-				&& !checkBlock(x_hitBox[0] + 1, m_coord.Y())) {
+		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
+				&& !checkBlock(hitBox.x + 1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -261,57 +297,79 @@ public class Player extends Character {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			hitBox.translate(0, -(m_coord.Y() - topBlock));
+			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			m_State = State.IDLE;
 		} else {
 			jumping = false;
 			falling = false;
+			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			hitBox.translate(0, -(m_coord.Y() - botBlock));
+			m_coord.setY(botBlock);
+		}
+
+		if (!moving && !falling) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			m_coord.setY(topBlock);
+		}
+		if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - m_height / 2)) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - m_height / 2);
+			hitBox.translate(0, -(m_coord.Y() - topBlock));
+			m_coord.setY(topBlock);
+		}
+
+		if (shooting) {
+			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+			Direction direc;
+
+			if (mouse_x > m_coord.X()) {
+				direc = new Direction("E");
+			} else {
+				direc = new Direction("W");
+			}
+
+			turn(direc);
 		}
 
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
-			if (falling || jumping)
-				m_State = State.JUMPING;
-
-			last_image_index = m_image_index;
-
-			switch (m_State) {
-			case IDLE:
-				m_image_index = (m_image_index + 1) % 4;
-				break;
-			case WALKING:
-				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
-				if (m_image_index < 8)
-					m_image_index = 8;
-				break;
-			case JUMPING:
+			if (shooting) {
+				m_image_index++;
+				if ((moving || falling || jumping) && m_image_index > 12) {
+					shoot();
+					shooting = false;
+				} else if (m_image_index > 6 && !falling && !moving) {
+					shoot();
+					shooting = false;
+				}
+				if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
+					shoot();
+					shooting = false;
+				}
+			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
 					m_image_index = 23;
 				if (m_image_index == 18)
 					m_image_index = 22;
-				break;
-			default:
+				if (m_image_index >= 22)
+					m_image_index = 22;
+			} else if (moving) {
+				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
+				if (m_image_index < 8)
+					m_image_index = 8;
+			} else {
 				m_image_index = (m_image_index + 1) % 4;
-				break;
 			}
 		}
 		m_automaton.step(this);
 
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
-
-		x_hitBox = new int[] { m_x - (m_width / 2 + 3 * DIMENSION), m_x - (m_width / 2 + 3 * DIMENSION),
-				m_x + (m_width / 2 + 3 * DIMENSION), m_x + (m_width / 2 + 3 * DIMENSION) };
-		y_hitBox = new int[] { m_y, m_y - m_height + 3 * DIMENSION, m_y - m_height + 3 * DIMENSION, m_y };
-
-		
-		for(int i = 0; i < m_projectiles.size(); i++) {
-			m_projectiles.get(i).tick(elapsed);
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			((Arrow) m_projectiles.get(i)).tick(elapsed);
 		}
 	}
 
@@ -320,9 +378,15 @@ public class Player extends Character {
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 
-			checkSprite();
+			BufferedImage img;
+			if (shooting) {
+				if (m_image_index > 12)
+					m_image_index = 9;
+				img = bIShooting[m_image_index];
+			} else {
+				img = bI[m_image_index];
+			}
 
-			BufferedImage img = bI[m_image_index];
 			int w = DIMENSION * m_width;
 			int h = m_height;
 			if (m_direction.toString().equals("E")) {
@@ -330,12 +394,14 @@ public class Player extends Character {
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
-			g.setColor(Color.blue);
-			g.drawPolygon(x_hitBox, y_hitBox, x_hitBox.length);
+//			g.setColor(Color.blue);
+//			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
-		
-		for(int i = 0; i < m_projectiles.size(); i++) {
+
+		for (int i = 0; i < m_projectiles.size(); i++) {
+
 			((Arrow) m_projectiles.get(i)).paint(g);
+
 		}
 	}
 
@@ -343,30 +409,102 @@ public class Player extends Character {
 		return m_model.m_room.isBlocked(x, y);
 	}
 
-	public void checkSprite() {
-		if (m_State == State.WALKING && (m_image_index < 8 || m_image_index > 14)) {
-			m_image_index = (last_image_index - 8 + 1) % 6 + 8;
-		}
-		if (m_State == State.JUMPING && (m_image_index < 15 || m_image_index > 24)) {
-			m_image_index = (last_image_index - 15 + 1) % 9 + 15;
-			if (m_image_index >= 18 && m_image_index < 22)
-				m_image_index = 22;
-		}
-		if (m_State == State.IDLE && (m_image_index > 4)) {
-			m_image_index = (last_image_index + 1) % 4;
-		}
-	}
-	
 	public void setSlowness(int s) {
-		if(s<6) {
+		if (s < 6) {
 			m_slowness = 6;
 		} else {
 			m_slowness = s;
 		}
 	}
-	
+
 	public void setGravity(int g) {
 		G = g;
+	}
+
+	public void shoot() {
+		if (shooting) {
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y() - m_height / 2;
+
+			Direction direc;
+			float angle;
+			double r;
+			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+
+			int x = mouse_x - m_x;
+			int y = m_y - mouse_y;
+
+			if (mouse_x > m_x) {
+				direc = new Direction("E");
+			} else {
+				direc = new Direction("W");
+			}
+
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			angle = (float) Math.asin(Math.abs(y) / r);
+
+			if (mouse_y > m_y) {
+				angle = -angle;
+			}
+
+			shooting = false;
+
+			try {
+				addProjectile(m_x, m_y, angle, this, direc);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
+		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
+	}
+
+	public void removeProjectile(Projectile projectile) {
+		m_projectiles.remove(projectile);
+	}
+
+	public Equipment addEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		Equipment res = null;
+		
+		if (m_equipments.get(stuff) != null) {
+			res = m_equipments.get(stuff);
+		}
+		
+		m_equipments.put(stuff, equipment);
+		
+		Stuff[] stuffTable = Stuff.values();
+
+		m_attackSpeed = m_default_stat_map.get(Stats.AttackSpeed);
+		m_resistance = m_default_stat_map.get(Stats.Resistance);
+		m_strength = m_default_stat_map.get(Stats.Strengh);
+		MAX_LIFE = m_default_stat_map.get(Stats.Health);
+
+		for (int i = 0; i < stuffTable.length; i++) {
+			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
+			if (tmpEquipment != null) {
+				m_attackSpeed += tmpEquipment.getModification(Stats.AttackSpeed);
+				m_resistance += tmpEquipment.getModification(Stats.Resistance);
+				m_strength += tmpEquipment.getModification(Stats.Strengh);
+				MAX_LIFE += tmpEquipment.getModification(Stats.Health);
+			}
+		}
+		
+		return res;
+	}
+	
+	public void setMoney(int money) {
+		m_money += money;
+	}
+
+	public void setStat() {
+		m_default_stat_map.put(Stats.AttackSpeed, 1000);
+		m_default_stat_map.put(Stats.Health, 100);
+		m_default_stat_map.put(Stats.Resistance, 0);
+		m_default_stat_map.put(Stats.Strengh, 1);
 	}
 
 }

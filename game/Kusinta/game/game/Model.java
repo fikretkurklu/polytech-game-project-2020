@@ -18,6 +18,7 @@ import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
 import underworld.Underworld;
+import village.Village;
 import player.Character;
 
 public class Model {
@@ -41,50 +42,55 @@ public class Model {
 	public Automaton lureAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
+	public Village m_village;
 	boolean set = false;
 //	Opponent[] m_opponents;
 
 	public Model(View view, int w, int h) throws Exception {
-        m_view = view;
-        m_width = w;
-        m_height = h;
+		m_view = view;
+		m_width = w;
+		m_height = h;
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
+				new Direction("E"), this);
 		setUnderworldEnv();
 		setCenterScreenPlayer();
 	}
-	
+
 	private void switchPlayer() {
 		Character tmp = m_player;
 		m_player = m_playerSave;
 		m_playerSave = tmp;
 	}
-	
+
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
-				new Direction("E"), this);
-		
-		m_playerSave = new PlayerSoul(playerSoulAutomaton, 1000, 1000, 
-				new Direction("E"), this);
-		m_underworld = new Underworld(m_AL, m_width, m_height, (PlayerSoul) m_playerSave, this);
+		m_underworld = new Underworld(m_AL, m_width, m_height, this);
+		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
+				m_underworld.getStartCoord().Y(), new Direction("E"), this);
 		mode = ROOM;
 	}
-	
+
 	public void setRoomEnv() throws Exception {
-			if (!(m_player instanceof Player))
-				switchPlayer();
-			mode = ROOM;
+		if (!(m_player instanceof Player))
+			switchPlayer();
+		mode = ROOM;
 	}
-	
+
 	public void setUnderworldEnv() throws Exception {
 		if (!(m_player instanceof PlayerSoul))
 			switchPlayer();
 		mode = UNDERWORLD;
+	}
+
+	public void setVillageEnv() throws Exception {
+		m_village = new Village(m_width, m_height, this);
+		mode = VILLAGE;
 	}
 
 	public void setCenterScreenPlayer() {
@@ -95,13 +101,14 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
-		switch(mode) {
+		switch (mode) {
 		case ROOM:
 			m_room.tick(elapsed);
 			break;
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
-		}	
+			break;
+		}
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -109,21 +116,26 @@ public class Model {
 		m_height = height;
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		switch(mode) {
+		switch (mode) {
 		case ROOM:
 			m_room.paint(gp, width, height);
 			m_player.paint(gp);
 			break;
 		case UNDERWORLD:
-			m_underworld.paint(gp, width, height, (PlayerSoul) m_player);
+			m_underworld.paint(gp, width, height);
+			break;
+		case VILLAGE:
+			m_village.paint(g, width, height);
+			break;
 		}
+
 		gp.dispose();
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
 	}
-	
+
 	public void setPressed(int keyChar, boolean b) {
 		m_player.setPressed(keyChar, b);
 	}
@@ -150,9 +162,18 @@ public class Model {
 		}
 		return null;
 	}
+
+	public int getXDecalage() {
+		return x_decalage;
+	}
+
+	public int getYDecalage() {
+		return y_decalage;
+	}
 	
 	public Character getPlayer() {
 		return m_player;
 	}
-
+	
+	
 }

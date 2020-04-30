@@ -18,9 +18,14 @@ PlayerSoul (Init){
   | Key(d) & ! Cell(E,O) ? Move(E) : (Actions)
   | True ? : (Actions)
   * (Actions)
-  | Key(SPACE) ? Jump : (Init)
+  | Key(SPACE) ? : (Dash)
   | Key(v) ? Egg : (Init)
   | True ? : (Init)
+  * (Dash)
+  | MyDir(N) & ! Cell(N,D) ? Jump : (Init)
+  | MyDir(S) & ! Cell(S,D) ? Jump : (Init)
+  | MyDir(E) & ! Cell(E,D) ? Jump : (Init)
+  | MyDir(W) & ! Cell(W,D) ? Jump : (Init)
 }
 
 Lure (Init){
@@ -31,8 +36,15 @@ Lure (Init){
 
 Ghost (State1){
 	*(State1)
-  | Cell(H, A) ? Hit(N): (State1)
-  | Cell(H, C) ? Hit(S): (State1)
+  | Cell(N, A) ? Hit(N): (State1)
+  | Cell(S, A) ? Hit(S): (State1)
+  | Cell(E, A) ? Hit(E): (State1)
+  | Cell(W, A) ? Hit(W): (State1)
+  | Cell(H, A) ? Hit(H): (State1)
+  | Cell(N, C) ? Hit(N): (State1)
+  | Cell(S, C) ? Hit(S): (State1)
+  | Cell(E, C) ? Hit(E): (State1)
+  | Cell(W, C) ? Hit(W): (State1)
   | Closest(C, NE) ? Wizz(NE): (State1)
   | Closest(C, NW) ? Wizz(NW): (State1)
   | Closest(C, SE) ? Wizz(SE): (State1)
@@ -49,7 +61,7 @@ Ghost (State1){
   | Closest(A, W) ? Pop(W) : (State1)
   | Closest(A, S) ? Pop(S) : (State1)
   | Closest(A, E) ? Pop(E) : (State1)
-  | Cell(H, O) ? Turn : (ExtraMove)  
+  | Cell(F, O) ? Turn : (ExtraMove)   
   | True ? Move : (State1)
   *(ExtraMove)
   |True ? Move :(State1)

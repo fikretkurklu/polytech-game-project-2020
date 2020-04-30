@@ -2,80 +2,59 @@ package underworld;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
+import game.Model;
 import environnement.Element;
 
 public class Cloud extends Element{
 	
 	int m_width, m_height;
-	int xHitbox[];
-	int yHitbox[];
-	String imagePath;
+	Model m_model;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
 	long timeElapsed = 0;
-	PlayerSoul m_player;
+	Rectangle hitBox;
 
-	public Cloud(Automaton automaton, Coord coord, PlayerSoul player) {
+	public Cloud(Automaton automaton, Coord coord, Model model) {
 		super(false, true, coord, automaton);
 		m_width = 2 * Element.SIZE;
 		m_height = 2 * Element.SIZE;
-		m_player = player;
-		xHitbox = new int[4];
-		yHitbox = new int[4];
-		calculateHitbox();
-//		xMax = getCoord().X() + m_width;
-//		yMax = getCoord().Y() - m_height;
+		m_model = model;
+		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);
 		outScreen = false;
 		move = false;
-		imagePath = UnderworldParam.cloudImage[0];
 		try {
-			loadImage(imagePath, m_width, m_height);
+			loadImage(UnderworldParam.cloudImage[0], m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void calculateHitbox() {
-		
-		int x = getCoord().X();
-		int y = getCoord().Y();
-		
-		xHitbox[0] = x;
-		xHitbox[1] = x + m_width;
-		xHitbox[2] = x + m_width;
-		xHitbox[3] = x;
-		
-		yHitbox[0] = y;
-		yHitbox[1] = y;
-		yHitbox[2] = y + m_height;
-		yHitbox[3] = y + m_height;
-		
-	}
-	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			int centerX = m_player.centerX();
-			int centerY = m_player.centerY();
-			return ((xHitbox[0] <= centerX) && (xHitbox[1] >= centerX) && (yHitbox[0] <= centerY) && (yHitbox[2] >= centerY));
+			PlayerSoul player = (PlayerSoul) m_model.getPlayer();
+			return hitBox.contains(player.centerX(), player.centerY());
+		} else if ((dir.toString().equals("B")) && (cat.toString().equals("O"))) {
+			return m_coord.X() + m_width <= 0;
 		}
 		return false;
 	}
 	
 	@Override
 	public boolean pop(Direction dir) {
-		return m_player.setVisibility(true);
+		return ((PlayerSoul) m_model.getPlayer()).setVisibility(true);
 	}
 	
 	@Override
 	public boolean wizz(Direction dir) {
-		return m_player.setVisibility(false);
+		return ((PlayerSoul) m_model.getPlayer()).setVisibility(false);
 	}
 	
 	@Override
@@ -89,8 +68,8 @@ public class Cloud extends Element{
 	public boolean move(Direction dir) {
 		if (move) {
 			move = false;
-			getCoord().translateX(-1);
-			calculateHitbox();
+			m_coord.translateX(-1);
+			hitBox.setLocation(m_coord.X(), m_coord.Y());
 			return true;
 		}
 		return false;
@@ -100,7 +79,7 @@ public class Cloud extends Element{
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.blue);
-		g.drawPolygon(xHitbox, yHitbox, 4);
+		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}
 	
 	public void tick(long elapsed) {

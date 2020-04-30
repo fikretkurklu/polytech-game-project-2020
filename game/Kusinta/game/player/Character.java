@@ -1,57 +1,73 @@
 package player;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import equipment.Equipment;
+import equipment.EquipmentManager;
+import equipment.EquipmentManager.Stuff;
 import game.Coord;
 import game.Model;
 import projectile.Projectile;
 
 public abstract class Character extends Entity {
 
-	protected Coord m_coord;
-	protected Model m_model;
+	public Model m_model;
 	protected Direction m_direction;
 
 	int MAX_LIFE = 100;
 	int m_life;
-	int m_resistance, m_strength, m_attackSpeed;
+	protected int m_resistance, m_strength, m_attackSpeed;
+	protected int m_slowness;
+
+	int m_width, m_height;
 
 	protected LinkedList<Projectile> m_projectiles;
 
-	protected BufferedImage[] bI;
-	protected int m_image_index, last_image_index;
+	BufferedImage[] bI;
+	protected int m_image_index;
 
-	// Sprite m_character;
+	protected Rectangle hitBox;
 
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws IOException {
+	protected int m_money;
+	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
+
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
-
-		m_coord = new Coord(x, y);
-
+		
+		m_coord = new Coord(x,y);
+		
 		m_direction = dir;
-
+		
 		MAX_LIFE = maxLife;
 
 		m_life = life;
 		m_resistance = resistance;
 		m_strength = strength;
 		m_attackSpeed = attackSpeed;
-
+		
 		m_projectiles = new LinkedList<Projectile>();
-
+		
 		m_model = model;
-
+		
 		m_image_index = 0;
-		last_image_index = 0;
+		
+		m_equipments = new HashMap<>();
+		
+		Stuff[] stuffTable = Stuff.values();
+		
+		for(int i = 0; i < stuffTable.length; i++) {
+			m_equipments.put(stuffTable[i], null);
+		}
 	}
 
 	public Coord getCoord() {
@@ -69,7 +85,7 @@ public abstract class Character extends Entity {
 	public LinkedList<Projectile> getProjectiles() {
 		return m_projectiles;
 	}
-
+	
 	@Override
 	public boolean wizz(Direction dir) { // activer un levier
 		// TODO Auto-generated method stub
@@ -143,7 +159,7 @@ public abstract class Character extends Entity {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean store() {
 		return true;
@@ -165,10 +181,15 @@ public abstract class Character extends Entity {
 		m_strength = strength;
 	}
 
+	public int getMoney() {
+		return m_money;
+	}
+	
 	public abstract void tick(long elapsed);
 
 	public abstract void paint(Graphics gp);
 
 	public abstract void setPressed(int keyChar, boolean b);
+	
 
 }
