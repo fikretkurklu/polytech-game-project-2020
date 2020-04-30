@@ -63,6 +63,14 @@ public class Cloud extends Element{
 		return true;
 	}
 	
+
+	public void reactivate(Automaton automaton) {
+		m_automaton = automaton;
+		outScreen = false;
+		move = false;
+		hitBox.setLocation(m_coord.X(), m_coord.Y());
+		timeElapsed = 0;
+	}
 	
 	@Override
 	public boolean move(Direction dir) {
