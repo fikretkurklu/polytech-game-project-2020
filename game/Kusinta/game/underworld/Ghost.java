@@ -140,9 +140,9 @@ public class Ghost extends Entity {
 		quitAttackMode();
 		int d = 0;
 		String catString = cat.toString();
-		if (((PlayerSoul) m_model.getPlayer()).hidden) {
-			return false;
-		}
+//		if (((PlayerSoul) m_model.getPlayer()).hidden) {
+//			return false;
+//		}
 		if (catString.equals("A") || catString.equals("C")) {
 			Coord playerCoord = null;
 			if (catString.equals("A"))
@@ -229,9 +229,9 @@ public class Ghost extends Entity {
 			}
 			// return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
 		} else if (cat.toString().equals("A")) {
-			if (((PlayerSoul) m_model.getPlayer()).hidden) {
-				return false;
-			}
+//			if (((PlayerSoul) m_model.getPlayer()).hidden) {
+//				return false;
+//			}
 			coord = m_model.getPlayer().getCoord();
 			// return m_model.getPlayer().getCoord().isEqual(m_coord);
 		} else if (cat.toString().equals("C")) {
