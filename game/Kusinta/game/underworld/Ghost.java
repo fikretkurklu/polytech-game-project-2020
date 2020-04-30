@@ -37,18 +37,15 @@ public class Ghost extends Entity {
 	int m_image_index;
 	boolean isAttacking = false, isFollowing = false;
 	int m_range = 300;
-	Character player;
+	Rectangle m_hitbox;
 
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) {
 		super(automaton);
 		m_model = model;
 		m_coord = coord;
-		loadImage();
 		m_direction = dir;
-		xHitbox = new int[4];
-		yHitbox = new int[4];
-		calculateHitbox();
-		player = model.getPlayer();
+		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
+		loadImage();
 	}
 
 	private void loadImage() {
@@ -132,6 +129,8 @@ public class Ghost extends Entity {
 			m_coord.translate(0, SPEED);
 			flag = true;
 		}
+		if (flag)
+			m_hitbox.setLocation(m_coord.X(), m_coord.Y());
 		return flag;
 	}
 
@@ -325,6 +324,8 @@ public class Ghost extends Entity {
 			m_coord.translate(SPEED, SPEED);
 			flag = true;
 		}
+		if (flag)
+			m_hitbox.setLocation(m_coord.X(), m_coord.Y());
 		return flag;
 	}
 
@@ -375,13 +376,13 @@ public class Ghost extends Entity {
 
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			calculateHitbox();
+//			calculateHitbox();
 			if (leftOrientation)
-				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), -SIZE, SIZE, null);
+				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
 			else
-				g.drawImage(m_images[m_image_index], m_coord.X() - SIZE, m_coord.Y(), SIZE, SIZE, null);
+				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
 			g.setColor(Color.blue);
-			g.drawPolygon(xHitbox, yHitbox, 4);
+			g.drawRect(m_hitbox.x, m_hitbox.y, m_width, m_height);
 		}
 	}
 
