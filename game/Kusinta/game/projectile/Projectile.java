@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -14,7 +13,6 @@ import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
 import game.Model;
-import opponent.Opponent;
 import player.Character;
 
 public abstract class Projectile extends Entity {
@@ -90,48 +88,7 @@ public abstract class Projectile extends Entity {
 	}
 
 	@Override
-	public boolean cell(Direction dir, Category cat) {
-		boolean c;
-		if (cat.toString().equals("_")) {
-			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-			if (c) {
-				m_State = State.HIT_STATE;
-				return true;
-			}
-			if (m_shooter instanceof Opponent) {
-				c = m_model.getPlayer().getHitBox().contains(hitBox.X(), hitBox.Y())
-						|| m_model.getPlayer().getHitBox().contains(m_coord.X(), m_coord.Y());
-				if(c) {
-					m_State = State.HIT_STATE;
-					this.setCollidingWith(m_model.getPlayer());
-					return true;
-				}
-			} else {
-				LinkedList<Opponent> opponents = m_model.getOpponent();
-				for(Opponent op : opponents) {
-					c = op.getHitBox().contains(hitBox.X(), hitBox.Y())
-							|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
-					if(c) {
-						m_State = State.HIT_STATE;
-						this.setCollidingWith(op);
-						return true;
-					}
-				}
-			}
-		} else {
-			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-			if (m_State == State.HIT_STATE) {
-				return !c;
-			}
-			if (!c) {
-				m_State = State.HIT_STATE;
-			}
-			return c;
-		}
-		return false;
-	}
+	public abstract boolean cell(Direction dir, Category cat);
 
 	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);

@@ -8,25 +8,25 @@ import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
-import projectile.Projectile;
 import environnement.Element;
 
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	private final String PATH_ARROW="resources/Player/spriteArrow.png";
-	private final String PATH_SPRITE_PLAYER="resources/Player/spritePlayer.png";
+	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
+	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
 	private final String PATH_SPRITE_TIR = "resources/Player/spriteArcher.png";
-	
+
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	int SPEED_WALK = 1;
+	int SPEED_WALK = 2;
+	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping, shooting, moving;
+	boolean falling, jumping, shooting;
 
 	int y_gravity;
 	int dt_y;
@@ -38,15 +38,15 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
-	
+	long m_moveElapsed;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 16, 7);
 		bIShooting = m_model.loadSprite(PATH_SPRITE_TIR, 4, 4);
-		
+
 		loadImageProjectile(PATH_ARROW);
-		
+
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
 
@@ -56,12 +56,13 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height + 3 * DIMENSION),
-				2 * (m_width / 2 + 3 * DIMENSION), m_height + 3 * DIMENSION);
+		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height), 2 * (m_width / 2 + 3 * DIMENSION),
+				m_height);
 
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
+		m_moveElapsed = 0;
 
 		reset();
 		setMoney(10000);
@@ -81,6 +82,7 @@ public class Player extends Character {
 		falling = false;
 		shooting = false;
 	}
+
 	@Override
 	public boolean move(Direction dir) { // bouger
 
@@ -96,23 +98,24 @@ public class Player extends Character {
 		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 			turn(dir);
 		}
-	
+
 		if (dir.toString().equals("E")) {
-			if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
-					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
-					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
+			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height / 2)) {
 				m_x += SPEED_WALK;
 				m_coord.setX(m_x);
 				hitBox.translate(SPEED_WALK, 0);
 			}
 		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
-					&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
+			if (!checkBlock(hitBox.x - SPEED_WALK, m_y - 1) && !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height)
+					&& !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height / 2)) {
 				m_x -= SPEED_WALK;
 				m_coord.setX(m_x);
 				hitBox.translate(-SPEED_WALK, 0);
 			}
 		}
+
 		return true;
 	}
 
@@ -131,6 +134,7 @@ public class Player extends Character {
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
+
 		return true;
 	}
 
@@ -267,8 +271,7 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
-				&& !checkBlock(hitBox.x + 1, m_coord.Y())) {
+		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -284,33 +287,21 @@ public class Player extends Character {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-		} else {
-			jumping = false;
-			falling = false;
-			int botBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			hitBox.translate(0, -(m_coord.Y() - botBlock));
-			m_coord.setY(botBlock);
-		}
-
-		if (shooting) {
-			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			if (mouse_x > m_coord.X()) {
-				turn(new Direction("E"));
-			} else {
-				turn(new Direction("W"));
-			}
 		}
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
 		if (shooting) {
 			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
-			attackspeed = 200/(attackspeed/1000);
+			attackspeed = 200 / (attackspeed / 1000);
 		}
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
-			if (shooting) {
+			if (!gotpower()) {
+				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
+
+			} else if (shooting) {
 				m_image_index++;
 				if ((moving || falling || jumping) && m_image_index > 12) {
 					shoot();
@@ -322,7 +313,7 @@ public class Player extends Character {
 					shoot();
 					shooting = false;
 				}
-				
+
 			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
@@ -340,7 +331,19 @@ public class Player extends Character {
 			}
 		}
 
-		m_automaton.step(this);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			if (shooting) {
+				int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
+				if (mouse_x > m_coord.X()) {
+					turn(new Direction("E"));
+				} else {
+					turn(new Direction("W"));
+				}
+			}
+			m_automaton.step(this);
+		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
@@ -348,30 +351,28 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
-		if (bI != null) {
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y();
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
 
-			BufferedImage img;
-			if (shooting) {
-				if (m_image_index > 12)
-					m_image_index = 9;
-				img = bIShooting[m_image_index];
-			} else {
-				img = bI[m_image_index];
-			}
+		BufferedImage img;
+		if (shooting) {
+			if (m_image_index > 12)
+				m_image_index = 9;
+			img = bIShooting[m_image_index];
+		} else {
+			img = bI[m_image_index];
+		}
 
-			int w = DIMENSION * m_width;
-			int h = m_height;
-			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
-			} else {
-				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
-			}
+		int w = DIMENSION * m_width;
+		int h = m_height;
+		if (m_direction.toString().equals("E")) {
+			g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+		} else {
+			g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			 m_projectiles.get(i).paint(g);
+			m_projectiles.get(i).paint(g);
 		}
 	}
 
@@ -423,9 +424,10 @@ public class Player extends Character {
 		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
 	}
 
-	public void removeProjectile(Projectile projectile) {
-		m_projectiles.remove(projectile);
+	@Override
+	public boolean explode() {
+		if (!gotpower())
+			m_image_index = 66;
+		return true;
 	}
-
-
 }

@@ -1,7 +1,6 @@
 package opponent;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,15 +11,15 @@ import automaton.Direction;
 import environnement.Element;
 import game.Model;
 import player.Character;
+import projectile.Arrow;
 
 public abstract class Opponent extends Character {
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
+	protected Arrow collidedWith;
 	
 	int m_width, m_height;
-	
-	Rectangle hotBox;
 
 	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
@@ -50,6 +49,10 @@ public abstract class Opponent extends Character {
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
+	}
+	
+	public void setCollidedWith(Arrow a) {
+		collidedWith = a;
 	}
 
 }
