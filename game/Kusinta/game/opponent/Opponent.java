@@ -11,11 +11,13 @@ import automaton.Direction;
 import environnement.Element;
 import game.Model;
 import player.Character;
+import projectile.Arrow;
 
 public abstract class Opponent extends Character {
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
+	protected Arrow collidedWith;
 	
 	int m_width, m_height;
 
@@ -47,6 +49,10 @@ public abstract class Opponent extends Character {
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
+	}
+	
+	public void setCollidedWith(Arrow a) {
+		collidedWith = a;
 	}
 
 }

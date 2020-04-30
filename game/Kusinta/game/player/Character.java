@@ -245,5 +245,9 @@ public abstract class Character extends Entity {
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
 	}
+
+	public boolean isMoving() {
+		return moving;
+	}
 	
 }
