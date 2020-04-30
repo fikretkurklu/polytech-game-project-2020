@@ -2,18 +2,20 @@ package game;
 
 import java.awt.Graphics;
 
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import opponent.FlyingOpponent;
+import opponent.Opponent;
+import hud.HUD;
 import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
@@ -22,7 +24,7 @@ import village.Village;
 import player.Character;
 
 public class Model {
-	
+
 	public final static int VILLAGE = 0;
 	public final static int ROOM = 1;
 	public final static int UNDERWORLD = 2;
@@ -30,8 +32,7 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	
-	Character m_player;
+	public Character m_player;
 	Character m_playerSave;
 	View m_view;
 	public int mode;
@@ -39,12 +40,14 @@ public class Model {
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
+	public Automaton flyingOpponentAutomaton;
 	public Automaton lureAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
 	boolean set = false;
-//	Opponent[] m_opponents;
+	LinkedList<Opponent> m_opponents;
+	public HUD m_hud;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
@@ -54,12 +57,19 @@ public class Model {
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
+		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
+//		int HUD_w = m_width / 3;
+//		int HUD_h = m_height / 9;
+//		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		m_opponents = new LinkedList<Opponent>();
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 10));
 		setUnderworldEnv();
 		setCenterScreenPlayer();
+		//setVillageEnv();
 	}
 
 	private void switchPlayer() {
@@ -77,8 +87,12 @@ public class Model {
 	}
 
 	public void setRoomEnv() throws Exception {
-		if (!(m_player instanceof Player))
+		if (!(m_player instanceof Player)) {
 			switchPlayer();
+			m_player.reset();
+		}
+			
+		m_village = null;
 		mode = ROOM;
 	}
 
@@ -89,20 +103,37 @@ public class Model {
 	}
 
 	public void setVillageEnv() throws Exception {
-		m_village = new Village(m_width, m_height, this);
+		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		mode = VILLAGE;
 	}
 
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
-
+		switch(mode) {
+		case ROOM :
+			if (m_x + x_decalage > 0) {
+				x_decalage = -m_x;
+			} else if (- x_decalage > m_room.getWitdh() - m_width) {
+				x_decalage = -(m_room.getWitdh() - m_width);
+			}
+			if (m_y + y_decalage > 0) {
+				y_decalage = m_y;
+			} else if (- y_decalage > m_room.getHeight() - m_height) {
+				y_decalage = - (m_room.getHeight() - m_height);
+			}
+			break;
+		}
 	}
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
 		switch (mode) {
 		case ROOM:
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+			m_hud.tick(elapsed);
 			m_room.tick(elapsed);
 			break;
 		case UNDERWORLD:
@@ -112,23 +143,28 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
+		
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (mode) {
 		case ROOM:
-			m_room.paint(gp, width, height);
+			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			m_player.paint(gp);
+			for (Opponent op : m_opponents) {
+				op.paint(gp);
+			}
+			m_hud.paint(g);
 			break;
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height);
 			break;
 		case VILLAGE:
 			m_village.paint(g, width, height);
+			m_hud.paint(g);
 			break;
 		}
-
 		gp.dispose();
 	}
 
@@ -171,9 +207,16 @@ public class Model {
 		return y_decalage;
 	}
 	
-	public Character getPlayer() {
-		return m_player;
+	public PlayerSoul getPlayerSoul() {
+		return (PlayerSoul)m_player;
 	}
 	
+	public Player getPlayer() {
+		return (Player)m_player;
+	}
+	
+	public LinkedList<Opponent> getOpponent(){
+		return m_opponents;
+	}
 	
 }

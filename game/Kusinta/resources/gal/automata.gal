@@ -1,6 +1,5 @@
 Player_donjon(Init){	
-  * (Init)
-  | Cell(H,A) ? Power() : (Init)       
+  * (Init)      
   | ! GotPower() ? Explode () : ()     
   | Key(SPACE) ? Egg() : (Doing)
   | Key(z) ? Jump: (Doing)
@@ -9,8 +8,7 @@ Player_donjon(Init){
   | Key(s) ? Wizz()  : (Init)          
   | Key(v) ? Pop() : (Init)    
   
-  * (Doing)
-  | Cell(H,A) ? Power() : (Init)       
+  * (Doing)       
   | ! GotPower() ? Explode () : ()  
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
@@ -27,11 +25,40 @@ Block (Inactif) {
 
 Fleche (Init) {
   *(Init)
-  | Cell(H,V) ? Move : (Init)
   | Cell(H,_) ? Explode() : ()
+  | Cell(H,V) ? Move : (Init)
 }
 
 Decor (Inactif) {                
   *(Inactif) 
   | True ? : (Inactif)
 }
+
+FlyingOpponents (Init) {
+*(Init)
+  | Cell(H, A) ? Power : (Init)  
+  | ! GotPower() ? Explode() : ()        
+  | Cell(E, O) ? Turn(W) : (Init)
+  | Cell(W, O) ? Turn(E) : (Init)
+  | Closest(A, E) ? Egg(E) : (Init)
+  | Closest(A, W) ? Egg(W) : (Init)
+  | True ? Move(E) : (Init) 
+}
+
+WalkingOpponents (East) {
+*(East)
+  | Cell(H, A) ? Power : (East)
+  | ! GotPower() ? Explode() : ()
+  | Cell(E, A) ? Wizz() : (East)
+  | Cell(E, O) ? Turn(W) : (West)
+  | Closest(A, E) ? Pop(E) : (East)
+  | True ? Move(E) : (East)
+*(West)
+  | Cell(H, A) ? Power : (West)
+  | ! GotPower() ? Explode() : ()
+  | Cell(W, A) ? Wizz() : (West)
+  | Cell(W, O) ? Turn(E) : (East)
+  | Closest(A, W) ? Pop(W) : (West)
+  | True ? Move(W) : (West)
+}
+

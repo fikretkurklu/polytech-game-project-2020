@@ -17,6 +17,7 @@ import automaton.Entity;
 import environnement.Element;
 import game.Coord;
 import game.Model;
+import underworld.PlayerSoul;
 
 
 public class Ghost extends Entity {
@@ -81,13 +82,13 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean pop(Direction dir) {
-		Coord playerCoord = m_model.getPlayer().getCoord();
+		Coord playerCoord = getPlayer().getCoord();
 		return PopOrWizz(dir, playerCoord);
 	}
 
 	@Override
 	public boolean wizz(Direction dir) {
-		Coord lureCoord = ((PlayerSoul) m_model.getPlayer()).lure.getCoord();
+		Coord lureCoord = m_model.getPlayerSoul().lure.getCoord();
 		return PopOrWizz(dir, lureCoord);
 	}
 
@@ -389,8 +390,8 @@ public class Ghost extends Entity {
 
 	}
 
-	player.Character getPlayer() {
-		return m_model.getPlayer();
+	PlayerSoul getPlayer() {
+		return m_model.getPlayerSoul();
 	}
 	
 	Coord getBlockCoord(int x, int y) {

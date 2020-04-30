@@ -21,12 +21,10 @@
 package game;
 
 import java.awt.Graphics;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import game.graphics.GameCanvasListener;
-import underworld.PlayerSoul;
 
 public class Controller implements GameCanvasListener {
 	public static final int K_Z = 122;
@@ -61,25 +59,20 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("Mouse pressed: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.mode ==  Model.UNDERWORLD) {
-			((PlayerSoul) m_game.m_model.m_player).Pressed();
+		if (m_game.m_model.mode == Model.UNDERWORLD) {
+			m_game.m_model.m_player.setPressed((int)'v', true);
+			return;
 		}
+		m_game.m_model.m_player.setPressed((int)' ', true);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-//		System.out.println("Mouse released: (" + e.getX() + "," + e.getY() + ")");
-//		System.out.println("   modifiers=" + e.getModifiersEx());
-//		System.out.println("   buttons=" + e.getButton());
-		System.out.println("Mouse released: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.mode ==  Model.UNDERWORLD) {
-			((PlayerSoul) m_game.m_model.m_player).Released();
+		if (m_game.m_model.mode == Model.UNDERWORLD) {
+			m_game.m_model.m_player.setPressed((int)'v', false);
+			return;
 		}
+		m_game.m_model.m_player.setPressed((int)' ', false);
 
 	}
 
@@ -106,9 +99,9 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		System.out.println("Mouse moved: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
+//		System.out.println("Mouse moved: (" + e.getX() + "," + e.getY() + ")");
+//		System.out.println("   modifiers=" + e.getModifiersEx());
+//		System.out.println("   buttons=" + e.getButton());
 		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
 		if (m_game.m_model.mode ==  Model.VILLAGE) {
 			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
@@ -117,22 +110,15 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-//		System.out.println("Key typed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-//		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
-
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-//		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
 	}
 

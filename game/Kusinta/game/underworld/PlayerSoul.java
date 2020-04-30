@@ -45,12 +45,12 @@ public class PlayerSoul extends Character {
 	
 	int animationMode = NORMAL;
 	
-	boolean escape, dead;
+	boolean escape;
 	boolean dashAvailable, lureAvailable;
 	Lure lure;
 
 	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
-		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
+		super(automaton, x, y, dir, model, 100, 80, 0, 0, 0);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
@@ -94,14 +94,6 @@ public class PlayerSoul extends Character {
 		}
 	}
 
-	public void Pressed() {
-		vPressed = true;
-	}
-
-	public void Released() {
-		vPressed = false;
-	}
-
 	public void setPressed(int keyCode, boolean pressed) {
 		switch (keyCode) {
 		case Controller.K_Z:
@@ -125,6 +117,9 @@ public class PlayerSoul extends Character {
 			break;
 		case Controller.K_SPACE:
 			spacePressed = pressed;
+			break;
+		case Controller.K_V:
+			vPressed = pressed;
 			break;
 		}
 	}
@@ -282,16 +277,6 @@ public class PlayerSoul extends Character {
 		}
 		return false;
 	}
-	
-	@Override
-	public boolean explode() {
-		dead = true;
-		return true;
-	}
-	
-	public boolean isAlive() {
-		return dead;
-	}
 
 	public boolean checkBlock(int x, int y) {
 		return m_model.m_underworld.isBlocked(x, y);
@@ -302,7 +287,7 @@ public class PlayerSoul extends Character {
 	}
 
 	public void getDamage() {
-		m_life -= 20;
+		loseLife(20);
 	}
 
 	public static final int HEALTHHEIGHT = SIZE / 8;
@@ -316,7 +301,7 @@ public class PlayerSoul extends Character {
 			if (lure != null)
 				lure.paint(g);
 			g.setColor(Color.green);
-			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, (int) ((m_width * m_life) / 100), HEALTHHEIGHT);
+			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, (int) ((m_width * getLife()) / 100), HEALTHHEIGHT);
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 		}
@@ -374,6 +359,12 @@ public class PlayerSoul extends Character {
 			}
 		}
 		m_automaton.step(this);
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

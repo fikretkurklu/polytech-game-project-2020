@@ -172,7 +172,7 @@ public class Underworld {
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
 		}
-		m_model.getPlayer().paint(g);
+		m_model.getPlayerSoul().paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}

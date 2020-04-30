@@ -9,6 +9,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import automaton.Automaton;
+import automaton.Category;
+import automaton.Direction;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -151,5 +153,11 @@ public class Lure extends Projectile {
 	
 	public Coord getBlockCoord(int x, int y) {
 		return m_model.m_underworld.blockBot(x, y);
+	}
+
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
