@@ -30,9 +30,6 @@ public abstract class Character extends Entity {
 	public static enum CurrentStat { Resistance, Strength, Attackspeed, MaxLife, Life };
 
 	int MAX_LIFE = 100;
-	protected int m_life;
-	protected int m_resistance, m_strength, m_attackSpeed;
-	protected int m_slowness;
 
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 	
@@ -117,7 +114,7 @@ public abstract class Character extends Entity {
 	}
 
 	public void loseLife(int l) {
-		m_life -= l;
+		m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 	}
 
 	@Override
@@ -160,7 +157,7 @@ public abstract class Character extends Entity {
 	}
 
 	public int getLife() {
-		return m_life;
+		return (m_currentStatMap.get(CurrentStat.Life));
 	}
 	
 	public Equipment addEquipment(Equipment equipment) {

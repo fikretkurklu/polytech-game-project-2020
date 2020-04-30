@@ -61,7 +61,7 @@ public class Model {
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		m_opponents = new LinkedList<Opponent>();
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 430, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
 		setCenterScreenPlayer();
 		setVillageEnv();
 		int HUD_w = m_width / 3;
@@ -121,7 +121,6 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}

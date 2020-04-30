@@ -10,6 +10,7 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import game.Model;
+import player.Character.CurrentStat;
 import projectile.MagicProjectile;
 import projectile.Projectile;
 
@@ -101,7 +102,7 @@ public class FlyingOpponent extends Opponent {
 		if (!dead) {
 			long now = System.currentTimeMillis();
 
-			if (now - m_shot_time > m_attackSpeed) {
+			if (now - m_shot_time > m_currentStatMap.get(CurrentStat.Attackspeed)) {
 
 				m_image_index = 0;
 
@@ -145,14 +146,14 @@ public class FlyingOpponent extends Opponent {
 		}
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-		if (m_life > 50) {
+		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
 			g.setColor(Color.GREEN);
-		} else if (m_life > 25) {
+		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
 			g.setColor(Color.ORANGE);
 		} else {
 			g.setColor(Color.RED);
 		}
-		float w = hitBox.width * ((float) m_life / 100);
+		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
 		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
