@@ -3,7 +3,6 @@ package player;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 
 import automaton.*;
 import game.Controller;
@@ -11,7 +10,6 @@ import game.Model;
 import projectile.Arrow;
 import projectile.Projectile;
 import environnement.Element;
-import equipment.Stat.Stats;
 
 public class Player extends Character {
 
@@ -307,7 +305,7 @@ public class Player extends Character {
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
 		if (shooting) {
-			attackspeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
+			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
 			attackspeed = 200/(attackspeed/1000);
 		}
 		if (m_imageElapsed > attackspeed) {

@@ -27,9 +27,9 @@ public abstract class Character extends Entity {
 
 	public Model m_model;
 	protected Direction m_direction;
-	protected enum CurrentStat { m_resistance, m_strength, m_attackspeed, m_maxLife, m_life };
+	public static enum CurrentStat { Resistance, Strength, Attackspeed, MaxLife, Life };
 
-	protected HashMap<CurrentStat, Integer> m_current_stat_map;
+	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 	
 	int m_width, m_height;
 
@@ -43,7 +43,7 @@ public abstract class Character extends Entity {
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 	
-	public HashMap<Stats, Integer> m_default_stat_map;
+	public HashMap<Stats, Integer> m_defaultStatMap;
 
 	Image imageProjectile;
 	
@@ -103,31 +103,27 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean gotpower() { // mort
-		if (m_current_stat_map.get(CurrentStat.m_life) > 0) {
+		if (m_currentStatMap.get(CurrentStat.Life) > 0) {
 			return true;
 		}
 		return false;
 	}
 
 	public void setLife(int l) {
-		int maxLife = m_current_stat_map.get(CurrentStat.m_maxLife);
+		int maxLife = m_currentStatMap.get(CurrentStat.MaxLife);
 		if (l > maxLife) {
-			m_current_stat_map.put(CurrentStat.m_life, maxLife);
+			m_currentStatMap.put(CurrentStat.Life, maxLife);
 		} else {
-			m_current_stat_map.put(CurrentStat.m_life, l);
+			m_currentStatMap.put(CurrentStat.Life, l);
 		}
-	}
-
-	public void setResistance(int resistance) {
-		m_current_stat_map.put(CurrentStat.m_resistance, resistance);
-	}
-
-	public void setStrength(int strength) {
-		m_current_stat_map.put(CurrentStat.m_strength, strength);
 	}
 
 	public int getMoney() {
 		return m_money;
+	}
+	
+	public int getStat(CurrentStat stat) {
+		return m_currentStatMap.get(stat);
 	}
 	
 	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment(){
@@ -150,26 +146,26 @@ public abstract class Character extends Entity {
 
 		m_equipments.put(stuff, equipment);
 		Stuff[] stuffTable = Stuff.values();
-		m_current_stat_map.put(CurrentStat.m_attackspeed, m_default_stat_map.get(Stats.AttackSpeed));
-		m_current_stat_map.put(CurrentStat.m_resistance, m_default_stat_map.get(Stats.Resistance));
-		m_current_stat_map.put(CurrentStat.m_strength, m_default_stat_map.get(Stats.Strengh));
-		m_current_stat_map.put(CurrentStat.m_maxLife, m_default_stat_map.get(Stats.Health));
-		m_current_stat_map.put(CurrentStat.m_life, m_default_stat_map.get(Stats.Health));
+		m_currentStatMap.put(CurrentStat.Attackspeed, m_defaultStatMap.get(Stats.AttackSpeed));
+		m_currentStatMap.put(CurrentStat.Resistance, m_defaultStatMap.get(Stats.Resistance));
+		m_currentStatMap.put(CurrentStat.Strength, m_defaultStatMap.get(Stats.Strengh));
+		m_currentStatMap.put(CurrentStat.MaxLife, m_defaultStatMap.get(Stats.Health));
+		m_currentStatMap.put(CurrentStat.Life, m_defaultStatMap.get(Stats.Health));
 		
 
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
 			if (tmpEquipment != null) {
-				int attackSpeed = m_current_stat_map.get(CurrentStat.m_attackspeed);
-				int resistance = m_current_stat_map.get(CurrentStat.m_resistance);
-				int strength = m_current_stat_map.get(CurrentStat.m_strength);
-				int maxlife = m_current_stat_map.get(CurrentStat.m_maxLife);
-				m_current_stat_map.put(CurrentStat.m_attackspeed, attackSpeed+tmpEquipment.getModification(Stats.AttackSpeed));
-				m_current_stat_map.put(CurrentStat.m_resistance, resistance+tmpEquipment.getModification(Stats.Resistance));
-				m_current_stat_map.put(CurrentStat.m_strength, strength+tmpEquipment.getModification(Stats.Strengh));
-				m_current_stat_map.put(CurrentStat.m_maxLife, maxlife+tmpEquipment.getModification(Stats.Health));
+				int attackSpeed = m_currentStatMap.get(CurrentStat.Attackspeed);
+				int resistance = m_currentStatMap.get(CurrentStat.Resistance);
+				int strength = m_currentStatMap.get(CurrentStat.Strength);
+				int maxlife = m_currentStatMap.get(CurrentStat.MaxLife);
+				m_currentStatMap.put(CurrentStat.Attackspeed, attackSpeed+tmpEquipment.getModification(Stats.AttackSpeed));
+				m_currentStatMap.put(CurrentStat.Resistance, resistance+tmpEquipment.getModification(Stats.Resistance));
+				m_currentStatMap.put(CurrentStat.Strength, strength+tmpEquipment.getModification(Stats.Strengh));
+				m_currentStatMap.put(CurrentStat.MaxLife, maxlife+tmpEquipment.getModification(Stats.Health));
 			}
-			m_current_stat_map.put(CurrentStat.m_life, m_current_stat_map.get(CurrentStat.m_maxLife));
+			m_currentStatMap.put(CurrentStat.Life, m_currentStatMap.get(CurrentStat.MaxLife));
 		}
 		return res;
 	}
@@ -180,21 +176,21 @@ public abstract class Character extends Entity {
 	}
 	
 	public void setStat(int attackspeed, int health, int resistance, int strength) {
-		m_default_stat_map = new HashMap<>();
-		m_default_stat_map.put(Stats.AttackSpeed, attackspeed);
-		m_default_stat_map.put(Stats.Health, health);
-		m_default_stat_map.put(Stats.Resistance, resistance);
-		m_default_stat_map.put(Stats.Strengh, strength);
+		m_defaultStatMap = new HashMap<>();
+		m_defaultStatMap.put(Stats.AttackSpeed, attackspeed);
+		m_defaultStatMap.put(Stats.Health, health);
+		m_defaultStatMap.put(Stats.Resistance, resistance);
+		m_defaultStatMap.put(Stats.Strengh, strength);
 	}
 	
 	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
-		m_current_stat_map = new HashMap<>();
+		m_currentStatMap = new HashMap<>();
 		int life = health;
-		m_current_stat_map.put(CurrentStat.m_maxLife, health);
-		m_current_stat_map.put(CurrentStat.m_life, life);
-		m_current_stat_map.put(CurrentStat.m_resistance, resistance);
-		m_current_stat_map.put(CurrentStat.m_strength, strength);
-		m_current_stat_map.put(CurrentStat.m_attackspeed, attackspeed);
+		m_currentStatMap.put(CurrentStat.MaxLife, health);
+		m_currentStatMap.put(CurrentStat.Life, life);
+		m_currentStatMap.put(CurrentStat.Resistance, resistance);
+		m_currentStatMap.put(CurrentStat.Strength, strength);
+		m_currentStatMap.put(CurrentStat.Attackspeed, attackspeed);
 	}
 	
 	public void setMoney(int money) {

@@ -11,10 +11,11 @@ import javax.imageio.ImageIO;
 import player.Player;
 
 public class HUD {
-	private final String BG = "resources/HUD/BG.png";
+	
 	Player m_player;
 	int m_x, m_y, m_width, m_height;
-	CoinDraw coinDraw;
+	HUDFont m_font;
+	HUDStats m_stats;
 
 	public HUD(int x, int y, int w, int h, Player p) {
 		m_x = x;
@@ -22,15 +23,20 @@ public class HUD {
 		m_width = w;
 		m_height = h;
 		m_player = p;
-
+		m_font = new HUDFont(0, 0, w/2, h, p);
+		m_stats = new HUDStats(m_font.m_width, 0, w - m_font.m_width, h, p);
 	}
 
 	public void tick(long elapsed) {
-
+		m_font.tick(elapsed);
+		m_stats.tick(elapsed);
 	}
 
 	public void paint(Graphics g) {
-
+		Graphics gp = g.create(m_x, m_y, m_width, m_height);
+		m_font.paint(gp);
+		m_stats.paint(gp);
+		gp.dispose();
 	}
 
 	public static Image[] loadSprite(String filename, int nrows, int ncols) throws IOException {

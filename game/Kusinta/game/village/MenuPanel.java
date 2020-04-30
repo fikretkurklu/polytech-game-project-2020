@@ -1,6 +1,5 @@
 package village;
 
-import java.awt.Graphics;
 import player.Player;
 import village.Village.ID_ENV;
 

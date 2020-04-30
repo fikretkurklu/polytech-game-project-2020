@@ -12,6 +12,7 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import hud.HUD;
 import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
@@ -40,6 +41,7 @@ public class Model {
 	public Underworld m_underworld;
 	public Village m_village;
 	boolean set = false;
+	public HUD m_hud;
 //	Opponent[] m_opponents;
 
 	public Model(View view, int w, int h) throws Exception {
@@ -55,6 +57,9 @@ public class Model {
 				new Direction("E"), this);
 		setCenterScreenPlayer();
 		setVillageEnv();
+		int HUD_w = m_width / 3;
+		int HUD_h = m_height / 9;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 	}
 
 	private void switchPlayer() {
@@ -109,10 +114,11 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
+		m_hud.tick(elapsed);
 		switch (mode) {
 		case ROOM:
 			m_room.tick(elapsed);
+			m_player.tick(elapsed);
 			break;
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
@@ -121,6 +127,7 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
+		
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
@@ -139,6 +146,7 @@ public class Model {
 		}
 
 		gp.dispose();
+		m_hud.paint(g);
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {
