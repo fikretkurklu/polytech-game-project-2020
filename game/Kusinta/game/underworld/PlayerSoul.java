@@ -24,14 +24,11 @@ public class PlayerSoul extends Character {
 
 	int m_width, m_height = SIZE;
 
-	boolean hidden;
 	Image m_images[];
 	Image m_dashImages[];
 	long m_imageElapsed;
 	long m_dashTimer;
 	long m_lureTimer;
-
-	int m_centerX, m_centerY;
 	
 	int sizeAnimation = UnderworldParam.playerSoulImage.length;
 	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length;
@@ -47,7 +44,6 @@ public class PlayerSoul extends Character {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
 		m_width = SIZE;
 		m_height = SIZE;
-		hidden = false;
 		m_dashTimer = 0;
 		qPressed = false;
 		zPressed = false;
@@ -81,19 +77,6 @@ public class PlayerSoul extends Character {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	public int centerX() {
-		return m_centerX;
-	}
-
-	public int centerY() {
-		return m_centerY;
-	}
-
-	public boolean setVisibility(boolean visibility) {
-		hidden = visibility;
-		return true;
 	}
 	
 	public void Pressed() {
@@ -160,16 +143,16 @@ public class PlayerSoul extends Character {
 		turn(dir);
 		switch (m_direction.toString()) {
 		case "N":
-			getCoord().translate(0, -DISTANCE);
+			m_coord.translate(0, -DISTANCE);
 			break;
 		case "S":
-			getCoord().translate(0, DISTANCE);
+			m_coord.translate(0, DISTANCE);
 			break;
 		case "E":
-			getCoord().translate(DISTANCE, 0);
+			m_coord.translate(DISTANCE, 0);
 			break;
 		case "W":
-			getCoord().translate(-DISTANCE, 0);
+			m_coord.translate(-DISTANCE, 0);
 			break;
 		default:
 			return false;
@@ -189,7 +172,7 @@ public class PlayerSoul extends Character {
 		case "N":
 			int xUp = hitBox.x + (SIZE / 2);
 			if (checkBlock(xUp, hitBox.y)) {
-				getCoord().setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+				m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
 				DISTANCE = 3;
 				return true;
 			}
@@ -197,7 +180,7 @@ public class PlayerSoul extends Character {
 		case "S":
 			int xDown = hitBox.x + (SIZE / 2);
 			if (checkBlock(xDown, hitBox.y + SIZE)) {
-				getCoord().setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+				m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
 				DISTANCE = 3;
 				return true;
 			}
@@ -205,7 +188,7 @@ public class PlayerSoul extends Character {
 		case "E":
 			int yRight = hitBox.y + (SIZE/ 2);
 			if (checkBlock(hitBox.x + SIZE, yRight)) {
-				getCoord().setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+				m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
 				DISTANCE = 3;
 				return true;
 			}
@@ -213,7 +196,7 @@ public class PlayerSoul extends Character {
 		case "W":
 			int yLeft = hitBox.y + (SIZE/ 2);
 			if (checkBlock(hitBox.x, yLeft)) {
-				getCoord().setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+				m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 				DISTANCE = 3;
 				return true;
 			}

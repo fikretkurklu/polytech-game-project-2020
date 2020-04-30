@@ -38,23 +38,10 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			PlayerSoul player = (PlayerSoul) m_model.getPlayer();
-			return hitBox.contains(player.centerX(), player.centerY());
-		} else if ((dir.toString().equals("B")) && (cat.toString().equals("O"))) {
+		if ((dir.toString().equals("B")) && (cat.toString().equals("O"))) {
 			return m_coord.X() + m_width <= 0;
 		}
 		return false;
-	}
-	
-	@Override
-	public boolean pop(Direction dir) {
-		return ((PlayerSoul) m_model.getPlayer()).setVisibility(true);
-	}
-	
-	@Override
-	public boolean wizz(Direction dir) {
-		return ((PlayerSoul) m_model.getPlayer()).setVisibility(false);
 	}
 	
 	@Override

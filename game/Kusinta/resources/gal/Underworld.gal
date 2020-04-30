@@ -1,10 +1,7 @@
 Cloud (Init){	
   * (Init)
   | Cell(B,O) ? Explode : ()
-  | Cell(H,O) ? Pop : (Actions)
-  | True ? Wizz : (Actions)
-  * (Actions)
-  | True ? Move : (Init)     
+  | True ? Move : (Init)   
   * ()
 }
 
