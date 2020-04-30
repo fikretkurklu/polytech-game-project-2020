@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 
+import automata.ast.Category;
 import automaton.Automaton;
 import automaton.Direction;
 import environnement.Element;
@@ -35,6 +36,11 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		// TODO Auto-generated method stub
+	}
+	
+	public boolean cell(Direction dir, Category cat) {
+		dir.toString();
+		return false;
 		
 	}
 	
