@@ -64,7 +64,24 @@ public class Arrow extends Projectile {
 		if (now - getDeadTime() > 1000 && getState() == 2) {
 			setAlpha(this.getAlpha() * 0.95f);
 		}
+		
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
+	}
+	
+	public float getAlpha() {
+		return m_alpha;
+	}
+	
+	public void setAlpha(float alpha) {
+		m_alpha = alpha;
+		if(alpha <= 0.05) {
+			((Player)m_shooter).removeProjectile(this);
+		}
+	}
+	
+	public void tick(long elapsed) {
+		m_automaton.step(this);
 	}
 
 }
