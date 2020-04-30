@@ -39,7 +39,6 @@ public class Player extends Character {
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 	
-	
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -86,7 +85,6 @@ public class Player extends Character {
 	public boolean move(Direction dir) { // bouger
 
 		moving = true;
-
 		if (shooting) {
 			if (m_image_index <= 5)
 				m_image_index = m_image_index + 6;
@@ -98,9 +96,9 @@ public class Player extends Character {
 		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 			turn(dir);
 		}
-
+	
 		if (dir.toString().equals("E")) {
-			if (!checkBlock((hitBox.x + hitBox.width), m_y - 1)
+			if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
 					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
 					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
 				m_x += SPEED_WALK;
@@ -108,7 +106,7 @@ public class Player extends Character {
 				hitBox.translate(SPEED_WALK, 0);
 			}
 		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(hitBox.x, m_y - 1) && !checkBlock(hitBox.x, m_y - m_height)
+			if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
 					&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
 				m_x -= SPEED_WALK;
 				m_coord.setX(m_x);
@@ -341,6 +339,7 @@ public class Player extends Character {
 				m_image_index = (m_image_index + 1) % 4;
 			}
 		}
+
 		m_automaton.step(this);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
