@@ -380,8 +380,6 @@ public class Player extends Character {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
 		}
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
