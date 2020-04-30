@@ -64,8 +64,9 @@ public class Cloud extends Element{
 	}
 	
 
-	public void reactivate(Automaton automaton) {
-		m_automaton = automaton;
+	public void reactivate() {
+		m_coord.setX(4556);
+		setCurrentState(m_automaton.getInitialState());;
 		outScreen = false;
 		move = false;
 		hitBox.setLocation(m_coord.X(), m_coord.Y());
