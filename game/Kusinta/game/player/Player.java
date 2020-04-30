@@ -1,6 +1,5 @@
 package player;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -9,7 +8,6 @@ import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
-import projectile.Projectile;
 import environnement.Element;
 
 public class Player extends Character {
