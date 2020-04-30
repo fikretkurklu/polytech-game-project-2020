@@ -61,7 +61,7 @@ public class Arrow extends Projectile {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
 		
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		//((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
 	}
 	

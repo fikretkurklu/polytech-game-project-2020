@@ -58,8 +58,8 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height),
-				2 * (m_width / 2 + 3 * DIMENSION), m_height);
+		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height), 2 * (m_width / 2 + 3 * DIMENSION),
+				m_height);
 
 		m_shot_time = System.currentTimeMillis();
 
@@ -105,8 +105,8 @@ public class Player extends Character {
 
 			if (dir.toString().equals("E")) {
 				if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
-						&& !checkBlock((hitBox.x + hitBox.width)+ SPEED_WALK, m_y - m_height)
-						&& !checkBlock((hitBox.x + hitBox.width)+ SPEED_WALK, m_y - m_height / 2)) {
+						&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height)
+						&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height / 2)) {
 					m_x += SPEED_WALK;
 					m_coord.setX(m_x);
 					hitBox.translate(SPEED_WALK, 0);
@@ -278,8 +278,7 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
-		if (!checkBlock(m_coord.X(), m_coord.Y()) && !checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y())
-				&& !checkBlock(hitBox.x + 1, m_coord.Y())) {
+		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -295,9 +294,7 @@ public class Player extends Character {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-		} 
-
-		
+		}
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
@@ -354,7 +351,6 @@ public class Player extends Character {
 			}
 			m_automaton.step(this);
 		}
-		
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
