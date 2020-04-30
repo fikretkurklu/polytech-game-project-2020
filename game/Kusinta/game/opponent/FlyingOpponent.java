@@ -10,7 +10,6 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import game.Model;
-import player.Character.CurrentStat;
 import projectile.MagicProjectile;
 import projectile.Projectile;
 
@@ -18,7 +17,7 @@ public class FlyingOpponent extends Opponent {
 
 	public static final int SPEED_FLY = 1;
 
-	protected boolean shooting, moving, dead;
+	protected boolean shooting;
 
 	long m_shot_time;
 
@@ -41,8 +40,8 @@ public class FlyingOpponent extends Opponent {
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
-			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack"+(i+1)+".png");
-		}				
+			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png");
+		}
 		death = new Image[6];
 		for (int i = 0; i < 6; i++) {
 			death[i] = loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png");
@@ -129,8 +128,8 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		g.setColor(Color.blue);
+//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
 		if (dead) {
 			image = death[m_image_index];
@@ -193,41 +192,45 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
+		boolean d = m_model.getPlayer().isDead();
+		System.out.println(d);
+		if (!d) {
 
-		Coord playerCoord = m_model.getPlayer().getCoord();
-		int player_x = playerCoord.X();
-		int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
-		int x = player_x - m_coord.X();
-		int y = (m_coord.Y() - m_height / 2) - player_y;
+			Coord playerCoord = m_model.getPlayer().getCoord();
+			int player_x = playerCoord.X();
+			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
+			int x = player_x - m_coord.X();
+			int y = (m_coord.Y() - m_height / 2) - player_y;
 
-		int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+			int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-		if (distance <= 400) {
+			if (distance <= 400) {
 
-			double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			double angle = (float) Math.asin(Math.abs(y) / r);
+				double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+				double angle = (float) Math.asin(Math.abs(y) / r);
 
-			if (player_y > m_coord.Y() - m_height / 2) {
-				angle = -angle;
-			}
-
-			int i = 0;
-
-			while (i < distance) {
-				int checkX;
-				int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
-				if (player_x > m_coord.X()) {
-					checkX = (int) (m_coord.X() + i * Math.cos(angle));
-				} else {
-					checkX = (int) (m_coord.X() - i * Math.cos(angle));
+				if (player_y > m_coord.Y() - m_height / 2) {
+					angle = -angle;
 				}
-				if (m_model.m_room.isBlocked(checkX, checkY)) {
-					return false;
-				}
-				i += 40;
-			}
-			return true;
 
+				int i = 0;
+
+				while (i < distance) {
+					int checkX;
+					int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
+					if (player_x > m_coord.X()) {
+						checkX = (int) (m_coord.X() + i * Math.cos(angle));
+					} else {
+						checkX = (int) (m_coord.X() - i * Math.cos(angle));
+					}
+					if (m_model.m_room.isBlocked(checkX, checkY)) {
+						return false;
+					}
+					i += 40;
+				}
+				return true;
+
+			}
 		}
 		return false;
 	}
@@ -297,8 +300,7 @@ public class FlyingOpponent extends Opponent {
 
 	public void addProjectile(int x, int y, double angle, FlyingOpponent opponent, Direction direction)
 			throws Exception {
-		m_projectiles
-				.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
+		m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
 	}
 
 	public void removeProjectile(Projectile projectile) {

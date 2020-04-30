@@ -43,6 +43,8 @@ public abstract class Character extends Entity {
 	protected Character collidingWith;
 
 	protected Rectangle hitBox;
+	
+	protected boolean moving, dead;
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -109,7 +111,7 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean power() {
-//		collidingWith.loseLife(m_strength);
+		collidingWith.loseLife((m_currentStatMap.get(CurrentStat.Strength)));
 		return false;
 	}
 
@@ -238,6 +240,10 @@ public abstract class Character extends Entity {
 
 	public Image[] getProjectileImages() {
 		return imageProjectiles;
+	}
+	
+	public boolean isDead() {
+		return dead;
 	}
 	
 }

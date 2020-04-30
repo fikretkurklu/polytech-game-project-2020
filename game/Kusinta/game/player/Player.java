@@ -1,5 +1,6 @@
 package player;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -14,10 +15,10 @@ import environnement.Element;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	private final String PATH_ARROW="resources/Player/spriteArrow.png";
-	private final String PATH_SPRITE_PLAYER="resources/Player/spritePlayer.png";
+	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
+	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
 	private final String PATH_SPRITE_TIR = "resources/Player/spriteArcher.png";
-	
+
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
@@ -26,7 +27,7 @@ public class Player extends Character {
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping, shooting, moving;
+	boolean falling, jumping, shooting;
 
 	int y_gravity;
 	int dt_y;
@@ -38,15 +39,14 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
-	
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 16, 7);
 		bIShooting = m_model.loadSprite(PATH_SPRITE_TIR, 4, 4);
-		
+
 		loadImageProjectile(PATH_ARROW);
-		
+
 		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
 
@@ -56,8 +56,8 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height + 3 * DIMENSION),
-				2 * (m_width / 2 + 3 * DIMENSION), m_height + 3 * DIMENSION);
+		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height),
+				2 * (m_width / 2 + 3 * DIMENSION), m_height);
 
 		m_shot_time = System.currentTimeMillis();
 
@@ -80,37 +80,41 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
+		dead = false;
 	}
+
 	@Override
 	public boolean move(Direction dir) { // bouger
+		if (!dead) {
 
-		moving = true;
-		if (shooting) {
-			if (m_image_index <= 5)
-				m_image_index = m_image_index + 6;
-		}
-
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
-
-		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
-			turn(dir);
-		}
-	
-		if (dir.toString().equals("E")) {
-			if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
-					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
-					&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
-				m_x += SPEED_WALK;
-				m_coord.setX(m_x);
-				hitBox.translate(SPEED_WALK, 0);
+			moving = true;
+			if (shooting) {
+				if (m_image_index <= 5)
+					m_image_index = m_image_index + 6;
 			}
-		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
-					&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
-				m_x -= SPEED_WALK;
-				m_coord.setX(m_x);
-				hitBox.translate(-SPEED_WALK, 0);
+
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y();
+
+			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
+				turn(dir);
+			}
+
+			if (dir.toString().equals("E")) {
+				if (!checkBlock((hitBox.x + hitBox.width), m_y - SPEED_WALK)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height)
+						&& !checkBlock((hitBox.x + hitBox.width), m_y - m_height / 2)) {
+					m_x += SPEED_WALK;
+					m_coord.setX(m_x);
+					hitBox.translate(SPEED_WALK, 0);
+				}
+			} else if (dir.toString().equals("W")) {
+				if (!checkBlock(hitBox.x, m_y - SPEED_WALK) && !checkBlock(hitBox.x, m_y - m_height)
+						&& !checkBlock(hitBox.x, m_y - m_height / 2)) {
+					m_x -= SPEED_WALK;
+					m_coord.setX(m_x);
+					hitBox.translate(-SPEED_WALK, 0);
+				}
 			}
 		}
 		return true;
@@ -118,18 +122,20 @@ public class Player extends Character {
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
-		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
-			y_gravity = m_coord.Y();
-			jumping = true;
-			falling = true;
-			if (shooting) {
-				if (m_image_index <= 5)
-					m_image_index = m_image_index + 6;
+		if (!dead) {
+			if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
+				y_gravity = m_coord.Y();
+				jumping = true;
+				falling = true;
+				if (shooting) {
+					if (m_image_index <= 5)
+						m_image_index = m_image_index + 6;
+				}
+				if (!shooting)
+					m_image_index = 16;
+				m_time = m_ratio_y;
+				gravity(m_time);
 			}
-			if (!shooting)
-				m_image_index = 16;
-			m_time = m_ratio_y;
-			gravity(m_time);
 		}
 		return true;
 	}
@@ -159,7 +165,7 @@ public class Player extends Character {
 				m_time = t;
 			}
 
-			if (!jumping && !shooting)
+			if (!jumping && !shooting && !dead)
 				m_image_index = 23;
 
 			double C;
@@ -179,7 +185,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-		if (!shooting) {
+		if (!shooting && !dead) {
 			shooting = true;
 
 			if (jumping || falling || moving) {
@@ -193,55 +199,57 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		switch (keyCode) {
-		case Controller.K_Q:
-			qPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_Z:
-			zPressed = pressed;
-			break;
-		case Controller.K_D:
-			dPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_SPACE:
-			espPressed = pressed;
-			if (pressed) {
-				if (!shooting) {
-					if (jumping || falling || moving) {
-						m_image_index = 9;
-					} else {
-						m_image_index = 2;
+		if (!dead) {
+			switch (keyCode) {
+			case Controller.K_Q:
+				qPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_Z:
+				zPressed = pressed;
+				break;
+			case Controller.K_D:
+				dPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_SPACE:
+				espPressed = pressed;
+				if (pressed) {
+					if (!shooting) {
+						if (jumping || falling || moving) {
+							m_image_index = 9;
+						} else {
+							m_image_index = 2;
+						}
 					}
 				}
+				break;
+			case Controller.K_A:
+				aPressed = pressed;
+				break;
+			case Controller.K_E:
+				ePressed = pressed;
+				break;
+			case Controller.K_V:
+				vPressed = pressed;
+				break;
 			}
-			break;
-		case Controller.K_A:
-			aPressed = pressed;
-			break;
-		case Controller.K_E:
-			ePressed = pressed;
-			break;
-		case Controller.K_V:
-			vPressed = pressed;
-			break;
 		}
 	}
 
@@ -305,12 +313,15 @@ public class Player extends Character {
 		float attackspeed = 200;
 		if (shooting) {
 			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
-			attackspeed = 200/(attackspeed/1000);
+			attackspeed = 200 / (attackspeed / 1000);
 		}
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
-			if (shooting) {
+			if (dead) {
+				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
+
+			} else if (shooting) {
 				m_image_index++;
 				if ((moving || falling || jumping) && m_image_index > 12) {
 					shoot();
@@ -322,7 +333,7 @@ public class Player extends Character {
 					shoot();
 					shooting = false;
 				}
-				
+
 			} else if (jumping || falling) {
 				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
 				if (falling && !jumping)
@@ -369,9 +380,11 @@ public class Player extends Character {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
 		}
+		g.setColor(Color.blue);
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			 m_projectiles.get(i).paint(g);
+			m_projectiles.get(i).paint(g);
 		}
 	}
 
@@ -427,5 +440,13 @@ public class Player extends Character {
 		m_projectiles.remove(projectile);
 	}
 
+	@Override
+	public boolean explode() {
+		if (!dead) {
+			m_image_index = 66;
+		}
+		dead = true;
+		return true;
+	}
 
 }

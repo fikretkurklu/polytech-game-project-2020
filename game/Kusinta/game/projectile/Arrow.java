@@ -27,8 +27,6 @@ public class Arrow extends Projectile {
 
 		DIMENSION = SIZE / (image.getHeight(null));
 
-		float ratio = (float) (image.getWidth(null) * 4) / (float) (5 * image.getHeight(null));
-
 		m_height =  image.getHeight(null);
 		m_width =  image.getWidth(null);
 

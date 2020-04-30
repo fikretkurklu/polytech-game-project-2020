@@ -3,12 +3,15 @@ package projectile;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.util.LinkedList;
 
 import automaton.Automaton;
+import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
 import opponent.FlyingOpponent;
+import opponent.Opponent;
 
 public class MagicProjectile extends Projectile {
 	
@@ -87,6 +90,47 @@ public class MagicProjectile extends Projectile {
 			}
 		}
 		
+	}
+	
+	@Override
+	public boolean cell(Direction dir, Category cat) {
+		boolean c;
+		if (cat.toString().equals("_")) {
+			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())));
+			if (c) {
+				m_State = State.HIT_STATE;
+				return true;
+			}
+			if (m_shooter instanceof Opponent) {
+				c = m_model.getPlayer().getHitBox().contains(m_coord.X(), m_coord.Y());
+				if(c) {
+					m_State = State.HIT_STATE;
+					this.setCollidingWith(m_model.getPlayer());
+					return true;
+				}
+			} else {
+				LinkedList<Opponent> opponents = m_model.getOpponent();
+				for(Opponent op : opponents) {
+					c = op.getHitBox().contains(hitBox.X(), hitBox.Y())
+							|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
+					if(c) {
+						m_State = State.HIT_STATE;
+						this.setCollidingWith(op);
+						return true;
+					}
+				}
+			}
+		} else {
+			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())));
+			if (m_State == State.HIT_STATE) {
+				return !c;
+			}
+			if (!c) {
+				m_State = State.HIT_STATE;
+			}
+			return c;
+		}
+		return false;
 	}
 
 }

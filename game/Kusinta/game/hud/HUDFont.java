@@ -34,7 +34,7 @@ public class HUDFont {
 	}
 	
 	public void updateBar() {
-		fgRect = new Rectangle(bgRect.x, bgRect.y, m_player.getStat(CurrentStat.Life) / m_player.getStat(CurrentStat.MaxLife) * bgRect.width, bgRect.height);
+		fgRect = new Rectangle(bgRect.x, bgRect.y, (int)((float)m_player.getStat(CurrentStat.Life) / m_player.getStat(CurrentStat.MaxLife) * bgRect.width), bgRect.height);
 	}
 	public void tick(long elapsed) {
 		hudCoin.tick(elapsed);

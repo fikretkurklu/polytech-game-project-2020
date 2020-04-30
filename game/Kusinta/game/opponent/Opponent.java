@@ -1,7 +1,6 @@
 package opponent;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,8 +18,6 @@ public abstract class Opponent extends Character {
 
 	
 	int m_width, m_height;
-	
-	Rectangle hotBox;
 
 	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
