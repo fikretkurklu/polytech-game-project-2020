@@ -193,7 +193,6 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean closest(Category cat, Direction dir) {
 		boolean d = m_model.getPlayer().isDead();
-		System.out.println(d);
 		if (!d) {
 
 			Coord playerCoord = m_model.getPlayer().getCoord();
