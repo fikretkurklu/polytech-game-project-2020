@@ -29,8 +29,8 @@ public class Arrow extends Projectile {
 
 		float ratio = (float) (image.getWidth(null) * 4) / (float) (5 * image.getHeight(null));
 
-		m_height = DIMENSION * image.getHeight(null);
-		m_width = (int) (ratio * image.getWidth(null));
+		m_height =  image.getHeight(null);
+		m_width =  image.getWidth(null);
 
 		if (m_direction.toString().equals("E")) {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
