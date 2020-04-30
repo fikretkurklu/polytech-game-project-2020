@@ -7,7 +7,7 @@ public class EquipmentManager {
 	};
 
 	public static enum Stuff {
-		Armor, Belt, Gloves, Grieves, Helmet, LongBow, ShortBow
+		Armor, Belt, Gloves, Grieves, Helmet, Bow
 	};
 
 	public Equipment newEquipment() throws Exception {
@@ -15,40 +15,35 @@ public class EquipmentManager {
 		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
 		switch (equipment) {
 		case Armor:
-			System.out.println("Armor created");
 			Armor armor = new Armor();
 			armor.applyMultiplier();
 			return armor;
 		case Belt:
-			System.out.println("Belt created");
 			Belt belt = new Belt();
 			belt.applyMultiplier();
 			return belt;
 		case Gloves:
-			System.out.println("Gloves created");
 			Gloves gloves = new Gloves();
 			gloves.applyMultiplier();
 			return gloves;
 		case Grieves:
-			System.out.println("Grieves created");
 			Grieves grieves = new Grieves();
 			grieves.applyMultiplier();
 			return grieves;
 		case Helmet:
-			System.out.println("Helmet created");
 			Helmet helmet = new Helmet();
 			helmet.applyMultiplier();
 			return helmet;
-		case LongBow:
-			System.out.println("LongBow created");
-			LongBow longbow = new LongBow();
-			longbow.applyMultiplier();
-			return longbow;
-		case ShortBow:
-			System.out.println("ShortBow created");
-			ShortBow shortbow = new ShortBow();
-			shortbow.applyMultiplier();
-			return shortbow;
+		case Bow:
+			if ((int)(Math.random() * 2) == 0) {
+				LongBow bow = new LongBow();
+				bow.applyMultiplier();
+				return bow;
+			} else {
+				ShortBow bow = new ShortBow();
+				bow.applyMultiplier();
+				return bow;
+			}
 		default:
 			System.out.println("The current equipment is not part of the equipment list");
 			return null;

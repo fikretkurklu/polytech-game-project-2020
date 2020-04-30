@@ -38,6 +38,10 @@ public class FlyingOpponent extends Opponent {
 		moving = false;
 		dead = false;
 
+		imageProjectiles = new Image[13];
+		for (int i = 0; i < 13; i++) {
+			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack"+(i+1)+".png");
+		}				
 		death = new Image[6];
 		for (int i = 0; i < 6; i++) {
 			death[i] = loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png");
@@ -55,9 +59,9 @@ public class FlyingOpponent extends Opponent {
 
 		m_width = flight[0].getWidth(null);
 		m_height = flight[0].getHeight(null);
-		
-		int w = (int)(m_width / 1.7);
-		int h = (int)(m_height / 1.3);
+
+		int w = (int) (m_width / 1.7);
+		int h = (int) (m_height / 1.3);
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
 
@@ -102,10 +106,10 @@ public class FlyingOpponent extends Opponent {
 				m_image_index = 0;
 
 				shooting = true;
-				
+
 				Coord playerCoord = m_model.getPlayer().getCoord();
 				int player_x = playerCoord.X();
-				
+
 				if (player_x > m_coord.X()) {
 					turn(new Direction("E"));
 				} else {
@@ -141,21 +145,20 @@ public class FlyingOpponent extends Opponent {
 		}
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-		if(m_life > 50) {
+		if (m_life > 50) {
 			g.setColor(Color.GREEN);
-		} else if(m_life > 25) {
+		} else if (m_life > 25) {
 			g.setColor(Color.ORANGE);
 		} else {
 			g.setColor(Color.RED);
 		}
-		float w = hitBox.width * ((float)m_life / 100);
-		g.fillRect(hitBox.x, hitBox.y - 10, (int)w, 10);
+		float w = hitBox.width * ((float) m_life / 100);
+		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-		
-		
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			((MagicProjectile)m_projectiles.get(i)).paint(g);
+			((MagicProjectile) m_projectiles.get(i)).paint(g);
 		}
 	}
 
@@ -168,7 +171,7 @@ public class FlyingOpponent extends Opponent {
 			m_imageElapsed = 0;
 
 			if (dead) {
-				if(m_image_index == 5) {
+				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 				}
 				m_image_index = (m_image_index + 1) % 6;
@@ -181,7 +184,7 @@ public class FlyingOpponent extends Opponent {
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			(m_projectiles.get(i)).tick(elapsed);
 		}
@@ -293,11 +296,17 @@ public class FlyingOpponent extends Opponent {
 
 	public void addProjectile(int x, int y, double angle, FlyingOpponent opponent, Direction direction)
 			throws Exception {
-		m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
+		m_projectiles
+				.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
 	}
 
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
 	}
 
 }

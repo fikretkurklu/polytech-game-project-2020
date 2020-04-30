@@ -23,7 +23,7 @@ public class Arrow extends Projectile {
 			throws Exception {
 		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
 
-		image = loadImage("resources/Player/spriteArrow.png");
+		image = m_shooter.getProjectileImage();
 
 		DIMENSION = SIZE / (image.getHeight(null));
 
@@ -44,24 +44,22 @@ public class Arrow extends Projectile {
 
 	public void paint(Graphics g) {
 		long now = System.currentTimeMillis();
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
+		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height/2, m_width* 2, m_height * 2);
+		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 
 		if (image != null) {
-			int w = DIMENSION * m_width;
+			int w = m_width;
 			int h = m_height;
-			Graphics2D g2D = (Graphics2D) g;
 			if (m_direction.toString().equals("E")) {
-				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
-				g2D.drawImage(image, m_coord.X() - (w / 2), m_coord.Y() - h / 2, w, h, null);
-				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
+				bg.rotate(-m_angle, m_width / 2, m_height/2);
+				bg.drawImage(image, 0, 0, w, h, null);
 			} else {
-				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
-				g2D.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h / 2, -w, h, null);
-				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
+				bg.rotate(m_angle, m_width / 2, m_height / 2);
+				bg.drawImage(image, m_width, 0, -w, h, null);
 			}
 		}
-
-		if (now - getDeadTime() > 1000 && getState() == 2) {
+		bg.dispose();
+		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
 		

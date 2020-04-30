@@ -163,4 +163,10 @@ public class WalkingOpponent extends Opponent {
 		return true;
 	}
 
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -26,10 +26,7 @@ public class MagicProjectile extends Projectile {
 	public MagicProjectile(Automaton projectileAutomaton, int x, int y, double angle, FlyingOpponent shooter, Direction direction) throws Exception {
 		super(projectileAutomaton, x, y, angle, shooter, shooter.getModel(), direction);
 		
-		images = new Image[13];
-		for (int i = 0; i < 13; i++) {
-			images[i] = loadImage("resources/oppenent/jin/Magic_Attack"+(i+1)+".png");
-		}
+		images = m_shooter.getProjectileImages();
 		
 		DIMENSION = SIZE / (images[0].getHeight(null));
 
@@ -83,7 +80,7 @@ public class MagicProjectile extends Projectile {
 				((FlyingOpponent)m_shooter).removeProjectile(this);
 			}
 
-			if(m_State == OK_STATE) {
+			if(m_State == State.OK_STATE) {
 				m_image_index = 0;
 			} else {
 				m_image_index ++;

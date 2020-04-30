@@ -43,6 +43,7 @@ public class Room{
 	Automaton StaticDecorAutomaton = null;
 	
 	int m_BlockAElapsed = 0;
+	int m_RealWidth, m_RealHeight;
 
 	public Room(AutomatonLibrary AL, int width, int height) throws Exception {
 		m_AL = AL;
@@ -78,6 +79,8 @@ public class Room{
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
+			m_RealWidth = nbCol * Element.SIZE;
+			m_RealHeight = nbRow * Element.SIZE;
 			//m_background = new Element[i * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
@@ -191,10 +194,12 @@ public class Room{
 
 	}
 
-	public void paint(Graphics g, int width, int height) {
+	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		for (int i = 0; i < m_background.length; i++) {
+		int start = (- y_decalage / Element.SIZE) * nbCol;
+		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_background.length);
+		for (int i = start; i < end; i++) {
 			m_background[i].paint(g);
 		}
 		for (int i = 0; i < m_decor.length; i++) {
@@ -231,6 +236,7 @@ public class Room{
 		}
 	}
 	public void tick(long elapsed) {
+		
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);
 		}
@@ -251,5 +257,11 @@ public class Room{
 			
 		}
 	}
-
+	
+	public int getWitdh() {
+		return m_RealWidth;
+	}
+	public int getHeight() {
+		return m_RealHeight;
+	}
 }

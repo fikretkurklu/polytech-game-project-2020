@@ -1,19 +1,24 @@
 package player;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.imageio.ImageIO;
+
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import environnement.Element;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
+import equipment.Stat.Stats;
 import game.Coord;
 import game.Model;
 import projectile.Projectile;
@@ -22,12 +27,15 @@ public abstract class Character extends Entity {
 
 	public Model m_model;
 	protected Direction m_direction;
+	public static enum CurrentStat { Resistance, Strength, Attackspeed, MaxLife, Life };
 
 	int MAX_LIFE = 100;
 	protected int m_life;
 	protected int m_resistance, m_strength, m_attackSpeed;
 	protected int m_slowness;
 
+	protected HashMap<CurrentStat, Integer> m_currentStatMap;
+	
 	int m_width, m_height;
 
 	protected LinkedList<Projectile> m_projectiles;
@@ -41,22 +49,22 @@ public abstract class Character extends Entity {
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
+	
+	public HashMap<Stats, Integer> m_defaultStatMap;
 
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws IOException {
+	protected Image imageProjectile;
+	protected Image[] imageProjectiles;
+	
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
-
-		m_coord = new Coord(x, y);
-
+		
+		setStat(attackSpeed, maxLife, resistance, strength);
+		setCurrentStat(attackSpeed, maxLife, resistance, strength);
+		
+		m_coord = new Coord(x,y);
+		
 		m_direction = dir;
-
-		MAX_LIFE = maxLife;
-
-		m_life = life;
-		m_resistance = resistance;
-		m_strength = strength;
-		m_attackSpeed = attackSpeed;
-
+		
 		m_projectiles = new LinkedList<Projectile>();
 
 		m_model = model;
@@ -73,7 +81,12 @@ public abstract class Character extends Entity {
 			m_equipments.put(stuffTable[i], null);
 		}
 	}
-
+	
+	public Rectangle getHitBox() {
+		return hitBox;
+	}
+	public abstract void reset();
+	
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -89,6 +102,7 @@ public abstract class Character extends Entity {
 	public LinkedList<Projectile> getProjectiles() {
 		return m_projectiles;
 	}
+	
 
 	@Override
 	public boolean turn(Direction dir) {
@@ -108,33 +122,30 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean gotpower() { // mort
-		if (m_life > 0) {
+		if (m_currentStatMap.get(CurrentStat.Life) > 0) {
 			return true;
 		}
 		return false;
 	}
 
 	public void setLife(int l) {
-		if (l > MAX_LIFE) {
-			m_life = MAX_LIFE;
+		int maxLife = m_currentStatMap.get(CurrentStat.MaxLife);
+		if (l > maxLife) {
+			m_currentStatMap.put(CurrentStat.Life, maxLife);
 		} else {
-			m_life = l;
+			m_currentStatMap.put(CurrentStat.Life, l);
 		}
-	}
-
-	public void setResistance(int resistance) {
-		m_resistance = resistance;
-	}
-
-	public void setStrength(int strength) {
-		m_strength = strength;
 	}
 
 	public int getMoney() {
 		return m_money;
 	}
-
-	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment() {
+	
+	public int getStat(CurrentStat stat) {
+		return m_currentStatMap.get(stat);
+	}
+	
+	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment(){
 		return m_equipments;
 	}
 
@@ -148,12 +159,88 @@ public abstract class Character extends Entity {
 		return m_height;
 	}
 
-	public Rectangle getHitBox() {
-		return hitBox;
-	}
-
 	public int getLife() {
 		return m_life;
 	}
+	
+	public Equipment addEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		Equipment res = null;
 
+		if (m_equipments.get(stuff) != null) {
+			res = m_equipments.get(stuff);
+		}
+
+		m_equipments.put(stuff, equipment);
+		Stuff[] stuffTable = Stuff.values();
+		m_currentStatMap.put(CurrentStat.Attackspeed, m_defaultStatMap.get(Stats.AttackSpeed));
+		m_currentStatMap.put(CurrentStat.Resistance, m_defaultStatMap.get(Stats.Resistance));
+		m_currentStatMap.put(CurrentStat.Strength, m_defaultStatMap.get(Stats.Strengh));
+		m_currentStatMap.put(CurrentStat.MaxLife, m_defaultStatMap.get(Stats.Health));
+		m_currentStatMap.put(CurrentStat.Life, m_defaultStatMap.get(Stats.Health));
+		
+
+		for (int i = 0; i < stuffTable.length; i++) {
+			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
+			if (tmpEquipment != null) {
+				int attackSpeed = m_currentStatMap.get(CurrentStat.Attackspeed);
+				int resistance = m_currentStatMap.get(CurrentStat.Resistance);
+				int strength = m_currentStatMap.get(CurrentStat.Strength);
+				int maxlife = m_currentStatMap.get(CurrentStat.MaxLife);
+				m_currentStatMap.put(CurrentStat.Attackspeed, attackSpeed+tmpEquipment.getModification(Stats.AttackSpeed));
+				m_currentStatMap.put(CurrentStat.Resistance, resistance+tmpEquipment.getModification(Stats.Resistance));
+				m_currentStatMap.put(CurrentStat.Strength, strength+tmpEquipment.getModification(Stats.Strengh));
+				m_currentStatMap.put(CurrentStat.MaxLife, maxlife+tmpEquipment.getModification(Stats.Health));
+			}
+			m_currentStatMap.put(CurrentStat.Life, m_currentStatMap.get(CurrentStat.MaxLife));
+		}
+		return res;
+	}
+	
+	public void removeEquipment(Equipment equipment) {
+		Stuff stuff = equipment.toStuff();
+		m_equipments.put(stuff, null);
+	}
+	
+	public void setStat(int attackspeed, int health, int resistance, int strength) {
+		m_defaultStatMap = new HashMap<>();
+		m_defaultStatMap.put(Stats.AttackSpeed, attackspeed);
+		m_defaultStatMap.put(Stats.Health, health);
+		m_defaultStatMap.put(Stats.Resistance, resistance);
+		m_defaultStatMap.put(Stats.Strengh, strength);
+	}
+	
+	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
+		m_currentStatMap = new HashMap<>();
+		int life = health;
+		m_currentStatMap.put(CurrentStat.MaxLife, health);
+		m_currentStatMap.put(CurrentStat.Life, life);
+		m_currentStatMap.put(CurrentStat.Resistance, resistance);
+		m_currentStatMap.put(CurrentStat.Strength, strength);
+		m_currentStatMap.put(CurrentStat.Attackspeed, attackspeed);
+	}
+	
+	public void setMoney(int money) {
+		m_money += money;
+	}
+	
+	public void loadImageProjectile(String path) throws Exception {
+		File imageFile = new File(path);
+		if (imageFile.exists()) {
+			imageProjectile = ImageIO.read(imageFile);
+			double ratio = (double)imageProjectile.getHeight(null)/(double)imageProjectile.getWidth(null);
+			imageProjectile = imageProjectile.getScaledInstance((int)(1.5*Element.SIZE*ratio), (int)(1.5*Element.SIZE), 0);
+		} else {
+			throw new Exception("Error while loading image: path = " + path);
+		}
+	}
+
+	public Image getProjectileImage() {
+		return imageProjectile;
+	}
+
+	public Image[] getProjectileImages() {
+		return imageProjectiles;
+	}
+	
 }
