@@ -98,9 +98,16 @@ public class FlyingOpponent extends Opponent {
 
 				m_image_index = 0;
 
-				// System.out.println("egg");
-
 				shooting = true;
+				
+				Coord playerCoord = m_model.getPlayer().getCoord();
+				int player_x = playerCoord.X();
+				
+				if (player_x > m_coord.X()) {
+					turn(new Direction("E"));
+				} else {
+					turn(new Direction("W"));
+				}
 
 				shoot();
 
@@ -174,17 +181,12 @@ public class FlyingOpponent extends Opponent {
 
 			int i = 0;
 
-//			System.out.println(angle);
-
 			while (i < distance) {
 				int checkX;
 				int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
-				System.out.println(checkY);
 				if (player_x > m_coord.X()) {
-					turn(new Direction("E"));
 					checkX = (int) (m_coord.X() + i * Math.cos(angle));
 				} else {
-					turn(new Direction("W"));
 					checkX = (int) (m_coord.X() - i * Math.cos(angle));
 				}
 				if (m_model.m_room.isBlocked(checkX, checkY)) {

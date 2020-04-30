@@ -15,6 +15,9 @@ import game.Model;
 import player.Character;
 
 public abstract class Projectile extends Entity {
+	
+	static final int SPEED = 9;
+	
 	static final int OK_STATE = 1;
 	static final int HIT_STATE = 2;
 	public static final int SIZE = 86;
@@ -23,6 +26,7 @@ public abstract class Projectile extends Entity {
 	protected Direction m_direction;
 	
 	protected int m_State;
+	int moving;
 	
 	protected Character m_shooter;
 	protected Model m_model;
@@ -51,11 +55,38 @@ public abstract class Projectile extends Entity {
 		
 		m_alpha = 1f;
 		
+		m_dead_time = 0;
+
+		moving = 0;
+		
+	}
+	
+
+	@Override
+	public boolean move(Direction dir) {
+		int tmpX = m_coord.X();
+		int tmpY = m_coord.Y();
+
+		if (moving == 0) {
+			if (m_direction.toString().equals("E")) {
+				m_coord.setX((int) (m_coord.X() + SPEED * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
+			} else {
+				m_coord.setX((int) (m_coord.X() - SPEED * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
+			}
+		}
+		moving = (moving + 1) % 3;
+
+		hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
+
+		return true;
 	}
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		boolean c = !(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
+		boolean c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
+				|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
 		if (m_State == HIT_STATE) {
 			return !c;
 		}
@@ -65,11 +96,13 @@ public abstract class Projectile extends Entity {
 		return c;
 	}
 
-	public void loadImage(String path) throws Exception {
+	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
+		Image img;
 		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
+			img = ImageIO.read(imageFile);
+			img = img.getScaledInstance(SIZE, SIZE, 0);
+			return img;
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
@@ -93,5 +126,13 @@ public abstract class Projectile extends Entity {
 	
 	public void setAlpha(float alpha) {
 		m_alpha = alpha;
+	}
+	
+	@Override
+	public boolean explode() {
+		if (m_dead_time == 0) {
+			m_dead_time = System.currentTimeMillis();
+		}
+		return true;
 	}
 }
