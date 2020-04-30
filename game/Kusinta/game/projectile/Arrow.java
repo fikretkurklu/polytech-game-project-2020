@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
@@ -15,7 +14,6 @@ public class Arrow extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	static final int SPEED = 9;
-	int moving;
 	int DIMENSION;
 
 	int m_height;
@@ -25,7 +23,7 @@ public class Arrow extends Projectile {
 			throws Exception {
 		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
 
-		loadImage("resources/Player/spriteArrow.png");
+		image = loadImage("resources/Player/spriteArrow.png");
 
 		DIMENSION = SIZE / (image.getHeight(null));
 
@@ -42,38 +40,6 @@ public class Arrow extends Projectile {
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		}
 
-		m_dead_time = 0;
-
-		moving = 0;
-	}
-
-	@Override
-	public boolean explode() {
-		if (m_dead_time == 0) {
-			m_dead_time = System.currentTimeMillis();
-		}
-		return true;
-	}
-
-	@Override
-	public boolean move(Direction dir) {
-		int tmpX = m_coord.X();
-		int tmpY = m_coord.Y();
-
-		if (moving == 0) {
-			if (m_direction.toString().equals("E")) {
-				m_coord.setX((int) (m_coord.X() + SPEED * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
-			} else {
-				m_coord.setX((int) (m_coord.X() - SPEED * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
-			}
-		}
-		moving = (moving + 1) % 3;
-
-		hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
-
-		return true;
 	}
 
 	public void paint(Graphics g) {
@@ -99,19 +65,6 @@ public class Arrow extends Projectile {
 			setAlpha(this.getAlpha() * 0.95f);
 		}
 
-	}
-
-	@Override
-	public boolean cell(Direction dir, Category cat) {
-		boolean c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-				|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-		if (m_State == HIT_STATE) {
-			return !c;
-		}
-		if (!c) {
-			m_State = HIT_STATE;
-		}
-		return c;
 	}
 
 }

@@ -53,14 +53,14 @@ WalkingOpponents (East) {
   | ! GotPower() ? Explode() : ()
   | Cell(E,A) ? Wizz() : (East)
   | Cell(E, O) ? Turn(W) : (West)
-  | Closest(E, A) ? Pop(E) : (East)
+  | Closest(A, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
   | Cell(H, M) ? Power : (West)
   | ! GotPower() ? Explode() : ()
   | Cell(W,A) ? Wizz() : (West)
   | Cell(W, O) ? Turn(E) : (East)
-  | Closest(W, A) ? Pop(W) : (West)
+  | Closest(A, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
 }
 
