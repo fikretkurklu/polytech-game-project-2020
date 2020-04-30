@@ -18,14 +18,9 @@ PlayerSoul (Init){
   | Key(d) & ! Cell(E,O) ? Move(E) : (Actions)
   | True ? : (Actions)
   * (Actions)
-  | Key(SPACE) ? : (Dash)
+  | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)
   | True ? : (Init)
-  * (Dash)
-  | MyDir(N) & ! Cell(N,D) ? Jump : (Init)
-  | MyDir(S) & ! Cell(S,D) ? Jump : (Init)
-  | MyDir(E) & ! Cell(E,D) ? Jump : (Init)
-  | MyDir(W) & ! Cell(W,D) ? Jump : (Init)
 }
 
 Lure (Init){

@@ -26,15 +26,20 @@ public class PlayerSoul extends Character {
 
 	boolean hidden;
 	Image m_images[];
+	Image m_dashImages[];
 	long m_imageElapsed;
 	long m_dashTimer;
 	long m_lureTimer;
 
 	int m_centerX, m_centerY;
+	
+	int sizeAnimation = UnderworldParam.playerSoulImage.length;
+	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length;
 
 
 	boolean qPressed, zPressed, dPressed, sPressed, vPressed, spacePressed;
 	boolean leftOrientation;
+	boolean dash;
 	boolean dashAvailable, lureAvailable;
 	Lure lure;
 
@@ -58,14 +63,19 @@ public class PlayerSoul extends Character {
 	}
 
 	private void loadImage() {
-		m_images = new Image[UnderworldParam.playerSoulImage.length];
+		m_images = new Image[sizeAnimation];
+		m_dashImages = new Image[sizeDashAnimation];
 		File imageFile;
 		m_image_index = 0;
 		m_imageElapsed = 0;
 		try {
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < sizeAnimation ; i++) {
 				imageFile = new File(UnderworldParam.playerSoulImage[i]);
 				m_images[i] = ImageIO.read(imageFile);
+			}
+			for (int j = 0; j < sizeDashAnimation ; j++) {
+				imageFile = new File(UnderworldParam.lureApparitionImage[j]);
+				m_dashImages[j] = ImageIO.read(imageFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -143,8 +153,7 @@ public class PlayerSoul extends Character {
 		return super.turn(dir);
 	}
 
-	public static final int DISTANCE = 3;
-	public static final int DASH = 500;
+	public static int DISTANCE = 3;
 
 	@Override
 	public boolean move(Direction dir) {
@@ -181,6 +190,7 @@ public class PlayerSoul extends Character {
 			int xUp = hitBox.x + (SIZE / 2);
 			if (checkBlock(xUp, hitBox.y)) {
 				getCoord().setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+				DISTANCE = 3;
 				return true;
 			}
 			return false;
@@ -188,6 +198,7 @@ public class PlayerSoul extends Character {
 			int xDown = hitBox.x + (SIZE / 2);
 			if (checkBlock(xDown, hitBox.y + SIZE)) {
 				getCoord().setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+				DISTANCE = 3;
 				return true;
 			}
 			return false;
@@ -195,6 +206,7 @@ public class PlayerSoul extends Character {
 			int yRight = hitBox.y + (SIZE/ 2);
 			if (checkBlock(hitBox.x + SIZE, yRight)) {
 				getCoord().setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+				DISTANCE = 3;
 				return true;
 			}
 			return false;
@@ -202,6 +214,7 @@ public class PlayerSoul extends Character {
 			int yLeft = hitBox.y + (SIZE/ 2);
 			if (checkBlock(hitBox.x, yLeft)) {
 				getCoord().setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+				DISTANCE = 3;
 				return true;
 			}
 			return false;
@@ -215,20 +228,13 @@ public class PlayerSoul extends Character {
 		if (dashAvailable) {
 			switch (m_direction.toString()) {
 			case "N":
-				getCoord().translate(0, -DASH);
-				dashAvailable = false;
-				return true;
 			case "S":
-				getCoord().translate(0, DASH);
-				dashAvailable = false;
-				return true;
 			case "E":
-				getCoord().translate(DASH, 0);
-				dashAvailable = false;
-				return true;
 			case "W":
-				getCoord().translate(-DASH, 0);
+				DISTANCE = 6;
 				dashAvailable = false;
+				dash = true;
+				m_image_index = 0;
 				return true;
 			default:
 				return false;
@@ -261,13 +267,17 @@ public class PlayerSoul extends Character {
 
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			if (m_image_index >= 4) {
-				m_image_index = 0;
+			if (dash) {
+				if (leftOrientation)
+					g.drawImage(m_dashImages[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
+				else
+					g.drawImage(m_dashImages[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
+			} else {
+				if (leftOrientation)
+					g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
+				else
+					g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
 			}
-			if (leftOrientation)
-				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
-			else
-				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
 			if (lure != null)
 				lure.paint(g);
 			g.setColor(Color.blue);
@@ -277,14 +287,27 @@ public class PlayerSoul extends Character {
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
-		m_dashTimer += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_image_index++;
+			if (dash) {
+				if (m_image_index >= sizeDashAnimation) {
+					dash = false;
+					DISTANCE = 3;
+					m_image_index = 0;
+				}
+			} else {
+				if (m_image_index >= sizeAnimation) {
+					m_image_index = 0;
+				}
+			}
 		}
-		if (m_dashTimer > 5000) {
-			dashAvailable = true;
-			m_dashTimer = 0;
+		if (!dashAvailable) {
+			m_dashTimer += elapsed;
+			if (m_dashTimer > 10000) {
+				dashAvailable = true;
+				m_dashTimer = 0;
+			}
 		}
 		if (!(lureAvailable)) {
 			lure.tick(elapsed);
