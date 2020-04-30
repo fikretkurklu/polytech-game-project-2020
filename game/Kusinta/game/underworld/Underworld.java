@@ -17,7 +17,7 @@ import environnement.Element;
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
 	public final static int MAX_GHOSTS = 3;
-	public final static int MAX_FRAGMENTS = 1;
+	public final static int MAX_FRAGMENTS = 4;
 
 
 	AutomatonLibrary m_al;
@@ -114,13 +114,31 @@ public class Underworld {
 	private void generateClouds(Cloud[] clouds) {
 		int randomX;
 		for (int i = 0; i < clouds.length; i++) {
-			randomX = (int) (Math.random() * (4550));
+			randomX = (int) (Math.random() * (4558));
 			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 500), m_model);
 		}
 	}
 	
+	// Constantes utilisées dans la génération aléatoire des positions des fragments 
+	// en dehors de la salle d'apparition du joueur
+	
+	public static final int XMAX = 3784;
+	public static final int XMIN = 1290;
+	public static final int YMAX = 3784;
+	public static final int YMIN = 172;
+	
 	private void generateFragments(Fragment[] fragments) {
-		fragments[0] = new Fragment(fragmentAutomaton, new Coord(1200, 1200), m_model);
+		int x, y;
+		for (int i = 0; i < fragments.length; i++) {
+			x = XMIN + (int)(Math.random()*(XMAX - XMIN));
+			y = YMIN + (int)(Math.random()*(YMAX - YMIN));
+			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE)
+					|| isBlocked(x, y + Element.SIZE) || isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+				x = XMIN + (int)(Math.random()*(XMAX - XMIN));
+				y = YMIN + (int)(Math.random()*(YMAX - YMIN));
+			}
+			fragments[i] = new Fragment(fragmentAutomaton, new Coord(x, y), m_model);
+		}
 	}
 
 
@@ -165,15 +183,15 @@ public class Underworld {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
+		for(int i = 0; i < m_fragments.length; i++) {
+			m_fragments[i].paint(g);
+		}
 		m_model.getPlayer().paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
 		for(int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].paint(g);
-		}
-		for(int i = 0; i < m_fragments.length; i++) {
-			m_fragments[i].paint(g);
 		}
 	}
 

@@ -7,7 +7,9 @@ Cloud (Init){
 
 Fragment (Init){	
   * (Init)
-  | True ? : (Init)   
+  | GotPower ? : (Init)
+  | True ? : ()   
+  * ()
 }
 
 
@@ -21,6 +23,7 @@ PlayerSoul (Init){
   | Key(d) & ! Cell(E,O) ? Move(E) : (Actions)
   | True ? : (Actions)
   * (Actions)
+  | Key(e) & Closest(P,H) ? Pick(H) : (Actions)
   | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)
   | True ? : (Init)

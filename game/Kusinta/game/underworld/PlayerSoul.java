@@ -33,8 +33,9 @@ public class PlayerSoul extends Character {
 	int sizeAnimation = UnderworldParam.playerSoulImage.length;
 	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length;
 
-
-	boolean qPressed, zPressed, dPressed, sPressed, vPressed, spacePressed;
+	int fragmentsPicked = 0;
+	
+	boolean qPressed, zPressed, dPressed, sPressed, vPressed, ePressed, spacePressed; //La touche V est utilisée à la place du clic de la souris
 	boolean leftOrientation;
 	boolean dash;
 	boolean dashAvailable, lureAvailable;
@@ -50,6 +51,7 @@ public class PlayerSoul extends Character {
 		dPressed = false;
 		sPressed = false;
 		vPressed = false;
+		ePressed = false;
 		spacePressed = false;
 		leftOrientation = false;
 		dashAvailable = true;
@@ -105,6 +107,9 @@ public class PlayerSoul extends Character {
 			if (dPressed)
 				leftOrientation = false;
 			break;
+		case Controller.K_E:
+			ePressed = pressed;
+			break;
 		case Controller.K_SPACE:
 			spacePressed = pressed;
 			break;
@@ -126,6 +131,8 @@ public class PlayerSoul extends Character {
 			return spacePressed;
 		case Controller.K_V:
 			return vPressed;
+		case Controller.K_E:
+			return ePressed;
 		default:
 			return false;
 		}
@@ -164,6 +171,25 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean mydir(Direction dir) {
 		return dir.toString().equals(m_direction.toString());
+	}
+	
+	@Override
+	public boolean closest(Category cat, Direction dir) {
+		int xCenter = m_coord.X() + (m_width / 2);
+		int yCenter = m_coord.Y() + (m_height / 2);
+		for (int i = 0 ; i < m_model.m_underworld.m_fragments.length ; i++) {
+			if (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter)) {
+				m_model.m_underworld.m_fragments[i].setPicked();
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean pick(Direction dir) {
+		fragmentsPicked++;
+		return true;
 	}
 
 	@Override

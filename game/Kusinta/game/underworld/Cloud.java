@@ -1,9 +1,6 @@
 package underworld;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -18,14 +15,12 @@ public class Cloud extends Element{
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
 	long timeElapsed = 0;
-	Rectangle hitBox;
 
 	public Cloud(Automaton automaton, Coord coord, Model model) {
 		super(false, true, coord, automaton);
 		m_width = 2 * Element.SIZE;
 		m_height = 2 * Element.SIZE;
 		m_model = model;
-		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);
 		outScreen = false;
 		move = false;
 		try {
@@ -56,7 +51,6 @@ public class Cloud extends Element{
 		setCurrentState(m_automaton.getInitialState());;
 		outScreen = false;
 		move = false;
-		hitBox.setLocation(m_coord.X(), m_coord.Y());
 		timeElapsed = 0;
 	}
 	
@@ -65,7 +59,6 @@ public class Cloud extends Element{
 		if (move) {
 			move = false;
 			m_coord.translateX(-1);
-			hitBox.setLocation(m_coord.X(), m_coord.Y());
 			return true;
 		}
 		return false;
@@ -74,8 +67,6 @@ public class Cloud extends Element{
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}
 	
 	public void tick(long elapsed) {
