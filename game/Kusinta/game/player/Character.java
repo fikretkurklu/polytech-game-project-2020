@@ -42,33 +42,34 @@ public abstract class Character extends Entity {
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
+			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
-		
-		m_coord = new Coord(x,y);
-		
+
+		m_coord = new Coord(x, y);
+
 		m_direction = dir;
-		
+
 		MAX_LIFE = maxLife;
 
 		m_life = life;
 		m_resistance = resistance;
 		m_strength = strength;
 		m_attackSpeed = attackSpeed;
-		
+
 		m_projectiles = new LinkedList<Projectile>();
-		
+
 		m_model = model;
-		
+
 		m_image_index = 0;
-		
+
 		collidingWith = null;
-		
+
 		m_equipments = new HashMap<>();
-		
+
 		Stuff[] stuffTable = Stuff.values();
-		
-		for(int i = 0; i < stuffTable.length; i++) {
+
+		for (int i = 0; i < stuffTable.length; i++) {
 			m_equipments.put(stuffTable[i], null);
 		}
 	}
@@ -95,14 +96,14 @@ public abstract class Character extends Entity {
 			m_direction = dir;
 		return true;
 	}
-	
-	public boolean power(){
+
+	public boolean power() {
 //		collidingWith.loseLife(m_strength);
 		return false;
 	}
-	
+
 	public void loseLife(int l) {
-		m_life-=l;
+		m_life -= l;
 	}
 
 	@Override
@@ -132,24 +133,27 @@ public abstract class Character extends Entity {
 	public int getMoney() {
 		return m_money;
 	}
-	
-	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment(){
+
+	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment() {
 		return m_equipments;
 	}
-	
+
 	public abstract void tick(long elapsed);
 
 	public abstract void paint(Graphics gp);
 
 	public abstract void setPressed(int keyChar, boolean b);
-	
+
 	public int getHeight() {
 		return m_height;
 	}
-	
+
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
-	
+
+	public int getLife() {
+		return m_life;
+	}
 
 }

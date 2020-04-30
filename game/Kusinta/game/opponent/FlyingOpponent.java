@@ -55,8 +55,11 @@ public class FlyingOpponent extends Opponent {
 
 		m_width = flight[0].getWidth(null);
 		m_height = flight[0].getHeight(null);
+		
+		int w = (int)(m_width / 1.7);
+		int h = (int)(m_height / 1.3);
 
-		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height);
+		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
 
 		m_image_index = 0;
 
@@ -137,7 +140,7 @@ public class FlyingOpponent extends Opponent {
 			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width, 10);
+		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 		if(m_life > 50) {
 			g.setColor(Color.GREEN);
 		} else if(m_life > 25) {
@@ -145,9 +148,10 @@ public class FlyingOpponent extends Opponent {
 		} else {
 			g.setColor(Color.RED);
 		}
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width * (m_life / 100), 10);
+		float w = hitBox.width * ((float)m_life / 100);
+		g.fillRect(hitBox.x, hitBox.y - 10, (int)w, 10);
 		g.setColor(Color.LIGHT_GRAY);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, 10);
+		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 		
 		
 		for (int i = 0; i < m_projectiles.size(); i++) {
@@ -164,6 +168,9 @@ public class FlyingOpponent extends Opponent {
 			m_imageElapsed = 0;
 
 			if (dead) {
+				if(m_image_index == 5) {
+					m_model.getOpponent().remove(this);
+				}
 				m_image_index = (m_image_index + 1) % 6;
 			} else {
 				m_image_index = (m_image_index + 1) % 4;

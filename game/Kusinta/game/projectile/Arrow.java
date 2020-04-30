@@ -62,7 +62,7 @@ public class Arrow extends Projectile {
 		}
 
 		if (now - getDeadTime() > 1000 && getState() == 2) {
-			setAlpha(this.getAlpha() * 0.95f);
+			setAlpha(this.getAlpha() * 0.7f);
 		}
 		
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));

@@ -64,7 +64,7 @@ public abstract class Projectile extends Entity {
 
 		moving = 0;
 		
-		m_strength = 5;
+		m_strength = 15;
 
 	}
 
@@ -166,11 +166,10 @@ public abstract class Projectile extends Entity {
 	}
 	
 	public void setCollidingWith(Character cha) {
-		if(collidingWith != cha && collidingWith != null) {
+		if(collidingWith != cha) {
+			collidingWith = cha;
 			collidingWith.loseLife(m_strength);
-			System.out.println("loselife");
 		}
-		collidingWith = cha;
 	}
 	
 	public void setSpeed(int speed) {
