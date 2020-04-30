@@ -17,6 +17,7 @@ import environnement.Element;
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
 	public final static int MAX_GHOSTS = 3;
+	public final static int MAX_FRAGMENTS = 1;
 
 
 	AutomatonLibrary m_al;
@@ -29,9 +30,10 @@ public class Underworld {
 	int nbCol;
 	Cloud[] m_clouds;
 	Ghost[] m_ghosts;
+	Fragment[] m_fragments;
 	UnderworldEmptySpaceImageManager ESIM;
 	UndInnerWallManager UIWM;
-	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton;
+	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
@@ -53,11 +55,13 @@ public class Underworld {
 		UIWM = new UndInnerWallManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
 		m_ghosts = new Ghost[MAX_GHOSTS];
+		m_fragments = new Fragment[MAX_FRAGMENTS];
 		m_AL = AL;
 		try {
 			wallAutomaton = m_AL.getAutomaton("Block");
 			cloudAutomaton = m_AL.getAutomaton("Cloud");
 			ghostAutomaton = m_AL.getAutomaton("Ghost");
+			fragmentAutomaton = m_AL.getAutomaton("Fragment");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -82,6 +86,7 @@ public class Underworld {
 			f.close();
 			generateClouds(m_clouds);
 			generateGhosts(m_ghosts);
+			generateFragments(m_fragments);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,6 +117,10 @@ public class Underworld {
 			randomX = (int) (Math.random() * (4550));
 			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 500), m_model);
 		}
+	}
+	
+	private void generateFragments(Fragment[] fragments) {
+		fragments[0] = new Fragment(fragmentAutomaton, new Coord(1200, 1200), m_model);
 	}
 
 
@@ -163,6 +172,9 @@ public class Underworld {
 		for(int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].paint(g);
 		}
+		for(int i = 0; i < m_fragments.length; i++) {
+			m_fragments[i].paint(g);
+		}
 	}
 
 	public Coord getStartCoord() {
@@ -181,6 +193,9 @@ public class Underworld {
 		}
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);
+		}
+		for (int i = 0; i < m_fragments.length; i++) {
+			m_fragments[i].tick(elapsed);
 		}
 	}
 

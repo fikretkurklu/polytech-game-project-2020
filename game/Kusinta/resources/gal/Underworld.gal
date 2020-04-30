@@ -5,6 +5,12 @@ Cloud (Init){
   * ()
 }
 
+Fragment (Init){	
+  * (Init)
+  | True ? : (Init)   
+}
+
+
 PlayerSoul (Init){
   * (Init)
   | Key(z) & Key(s) ? : (Init)
