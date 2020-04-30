@@ -22,7 +22,8 @@ public class Player extends Character {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	int SPEED_WALK = 1;
+	int SPEED_WALK = 3;
+	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
 
@@ -39,6 +40,7 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
+	long m_moveElapsed;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -62,6 +64,7 @@ public class Player extends Character {
 		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
+		m_moveElapsed = 0;
 
 		reset();
 		setMoney(10000);
@@ -351,7 +354,12 @@ public class Player extends Character {
 			}
 		}
 
-		m_automaton.step(this);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
+		
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
