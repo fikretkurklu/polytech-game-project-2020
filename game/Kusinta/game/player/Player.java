@@ -20,7 +20,7 @@ public class Player extends Character {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	int SPEED_WALK = 3;
+	int SPEED_WALK = 2;
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
