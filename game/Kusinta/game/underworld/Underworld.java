@@ -2,7 +2,6 @@ package underworld;
 
 import java.awt.Graphics;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -17,8 +16,7 @@ import environnement.Element;
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
 	public final static int MAX_GHOSTS = 3;
-	public final static int MAX_FRAGMENTS = 4;
-
+	public final int MAX_FRAGMENTS = 4;
 
 	AutomatonLibrary m_al;
 	String mapFile;
@@ -37,10 +35,6 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
-	
-	
-	
-	
 
 	public Underworld(AutomatonLibrary AL, int width, int height, Model model) {
 		m_model = model;
@@ -93,17 +87,22 @@ public class Underworld {
 		}
 	}
 
+	public static final int XMAX = 3784;
+	public static final int XMIN = 1290;
+	public static final int YMAX = 3784;
+	public static final int YMIN = 172;
+
 	private void generateGhosts(Ghost[] ghosts) {
-		String[] dirs = {"N", "E", "W", "S"};
-		Direction dir = new Direction(dirs[(int) (Math.random()*dirs.length)]);
+		String[] dirs = { "N", "E", "W", "S" };
+		Direction dir = new Direction(dirs[(int) (Math.random() * dirs.length)]);
 		int x, y;
 		for (int i = 0; i < ghosts.length; i++) {
-			x = (int)(Math.random()*(4558));
-			y = (int)(Math.random()*(3956));
-			while (isBlocked(x, y) || isBlocked(x, y-Element.SIZE)
-					|| isBlocked(x, y+Element.SIZE) || isBlocked(x-Element.SIZE, y) || isBlocked(x+Element.SIZE, y)) {
-				x = (int)(Math.random()*4558);
-				y = (int)(Math.random()*3956);
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
 			ghosts[i] = new Ghost(dir, new Coord(x, y), ghostAutomaton, m_model);
 			if (dir.toString().equals("W"))
@@ -118,51 +117,38 @@ public class Underworld {
 			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 500), m_model);
 		}
 	}
-	
-	// Constantes utilisées dans la génération aléatoire des positions des fragments 
-	// en dehors de la salle d'apparition du joueur
-	
-	public static final int XMAX = 3784;
-	public static final int XMIN = 1290;
-	public static final int YMAX = 3784;
-	public static final int YMIN = 172;
-	
+
 	private void generateFragments(Fragment[] fragments) {
 		int x, y;
 		for (int i = 0; i < fragments.length; i++) {
-			x = XMIN + (int)(Math.random()*(XMAX - XMIN));
-			y = YMIN + (int)(Math.random()*(YMAX - YMIN));
-			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE)
-					|| isBlocked(x, y + Element.SIZE) || isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-				x = XMIN + (int)(Math.random()*(XMAX - XMIN));
-				y = YMIN + (int)(Math.random()*(YMAX - YMIN));
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
 			fragments[i] = new Fragment(fragmentAutomaton, new Coord(x, y), m_model);
 		}
 	}
 
-
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
-/*		if (code.equals("ES")) {
-			return new UnderworldEmptySpace(coord, ESIM);
-		} else if (code.contentEquals("LS")) {
-			return new UndWall(coord, UWIM, "LS", wallAutomaton);
-		} else if (code.contentEquals("RS")) {
-			return new UndWall(coord, UWIM, "RS", wallAutomaton);
-		} else if (code.contentEquals("SB")) {
-			return new UndWall(coord, UWIM, "HS", wallAutomaton);
-		} else if (code.contentEquals("OW")) {
-			return new UndWall(coord, UWIM, "W", wallAutomaton);
-		} else if (code.contentEquals("WB")) {
-			return new UndWall(coord, UWIM, "B", wallAutomaton);
-		} else if (code.contentEquals("IOW")) {
-			return new UndWall(coord, UWIM, "IOW", wallAutomaton);
-		} else if (code.contentEquals("RWB")) {
-			return new UndWall(coord, UWIM, "RWB", wallAutomaton);
-		} else if (code.contentEquals("OWD")) {
-			return new UndWall(coord, UWIM, "OWD", wallAutomaton);
-		}*/
+		/*
+		 * if (code.equals("ES")) { return new UnderworldEmptySpace(coord, ESIM); } else
+		 * if (code.contentEquals("LS")) { return new UndWall(coord, UWIM, "LS",
+		 * wallAutomaton); } else if (code.contentEquals("RS")) { return new
+		 * UndWall(coord, UWIM, "RS", wallAutomaton); } else if
+		 * (code.contentEquals("SB")) { return new UndWall(coord, UWIM, "HS",
+		 * wallAutomaton); } else if (code.contentEquals("OW")) { return new
+		 * UndWall(coord, UWIM, "W", wallAutomaton); } else if
+		 * (code.contentEquals("WB")) { return new UndWall(coord, UWIM, "B",
+		 * wallAutomaton); } else if (code.contentEquals("IOW")) { return new
+		 * UndWall(coord, UWIM, "IOW", wallAutomaton); } else if
+		 * (code.contentEquals("RWB")) { return new UndWall(coord, UWIM, "RWB",
+		 * wallAutomaton); } else if (code.contentEquals("OWD")) { return new
+		 * UndWall(coord, UWIM, "OWD", wallAutomaton); }
+		 */
 		if (code.equals("IW")) {
 			return new UndInnerWall(coord, UIWM);
 		} else if (code.contentEquals("OW_E")) {
@@ -183,14 +169,14 @@ public class Underworld {
 		for (int i = 0; i < m_elements.length; i++) {
 			m_elements[i].paint(g);
 		}
-		for(int i = 0; i < m_fragments.length; i++) {
+		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
 		}
 		m_model.getPlayer().paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
-		for(int i = 0; i < m_ghosts.length; i++) {
+		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].paint(g);
 		}
 	}
@@ -233,7 +219,7 @@ public class Underworld {
 			return 0;
 		}
 	}
-	
+
 	public Coord blockCoord(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {

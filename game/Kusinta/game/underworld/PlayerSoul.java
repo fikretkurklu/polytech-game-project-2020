@@ -29,15 +29,23 @@ public class PlayerSoul extends Character {
 	long m_imageElapsed;
 	long m_dashTimer;
 	long m_lureTimer;
-	
+
 	int sizeAnimation = UnderworldParam.playerSoulImage.length;
-	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length;
+	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length + sizeAnimation;
+	int sizeEscapeAnimation = sizeAnimation + sizeDashAnimation;
 
 	int fragmentsPicked = 0;
-	
-	boolean qPressed, zPressed, dPressed, sPressed, vPressed, ePressed, spacePressed; //La touche V est utilisée à la place du clic de la souris
+
+	boolean qPressed, zPressed, dPressed, sPressed, vPressed, ePressed, spacePressed;
 	boolean leftOrientation;
-	boolean dash;
+	
+	public static final int NORMAL = 1;
+	public static final int DASH = 2;
+	public static final int ESCAPE = 3;
+	
+	int animationMode = NORMAL;
+	
+	boolean escape;
 	boolean dashAvailable, lureAvailable;
 	Lure lure;
 
@@ -56,35 +64,41 @@ public class PlayerSoul extends Character {
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
+		escape = false;
+		animationMode = NORMAL;
+		setLife(100);
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		loadImage();
 	}
 
 	private void loadImage() {
-		m_images = new Image[sizeAnimation];
-		m_dashImages = new Image[sizeDashAnimation];
+		m_images = new Image[sizeEscapeAnimation];
 		File imageFile;
 		m_image_index = 0;
 		m_imageElapsed = 0;
 		try {
-			for (int i = 0; i < sizeAnimation ; i++) {
+			for (int i = 0; i < sizeAnimation; i++) {
 				imageFile = new File(UnderworldParam.playerSoulImage[i]);
 				m_images[i] = ImageIO.read(imageFile);
 			}
-			for (int j = 0; j < sizeDashAnimation ; j++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[j]);
-				m_dashImages[j] = ImageIO.read(imageFile);
+			for (int j = sizeAnimation; j < sizeDashAnimation; j++) {
+				imageFile = new File(UnderworldParam.lureApparitionImage[j - sizeAnimation]);
+				m_images[j] = ImageIO.read(imageFile);
+			}
+			for (int k = sizeDashAnimation; k < sizeEscapeAnimation; k++) {
+				imageFile = new File(UnderworldParam.playerSoulEscapeImage[k - sizeDashAnimation]);
+				m_images[k] = ImageIO.read(imageFile);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void Pressed() {
 		vPressed = true;
 	}
-	
+
 	public void Released() {
 		vPressed = false;
 	}
@@ -138,11 +152,6 @@ public class PlayerSoul extends Character {
 		}
 	}
 
-	@Override
-	public boolean turn(Direction dir) {
-		return super.turn(dir);
-	}
-
 	public static int DISTANCE = 3;
 
 	@Override
@@ -169,26 +178,35 @@ public class PlayerSoul extends Character {
 	}
 
 	@Override
-	public boolean mydir(Direction dir) {
-		return dir.toString().equals(m_direction.toString());
-	}
-	
-	@Override
 	public boolean closest(Category cat, Direction dir) {
 		int xCenter = m_coord.X() + (m_width / 2);
 		int yCenter = m_coord.Y() + (m_height / 2);
-		for (int i = 0 ; i < m_model.m_underworld.m_fragments.length ; i++) {
-			if (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter)) {
+		for (int i = 0; i < m_model.m_underworld.m_fragments.length; i++) {
+			if ((!m_model.m_underworld.m_fragments[i].picked) && (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
 				m_model.m_underworld.m_fragments[i].setPicked();
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
+	@Override
+	public boolean gotstuff() {
+		return (fragmentsPicked == m_model.m_underworld.MAX_FRAGMENTS);
+	}
+
+	@Override
+	public boolean wizz(Direction dir) {
+		fragmentsPicked = -1;
+		escape = true;
+		animationMode = ESCAPE;
+		m_image_index = sizeDashAnimation;
+		return true;
+	}
+
 	@Override
 	public boolean pick(Direction dir) {
-		fragmentsPicked++;
+		fragmentsPicked = fragmentsPicked + 1;
 		return true;
 	}
 
@@ -212,7 +230,7 @@ public class PlayerSoul extends Character {
 			}
 			return false;
 		case "E":
-			int yRight = hitBox.y + (SIZE/ 2);
+			int yRight = hitBox.y + (SIZE / 2);
 			if (checkBlock(hitBox.x + SIZE, yRight)) {
 				m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
 				DISTANCE = 3;
@@ -220,7 +238,7 @@ public class PlayerSoul extends Character {
 			}
 			return false;
 		case "W":
-			int yLeft = hitBox.y + (SIZE/ 2);
+			int yLeft = hitBox.y + (SIZE / 2);
 			if (checkBlock(hitBox.x, yLeft)) {
 				m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 				DISTANCE = 3;
@@ -242,8 +260,8 @@ public class PlayerSoul extends Character {
 			case "W":
 				DISTANCE = 6;
 				dashAvailable = false;
-				dash = true;
-				m_image_index = 0;
+				animationMode = DASH;
+				m_image_index = sizeAnimation;
 				return true;
 			default:
 				return false;
@@ -257,7 +275,7 @@ public class PlayerSoul extends Character {
 		if (lureAvailable) {
 			int x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
 			int y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
-			if (checkBlock(x,y))
+			if (checkBlock(x, y))
 				return false;
 			lure = new Lure(m_model.lureAutomaton, x, y, 0, this, m_model);
 			lureAvailable = false;
@@ -274,21 +292,22 @@ public class PlayerSoul extends Character {
 		return m_model.m_underworld.blockBot(x, y);
 	}
 
+	public void getDamage() {
+		m_life -= 20;
+	}
+
+	public static final int HEALTHHEIGHT = SIZE / 8;
+
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			if (dash) {
-				if (leftOrientation)
-					g.drawImage(m_dashImages[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
-				else
-					g.drawImage(m_dashImages[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
-			} else {
-				if (leftOrientation)
-					g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
-				else
-					g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
-			}
+			if (leftOrientation)
+				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
+			else
+				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
 			if (lure != null)
 				lure.paint(g);
+			g.setColor(Color.green);
+			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, (int) ((m_width * m_life) / 100), HEALTHHEIGHT);
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 		}
@@ -299,21 +318,34 @@ public class PlayerSoul extends Character {
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_image_index++;
-			if (dash) {
-				if (m_image_index >= sizeDashAnimation) {
-					dash = false;
-					DISTANCE = 3;
-					m_image_index = 0;
-				}
-			} else {
+			switch(animationMode) {
+			case NORMAL :
 				if (m_image_index >= sizeAnimation) {
 					m_image_index = 0;
 				}
+				break;
+			case ESCAPE :
+				if (m_image_index >= sizeEscapeAnimation) {
+					m_image_index = sizeDashAnimation;
+				}
+				break;
+			case DASH :
+				if (m_image_index >= sizeDashAnimation) {
+					if (escape) {
+						animationMode = ESCAPE;
+						m_image_index = sizeDashAnimation;
+					} else {
+						animationMode = NORMAL;
+						m_image_index = 0;
+					}
+					DISTANCE = 3;
+				}
+				break;
 			}
 		}
 		if (!dashAvailable) {
 			m_dashTimer += elapsed;
-			if (m_dashTimer > 10000) {
+			if (m_dashTimer > 5000) {
 				dashAvailable = true;
 				m_dashTimer = 0;
 			}
@@ -321,15 +353,15 @@ public class PlayerSoul extends Character {
 		if (!(lureAvailable)) {
 			lure.tick(elapsed);
 			m_lureTimer += elapsed;
-			if (lure.isDestroying()) {
-				// On ne fait rien
-			} else if (lure.isDestroyed()) {
-				m_lureTimer = 0;
-				lure = null;
-				lureAvailable = true;
-			} else if (m_lureTimer >= 10000) {
-				m_lureTimer = 0;
-				lure.elapsed();
+			if (!lure.isDestroying()) {
+				if (lure.isDestroyed()) {
+					m_lureTimer = 0;
+					lure = null;
+					lureAvailable = true;
+				} else if (m_lureTimer >= 5000) {
+					m_lureTimer = 0;
+					lure.elapsed();
+				}
 			}
 		}
 		m_automaton.step(this);
