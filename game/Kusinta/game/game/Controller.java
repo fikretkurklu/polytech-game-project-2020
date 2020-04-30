@@ -53,13 +53,12 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		m_game.m_model.m_player.setPressed((int)' ', true);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-//		System.out.println("Mouse released: (" + e.getX() + "," + e.getY() + ")");
-//		System.out.println("   modifiers=" + e.getModifiersEx());
-//		System.out.println("   buttons=" + e.getButton());
+		m_game.m_model.m_player.setPressed((int)' ', false);
 
 	}
 
