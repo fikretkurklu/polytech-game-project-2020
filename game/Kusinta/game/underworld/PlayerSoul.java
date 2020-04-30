@@ -45,7 +45,7 @@ public class PlayerSoul extends Character {
 	
 	int animationMode = NORMAL;
 	
-	boolean escape;
+	boolean escape, dead;
 	boolean dashAvailable, lureAvailable;
 	Lure lure;
 
@@ -66,7 +66,6 @@ public class PlayerSoul extends Character {
 		lureAvailable = true;
 		escape = false;
 		animationMode = NORMAL;
-		setLife(100);
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		loadImage();
 	}
@@ -152,31 +151,6 @@ public class PlayerSoul extends Character {
 		}
 	}
 
-	public static int DISTANCE = 3;
-
-	@Override
-	public boolean move(Direction dir) {
-		turn(dir);
-		switch (m_direction.toString()) {
-		case "N":
-			m_coord.translate(0, -DISTANCE);
-			break;
-		case "S":
-			m_coord.translate(0, DISTANCE);
-			break;
-		case "E":
-			m_coord.translate(DISTANCE, 0);
-			break;
-		case "W":
-			m_coord.translate(-DISTANCE, 0);
-			break;
-		default:
-			return false;
-		}
-		hitBox.setLocation(m_coord.X(), m_coord.Y());
-		return true;
-	}
-
 	@Override
 	public boolean closest(Category cat, Direction dir) {
 		int xCenter = m_coord.X() + (m_width / 2);
@@ -195,21 +169,8 @@ public class PlayerSoul extends Character {
 		return (fragmentsPicked == m_model.m_underworld.MAX_FRAGMENTS);
 	}
 
-	@Override
-	public boolean wizz(Direction dir) {
-		fragmentsPicked = -1;
-		escape = true;
-		animationMode = ESCAPE;
-		m_image_index = sizeDashAnimation;
-		return true;
-	}
-
-	@Override
-	public boolean pick(Direction dir) {
-		fragmentsPicked = fragmentsPicked + 1;
-		return true;
-	}
-
+	public static int DISTANCE = 3;
+	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		switch (dir.toString()) {
@@ -249,6 +210,44 @@ public class PlayerSoul extends Character {
 			return true;
 		}
 	}
+	
+	@Override
+	public boolean move(Direction dir) {
+		turn(dir);
+		switch (m_direction.toString()) {
+		case "N":
+			m_coord.translate(0, -DISTANCE);
+			break;
+		case "S":
+			m_coord.translate(0, DISTANCE);
+			break;
+		case "E":
+			m_coord.translate(DISTANCE, 0);
+			break;
+		case "W":
+			m_coord.translate(-DISTANCE, 0);
+			break;
+		default:
+			return false;
+		}
+		hitBox.setLocation(m_coord.X(), m_coord.Y());
+		return true;
+	}
+	
+	@Override
+	public boolean wizz(Direction dir) {
+		fragmentsPicked = -1;
+		escape = true;
+		animationMode = ESCAPE;
+		m_image_index = sizeDashAnimation;
+		return true;
+	}
+
+	@Override
+	public boolean pick(Direction dir) {
+		fragmentsPicked = fragmentsPicked + 1;
+		return true;
+	}
 
 	@Override
 	public boolean jump(Direction dir) {
@@ -282,6 +281,16 @@ public class PlayerSoul extends Character {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean explode() {
+		dead = true;
+		return true;
+	}
+	
+	public boolean isAlive() {
+		return dead;
 	}
 
 	public boolean checkBlock(int x, int y) {

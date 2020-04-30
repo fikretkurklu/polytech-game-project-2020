@@ -13,7 +13,7 @@ Fragment (Init){
 }
 
 
-PlayerSoul (Init){
+PlayerSoul (Init) {
   * (Init)
   | Key(z) & Key(s) ? : (Init)
   | Key(q) & Key(d) ? : (Init)
