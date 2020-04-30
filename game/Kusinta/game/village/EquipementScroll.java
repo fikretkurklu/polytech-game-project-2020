@@ -48,7 +48,7 @@ public class EquipementScroll {
 			g.setFont(font);
 			g.drawImage(m_img, m_x, m_y, null);
 			Stats[] statistic = Stats.values();
-			for (int i = 0; i < statistic.length - 1; i++) {
+			for (int i = 0; i < statistic.length; i++) {
 				String label = statistic[i].name() + " = " +  m_equipement.getModification(statistic[i]);
 				g.drawString(label, m_x + m_width / 2 - (label.length() * font.getSize() / 3), m_y + m_height / 2 - font.getSize() * statistic.length / 2 + (i + 1) * font.getSize());
 			}	

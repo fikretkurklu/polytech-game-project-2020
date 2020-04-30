@@ -46,12 +46,6 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
-//		System.out.println("   modifiers=" + e.getModifiersEx());
-//		System.out.println("   buttons=" + e.getButton());
-		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
 		if (m_game.m_model.mode ==  Model.VILLAGE) {
 			m_game.m_model.m_village.Clicked();
 		}
@@ -59,9 +53,6 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("Mouse pressed: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
 	}
 
 	@Override
@@ -69,9 +60,6 @@ public class Controller implements GameCanvasListener {
 //		System.out.println("Mouse released: (" + e.getX() + "," + e.getY() + ")");
 //		System.out.println("   modifiers=" + e.getModifiersEx());
 //		System.out.println("   buttons=" + e.getButton());
-		System.out.println("Mouse released: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
 
 	}
 
