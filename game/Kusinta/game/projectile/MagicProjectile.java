@@ -81,7 +81,7 @@ public class MagicProjectile extends Projectile {
 			m_imageElapsed = 0;
 
 			if (m_image_index == 12) {
-				((FlyingOpponent) m_shooter).removeProjectile(this);
+				m_shooter.removeProjectile(this);
 			}
 
 			if (m_State == State.OK_STATE) {

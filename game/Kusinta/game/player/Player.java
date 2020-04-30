@@ -20,7 +20,7 @@ public class Player extends Character {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	int SPEED_WALK = 3;
+	int SPEED_WALK = 2;
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
@@ -351,26 +351,24 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
-		if (bI != null) {
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y();
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
 
-			BufferedImage img;
-			if (shooting) {
-				if (m_image_index > 12)
-					m_image_index = 9;
-				img = bIShooting[m_image_index];
-			} else {
-				img = bI[m_image_index];
-			}
+		BufferedImage img;
+		if (shooting) {
+			if (m_image_index > 12)
+				m_image_index = 9;
+			img = bIShooting[m_image_index];
+		} else {
+			img = bI[m_image_index];
+		}
 
-			int w = DIMENSION * m_width;
-			int h = m_height;
-			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
-			} else {
-				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
-			}
+		int w = DIMENSION * m_width;
+		int h = m_height;
+		if (m_direction.toString().equals("E")) {
+			g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+		} else {
+			g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
