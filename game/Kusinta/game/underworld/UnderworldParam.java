@@ -8,5 +8,7 @@ public interface UnderworldParam {
 	String[] lureApparitionImage = {"resources/Underworld/Lure/spirit-recruit-0.png", "resources/Underworld/Lure/spirit-recruit-1.png", "resources/Underworld/Lure/spirit-recruit-2.png", "resources/Underworld/Lure/spirit-recruit-3.png",
 			"resources/Underworld/Lure/spirit-recruit-4.png", "resources/Underworld/Lure/spirit-recruit-5.png", "resources/Underworld/Lure/spirit-recruit-6.png"};
 	String[] lureImage = {"resources/Underworld/Lure/lost-ghost-s-1.png", "resources/Underworld/Lure/lost-ghost-s-2.png", "resources/Underworld/Lure/lost-ghost-s-3.png", "resources/Underworld/Lure/lost-ghost-s-4.png"};
-		String[] ghostImage = {"resources/Underworld/Ghost/flame-shadow-s-1.png", "resources/Underworld/Ghost/flame-shadow-s-2.png", "resources/Underworld/Ghost/flame-shadow-s-3.png"};
+	String[] ghostImage = {"resources/Underworld/Ghost/flame-shadow-s-1.png", "resources/Underworld/Ghost/flame-shadow-s-2.png", "resources/Underworld/Ghost/flame-shadow-s-3.png"};
+	String fragmentSprite = "resources/Underworld/Fragment/CrystalsWhite.png";
+	int fragmentAnimationSize = 7;
 }
