@@ -83,63 +83,60 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
-		dead = false;
 	}
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		if (!dead) {
 
-			moving = true;
-			if (shooting) {
-				if (m_image_index <= 5)
-					m_image_index = m_image_index + 6;
+		moving = true;
+		if (shooting) {
+			if (m_image_index <= 5)
+				m_image_index = m_image_index + 6;
+		}
+
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
+
+		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
+			turn(dir);
+		}
+
+		if (dir.toString().equals("E")) {
+			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height / 2)) {
+				m_x += SPEED_WALK;
+				m_coord.setX(m_x);
+				hitBox.translate(SPEED_WALK, 0);
 			}
-
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y();
-
-			if (!dir.toString().equals(m_direction.toString()) && !shooting) {
-				turn(dir);
-			}
-
-			if (dir.toString().equals("E")) {
-				if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
-						&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height)
-						&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height / 2)) {
-					m_x += SPEED_WALK;
-					m_coord.setX(m_x);
-					hitBox.translate(SPEED_WALK, 0);
-				}
-			} else if (dir.toString().equals("W")) {
-				if (!checkBlock(hitBox.x - SPEED_WALK, m_y - 1) && !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height)
-						&& !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height / 2)) {
-					m_x -= SPEED_WALK;
-					m_coord.setX(m_x);
-					hitBox.translate(-SPEED_WALK, 0);
-				}
+		} else if (dir.toString().equals("W")) {
+			if (!checkBlock(hitBox.x - SPEED_WALK, m_y - 1) && !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height)
+					&& !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height / 2)) {
+				m_x -= SPEED_WALK;
+				m_coord.setX(m_x);
+				hitBox.translate(-SPEED_WALK, 0);
 			}
 		}
+
 		return true;
 	}
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
-		if (!dead) {
-			if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
-				y_gravity = m_coord.Y();
-				jumping = true;
-				falling = true;
-				if (shooting) {
-					if (m_image_index <= 5)
-						m_image_index = m_image_index + 6;
-				}
-				if (!shooting)
-					m_image_index = 16;
-				m_time = m_ratio_y;
-				gravity(m_time);
+		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
+			y_gravity = m_coord.Y();
+			jumping = true;
+			falling = true;
+			if (shooting) {
+				if (m_image_index <= 5)
+					m_image_index = m_image_index + 6;
 			}
+			if (!shooting)
+				m_image_index = 16;
+			m_time = m_ratio_y;
+			gravity(m_time);
 		}
+
 		return true;
 	}
 
@@ -168,7 +165,7 @@ public class Player extends Character {
 				m_time = t;
 			}
 
-			if (!jumping && !shooting && !dead)
+			if (!jumping && !shooting)
 				m_image_index = 23;
 
 			double C;
@@ -188,7 +185,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-		if (!shooting && !dead) {
+		if (!shooting) {
 			shooting = true;
 
 			if (jumping || falling || moving) {
@@ -202,57 +199,55 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		if (!dead) {
-			switch (keyCode) {
-			case Controller.K_Q:
-				qPressed = pressed;
-				if (pressed) {
-					if (!shooting && !falling && !moving)
-						m_image_index = 8;
-					moving = true;
-				} else {
-					moving = false;
-					if (!falling && shooting && m_image_index > 7)
-						m_image_index = m_image_index - 6;
-				}
-				break;
-			case Controller.K_Z:
-				zPressed = pressed;
-				break;
-			case Controller.K_D:
-				dPressed = pressed;
-				if (pressed) {
-					if (!shooting && !falling && !moving)
-						m_image_index = 8;
-					moving = true;
-				} else {
-					moving = false;
-					if (!falling && shooting && m_image_index > 7)
-						m_image_index = m_image_index - 6;
-				}
-				break;
-			case Controller.K_SPACE:
-				espPressed = pressed;
-				if (pressed) {
-					if (!shooting) {
-						if (jumping || falling || moving) {
-							m_image_index = 9;
-						} else {
-							m_image_index = 2;
-						}
+		switch (keyCode) {
+		case Controller.K_Q:
+			qPressed = pressed;
+			if (pressed) {
+				if (!shooting && !falling && !moving)
+					m_image_index = 8;
+				moving = true;
+			} else {
+				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
+			}
+			break;
+		case Controller.K_Z:
+			zPressed = pressed;
+			break;
+		case Controller.K_D:
+			dPressed = pressed;
+			if (pressed) {
+				if (!shooting && !falling && !moving)
+					m_image_index = 8;
+				moving = true;
+			} else {
+				moving = false;
+				if (!falling && shooting && m_image_index > 7)
+					m_image_index = m_image_index - 6;
+			}
+			break;
+		case Controller.K_SPACE:
+			espPressed = pressed;
+			if (pressed) {
+				if (!shooting) {
+					if (jumping || falling || moving) {
+						m_image_index = 9;
+					} else {
+						m_image_index = 2;
 					}
 				}
-				break;
-			case Controller.K_A:
-				aPressed = pressed;
-				break;
-			case Controller.K_E:
-				ePressed = pressed;
-				break;
-			case Controller.K_V:
-				vPressed = pressed;
-				break;
 			}
+			break;
+		case Controller.K_A:
+			aPressed = pressed;
+			break;
+		case Controller.K_E:
+			ePressed = pressed;
+			break;
+		case Controller.K_V:
+			vPressed = pressed;
+			break;
 		}
 	}
 
@@ -305,7 +300,7 @@ public class Player extends Character {
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
-			if (dead) {
+			if (!gotpower()) {
 				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
 
 			} else if (shooting) {
@@ -433,17 +428,10 @@ public class Player extends Character {
 		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
 	}
 
-	public void removeProjectile(Projectile projectile) {
-		m_projectiles.remove(projectile);
-	}
-
 	@Override
 	public boolean explode() {
-		if (!dead) {
+		if (!gotpower())
 			m_image_index = 66;
-		}
-		dead = true;
 		return true;
 	}
-
 }

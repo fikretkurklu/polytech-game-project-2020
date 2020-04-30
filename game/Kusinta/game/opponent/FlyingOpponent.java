@@ -36,7 +36,6 @@ public class FlyingOpponent extends Opponent {
 
 		shooting = false;
 		moving = false;
-		dead = false;
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
@@ -70,7 +69,7 @@ public class FlyingOpponent extends Opponent {
 	}
 
 	public boolean move(Direction dir) {
-		if (!dead) {
+		if (gotpower()) {
 			int m_x = m_coord.X();
 
 			if (!moving) {
@@ -92,13 +91,12 @@ public class FlyingOpponent extends Opponent {
 	}
 
 	public boolean explode() {
-		dead = true;
 		return true;
 	}
 
 	@Override
 	public boolean egg(Direction dir) {
-		if (!dead) {
+		if (gotpower()) {
 			long now = System.currentTimeMillis();
 
 			if (now - m_shot_time > m_currentStatMap.get(CurrentStat.Attackspeed)) {
@@ -131,7 +129,7 @@ public class FlyingOpponent extends Opponent {
 //		g.setColor(Color.blue);
 //		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
-		if (dead) {
+		if (!gotpower()) {
 			image = death[m_image_index];
 		} else if (shooting) {
 			image = attack[m_image_index];
@@ -170,7 +168,7 @@ public class FlyingOpponent extends Opponent {
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
-			if (dead) {
+			if (!gotpower()) {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 				}
@@ -192,9 +190,8 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		boolean d = m_model.getPlayer().isDead();
-		System.out.println(d);
-		if (!d) {
+		boolean d = m_model.getPlayer().gotpower();
+		if (d) {
 
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();

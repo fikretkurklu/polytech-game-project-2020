@@ -44,7 +44,7 @@ public abstract class Character extends Entity {
 
 	protected Rectangle hitBox;
 	
-	protected boolean moving, dead;
+	protected boolean moving;
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -241,9 +241,9 @@ public abstract class Character extends Entity {
 	public Image[] getProjectileImages() {
 		return imageProjectiles;
 	}
-	
-	public boolean isDead() {
-		return dead;
+
+	public void removeProjectile(Projectile projectile) {
+		m_projectiles.remove(projectile);
 	}
 	
 }
