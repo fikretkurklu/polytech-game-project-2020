@@ -143,5 +143,9 @@ public abstract class Character extends Entity {
 
 	public abstract void setPressed(int keyChar, boolean b);
 	
+	public int getHeight() {
+		return m_height;
+	}
+	
 
 }

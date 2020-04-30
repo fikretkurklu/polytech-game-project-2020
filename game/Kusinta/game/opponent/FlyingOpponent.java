@@ -4,14 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import environnement.Element;
 import game.Coord;
 import game.Model;
 import projectile.MagicProjectile;
@@ -19,7 +15,6 @@ import projectile.Projectile;
 
 public class FlyingOpponent extends Opponent {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	public static final int SPEED_FLY = 1;
 
 	protected boolean shooting, moving, dead;
@@ -68,26 +63,24 @@ public class FlyingOpponent extends Opponent {
 	}
 
 	public boolean move(Direction dir) {
+		if (!dead) {
+			int m_x = m_coord.X();
 
-//		System.out.println("moving");
+			if (!moving) {
+				m_image_index = 0;
+			}
+			moving = true;
 
-		int m_x = m_coord.X();
-
-		if (!moving) {
-			m_image_index = 0;
+			if (m_direction.toString().equals("E")) {
+				m_x += SPEED_FLY;
+				hitBox.translate(m_x - m_coord.X(), 0);
+				m_coord.setX(m_x);
+			} else {
+				m_x -= SPEED_FLY;
+				hitBox.translate(-(m_coord.X() - m_x), 0);
+				m_coord.setX(m_x);
+			}
 		}
-		moving = true;
-
-		if (m_direction.toString().equals("E")) {
-			m_x += SPEED_FLY;
-			hitBox.translate(m_x - m_coord.X(), 0);
-			m_coord.setX(m_x);
-		} else {
-			m_x -= SPEED_FLY;
-			hitBox.translate(-(m_coord.X() - m_x), 0);
-			m_coord.setX(m_x);
-		}
-//		}
 		return true;
 	}
 
@@ -98,20 +91,24 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean egg(Direction dir) {
+		if (!dead) {
+			long now = System.currentTimeMillis();
 
-		long now = System.currentTimeMillis();
+			if (now - m_shot_time > m_attackSpeed) {
 
-		if (now - m_shot_time > m_attackSpeed && !shooting) {
+				m_image_index = 0;
 
-			shooting = true;
+				// System.out.println("egg");
 
-			shoot();
+				shooting = true;
 
-			m_shot_time = now;
+				shoot();
 
-			return true;
+				m_shot_time = now;
+
+				return true;
+			}
 		}
-
 		return false;
 	}
 
@@ -120,10 +117,10 @@ public class FlyingOpponent extends Opponent {
 		g.setColor(Color.blue);
 		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
-		if (shooting) {
-			image = attack[m_image_index];
-		} else if (dead) {
+		if (dead) {
 			image = death[m_image_index];
+		} else if (shooting) {
+			image = attack[m_image_index];
 		} else {
 			image = flight[m_image_index];
 		}
@@ -137,7 +134,6 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public void tick(long elapsed) {
 		m_automaton.step(this);
-		System.out.println(m_direction.toString());
 
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
@@ -148,12 +144,57 @@ public class FlyingOpponent extends Opponent {
 			} else {
 				m_image_index = (m_image_index + 1) % 4;
 			}
+			if (shooting) {
+				if (m_image_index == 3) {
+					shooting = false;
+				}
+			}
 		}
 	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		System.out.println("closest");
+
+		Coord playerCoord = m_model.getPlayer().getCoord();
+		int player_x = playerCoord.X();
+		int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
+		int x = player_x - m_coord.X();
+		int y = (m_coord.Y() - m_height / 2) - player_y;
+
+		int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+		if (distance <= 400) {
+
+			double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			double angle = (float) Math.asin(Math.abs(y) / r);
+
+			if (player_y > m_coord.Y() - m_height / 2) {
+				angle = -angle;
+			}
+
+			int i = 0;
+
+//			System.out.println(angle);
+
+			while (i < distance) {
+				int checkX;
+				int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
+				System.out.println(checkY);
+				if (player_x > m_coord.X()) {
+					turn(new Direction("E"));
+					checkX = (int) (m_coord.X() + i * Math.cos(angle));
+				} else {
+					turn(new Direction("W"));
+					checkX = (int) (m_coord.X() - i * Math.cos(angle));
+				}
+				if (m_model.m_room.isBlocked(checkX, checkY)) {
+					return false;
+				}
+				i += 40;
+			}
+			return true;
+
+		}
 		return false;
 	}
 
@@ -161,62 +202,27 @@ public class FlyingOpponent extends Opponent {
 	public boolean cell(Direction dir, Category cat) {
 
 		if (m_direction.toString().equals(dir.toString())) {
-			System.out.println("dir = "+dir.toString());
 			if (dir.toString().equals("E")) {
 
 				int x = hitBox.x + hitBox.width + 1;
-				System.out.println(x);
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2) || 
-						m_model.m_room.isBlocked(x, m_coord.Y() - 1) ||
-						m_model.m_room.isBlocked(x, m_coord.Y() - m_height +1) ) {
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
 					return true;
 				} else {
 					return false;
 				}
 			} else if (dir.toString().equals("W")) {
 				int x = hitBox.x;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2) || 
-						m_model.m_room.isBlocked(x, m_coord.Y() - 1) ||
-						m_model.m_room.isBlocked(x, m_coord.Y() - m_height +1)) {
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
 					return true;
 				} else {
 					return false;
 				}
 			}
 		}
-
-//		if (cat.toString().equals("A")) {
-//			Coord playerCoord = m_model.getPlayer().getCoord();
-//			int player_x = playerCoord.X();
-//			int player_y = playerCoord.Y();
-//			int x = player_x - m_coord.X();
-//			int y = m_coord.Y() - m_height - player_y;
-//
-//			int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-//
-//			if (distance <= 400) {
-//
-//				double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-//				double angle = (float) Math.asin(Math.abs(y) / r);
-//				int i = 0;
-//
-//				while (i < distance) {
-//					int checkX;
-//					if (player_x > m_coord.X()) {
-//						checkX = (int) (m_coord.X() + i * Math.cos(angle));
-//					} else {
-//						checkX = (int) (m_coord.X() - i * Math.cos(angle));
-//					}
-//					if (m_model.m_room.isBlocked(checkX, (int) (m_coord.Y() - m_height - i * Math.sin(angle)))) {
-//						return false;
-//					}
-//					i += 40;
-//				}
-//				return true;
-//
-//			}
-//			return false;
-//		}
 		return false;
 	}
 
@@ -247,9 +253,6 @@ public class FlyingOpponent extends Opponent {
 			if (player_y > m_y) {
 				angle = -angle;
 			}
-
-			shooting = false;
-
 			try {
 				addProjectile(m_x, m_y, angle, this, direc);
 			} catch (Exception e) {
@@ -265,18 +268,6 @@ public class FlyingOpponent extends Opponent {
 
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
-	}
-
-	public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
 	}
 
 }
