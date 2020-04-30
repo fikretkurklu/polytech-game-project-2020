@@ -39,20 +39,20 @@ public class WalkingOpponent extends Opponent {
 	}
 	
 	public boolean move(Direction dir) {
-		if (!dead) {
+		if (!(m_state== CurrentState.isDead)) {
 			int m_x = m_coord.X();
 
-			if (!moving) {
+			if (!(m_state == CurrentState.isMoving)) {
 				m_image_index = 0;
 			}
-			moving = true;
+			m_state = CurrentState.isMoving;
 
 			if (m_direction.toString().equals("E")) {
-				m_x += SPEED_FLY;
+				m_x += WALKING_SPEED;
 				hitBox.translate(m_x - m_coord.X(), 0);
 				m_coord.setX(m_x);
 			} else {
-				m_x -= SPEED_FLY;
+				m_x -= WALKING_SPEED;
 				hitBox.translate(-(m_coord.X() - m_x), 0);
 				m_coord.setX(m_x);
 			}
