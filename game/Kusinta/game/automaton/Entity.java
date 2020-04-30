@@ -10,7 +10,7 @@ public abstract class Entity {
 	protected Automaton m_automaton;
 	
 	protected Coord m_coord;
-	
+		
 	public Entity() {}
 	
 	public Entity(Automaton automaton) {

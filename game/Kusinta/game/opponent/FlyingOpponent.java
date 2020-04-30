@@ -136,6 +136,23 @@ public class FlyingOpponent extends Opponent {
 		} else {
 			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(hitBox.x, hitBox.y, hitBox.width, 10);
+		if(m_life > 50) {
+			g.setColor(Color.GREEN);
+		} else if(m_life > 25) {
+			g.setColor(Color.ORANGE);
+		} else {
+			g.setColor(Color.RED);
+		}
+		g.fillRect(hitBox.x, hitBox.y, hitBox.width * (m_life / 100), 10);
+		g.setColor(Color.LIGHT_GRAY);
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, 10);
+		
+		
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			((MagicProjectile)m_projectiles.get(i)).paint(g);
+		}
 	}
 
 	@Override
@@ -156,6 +173,10 @@ public class FlyingOpponent extends Opponent {
 					shooting = false;
 				}
 			}
+		}
+		
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			(m_projectiles.get(i)).tick(elapsed);
 		}
 	}
 

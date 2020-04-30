@@ -183,5 +183,8 @@ public class Model {
 		return (Player)m_player;
 	}
 	
+	public LinkedList<Opponent> getOpponent(){
+		return m_opponents;
+	}
 	
 }

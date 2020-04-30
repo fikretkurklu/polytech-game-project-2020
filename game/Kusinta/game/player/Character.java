@@ -24,7 +24,7 @@ public abstract class Character extends Entity {
 	protected Direction m_direction;
 
 	int MAX_LIFE = 100;
-	int m_life;
+	protected int m_life;
 	protected int m_resistance, m_strength, m_attackSpeed;
 	protected int m_slowness;
 
@@ -34,8 +34,8 @@ public abstract class Character extends Entity {
 
 	BufferedImage[] bI;
 	protected int m_image_index;
-	
-	Character collidingWith;
+
+	protected Character collidingWith;
 
 	protected Rectangle hitBox;
 
@@ -97,7 +97,7 @@ public abstract class Character extends Entity {
 	}
 	
 	public boolean power(){
-		collidingWith.loseLife(m_strength);
+//		collidingWith.loseLife(m_strength);
 		return false;
 	}
 	
@@ -145,6 +145,10 @@ public abstract class Character extends Entity {
 	
 	public int getHeight() {
 		return m_height;
+	}
+	
+	public Rectangle getHitBox() {
+		return hitBox;
 	}
 	
 

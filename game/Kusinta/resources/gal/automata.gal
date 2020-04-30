@@ -27,8 +27,8 @@ Block (Inactif) {
 
 Fleche (Init) {
   *(Init)
-  | Cell(H,V) ? Move : (Init)
   | Cell(H,_) ? Explode() : ()
+  | Cell(H,V) ? Move : (Init)
 }
 
 Decor (Inactif) {                
@@ -38,7 +38,7 @@ Decor (Inactif) {
 
 FlyingOpponents (Init) {
 *(Init)
-  | Cell(H, M) ? Power : (Init)  
+  | Cell(H, A) ? Power : (Init)  
   | ! GotPower() ? Explode() : ()        
   | Cell(E, O) ? Turn(W) : (Init)
   | Cell(W, O) ? Turn(E) : (Init)
@@ -49,14 +49,14 @@ FlyingOpponents (Init) {
 
 WalkingOpponents (East) {
 *(East)
-  | Cell(H, M) ? Power : (East)
+  | Cell(H, A) ? Power : (East)
   | ! GotPower() ? Explode() : ()
   | Cell(E, A) ? Wizz() : (East)
   | Cell(E, O) ? Turn(W) : (West)
   | Closest(A, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
-  | Cell(H, M) ? Power : (West)
+  | Cell(H, A) ? Power : (West)
   | ! GotPower() ? Explode() : ()
   | Cell(W, A) ? Wizz() : (West)
   | Cell(W, O) ? Turn(E) : (East)
