@@ -10,6 +10,7 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import game.Model;
+import player.Character.CurrentStat;
 import projectile.MagicProjectile;
 import projectile.Projectile;
 
@@ -38,6 +39,10 @@ public class FlyingOpponent extends Opponent {
 		moving = false;
 		dead = false;
 
+		imageProjectiles = new Image[13];
+		for (int i = 0; i < 13; i++) {
+			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack"+(i+1)+".png");
+		}				
 		death = new Image[6];
 		for (int i = 0; i < 6; i++) {
 			death[i] = loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png");
@@ -56,7 +61,10 @@ public class FlyingOpponent extends Opponent {
 		m_width = flight[0].getWidth(null);
 		m_height = flight[0].getHeight(null);
 
-		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height);
+		int w = (int) (m_width / 1.7);
+		int h = (int) (m_height / 1.3);
+
+		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
 
 		m_image_index = 0;
 
@@ -94,15 +102,15 @@ public class FlyingOpponent extends Opponent {
 		if (!dead) {
 			long now = System.currentTimeMillis();
 
-			if (now - m_shot_time > m_attackSpeed) {
+			if (now - m_shot_time > m_currentStatMap.get(CurrentStat.Attackspeed)) {
 
 				m_image_index = 0;
 
 				shooting = true;
-				
+
 				Coord playerCoord = m_model.getPlayer().getCoord();
 				int player_x = playerCoord.X();
-				
+
 				if (player_x > m_coord.X()) {
 					turn(new Direction("E"));
 				} else {
@@ -137,21 +145,21 @@ public class FlyingOpponent extends Opponent {
 			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
 		g.setColor(Color.DARK_GRAY);
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width, 10);
-		if(m_life > 50) {
+		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
+		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
 			g.setColor(Color.GREEN);
-		} else if(m_life > 25) {
+		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
 			g.setColor(Color.ORANGE);
 		} else {
 			g.setColor(Color.RED);
 		}
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width * (m_life / 100), 10);
+		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
+		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, 10);
-		
-		
+		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			((MagicProjectile)m_projectiles.get(i)).paint(g);
+			((MagicProjectile) m_projectiles.get(i)).paint(g);
 		}
 	}
 
@@ -164,6 +172,9 @@ public class FlyingOpponent extends Opponent {
 			m_imageElapsed = 0;
 
 			if (dead) {
+				if (m_image_index == 5) {
+					m_model.getOpponent().remove(this);
+				}
 				m_image_index = (m_image_index + 1) % 6;
 			} else {
 				m_image_index = (m_image_index + 1) % 4;
@@ -174,7 +185,7 @@ public class FlyingOpponent extends Opponent {
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			(m_projectiles.get(i)).tick(elapsed);
 		}
@@ -286,11 +297,17 @@ public class FlyingOpponent extends Opponent {
 
 	public void addProjectile(int x, int y, double angle, FlyingOpponent opponent, Direction direction)
 			throws Exception {
-		m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
+		m_projectiles
+				.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
 	}
 
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
 	}
 
 }

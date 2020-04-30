@@ -1,5 +1,6 @@
 package projectile;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,18 +20,18 @@ import player.Character;
 public abstract class Projectile extends Entity {
 
 	protected int SPEED = 9;
-
-	static final int OK_STATE = 1;
-	static final int HIT_STATE = 2;
+	
+	protected enum State {OK_STATE, HIT_STATE};
 	public static final int SIZE = 86;
 
 	protected double m_angle;
 	protected Direction m_direction;
 	protected int m_strength;
 
-	protected int m_State;
 	int moving;
 
+	protected State m_State;
+	
 	protected Character m_shooter;
 	protected Character collidingWith;
 	protected Model m_model;
@@ -45,26 +46,25 @@ public abstract class Projectile extends Entity {
 
 	protected Image image;
 
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model,
-			Direction direction) {
+	public Projectile( Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
 		super(projectileAutomaton);
-
-		m_coord = new Coord(x, y);
+		
+		m_coord = new Coord(x,y);
 		m_angle = angle;
 		m_direction = direction;
 
 		m_shooter = shooter;
 		m_model = model;
-
-		m_State = OK_STATE;
-
+		
+		m_State = State.OK_STATE;
+		
 		m_alpha = 1f;
 
 		m_dead_time = 0;
 
 		moving = 0;
 		
-		m_strength = 5;
+		m_strength = 15;
 
 	}
 
@@ -96,14 +96,14 @@ public abstract class Projectile extends Entity {
 			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
 					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
 			if (c) {
-				m_State = HIT_STATE;
+				m_State = State.HIT_STATE;
 				return true;
 			}
 			if (m_shooter instanceof Opponent) {
 				c = m_model.getPlayer().getHitBox().contains(hitBox.X(), hitBox.Y())
 						|| m_model.getPlayer().getHitBox().contains(m_coord.X(), m_coord.Y());
 				if(c) {
-					m_State = HIT_STATE;
+					m_State = State.HIT_STATE;
 					this.setCollidingWith(m_model.getPlayer());
 					return true;
 				}
@@ -113,7 +113,7 @@ public abstract class Projectile extends Entity {
 					c = op.getHitBox().contains(hitBox.X(), hitBox.Y())
 							|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
 					if(c) {
-						m_State = HIT_STATE;
+						m_State = State.HIT_STATE;
 						this.setCollidingWith(op);
 						return true;
 					}
@@ -122,11 +122,11 @@ public abstract class Projectile extends Entity {
 		} else {
 			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
 					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-			if (m_State == HIT_STATE) {
+			if (m_State == State.HIT_STATE) {
 				return !c;
 			}
 			if (!c) {
-				m_State = HIT_STATE;
+				m_State = State.HIT_STATE;
 			}
 			return c;
 		}
@@ -152,8 +152,8 @@ public abstract class Projectile extends Entity {
 	public long getDeadTime() {
 		return m_dead_time;
 	}
-
-	public int getState() {
+	
+	public State getState() {
 		return m_State;
 	}
 
@@ -166,14 +166,15 @@ public abstract class Projectile extends Entity {
 	}
 	
 	public void setCollidingWith(Character cha) {
-		if(collidingWith != cha && collidingWith != null) {
+		if(collidingWith != cha) {
+			collidingWith = cha;
 			collidingWith.loseLife(m_strength);
-			System.out.println("loselife");
 		}
-		collidingWith = cha;
 	}
 	
 	public void setSpeed(int speed) {
 		SPEED = speed;
 	}
+	
+	public abstract void paint(Graphics g) ;
 }

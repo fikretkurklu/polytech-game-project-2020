@@ -1,10 +1,12 @@
 package village;
 
+import player.Player;
+
 public class VillagePanel extends Panel{
 	private String IMAGE_VILLAGE = "resources/Village/HUD/villageBG.jpg";
 	
-	public VillagePanel(int x, int y, int w, int h) {
-		super(x, y, w, h);
+	public VillagePanel(int x, int y, int w, int h, Player p) {
+		super(x, y, w, h, p);
 		setImage(IMAGE_VILLAGE);
 		int Scroll_w = w / Scroll.WIDTH_RATIO;
 		int Scroll_h = h / Scroll.HEIGHT_RATIO;

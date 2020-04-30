@@ -23,14 +23,14 @@ public class Arrow extends Projectile {
 			throws Exception {
 		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
 
-		image = loadImage("resources/Player/spriteArrow.png");
+		image = m_shooter.getProjectileImage();
 
 		DIMENSION = SIZE / (image.getHeight(null));
 
 		float ratio = (float) (image.getWidth(null) * 4) / (float) (5 * image.getHeight(null));
 
-		m_height = DIMENSION * image.getHeight(null);
-		m_width = (int) (ratio * image.getWidth(null));
+		m_height =  image.getHeight(null);
+		m_width =  image.getWidth(null);
 
 		if (m_direction.toString().equals("E")) {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
@@ -44,25 +44,23 @@ public class Arrow extends Projectile {
 
 	public void paint(Graphics g) {
 		long now = System.currentTimeMillis();
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
+		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height/2, m_width* 2, m_height * 2);
+		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 
 		if (image != null) {
-			int w = DIMENSION * m_width;
+			int w = m_width;
 			int h = m_height;
-			Graphics2D g2D = (Graphics2D) g;
 			if (m_direction.toString().equals("E")) {
-				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
-				g2D.drawImage(image, m_coord.X() - (w / 2), m_coord.Y() - h / 2, w, h, null);
-				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
+				bg.rotate(-m_angle, m_width / 2, m_height/2);
+				bg.drawImage(image, 0, 0, w, h, null);
 			} else {
-				g2D.rotate(m_angle, m_coord.X(), m_coord.Y());
-				g2D.drawImage(image, m_coord.X() + (w / 2), m_coord.Y() - h / 2, -w, h, null);
-				g2D.rotate(-m_angle, m_coord.X(), m_coord.Y());
+				bg.rotate(m_angle, m_width / 2, m_height / 2);
+				bg.drawImage(image, m_width, 0, -w, h, null);
 			}
 		}
-
-		if (now - getDeadTime() > 1000 && getState() == 2) {
-			setAlpha(this.getAlpha() * 0.95f);
+		bg.dispose();
+		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
+			setAlpha(this.getAlpha() * 0.7f);
 		}
 		
 		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));

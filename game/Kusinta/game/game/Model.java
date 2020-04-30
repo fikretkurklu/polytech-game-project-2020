@@ -15,6 +15,7 @@ import automaton.Direction;
 import game.graphics.View;
 import opponent.FlyingOpponent;
 import opponent.Opponent;
+import hud.HUD;
 import player.Player;
 import room.Room;
 import underworld.PlayerSoul;
@@ -31,7 +32,7 @@ public class Model {
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
-	Character m_player;
+	public Character m_player;
 	Character m_playerSave;
 	View m_view;
 	public int mode;
@@ -45,6 +46,7 @@ public class Model {
 	public Village m_village;
 	boolean set = false;
 	LinkedList<Opponent> m_opponents;
+	public HUD m_hud;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
@@ -59,9 +61,12 @@ public class Model {
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		m_opponents = new LinkedList<Opponent>();
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 430, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
 		setCenterScreenPlayer();
 		setVillageEnv();
+		int HUD_w = m_width / 3;
+		int HUD_h = m_height / 9;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 	}
 
 	private void switchPlayer() {
@@ -79,8 +84,12 @@ public class Model {
 	}
 
 	public void setRoomEnv() throws Exception {
-		if (!(m_player instanceof Player))
+		if (!(m_player instanceof Player)) {
 			switchPlayer();
+			m_player.reset();
+		}
+			
+		m_village = null;
 		mode = ROOM;
 	}
 
@@ -91,24 +100,35 @@ public class Model {
 	}
 
 	public void setVillageEnv() throws Exception {
-		m_village = new Village(m_width, m_height, this);
+		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		mode = VILLAGE;
 	}
 
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
+		if (m_x + x_decalage > 0) {
+			x_decalage = -m_x;
+		} else if (- x_decalage > m_room.getWitdh() - m_width) {
+			x_decalage = -(m_room.getWitdh() - m_width);
+		}
+		if (m_y + y_decalage > 0) {
+			y_decalage = m_y;
+		} else if (- y_decalage > m_room.getHeight() - m_height) {
+			y_decalage = - (m_room.getHeight() - m_height);
+		}
 
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
+		m_hud.tick(elapsed);
 		switch (mode) {
 		case ROOM:
 			m_room.tick(elapsed);
+			m_player.tick(elapsed);
 			break;
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
@@ -117,13 +137,14 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
+		
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (mode) {
 		case ROOM:
-			m_room.paint(gp, width, height);
+			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			m_player.paint(gp);
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
@@ -138,6 +159,7 @@ public class Model {
 		}
 
 		gp.dispose();
+		m_hud.paint(g);
 	}
 
 	public void setMouseCoord(Coord mouseCoord) {

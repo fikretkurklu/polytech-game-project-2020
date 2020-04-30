@@ -273,6 +273,12 @@ public class PlayerSoul extends Character {
 		m_automaton.step(this);
 		
 	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
