@@ -123,7 +123,8 @@ public class Ghost extends Entity {
 			Coord playerCoord = null;
 			if (catString.equals("A"))
 				playerCoord = getPlayer().getCoord();
-			else if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered)
+			else if (((PlayerSoul) getPlayer()).lure != null
+					&& !((PlayerSoul) getPlayer()).lure.disapered)
 				playerCoord = ((PlayerSoul) getPlayer()).lure.getCoord();
 			else
 				return false;
@@ -139,7 +140,8 @@ public class Ghost extends Entity {
 			} else if (dir.toString().equals("W")) {
 				d = m_coord.X() - playerCoord.X();
 				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
-			} else if (dir.toString().equals("NE")) {
+			}
+			 else if (dir.toString().equals("NE")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
 						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
