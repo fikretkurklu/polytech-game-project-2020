@@ -80,7 +80,8 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
-		invincible = false;
+		invincible = true;
+		m_invincibleElapsed = 0;
 		paintInvincible = true;
 	}
 
