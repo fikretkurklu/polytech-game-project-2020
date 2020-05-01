@@ -25,12 +25,11 @@ public class Gate extends Element {
 	public Gate(Automaton automaton, Coord coord, Model model) {
 		super(false, true, coord, automaton);
 		m_model = model;
-		m_width = (int) 4 * Element.SIZE;
-		m_height = (int) 4 * Element.SIZE;
+		m_width = (int) 4 * SIZE;
+		m_height = (int) 4 * SIZE;
 		appearing = false;
 		loopAnimation = false;
-		hitBox = new Rectangle(m_coord.X() + (Element.SIZE / 2), m_coord.Y() + (Element.SIZE / 2), Element.SIZE * 3,
-				Element.SIZE * 3);
+		hitBox = new Rectangle(m_coord.X() + SIZE, m_coord.Y() + SIZE, SIZE * 2, SIZE * 2);
 		try {
 			m_images = m_model.loadSprite(UnderworldParam.gateSprite, 6, 6);
 		} catch (IOException e) {
@@ -38,7 +37,7 @@ public class Gate extends Element {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public void paint(Graphics g) {
 		if (m_images != null) {
@@ -48,8 +47,8 @@ public class Gate extends Element {
 		}
 	}
 	
-	public boolean contains(int x, int y) {
-		return hitBox.contains(x,y);
+	public boolean contains(Rectangle hitBox) {
+		return hitBox.contains(m_coord.X() + 2 * SIZE,m_coord.Y() + 2 * SIZE);
 	}
 
 	public void tick(long elapsed) {

@@ -162,7 +162,7 @@ public class PlayerSoul extends Character {
 				}
 			}
 		} else if ((escape) && (cat.toString().equals("G"))) {
-			return m_model.m_underworld.m_gate.contains(xCenter, yCenter);
+			return m_model.m_underworld.m_gate.contains(hitBox);
 		}
 		return false;
 	}
@@ -172,7 +172,9 @@ public class PlayerSoul extends Character {
 		return (fragmentsPicked == m_model.m_underworld.MAX_FRAGMENTS);
 	}
 
-	public static int DISTANCE = 3;
+	public static int DISTANCE = 2;
+	public static final int NORMALSPEED = 2;
+	public static final int DASHSPEED = 4;
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
@@ -181,7 +183,7 @@ public class PlayerSoul extends Character {
 			int xUp = hitBox.x + (SIZE / 2);
 			if (checkBlock(xUp, hitBox.y)) {
 				m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
-				DISTANCE = 3;
+				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
@@ -189,7 +191,7 @@ public class PlayerSoul extends Character {
 			int xDown = hitBox.x + (SIZE / 2);
 			if (checkBlock(xDown, hitBox.y + SIZE)) {
 				m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
-				DISTANCE = 3;
+				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
@@ -197,7 +199,7 @@ public class PlayerSoul extends Character {
 			int yRight = hitBox.y + (SIZE / 2);
 			if (checkBlock(hitBox.x + SIZE, yRight)) {
 				m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
-				DISTANCE = 3;
+				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
@@ -205,7 +207,7 @@ public class PlayerSoul extends Character {
 			int yLeft = hitBox.y + (SIZE / 2);
 			if (checkBlock(hitBox.x, yLeft)) {
 				m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
-				DISTANCE = 3;
+				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
@@ -268,7 +270,7 @@ public class PlayerSoul extends Character {
 			case "S":
 			case "E":
 			case "W":
-				DISTANCE = 6;
+				DISTANCE = DASHSPEED;
 				dashAvailable = false;
 				animationMode = DASH;
 				m_image_index = sizeAnimation;
@@ -356,7 +358,7 @@ public class PlayerSoul extends Character {
 						animationMode = NORMAL;
 						m_image_index = 0;
 					}
-					DISTANCE = 3;
+					DISTANCE = NORMALSPEED;
 				}
 				break;
 			}

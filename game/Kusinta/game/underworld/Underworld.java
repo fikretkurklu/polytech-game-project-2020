@@ -1,7 +1,7 @@
 package underworld;
 
 import java.awt.Graphics;
-
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -138,7 +138,9 @@ public class Underworld {
 				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
-			fragments[i] = new Fragment(fragmentAutomaton, new Coord(x, y), m_model);
+			HITBOXDIM = - (int)(Element.SIZE/1.5);
+			HITBOXSIZE = 2 * Element.SIZE;
+			fragments[i] = new Fragment(fragmentAutomaton, setPosition(x, y), m_model);
 		}
 	}
 	
@@ -150,7 +152,9 @@ public class Underworld {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 		}
-		m_gate = new Gate(gateAutomaton, new Coord(x,y), m_model);
+		HITBOXDIM = Element.SIZE;
+		HITBOXSIZE = 2 * Element.SIZE;
+		m_gate = new Gate(gateAutomaton, setPosition(x,y), m_model);
 	}
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
@@ -239,6 +243,27 @@ public class Underworld {
 		}
 		if (gateCreated)
 			m_gate.tick(elapsed);
+	}
+	
+	public static int HITBOXDIM;
+	public static int HITBOXSIZE;
+	
+	private Coord setPosition(int x, int y) {
+		Rectangle hitBox = new Rectangle(x + HITBOXDIM, y + HITBOXDIM, HITBOXSIZE, HITBOXSIZE);
+		int xUp = hitBox.x + HITBOXSIZE/2;
+		int xDown = hitBox.x + HITBOXSIZE/2;
+		int yRight = hitBox.y + HITBOXSIZE/2;
+		int yLeft = hitBox.y + HITBOXSIZE/2;
+
+		if (isBlocked(xUp, hitBox.y))
+			y = blockCoord(xUp, hitBox.y).Y() + Element.SIZE;
+		if (isBlocked(xDown, hitBox.y + HITBOXSIZE))
+			y = blockCoord(xDown, hitBox.y + HITBOXSIZE).Y() - Element.SIZE;
+		if (isBlocked(hitBox.x + HITBOXSIZE, yRight))
+			x = blockCoord(hitBox.x + HITBOXSIZE, yRight).X() - Element.SIZE;
+		if (isBlocked(hitBox.x, yLeft))
+			x = blockCoord(hitBox.x, yLeft).X() + Element.SIZE;
+		return new Coord(x,y);
 	}
 	
 
