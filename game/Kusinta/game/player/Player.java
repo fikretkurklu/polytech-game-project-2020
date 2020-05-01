@@ -26,7 +26,7 @@ public class Player extends Character {
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping, shooting;
+	boolean falling, jumping, shooting, invincible, paintInvincible;
 
 	int y_gravity;
 	int dt_y;
@@ -38,7 +38,7 @@ public class Player extends Character {
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
-	long m_moveElapsed;
+	long m_moveElapsed, m_invincibleElapsed;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -63,6 +63,7 @@ public class Player extends Character {
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
+		m_invincibleElapsed = 0;
 
 		reset();
 		setMoney(10000);
@@ -81,6 +82,8 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
+		invincible = false;
+		paintInvincible = true;
 	}
 
 	@Override
@@ -295,6 +298,15 @@ public class Player extends Character {
 			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
 			attackspeed = 200 / (attackspeed / 1000);
 		}
+
+		if (invincible) {
+			m_invincibleElapsed += elapsed;
+			if (m_invincibleElapsed > 1000) {
+				invincible = false;
+				m_invincibleElapsed = 0;
+			}
+		}
+
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
@@ -365,12 +377,23 @@ public class Player extends Character {
 
 		int w = DIMENSION * m_width;
 		int h = m_height;
-		if (m_direction.toString().equals("E")) {
-			g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+		if (!invincible) {
+			if (m_direction.toString().equals("E")) {
+				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+			} else {
+				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+			}
 		} else {
-			g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+			if (paintInvincible) {
+				if (m_direction.toString().equals("E")) {
+					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+				} else {
+					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+				}
+			}
+			paintInvincible = !paintInvincible;
 		}
-
+		
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
@@ -429,5 +452,13 @@ public class Player extends Character {
 		if (!gotpower())
 			m_image_index = 66;
 		return true;
+	}
+
+	public void loseLife(int l) {
+		if (!invincible) {
+			invincible = true;
+			paintInvincible = true;
+			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
+		}
 	}
 }

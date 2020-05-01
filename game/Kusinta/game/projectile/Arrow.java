@@ -16,7 +16,6 @@ import player.Player;
 public class Arrow extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	static final int SPEED = 9;
 	int DIMENSION;
 
 	int m_height;
@@ -78,10 +77,6 @@ public class Arrow extends Projectile {
 		if (alpha <= 0.05) {
 			((Player) m_shooter).removeProjectile(this);
 		}
-	}
-
-	public void tick(long elapsed) {
-		m_automaton.step(this);
 	}
 
 	public boolean cell(Direction dir, Category cat) {
