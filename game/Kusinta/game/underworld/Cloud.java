@@ -24,7 +24,7 @@ public class Cloud extends Element{
 		outScreen = false;
 		move = false;
 		try {
-			loadImage(UnderworldParam.cloudImage[0], m_width, m_height);
+			loadImage(UnderworldParam.cloudImage[2], m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
