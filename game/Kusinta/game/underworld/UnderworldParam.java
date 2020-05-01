@@ -13,4 +13,6 @@ public interface UnderworldParam {
 	String fragmentSprite = "resources/Underworld/Fragment/CrystalsWhite.png";
 	String gateSprite = "resources/Underworld/Gate/Gate.png";
 	int fragmentAnimationSize = 7;
+	int gateApparitionAnimationSize = 24;
+	int gateAnimationSize = 30;
 }

@@ -17,6 +17,8 @@ public class Underworld {
 	public final static int MAX_CLOUDS = 7;
 	public final static int MAX_GHOSTS = 3;
 	public final int MAX_FRAGMENTS = 4;
+	
+	boolean gateCreated = false;
 
 	AutomatonLibrary m_al;
 	String mapFile;
@@ -29,9 +31,10 @@ public class Underworld {
 	Cloud[] m_clouds;
 	Ghost[] m_ghosts;
 	Fragment[] m_fragments;
+	Gate m_gate;
 	UnderworldEmptySpaceImageManager ESIM;
 	UndInnerWallManager UIWM;
-	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton;
+	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton, gateAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
@@ -56,6 +59,7 @@ public class Underworld {
 			cloudAutomaton = m_AL.getAutomaton("Cloud");
 			ghostAutomaton = m_AL.getAutomaton("Ghost");
 			fragmentAutomaton = m_AL.getAutomaton("Fragment");
+			gateAutomaton = m_AL.getAutomaton("Gate");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -81,6 +85,7 @@ public class Underworld {
 			generateClouds(m_clouds);
 			generateGhosts(m_ghosts);
 			generateFragments(m_fragments);
+			generateGate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,6 +135,17 @@ public class Underworld {
 			}
 			fragments[i] = new Fragment(fragmentAutomaton, new Coord(x, y), m_model);
 		}
+	}
+	
+	private void generateGate() {
+		int x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+		int y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		}
+		m_gate = new Gate(gateAutomaton, new Coord(x,y), m_model);
 	}
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
@@ -183,6 +199,8 @@ public class Underworld {
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].paint(g);
 		}
+		if (gateCreated)
+			m_gate.paint(g);
 	}
 
 	public Coord getStartCoord() {
@@ -205,6 +223,8 @@ public class Underworld {
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].tick(elapsed);
 		}
+		if (gateCreated)
+			m_gate.tick(elapsed);
 	}
 
 	public boolean isBlocked(int x, int y) {
@@ -240,6 +260,10 @@ public class Underworld {
 		} else {
 			return null;
 		}
+	}
+	
+	public void activateGate() {
+		gateCreated = true;
 	}
 
 }
