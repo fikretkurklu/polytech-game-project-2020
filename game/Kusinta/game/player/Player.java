@@ -411,6 +411,15 @@ public class Player extends Character {
 	public void setGravity(int g) {
 		G = g;
 	}
+	
+	public void setMoney(int money) {
+		m_money = money;
+		System.out.println(m_money);
+	}
+	
+	public int getMoney() {
+		return m_money;
+	}
 
 	public void shoot() {
 		if (shooting) {
