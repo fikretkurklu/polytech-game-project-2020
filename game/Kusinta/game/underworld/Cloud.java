@@ -1,66 +1,40 @@
 package underworld;
 
-import java.awt.Color;
 import java.awt.Graphics;
-
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
+import game.Model;
 import environnement.Element;
 
 public class Cloud extends Element{
 	
 	int m_width, m_height;
-//	int xMax, yMax;
-	int xHitbox[];
-	int yHitbox[];
-	String imagePath;
+	Model m_model;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
 	long timeElapsed = 0;
 
-	public Cloud(Automaton automaton, Coord coord) {
+	public Cloud(Automaton automaton, Coord coord, Model model) {
 		super(false, true, coord, automaton);
-		m_width = Element.SIZE;
-		m_height = Element.SIZE;
-		xHitbox = new int[4];
-		yHitbox = new int[4];
-		calculateHitbox();
-//		xMax = getCoord().X() + m_width;
-//		yMax = getCoord().Y() - m_height;
+		m_width = 2 * Element.SIZE;
+		m_height = 2 * Element.SIZE;
+		m_model = model;
 		outScreen = false;
 		move = false;
-		imagePath = UnderworldParam.cloudImage[0];
 		try {
-			loadImage(imagePath, m_width, m_height);
+			loadImage(UnderworldParam.cloudImage[2], m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void calculateHitbox() {
-		
-		int x = getCoord().X();
-		int y = getCoord().Y();
-		
-		xHitbox[0] = x;
-		xHitbox[1] = x + m_width;
-		xHitbox[2] = x + m_width;
-		xHitbox[3] = x;
-		
-		yHitbox[0] = y;
-		yHitbox[1] = y;
-		yHitbox[2] = y - m_height;
-		yHitbox[3] = y - m_height;
-		
-	}
-	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if ((dir.toString().equals("H")) && (cat.toString().equals("O"))) {
-			return (getCoord().X() + m_width <= 0) || (getCoord().Y() + m_height <= 0);
+		if ((dir.toString().equals("B")) && (cat.toString().equals("O"))) {
+			return m_coord.X() + m_width <= 0;
 		}
 		return false;
 	}
@@ -71,13 +45,20 @@ public class Cloud extends Element{
 		return true;
 	}
 	
+
+	public void reactivate() {
+		m_coord.setX(4556);
+		setCurrentState(m_automaton.getInitialState());;
+		outScreen = false;
+		move = false;
+		timeElapsed = 0;
+	}
 	
 	@Override
 	public boolean move(Direction dir) {
 		if (move) {
 			move = false;
-			getCoord().translateX(-1);
-			calculateHitbox();
+			m_coord.translateX(-1);
 			return true;
 		}
 		return false;
@@ -86,8 +67,6 @@ public class Cloud extends Element{
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		g.setColor(Color.blue);
-		g.drawPolyline(xHitbox, yHitbox, 4);
 	}
 	
 	public void tick(long elapsed) {

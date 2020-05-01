@@ -9,7 +9,7 @@ public class UnderworldEmptySpaceImageManager extends ImageManager{
 		useImageTable = false;
 		switch(ambiance) {
 		case(1) :
-			String[] path_1 = {"resources/Underworld/Floor/floor2.png"};
+			String[] path_1 = {"resources/Underworld/Floor/floor3.png", "resources/Underworld/Floor/background.png"};
 			imgPath = path_1;
 			break;
 		case(2) :

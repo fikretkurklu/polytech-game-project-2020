@@ -70,6 +70,10 @@ public class Interpretor implements IVisitor {
 			case "L" : // On my left
 			case "R" : // On my right
 			case "H" : // Here
+			case "NE" :
+			case "NW" :
+			case "SE" :
+			case "SW" :
 				return new automaton.Direction(name);
 				
 			default :

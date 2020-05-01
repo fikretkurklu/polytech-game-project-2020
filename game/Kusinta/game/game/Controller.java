@@ -46,6 +46,12 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+//		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
+//		System.out.println("   modifiers=" + e.getModifiersEx());
+//		System.out.println("   buttons=" + e.getButton());
+		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
+		System.out.println("   modifiers=" + e.getModifiersEx());
+		System.out.println("   buttons=" + e.getButton());
 		if (m_game.m_model.mode ==  Model.VILLAGE) {
 			m_game.m_model.m_village.Clicked();
 		}
@@ -53,11 +59,19 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if (m_game.m_model.mode == Model.UNDERWORLD) {
+			m_game.m_model.m_player.setPressed((int)'v', true);
+			return;
+		}
 		m_game.m_model.m_player.setPressed((int)' ', true);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if (m_game.m_model.mode == Model.UNDERWORLD) {
+			m_game.m_model.m_player.setPressed((int)'v', false);
+			return;
+		}
 		m_game.m_model.m_player.setPressed((int)' ', false);
 
 	}
@@ -96,22 +110,15 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-//		System.out.println("Key typed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-//		System.out.println("Key pressed: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
-
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-//		System.out.println("Key released: " + e.getKeyChar() + " code=" + e.getKeyCode());
-
 		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
 	}
 
