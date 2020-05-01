@@ -358,6 +358,7 @@ public class Ghost extends Entity {
 	public void quitAttackMode() {
 		if (isAttacking) {
 			isAttacking = false;
+			m_image_index = 0;
 //			m_direction.setDirection((dirs[(int) (Math.random() * dirs.length)]));
 		}
 	}
@@ -380,13 +381,13 @@ public class Ghost extends Entity {
 			if (m_imageElapsed > 200) {
 				m_imageElapsed = 0;
 				m_image_index++;
-				if (m_image_index < 3 || m_image_index > 8) {
+				if (m_image_index > 8) {
 					((PlayerSoul) getPlayer()).getDamage();
 					m_image_index = 3;
 				}
 			}
 		} else {
-			if (m_imageElapsed > 150) {
+			if (m_imageElapsed > 250) {
 				m_imageElapsed = 0;
 				m_image_index++;
 				if (m_image_index >= 3) {
