@@ -44,8 +44,8 @@ public class WalkingOpponent extends Opponent {
 
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
-		
-		AttackStrength = 5;
+
+		AttackStrength = 20;
 
 		deathSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
@@ -62,11 +62,11 @@ public class WalkingOpponent extends Opponent {
 			attackingSprite[i] = loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png");
 		}
 
-		m_width = walkingSprite[0].getWidth(null)*2;
-		m_height = walkingSprite[0].getHeight(null)*2;
+		m_width = walkingSprite[0].getWidth(null) * 2;
+		m_height = walkingSprite[0].getHeight(null) * 2;
 
-		int w = (int) (m_width/1.5)-75;
-		int h = (int) (m_height/1.5)-70;
+		int w = (int) (m_width / 1.5) - 75;
+		int h = (int) (m_height / 1.5) - 70;
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w, h);
 
@@ -84,20 +84,30 @@ public class WalkingOpponent extends Opponent {
 		switch (m_state) {
 		case isDead:
 			image = deathSprite[m_image_index];
+			basicHitBox();
 			break;
 		case isAttacking:
 			image = attackingSprite[m_image_index];
+			attackHitBox();
 			break;
 		case isMoving:
 			image = walkingSprite[m_image_index];
+			basicHitBox();
+			break;
+		default :
+			image = walkingSprite[m_image_index];
+			basicHitBox();
+			break;
 		}
 
 		if (m_direction.toString().equals("E")) {
-			gp.drawImage(image, hitBox.x-image.getWidth(null)/2, m_coord.Y() - m_height +70, m_width, m_height, null);
+			gp.drawImage(image, hitBox.x - image.getWidth(null) / 2, m_coord.Y() - m_height + 70, m_width, m_height,
+					null);
 		} else {
-			gp.drawImage(image, hitBox.x+hitBox.width+image.getWidth(null)/2, m_coord.Y() - m_height +70, -m_width, m_height, null);
+			gp.drawImage(image, hitBox.x + hitBox.width + image.getWidth(null) / 2, m_coord.Y() - m_height + 70,
+					-m_width, m_height, null);
 		}
-		
+
 		gp.setColor(Color.DARK_GRAY);
 		gp.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
@@ -154,9 +164,12 @@ public class WalkingOpponent extends Opponent {
 				}
 
 			} else if (cat.toString().equals("A")) {
-				if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x, hitBox.y + hitBox.height / 2)) {
-					return true;
+				if (m_model.getPlayer().gotpower()) {
+					if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x,
+							hitBox.y + hitBox.height / 2)) {
+						return true;
 
+					}
 				}
 			}
 		} else if (dir.toString().equals("W")) {
@@ -164,29 +177,32 @@ public class WalkingOpponent extends Opponent {
 				if ((m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height / 2)
 						|| m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height - 1)
 						|| m_model.m_room.isBlocked(hitBox.x, hitBox.y + 1))
-						|| !m_model.m_room.isBlocked(hitBox.x - 1, hitBox.y + hitBox.height + 1)) {
+						|| !m_model.m_room.isBlocked(hitBox.x - 5, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
 			} else if (cat.toString().equals("A")) {
-				if (m_model.getPlayer().getHitBox().contains(hitBox.x, hitBox.y + hitBox.height / 2)) {
-					return true;
+				if (m_model.getPlayer().gotpower()) {
+					if (m_model.getPlayer().getHitBox().contains(hitBox.x-5, hitBox.y + hitBox.height / 2)) {
+						return true;
+					}
 				}
 			}
 		} else if (dir.toString().equals("H")) {
 			if (cat.toString().equals("A")) {
-				int xHB = m_model.getPlayer().getHitBox().x;
-				int yHB = m_model.getPlayer().getHitBox().y;
-				int widthHB = m_model.getPlayer().getHitBox().width;
-				int heightHB = m_model.getPlayer().getHitBox().height;
-				if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
-						|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
-						|| hitBox.contains(xHB + widthHB, yHB + heightHB)
-						|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
-						|| hitBox.contains(xHB, yHB + heightHB / 2)
-						|| hitBox.contains(xHB + widthHB / 2, yHB)) {
-					System.out.println("Contact");
-					collidingWith = m_model.getPlayer();
-					return true;
+				if (m_model.getPlayer().gotpower()) {
+					int xHB = m_model.getPlayer().getHitBox().x;
+					int yHB = m_model.getPlayer().getHitBox().y;
+					int widthHB = m_model.getPlayer().getHitBox().width;
+					int heightHB = m_model.getPlayer().getHitBox().height;
+					if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
+							|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| hitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| hitBox.contains(xHB, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB / 2)
+							|| hitBox.contains(xHB + widthHB / 2, yHB)) {
+						collidingWith = m_model.getPlayer();
+						return true;
+					}
 				}
 			}
 		}
@@ -196,28 +212,30 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		int xPlayer = m_model.getPlayer().getCoord().X();
-		int yPlayer = m_model.getPlayer().getCoord().Y();
-		if (yPlayer >= hitBox.y && yPlayer-m_model.getPlayer().getHeight()/2 <= hitBox.y + hitBox.height) {
-			if (dir.toString().equals("E")) {
-				if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width/2 + 300) {
-					int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-					for (int i = 0; i < 10; i++) {
-						if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
-							return false;
+		if (m_model.getPlayer().gotpower()) {
+			int xPlayer = m_model.getPlayer().getCoord().X();
+			int yPlayer = m_model.getPlayer().getCoord().Y();
+			if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+				if (dir.toString().equals("E")) {
+					if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
+								return false;
+							}
 						}
+						return true;
 					}
-					return true;
-				}
-			} else if (dir.toString().equals("W")) {
-				if (xPlayer > hitBox.x + hitBox.width/2 - 300 && xPlayer < hitBox.x + 1) {
-					int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-					for (int i = 0; i < 10; i++) {
-						if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
-							return false;
+				} else if (dir.toString().equals("W")) {
+					if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
+								return false;
+							}
 						}
+						return true;
 					}
-					return true;
 				}
 			}
 		}
@@ -294,6 +312,23 @@ public class WalkingOpponent extends Opponent {
 	public void reset() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void attackHitBox() {
+		int w = (int) (m_width / 1.5) - 75;
+		int h = (int) (m_height / 1.5) - 70;
+		if (m_direction.toString().equals("E")) {
+			hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w + 40, h);
+		} else {
+			hitBox = new Rectangle(m_coord.X() - w / 2 - 40, m_coord.Y() - h, w + 40, h);
+		}
+	}
+	
+	public void basicHitBox() {
+		int w = (int) (m_width / 1.5) - 75;
+		int h = (int) (m_height / 1.5) - 70;
+
+		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w, h);
 	}
 
 }

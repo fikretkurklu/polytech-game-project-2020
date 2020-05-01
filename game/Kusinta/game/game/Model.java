@@ -65,7 +65,7 @@ public class Model {
 				new Direction("E"), this);
 		m_opponents = new LinkedList<Opponent>();
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1220, new Direction("E"), this, 100, 100, 1000, 100, 100));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1220, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		setCenterScreenPlayer();
 		setVillageEnv();
 		int HUD_w = m_width / 3;
