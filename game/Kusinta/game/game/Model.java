@@ -62,14 +62,14 @@ public class Model {
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
-//		int HUD_w = m_width / 3;
-//		int HUD_h = m_height / 9;
-//		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		int HUD_w = m_width / 3;
+		int HUD_h = m_height / 9;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		m_opponents = new LinkedList<Opponent>();
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 10));
-		setUnderworldEnv();
+		//setUnderworldEnv();
 		setCenterScreenPlayer();
-		//setVillageEnv();
+		setVillageEnv();
 	}
 
 	private void switchPlayer() {
