@@ -38,15 +38,16 @@ public class PlayerSoul extends Character {
 
 	boolean qPressed, zPressed, dPressed, sPressed, vPressed, ePressed, spacePressed;
 	boolean leftOrientation;
-	
+
 	public static final int NORMAL = 1;
 	public static final int DASH = 2;
 	public static final int ESCAPE = 3;
-	
+	public static final int ESCAPED = 4;
+
 	int animationMode = NORMAL;
-	
-	boolean escape;
-	boolean dashAvailable, lureAvailable;
+
+	boolean escape, escaped;
+	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
 	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
@@ -64,7 +65,9 @@ public class PlayerSoul extends Character {
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
+		moveAvailable = true;
 		escape = false;
+		escaped = false;
 		animationMode = NORMAL;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		loadImage();
@@ -150,11 +153,16 @@ public class PlayerSoul extends Character {
 	public boolean closest(Category cat, Direction dir) {
 		int xCenter = m_coord.X() + (m_width / 2);
 		int yCenter = m_coord.Y() + (m_height / 2);
-		for (int i = 0; i < m_model.m_underworld.m_fragments.length; i++) {
-			if ((!m_model.m_underworld.m_fragments[i].picked) && (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
-				m_model.m_underworld.m_fragments[i].setPicked();
-				return true;
+		if (cat.toString().equals("P")) {
+			for (int i = 0; i < m_model.m_underworld.m_fragments.length; i++) {
+				if ((!m_model.m_underworld.m_fragments[i].picked)
+						&& (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
+					m_model.m_underworld.m_fragments[i].setPicked();
+					return true;
+				}
 			}
+		} else if ((escape) && (cat.toString().equals("G"))) {
+			return m_model.m_underworld.m_gate.contains(xCenter, yCenter);
 		}
 		return false;
 	}
@@ -165,7 +173,7 @@ public class PlayerSoul extends Character {
 	}
 
 	public static int DISTANCE = 3;
-	
+
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		switch (dir.toString()) {
@@ -205,7 +213,7 @@ public class PlayerSoul extends Character {
 			return true;
 		}
 	}
-	
+
 	@Override
 	public boolean move(Direction dir) {
 		turn(dir);
@@ -228,13 +236,21 @@ public class PlayerSoul extends Character {
 		hitBox.setLocation(m_coord.X(), m_coord.Y());
 		return true;
 	}
-	
+
 	@Override
 	public boolean wizz(Direction dir) {
 		fragmentsPicked = -1;
 		escape = true;
+		m_model.m_underworld.activateGate();
 		animationMode = ESCAPE;
 		m_image_index = sizeDashAnimation;
+		return true;
+	}
+
+	@Override
+	public boolean pop(Direction dir) {
+		animationMode = ESCAPED;
+		m_image_index = sizeAnimation;
 		return true;
 	}
 
@@ -293,6 +309,8 @@ public class PlayerSoul extends Character {
 	public static final int HEALTHHEIGHT = SIZE / 8;
 
 	public void paint(Graphics g) {
+		if (escaped)
+			return;
 		if (m_images != null) {
 			if (leftOrientation)
 				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
@@ -308,22 +326,28 @@ public class PlayerSoul extends Character {
 	}
 
 	public void tick(long elapsed) {
+		if (escaped)
+			return;
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_image_index++;
-			switch(animationMode) {
-			case NORMAL :
+			switch (animationMode) {
+			case ESCAPED:
+				if (m_image_index >= sizeDashAnimation)
+					escaped = true;
+					return;
+			case NORMAL:
 				if (m_image_index >= sizeAnimation) {
 					m_image_index = 0;
 				}
 				break;
-			case ESCAPE :
+			case ESCAPE:
 				if (m_image_index >= sizeEscapeAnimation) {
 					m_image_index = sizeDashAnimation;
 				}
 				break;
-			case DASH :
+			case DASH:
 				if (m_image_index >= sizeDashAnimation) {
 					if (escape) {
 						animationMode = ESCAPE;
@@ -364,7 +388,7 @@ public class PlayerSoul extends Character {
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

@@ -5,6 +5,11 @@ Cloud (Init){
   * ()
 }
 
+Gate (Init){
+  * (Init)
+  | True ? : (Init)
+}
+
 Fragment (Init){	
   * (Init)
   | GotPower ? : (Init)
@@ -15,6 +20,7 @@ Fragment (Init){
 
 PlayerSoul (Init) {
   * (Init)
+  | Closest(G,H) ? Pop : ()
   | Key(z) & Key(s) ? : (Init)
   | Key(q) & Key(d) ? : (Init)
   | Key(z) & ! Cell(N,O) ? Move(N) : (Actions)
@@ -28,6 +34,7 @@ PlayerSoul (Init) {
   | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)
   | True ? : (Init)
+  * ()
 }
 
 Lure (Init){
