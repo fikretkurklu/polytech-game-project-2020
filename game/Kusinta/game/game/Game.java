@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020  Pr. Olivier Gruber
+d * Copyright (C) 2020  Pr. Olivier Gruber
  * Educational software for a basic game development
  * 
  *  This program is free software: you can redistribute it and/or modify
@@ -51,6 +51,7 @@ public class Game {
 	Controller m_controller;
 	Model m_model;
 	Sound m_music;
+	boolean gameOver;
 
 	Game() throws Exception {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -59,6 +60,7 @@ public class Game {
         m_model = new Model(m_view, d.width, d.height);
         // creating frame
         m_frame = m_view.createFrame(d);
+        gameOver = false;
         setupFrame();
         
         
@@ -125,22 +127,23 @@ public class Game {
 	 * that elapsed since the last time this method was invoked.
 	 */
 	void tick(long elapsed) {
-
-		m_model.tick(elapsed);
-
-		// Update every second
-		// the text on top of the frame: tick and fps
-		m_textElapsed += elapsed;
-		if (m_textElapsed > 1000) {
-			m_textElapsed = 0;
-			float period = m_view.getTickPeriod();
-			int fps = m_view.getFPS();
-
-			String txt = "Tick=" + period + "ms";
-			while (txt.length() < 15)
-				txt += " ";
-			txt = txt + fps + " fps   ";
-			m_text.setText(txt);
+		if (!gameOver) {
+			m_model.tick(elapsed);
+	
+			// Update every second
+			// the text on top of the frame: tick and fps
+			m_textElapsed += elapsed;
+			if (m_textElapsed > 1000) {
+				m_textElapsed = 0;
+				float period = m_view.getTickPeriod();
+				int fps = m_view.getFPS();
+	
+				String txt = "Tick=" + period + "ms";
+				while (txt.length() < 15)
+					txt += " ";
+				txt = txt + fps + " fps   ";
+				m_text.setText(txt);
+			}
 		}
 	}
 
@@ -149,17 +152,18 @@ public class Game {
 	 * called from the GameCanvasListener, called from the GameCanvas.
 	 */
 	void paint(Graphics g) {
-
-		// get the size of the canvas
-		int width = m_view.getWidth();
-		int height = m_view.getHeight();
-
-		// erase background
-		g.setColor(Color.gray);
-		g.fillRect(0, 0, width, height);
-
-		// paint
-		m_model.paint(g, width, height);
+		if (!gameOver) {
+			// get the size of the canvas
+			int width = m_view.getWidth();
+			int height = m_view.getHeight();
+	
+			// erase background
+			g.setColor(Color.gray);
+			g.fillRect(0, 0, width, height);
+	
+			// paint
+			m_model.paint(g, width, height);
+		}
 	}
 
 }

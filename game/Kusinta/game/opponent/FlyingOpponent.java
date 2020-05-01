@@ -19,8 +19,6 @@ public class FlyingOpponent extends Opponent {
 
 	protected boolean shooting;
 
-	long m_shot_time;
-
 	Image[] death;
 	Image[] flight;
 	Image[] attack;
@@ -31,7 +29,6 @@ public class FlyingOpponent extends Opponent {
 
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
-		m_shot_time = System.currentTimeMillis();
 		m_imageElapsed = 0;
 
 		shooting = false;
@@ -102,11 +99,8 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean egg(Direction dir) {
-		if (gotpower()) {
-			long now = System.currentTimeMillis();
-
-			if (now - m_shot_time > m_currentStatMap.get(CurrentStat.Attackspeed)) {
-
+		if (gotpower() && !shooting) {
+			
 				m_image_index = 0;
 
 				shooting = true;
@@ -120,12 +114,7 @@ public class FlyingOpponent extends Opponent {
 					turn(new Direction("W"));
 				}
 
-				shoot();
-
-				m_shot_time = now;
-
 				return true;
-			}
 		}
 		return false;
 	}
@@ -171,7 +160,12 @@ public class FlyingOpponent extends Opponent {
 		m_automaton.step(this);
 
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
+		float attackspeed = 200;
+		if (shooting) {
+			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
+			attackspeed = 200 / (attackspeed / 1000);
+		}
+		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
 			if (!gotpower()) {
@@ -184,6 +178,7 @@ public class FlyingOpponent extends Opponent {
 			}
 			if (shooting) {
 				if (m_image_index == 3) {
+					shoot();
 					shooting = false;
 				}
 			}
