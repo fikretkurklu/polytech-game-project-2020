@@ -35,17 +35,25 @@ public class WalkingOpponent extends Opponent {
 			int attackSpeed, int resistance, int strength) throws Exception {
 
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
-		int a = y;
-		if (m_model.m_room.isBlocked(x, a)) {
-			int b = m_model.m_room.getWitdh();
+		int a = x;
+		int b = y;
+		System.out.println(a);
+		System.out.println(b);
+		while (m_model.m_room.isBlocked(a, b)) {
 			int c = m_model.m_room.getWitdh();
-			int l = (int) (Math.random() * b);
-			int k = (int) (Math.random() * c);
+			int d = m_model.m_room.getWitdh();
+			a = (int) (Math.random() * (c+1));
+			b = (int) (Math.random() * (d+1));
+			System.out.println(a);
+			System.out.println(b);
 		}
-		while (!m_model.m_room.isBlocked(x, a)) {
-			a += 40;
+		while (!m_model.m_room.isBlocked(a, b)) {
+			b += 40;
+			System.out.println(a);
+			System.out.println(b);
 		}
-		int yCor = m_model.m_room.blockTop(x, a);
+		int yCor = m_model.m_room.blockTop(a, b);
+		m_coord.setX(a);
 		m_coord.setY(yCor);
 
 		m_imageElapsed = 0;
