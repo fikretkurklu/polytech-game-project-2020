@@ -19,10 +19,16 @@ public class Key extends Entity {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
+	private static final double G = 9.81;
+
 	Image image;
 	public Model m_model;
 
 	int m_width, m_height;
+
+	protected boolean falling;
+	long m_time;
+	private int y_gravity;
 
 	public Key(Automaton automaton, int x, int y, Model model) throws Exception {
 		super(automaton);
@@ -31,13 +37,16 @@ public class Key extends Entity {
 
 		m_coord.setX(x);
 		m_coord.setY(y);
-		
+
 		image = loadImage("resources/Room/dropable/Golden_Key.png");
 
 		m_width = image.getWidth(null);
 		m_height = image.getHeight(null);
 
 		m_model = model;
+
+		m_time = 0;
+		falling = false;
 	}
 
 	@Override
@@ -57,7 +66,7 @@ public class Key extends Entity {
 	public boolean wizz(Direction dir) {
 		m_model.m_player.setKey(this);
 		m_model.setKey(null);
-		
+
 		return false;
 	}
 
@@ -78,6 +87,35 @@ public class Key extends Entity {
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
+	}
+
+	public void tick(long elapsed) {
+		m_automaton.step(this);
+
+		if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5) && elapsed < 10) {
+
+			if (!falling) {
+				y_gravity = m_coord.Y();
+				m_time = 0;
+			} else {
+				m_time += elapsed;
+			}
+			falling = true;
+			if (m_time >= 10)
+				gravity(m_time);
+		} else if (falling) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
+			m_coord.setY(topBlock - 5);
+			m_time = 0;
+			falling = false;
+		}
+
+	}
+
+	private void gravity(long t) {
+
+		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
+		m_coord.setY(newY);
 	}
 
 }

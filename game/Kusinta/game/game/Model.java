@@ -88,7 +88,7 @@ public class Model {
 
 		diametre = 0;
 		
-		m_key = new Key(keyDropAutomaton, 800, 1700, this);
+		m_key = new Key(keyDropAutomaton, 900, 1000, this);
 	}
 
 	private void switchPlayer() {
@@ -147,11 +147,11 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
+		if(m_key != null) {
+			m_key.tick(elapsed);
+		}
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
-		}
-		if(m_key != null) {
-			keyDropAutomaton.step(m_key);
 		}
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
