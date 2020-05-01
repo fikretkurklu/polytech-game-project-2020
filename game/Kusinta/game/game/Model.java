@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
@@ -36,7 +37,9 @@ public class Model {
 	public Character m_player;
 	Character m_playerSave;
 	View m_view;
+
 	public int mode;
+
 	private AutomatonLibrary m_AL;
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
@@ -44,12 +47,17 @@ public class Model {
 	public Automaton flyingOpponentAutomaton;
 	public Automaton walkingOpponentAutomaton;
 	public Automaton lureAutomaton;
+
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
+
 	boolean set = false;
 	LinkedList<Opponent> m_opponents;
+
 	public HUD m_hud;
+
+	float diametre;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
@@ -73,6 +81,8 @@ public class Model {
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1220, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		setCenterScreenPlayer();
 		setVillageEnv();
+
+		diametre = 0;
 	}
 
 	private void switchPlayer() {
@@ -94,7 +104,7 @@ public class Model {
 			switchPlayer();
 			m_player.reset();
 		}
-			
+
 		m_village = null;
 		mode = ROOM;
 	}
@@ -113,17 +123,17 @@ public class Model {
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
-		switch(mode) {
-		case ROOM :
+		switch (mode) {
+		case ROOM:
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
-			} else if (- x_decalage > m_room.getWitdh() - m_width) {
+			} else if (-x_decalage > m_room.getWitdh() - m_width) {
 				x_decalage = -(m_room.getWitdh() - m_width);
 			}
 			if (m_y + y_decalage > 0) {
 				y_decalage = m_y;
-			} else if (- y_decalage > m_room.getHeight() - m_height) {
-				y_decalage = - (m_room.getHeight() - m_height);
+			} else if (-y_decalage > m_room.getHeight() - m_height) {
+				y_decalage = -(m_room.getHeight() - m_height);
 			}
 			break;
 		}
@@ -131,22 +141,16 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
-		switch (mode) {
-		case ROOM:
-			for (Opponent op : m_opponents) {
-				op.tick(elapsed);
-			}
-			m_hud.tick(elapsed);
-			m_room.tick(elapsed);
-			break;
-		case UNDERWORLD:
-			m_underworld.tick(elapsed);
-			break;
+		for (Opponent op : m_opponents) {
+			op.tick(elapsed);
 		}
+		m_hud.tick(elapsed);
+		m_room.tick(elapsed);
+		//m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
-		
+
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
@@ -154,9 +158,23 @@ public class Model {
 		switch (mode) {
 		case ROOM:
 			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
-			m_player.paint(gp);
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
+			}
+			m_player.paint(gp);
+			if (!m_player.gotpower() && diametre > 0) {
+				g.setColor(Color.BLACK);
+				int x = (int) (m_player.getCoord().X() + x_decalage - diametre / 2);
+				int y = (int) ((m_player.getCoord().Y() + y_decalage) - (diametre / 2));
+				g.fillOval(x, y, (int) diametre, (int) diametre);
+				if (diametre >= m_view.getWidth() * 1.5) {
+					try {
+						setUnderworldEnv();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				diametre *= 1.5;
 			}
 			m_hud.paint(g);
 			break;
@@ -209,17 +227,29 @@ public class Model {
 	public int getYDecalage() {
 		return y_decalage;
 	}
-	
+
 	public PlayerSoul getPlayerSoul() {
-		return (PlayerSoul)m_player;
+		return (PlayerSoul) m_player;
 	}
-	
+
 	public Player getPlayer() {
-		return (Player)m_player;
+		return (Player) m_player;
 	}
-	
-	public LinkedList<Opponent> getOpponent(){
+
+	public LinkedList<Opponent> getOpponent() {
 		return m_opponents;
 	}
-	
+
+	public View getView() {
+		return m_view;
+	}
+
+	public void setDiametre(float r) {
+		diametre = r;
+	}
+
+	public float getDiametre() {
+		return diametre;
+	}
+
 }
