@@ -24,6 +24,7 @@ public class Player extends Character {
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
+	
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 	boolean falling, jumping, shooting, invincible, paintInvincible;
@@ -62,9 +63,11 @@ public class Player extends Character {
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
-
+		
 		reset();
 		setMoney(10000);
+		
+		m_key = null;
 	}
 
 	public void reset() {
@@ -312,7 +315,9 @@ public class Player extends Character {
 
 			if (!gotpower()) {
 				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
-
+				if(m_image_index == 68 && m_model.getDiametre() == 0) {
+					m_model.setDiametre(1);
+				}
 			} else if (shooting) {
 				m_image_index++;
 				if ((moving || falling || jumping) && m_image_index > 12) {
@@ -367,7 +372,7 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		if (shooting) {
+		if (shooting && gotpower()) {
 			if (m_image_index > 12)
 				m_image_index = 9;
 			img = bIShooting[m_image_index];

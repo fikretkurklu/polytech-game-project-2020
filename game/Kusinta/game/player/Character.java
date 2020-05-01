@@ -21,6 +21,7 @@ import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 import game.Coord;
 import game.Model;
+import opponent.Key;
 import projectile.Projectile;
 
 public abstract class Character extends Entity {
@@ -53,6 +54,7 @@ public abstract class Character extends Entity {
 
 	protected Image imageProjectile;
 	protected Image[] imageProjectiles;
+	public Key m_key;
 	
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
@@ -250,4 +252,11 @@ public abstract class Character extends Entity {
 		return moving;
 	}
 	
+	public Key getKey() {
+		return m_key;
+	}
+	
+	public void setKey(Key key) {
+		m_key = key;
+	}
 }

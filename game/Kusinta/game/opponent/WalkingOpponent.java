@@ -36,6 +36,12 @@ public class WalkingOpponent extends Opponent {
 
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 		int a = y;
+		if (m_model.m_room.isBlocked(x, a)) {
+			int b = m_model.m_room.getWitdh();
+			int c = m_model.m_room.getWitdh();
+			int l = (int) (Math.random() * b);
+			int k = (int) (Math.random() * c);
+		}
 		while (!m_model.m_room.isBlocked(x, a)) {
 			a += 40;
 		}
@@ -94,7 +100,7 @@ public class WalkingOpponent extends Opponent {
 			image = walkingSprite[m_image_index];
 			basicHitBox();
 			break;
-		default :
+		default:
 			image = walkingSprite[m_image_index];
 			basicHitBox();
 			break;
@@ -163,7 +169,7 @@ public class WalkingOpponent extends Opponent {
 					return true;
 				}
 
-			} else if (cat.toString().equals("A")) {
+			} else if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x,
 							hitBox.y + hitBox.height / 2)) {
@@ -180,15 +186,15 @@ public class WalkingOpponent extends Opponent {
 						|| !m_model.m_room.isBlocked(hitBox.x - 5, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
-			} else if (cat.toString().equals("A")) {
+			} else if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
-					if (m_model.getPlayer().getHitBox().contains(hitBox.x-5, hitBox.y + hitBox.height / 2)) {
+					if (m_model.getPlayer().getHitBox().contains(hitBox.x - 5, hitBox.y + hitBox.height / 2)) {
 						return true;
 					}
 				}
 			}
 		} else if (dir.toString().equals("H")) {
-			if (cat.toString().equals("A")) {
+			if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					int xHB = m_model.getPlayer().getHitBox().x;
 					int yHB = m_model.getPlayer().getHitBox().y;
@@ -212,29 +218,31 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.getPlayer().gotpower()) {
-			int xPlayer = m_model.getPlayer().getCoord().X();
-			int yPlayer = m_model.getPlayer().getCoord().Y();
-			if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
-				if (dir.toString().equals("E")) {
-					if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
-						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-						for (int i = 0; i < 10; i++) {
-							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
-								return false;
+		if (m_model.mode == m_model.ROOM) {
+			if (m_model.getPlayer().gotpower()) {
+				int xPlayer = m_model.getPlayer().getCoord().X();
+				int yPlayer = m_model.getPlayer().getCoord().Y();
+				if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+					if (dir.toString().equals("E")) {
+						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
+							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+							for (int i = 0; i < 10; i++) {
+								if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
+									return false;
+								}
 							}
+							return true;
 						}
-						return true;
-					}
-				} else if (dir.toString().equals("W")) {
-					if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
-						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-						for (int i = 0; i < 10; i++) {
-							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
-								return false;
+					} else if (dir.toString().equals("W")) {
+						if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
+							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+							for (int i = 0; i < 10; i++) {
+								if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
+									return false;
+								}
 							}
+							return true;
 						}
-						return true;
 					}
 				}
 			}
@@ -256,10 +264,16 @@ public class WalkingOpponent extends Opponent {
 				if (m_direction.toString().equals("E")) {
 					m_x += walkingSpeed;
 					hitBox.translate(m_x - m_coord.X(), 0);
+					if (collidedWith != null) {
+						collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
+					}
 					m_coord.setX(m_x);
 				} else {
 					m_x -= walkingSpeed;
 					hitBox.translate(-(m_coord.X() - m_x), 0);
+					if (collidedWith != null) {
+						collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
+					}
 					m_coord.setX(m_x);
 				}
 			}
@@ -323,7 +337,7 @@ public class WalkingOpponent extends Opponent {
 			hitBox = new Rectangle(m_coord.X() - w / 2 - 40, m_coord.Y() - h, w + 40, h);
 		}
 	}
-	
+
 	public void basicHitBox() {
 		int w = (int) (m_width / 1.5) - 75;
 		int h = (int) (m_height / 1.5) - 70;

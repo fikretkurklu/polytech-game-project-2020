@@ -77,14 +77,14 @@ public class FlyingOpponent extends Opponent {
 			if (m_direction.toString().equals("E")) {
 				m_x += SPEED_FLY;
 				hitBox.translate(m_x - m_coord.X(), 0);
-				if(collidedWith != null) {
+				if (collidedWith != null) {
 					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
 				}
 				m_coord.setX(m_x);
 			} else {
 				m_x -= SPEED_FLY;
 				hitBox.translate(-(m_coord.X() - m_x), 0);
-				if(collidedWith != null) {
+				if (collidedWith != null) {
 					collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
 				}
 				m_coord.setX(m_x);
@@ -100,21 +100,21 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean egg(Direction dir) {
 		if (gotpower() && !shooting) {
-			
-				m_image_index = 0;
 
-				shooting = true;
+			m_image_index = 0;
 
-				Coord playerCoord = m_model.getPlayer().getCoord();
-				int player_x = playerCoord.X();
+			shooting = true;
 
-				if (player_x > m_coord.X()) {
-					turn(new Direction("E"));
-				} else {
-					turn(new Direction("W"));
-				}
+			Coord playerCoord = m_model.getPlayer().getCoord();
+			int player_x = playerCoord.X();
 
-				return true;
+			if (player_x > m_coord.X()) {
+				turn(new Direction("E"));
+			} else {
+				turn(new Direction("W"));
+			}
+
+			return true;
 		}
 		return false;
 	}
@@ -191,50 +191,69 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		boolean d = m_model.getPlayer().gotpower();
-		if (d) {
+		if (m_model.mode == m_model.ROOM) {
+			boolean d = m_model.getPlayer().gotpower();
+			if (d) {
 
-			Coord playerCoord = m_model.getPlayer().getCoord();
-			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
-			int x = player_x - m_coord.X();
-			int y = (m_coord.Y() - m_height / 2) - player_y;
+				Coord playerCoord = m_model.getPlayer().getCoord();
+				int player_x = playerCoord.X();
+				int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
+				int x = player_x - m_coord.X();
+				int y = (m_coord.Y() - m_height / 2) - player_y;
 
-			int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+				int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-			if (distance <= 400) {
+				if (distance <= 400) {
 
-				double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-				double angle = (float) Math.asin(Math.abs(y) / r);
+					double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+					double angle = (float) Math.asin(Math.abs(y) / r);
 
-				if (player_y > m_coord.Y() - m_height / 2) {
-					angle = -angle;
-				}
-
-				int i = 0;
-
-				while (i < distance) {
-					int checkX;
-					int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
-					if (player_x > m_coord.X()) {
-						checkX = (int) (m_coord.X() + i * Math.cos(angle));
-					} else {
-						checkX = (int) (m_coord.X() - i * Math.cos(angle));
+					if (player_y > m_coord.Y() - m_height / 2) {
+						angle = -angle;
 					}
-					if (m_model.m_room.isBlocked(checkX, checkY)) {
-						return false;
-					}
-					i += 40;
-				}
-				return true;
 
+					int i = 0;
+
+					while (i < distance) {
+						int checkX;
+						int checkY = (int) (m_coord.Y() - m_height / 2 - i * Math.sin(angle));
+						if (player_x > m_coord.X()) {
+							checkX = (int) (m_coord.X() + i * Math.cos(angle));
+						} else {
+							checkX = (int) (m_coord.X() - i * Math.cos(angle));
+						}
+						if (m_model.m_room.isBlocked(checkX, checkY)) {
+							return false;
+						}
+						i += 40;
+					}
+					return true;
+
+				}
 			}
 		}
 		return false;
+
 	}
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
+
+		if (dir.toString().equals("H") && m_model.mode == m_model.ROOM) {
+			int xHB = m_model.getPlayer().getHitBox().x;
+			int yHB = m_model.getPlayer().getHitBox().y;
+			int widthHB = m_model.getPlayer().getHitBox().width;
+			int heightHB = m_model.getPlayer().getHitBox().height;
+			if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
+					|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+					|| hitBox.contains(xHB + widthHB, yHB + heightHB)
+					|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
+					|| hitBox.contains(xHB, yHB + heightHB / 2) || hitBox.contains(xHB + widthHB / 2, yHB)) {
+				collidingWith = m_model.getPlayer();
+				return true;
+			}
+			return false;
+		}
 
 		if (m_direction.toString().equals(dir.toString())) {
 			if (dir.toString().equals("E")) {

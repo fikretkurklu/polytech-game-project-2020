@@ -18,51 +18,56 @@ import environnement.Element;
 public class Key extends Entity {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	
+
 	Image image;
 	public Model m_model;
-	
+
 	int m_width, m_height;
-	
+
 	public Key(Automaton automaton, int x, int y, Model model) throws Exception {
 		super(automaton);
-		
+
 		m_coord = new Coord();
-		
+
 		m_coord.setX(x);
 		m_coord.setY(y);
 		
 		image = loadImage("resources/Room/dropable/Golden_Key.png");
-	
+
 		m_width = image.getWidth(null);
 		m_height = image.getHeight(null);
-		
+
 		m_model = model;
 	}
-	
+
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		Rectangle playerHitBox = m_model.m_player.getHitBox();
 		int w = m_width / 4;
 		int h = m_height / 4;
-		
-		
-		if(playerHitBox.contains(m_coord.X() + (w/2) , m_coord.Y() + (h/2))) {
-			System.out.println("hello");
+
+		if (playerHitBox.contains(m_coord.X() + (w / 2), m_coord.Y() - (h / 2))) {
+			return true;
 		}
+
+		return false;
+	}
+
+	@Override
+	public boolean wizz(Direction dir) {
+		m_model.m_player.setKey(this);
+		m_model.setKey(null);
 		
 		return false;
 	}
-	
+
 	public void paint(Graphics g) {
 		int w = m_width / 4;
 		int h = m_height / 4;
-		
+
 		g.drawImage(image, m_coord.X(), m_coord.Y() - h, -w, h, null);
 	}
-	
-	
-	
+
 	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		Image image;
@@ -75,5 +80,4 @@ public class Key extends Entity {
 		}
 	}
 
-	
 }
