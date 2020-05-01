@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -13,24 +14,26 @@ import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
 import game.Model;
+import hud.HUD;
 import environnement.Element;
 
-public class Key extends Entity {
+public class Coin extends Entity {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	private static final double G = 9.81;
-
-	Image image;
+	protected int m_imageIndex;
+	protected long m_imageElapsed;
+	protected Image[] m_images;
 	public Model m_model;
+	int m_value;
+	
+	private String COIN_ICO_SPRITE = "resources/HUD/AnimatedCoin.png";
 
+	Image m_image;
+	
 	int m_width, m_height;
 
-	protected boolean falling;
-	long m_time;
-	private int y_gravity;
-
-	public Key(Automaton automaton, int x, int y, Model model) throws Exception {
+	public Coin(Automaton automaton, int x, int y, int value, Model model) throws Exception {
 		super(automaton);
 
 		m_coord = new Coord();
@@ -38,15 +41,26 @@ public class Key extends Entity {
 		m_coord.setX(x);
 		m_coord.setY(y);
 		
-		m_image = loadImage("resources/Room/dropable/Golden_Key.png");
+		m_value = value;
+		
+		try {
+			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
+			m_image = m_images[0];
 
-		m_width = m_image.getWidth(null);
-		m_height = m_image.getHeight(null);
+			m_width = m_image.getWidth(null);
+			m_height = m_image.getHeight(null);
+			
+			/*int size = m_width / 4;
+			for (int i = 0; i< m_images.length; i++) {
+				m_images[i] = m_images[i].getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
+			}*/
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 
 		m_model = model;
-
-		m_time = 0;
-		falling = false;
 	}
 
 	@Override
@@ -64,9 +78,9 @@ public class Key extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		m_model.m_player.setKey(this);
-		m_model.setKey(null);
-
+		m_model.m_player.setMoney(m_model.m_player.getMoney() + m_value);
+		m_model.removeCoin(this);
+		
 		return false;
 	}
 
@@ -74,8 +88,19 @@ public class Key extends Entity {
 		int w = m_width / 4;
 		int h = m_height / 4;
 
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, -w, h, null);
+		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, w, h, null);
 	}
+	
+	public void tick(long elapsed) {
+		m_imageElapsed += elapsed;
+		if (m_imageElapsed > 200) {
+			m_imageElapsed = 0;
+			m_imageIndex = (m_imageIndex + 1) % m_images.length;
+			m_image = m_images[m_imageIndex];
+		}
+		m_automaton.step(this);
+	}
+	
 
 	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
@@ -87,35 +112,6 @@ public class Key extends Entity {
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
-	}
-
-	public void tick(long elapsed) {
-		m_automaton.step(this);
-
-		if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5) && elapsed < 10) {
-
-			if (!falling) {
-				y_gravity = m_coord.Y();
-				m_time = 0;
-			} else {
-				m_time += elapsed;
-			}
-			falling = true;
-			if (m_time >= 10)
-				gravity(m_time);
-		} else if (falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
-			m_coord.setY(topBlock - 5);
-			m_time = 0;
-			falling = false;
-		}
-
-	}
-
-	private void gravity(long t) {
-
-		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
-		m_coord.setY(newY);
 	}
 
 }

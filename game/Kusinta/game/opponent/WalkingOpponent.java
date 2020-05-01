@@ -37,20 +37,14 @@ public class WalkingOpponent extends Opponent {
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 		int a = x;
 		int b = y;
-		System.out.println(a);
-		System.out.println(b);
 		while (m_model.m_room.isBlocked(a, b)) {
 			int c = m_model.m_room.getWitdh();
 			int d = m_model.m_room.getWitdh();
 			a = (int) (Math.random() * (c+1));
 			b = (int) (Math.random() * (d+1));
-			System.out.println(a);
-			System.out.println(b);
 		}
 		while (!m_model.m_room.isBlocked(a, b)) {
 			b += 40;
-			System.out.println(a);
-			System.out.println(b);
 		}
 		int yCor = m_model.m_room.blockTop(a, b);
 		m_coord.setX(a);
@@ -86,6 +80,7 @@ public class WalkingOpponent extends Opponent {
 
 		m_image_index = 0;
 
+		m_money = 100;
 	}
 
 	@Override
@@ -151,6 +146,12 @@ public class WalkingOpponent extends Opponent {
 			case isDead:
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
+					try {
+						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				m_image_index = (m_image_index + 1) % 6;
 				break;
