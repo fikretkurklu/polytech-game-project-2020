@@ -16,6 +16,7 @@ import automaton.Direction;
 import game.graphics.View;
 import opponent.WalkingOpponent;
 import opponent.FlyingOpponent;
+import opponent.Key;
 import opponent.Opponent;
 import hud.HUD;
 import player.Player;
@@ -46,6 +47,7 @@ public class Model {
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
 	public Automaton walkingOpponentAutomaton;
+	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 
 	public Room m_room;
@@ -57,6 +59,7 @@ public class Model {
 
 	public HUD m_hud;
 
+	public Key m_key;
 	float diametre;
 
 	public Model(View view, int w, int h) throws Exception {
@@ -69,6 +72,7 @@ public class Model {
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
 		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
+		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
@@ -83,6 +87,8 @@ public class Model {
 		setVillageEnv();
 
 		diametre = 0;
+		
+		m_key = new Key(keyDropAutomaton, 800, 1700, this);
 	}
 
 	private void switchPlayer() {
@@ -144,6 +150,9 @@ public class Model {
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
+		if(m_key != null) {
+			keyDropAutomaton.step(m_key);
+		}
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		//m_underworld.tick(elapsed);
@@ -161,6 +170,11 @@ public class Model {
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
 			}
+			
+			if(m_key != null) {
+				m_key.paint(gp);
+			}
+			
 			m_player.paint(gp);
 			if (!m_player.gotpower() && diametre > 0) {
 				g.setColor(Color.BLACK);
@@ -186,6 +200,9 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		}
+
+		
+
 		gp.dispose();
 	}
 
@@ -250,6 +267,10 @@ public class Model {
 
 	public float getDiametre() {
 		return diametre;
+	}
+	
+	public void setKey(Key key) {
+		m_key = key;
 	}
 
 }

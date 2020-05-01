@@ -66,6 +66,8 @@ public class Player extends Character {
 		
 		reset();
 		setMoney(10000);
+		
+		m_key = null;
 	}
 
 	public void reset() {
