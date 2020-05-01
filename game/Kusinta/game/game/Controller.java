@@ -35,10 +35,8 @@ public class Controller implements GameCanvasListener {
 	public static final int K_E = 101;
 	public static final int K_SPACE = 32;
 	public static final int K_V = 118;
-	
-	Game m_game;
 
-	
+	Game m_game;
 
 	Controller(Game game) {
 		m_game = game;
@@ -52,7 +50,7 @@ public class Controller implements GameCanvasListener {
 		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
 		System.out.println("   modifiers=" + e.getModifiersEx());
 		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.mode ==  Model.VILLAGE) {
+		if (m_game.m_model.mode == Model.VILLAGE) {
 			m_game.m_model.m_village.Clicked();
 		}
 	}
@@ -60,19 +58,21 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (m_game.m_model.mode == Model.UNDERWORLD) {
-			m_game.m_model.m_player.setPressed((int)'v', true);
+			m_game.m_model.m_player.setPressed((int) 'v', true);
 			return;
 		}
-		m_game.m_model.m_player.setPressed((int)' ', true);
+		if (m_game.m_model.mode == Model.ROOM) {
+			m_game.m_model.m_player.setPressed((int) ' ', true);
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (m_game.m_model.mode == Model.UNDERWORLD) {
-			m_game.m_model.m_player.setPressed((int)'v', false);
+			m_game.m_model.m_player.setPressed((int) 'v', false);
 			return;
 		}
-		m_game.m_model.m_player.setPressed((int)' ', false);
+		m_game.m_model.m_player.setPressed((int) ' ', false);
 
 	}
 
@@ -103,7 +103,7 @@ public class Controller implements GameCanvasListener {
 //		System.out.println("   modifiers=" + e.getModifiersEx());
 //		System.out.println("   buttons=" + e.getButton());
 		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
-		if (m_game.m_model.mode ==  Model.VILLAGE) {
+		if (m_game.m_model.mode == Model.VILLAGE) {
 			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
 		}
 	}

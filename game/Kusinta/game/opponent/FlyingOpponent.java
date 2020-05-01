@@ -192,7 +192,7 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean closest(Category cat, Direction dir) {
 		boolean d = m_model.getPlayer().gotpower();
-		if (d) {
+		if (d || m_model.mode == m_model.VILLAGE) {
 
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();
@@ -235,6 +235,24 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
+		
+		if(cat.toString().equals("H")){
+			int xHB = m_model.getPlayer().getHitBox().x;
+			int yHB = m_model.getPlayer().getHitBox().y;
+			int widthHB = m_model.getPlayer().getHitBox().width;
+			int heightHB = m_model.getPlayer().getHitBox().height;
+			if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
+					|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+					|| hitBox.contains(xHB + widthHB, yHB + heightHB)
+					|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
+					|| hitBox.contains(xHB, yHB + heightHB / 2)
+					|| hitBox.contains(xHB + widthHB / 2, yHB)) {
+				System.out.println("Contact");
+				collidingWith = m_model.getPlayer();
+				return true;
+			}
+			return false;
+		}
 
 		if (m_direction.toString().equals(dir.toString())) {
 			if (dir.toString().equals("E")) {
@@ -289,7 +307,7 @@ public class FlyingOpponent extends Opponent {
 				angle = -angle;
 			}
 			try {
-				addProjectile(m_x, m_y, angle, this, direc);
+				//addProjectile(m_x, m_y, angle, this, direc);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
