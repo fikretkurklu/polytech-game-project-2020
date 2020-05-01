@@ -34,7 +34,7 @@ public class Player extends Character {
 
 	long m_ratio_x, m_ratio_y;
 
-	long m_time, m_shot_time;
+	long m_time;
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
@@ -58,8 +58,6 @@ public class Player extends Character {
 
 		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height), 2 * (m_width / 2 + 3 * DIMENSION),
 				m_height);
-
-		m_shot_time = System.currentTimeMillis();
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -200,55 +198,57 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		switch (keyCode) {
-		case Controller.K_Q:
-			qPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_Z:
-			zPressed = pressed;
-			break;
-		case Controller.K_D:
-			dPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_SPACE:
-			espPressed = pressed;
-			if (pressed) {
-				if (!shooting) {
-					if (jumping || falling || moving) {
-						m_image_index = 9;
-					} else {
-						m_image_index = 2;
+		if (gotpower()) {
+			switch (keyCode) {
+			case Controller.K_Q:
+				qPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_Z:
+				zPressed = pressed;
+				break;
+			case Controller.K_D:
+				dPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_SPACE:
+				espPressed = pressed;
+				if (pressed) {
+					if (!shooting) {
+						if (jumping || falling || moving) {
+							m_image_index = 9;
+						} else {
+							m_image_index = 2;
+						}
 					}
 				}
+				break;
+			case Controller.K_A:
+				aPressed = pressed;
+				break;
+			case Controller.K_E:
+				ePressed = pressed;
+				break;
+			case Controller.K_V:
+				vPressed = pressed;
+				break;
 			}
-			break;
-		case Controller.K_A:
-			aPressed = pressed;
-			break;
-		case Controller.K_E:
-			ePressed = pressed;
-			break;
-		case Controller.K_V:
-			vPressed = pressed;
-			break;
 		}
 	}
 
@@ -292,19 +292,19 @@ public class Player extends Character {
 			jumping = false;
 		}
 
-		m_imageElapsed += elapsed;
-		float attackspeed = 200;
-		if (shooting) {
-			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
-			attackspeed = 200 / (attackspeed / 1000);
-		}
-
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
 			if (m_invincibleElapsed > 1000) {
 				invincible = false;
 				m_invincibleElapsed = 0;
 			}
+		}
+
+		m_imageElapsed += elapsed;
+		float attackspeed = 200;
+		if (shooting) {
+			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
+			attackspeed = 200 / (attackspeed / 1000);
 		}
 
 		if (m_imageElapsed > attackspeed) {
@@ -393,7 +393,7 @@ public class Player extends Character {
 			}
 			paintInvincible = !paintInvincible;
 		}
-		
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
