@@ -20,12 +20,19 @@ import environnement.Element;
 public class Coin extends Entity {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	
+	private static final double G = 9.81;
 
 	protected int m_imageIndex;
 	protected long m_imageElapsed;
 	protected Image[] m_images;
+	
 	public Model m_model;
 	int m_value;
+	
+	protected boolean falling;
+	long m_time;
+	private int y_gravity;
 	
 	private String COIN_ICO_SPRITE = "resources/HUD/AnimatedCoin.png";
 
@@ -43,6 +50,9 @@ public class Coin extends Entity {
 		
 		m_value = value;
 		
+		m_time = 0;
+		falling = false;
+		
 		try {
 			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
 			m_image = m_images[0];
@@ -57,9 +67,6 @@ public class Coin extends Entity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-
 		m_model = model;
 	}
 
@@ -99,6 +106,32 @@ public class Coin extends Entity {
 			m_image = m_images[m_imageIndex];
 		}
 		m_automaton.step(this);
+		
+		if (elapsed < 10) {
+			if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5)) {
+
+				if (!falling) {
+					y_gravity = m_coord.Y();
+					m_time = 0;
+				} else {
+					m_time += elapsed;
+				}
+				falling = true;
+				if (m_time >= 10)
+					gravity(m_time);
+			} else if (falling) {
+				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
+				m_coord.setY(topBlock - 5);
+				m_time = 0;
+				falling = false;
+			}
+		}
+	}
+	
+	private void gravity(long t) {
+
+		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
+		m_coord.setY(newY);
 	}
 	
 

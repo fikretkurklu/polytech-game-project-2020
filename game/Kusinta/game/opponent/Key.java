@@ -37,7 +37,7 @@ public class Key extends Entity {
 
 		m_coord.setX(x);
 		m_coord.setY(y);
-		
+
 		m_image = loadImage("resources/Room/dropable/Golden_Key.png");
 
 		m_width = m_image.getWidth(null);
@@ -91,25 +91,26 @@ public class Key extends Entity {
 
 	public void tick(long elapsed) {
 		m_automaton.step(this);
+		
+		if (elapsed < 10) {
+			if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5)) {
 
-		if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5) && elapsed < 10) {
-
-			if (!falling) {
-				y_gravity = m_coord.Y();
+				if (!falling) {
+					y_gravity = m_coord.Y();
+					m_time = 0;
+				} else {
+					m_time += elapsed;
+				}
+				falling = true;
+				if (m_time >= 10)
+					gravity(m_time);
+			} else if (falling) {
+				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
+				m_coord.setY(topBlock - 5);
 				m_time = 0;
-			} else {
-				m_time += elapsed;
+				falling = false;
 			}
-			falling = true;
-			if (m_time >= 10)
-				gravity(m_time);
-		} else if (falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
-			m_coord.setY(topBlock - 5);
-			m_time = 0;
-			falling = false;
 		}
-
 	}
 
 	private void gravity(long t) {
