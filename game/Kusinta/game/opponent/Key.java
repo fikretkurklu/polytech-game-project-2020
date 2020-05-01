@@ -21,7 +21,7 @@ public class Key extends Entity {
 
 	private static final double G = 9.81;
 
-	Image image;
+	Image m_image;
 	public Model m_model;
 
 	int m_width, m_height;

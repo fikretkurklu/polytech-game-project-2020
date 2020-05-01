@@ -159,15 +159,9 @@ public class Model {
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
-<<<<<<< HEAD
-=======
-		if(m_key != null) {
-			keyDropAutomaton.step(m_key);
-		}
 		for (Coin coin: m_coins) {
 			coin.tick(elapsed);
 		}
->>>>>>> f02925c5c1b847e57a2ec05473753d27409c75ef
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		//m_underworld.tick(elapsed);
