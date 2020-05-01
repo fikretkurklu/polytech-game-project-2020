@@ -67,3 +67,9 @@ KeyDrop (Init) {
   | Cell(H, A) ? Wizz : ()
   | True ? : (Init)
 }
+
+CoinDrop (Init) {
+*(Init)
+  | Cell(H, A) ? Wizz : ()
+  | True ? : (Init)
+}

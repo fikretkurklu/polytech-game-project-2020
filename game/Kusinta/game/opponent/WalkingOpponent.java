@@ -80,6 +80,7 @@ public class WalkingOpponent extends Opponent {
 
 		m_image_index = 0;
 
+		m_money = 100;
 	}
 
 	@Override
@@ -145,6 +146,12 @@ public class WalkingOpponent extends Opponent {
 			case isDead:
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
+					try {
+						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				m_image_index = (m_image_index + 1) % 6;
 				break;

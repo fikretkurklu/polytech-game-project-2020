@@ -15,6 +15,7 @@ import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
 import opponent.WalkingOpponent;
+import opponent.Coin;
 import opponent.FlyingOpponent;
 import opponent.Key;
 import opponent.Opponent;
@@ -49,6 +50,7 @@ public class Model {
 	public Automaton walkingOpponentAutomaton;
 	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
+	public Automaton coinDropAutomaton;
 
 	public Room m_room;
 	public Underworld m_underworld;
@@ -56,10 +58,12 @@ public class Model {
 
 	boolean set = false;
 	LinkedList<Opponent> m_opponents;
+	LinkedList<Coin> m_coins;
 
 	public HUD m_hud;
 
 	public Key m_key;
+	public Coin m_coin;
 	float diametre;
 
 	public Model(View view, int w, int h) throws Exception {
@@ -73,6 +77,7 @@ public class Model {
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
 		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
 		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
+		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
@@ -81,6 +86,7 @@ public class Model {
 		int HUD_h = m_height / 9;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		setCenterScreenPlayer();
@@ -88,7 +94,7 @@ public class Model {
 
 		diametre = 0;
 		
-		m_key = new Key(keyDropAutomaton, 800, 1700, this);
+		m_key = new Key(keyDropAutomaton, 900, 1000, this);
 	}
 
 	private void switchPlayer() {
@@ -147,11 +153,14 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
+		if(m_key != null) {
+			m_key.tick(elapsed);
+		}
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
-		if(m_key != null) {
-			keyDropAutomaton.step(m_key);
+		for (Coin coin: m_coins) {
+			coin.tick(elapsed);
 		}
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
@@ -173,6 +182,10 @@ public class Model {
 			
 			if(m_key != null) {
 				m_key.paint(gp);
+			}
+			
+			for (Coin coin: m_coins) {
+				coin.paint(gp);
 			}
 			
 			m_player.paint(gp);
@@ -255,6 +268,14 @@ public class Model {
 
 	public LinkedList<Opponent> getOpponent() {
 		return m_opponents;
+	}
+	
+	public void addCoin(Coin coin) {
+		m_coins.add(coin);
+	}
+	
+	public void removeCoin(Coin coin) {
+		m_coins.remove(coin);
 	}
 
 	public View getView() {
