@@ -58,7 +58,7 @@ public class Arrow extends Projectile {
 				bg.drawImage(image, 0, h/4, w, h, null);
 			} else {
 				bg.rotate(m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(image, m_width, h/4, -w, h, null);
+				bg.drawImage(image, w, h/4, -w, h, null);
 			}
 		}
 		bg.dispose();

@@ -24,7 +24,6 @@ public class Player extends Character {
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
-	
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 	boolean falling, jumping, shooting, invincible, paintInvincible;
@@ -63,10 +62,10 @@ public class Player extends Character {
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
-		
+
 		reset();
 		setMoney(10000);
-		
+
 		m_key = null;
 	}
 
@@ -315,7 +314,7 @@ public class Player extends Character {
 
 			if (!gotpower()) {
 				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
-				if(m_image_index == 68 && m_model.getDiametre() == 0) {
+				if (m_image_index == 68 && m_model.getDiametre() == 0) {
 					m_model.setDiametre(1);
 				}
 			} else if (shooting) {
@@ -411,19 +410,19 @@ public class Player extends Character {
 	public void setGravity(int g) {
 		G = g;
 	}
-	
+
 	public void setMoney(int money) {
 		m_money = money;
 		System.out.println(m_money);
 	}
-	
+
 	public int getMoney() {
 		return m_money;
 	}
 
 	public void shoot() {
 		if (shooting) {
-			int m_x = m_coord.X();
+			int m_x = m_coord.X() + hitBox.width / 2;
 			int m_y = m_coord.Y() - m_height / 2;
 			Direction direc;
 			double angle;
@@ -450,7 +449,11 @@ public class Player extends Character {
 			shooting = false;
 
 			try {
-				addProjectile(m_x, m_y, angle, this, direc);
+				if (direc.toString().equals("E")) {
+					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
+				} else {
+					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
