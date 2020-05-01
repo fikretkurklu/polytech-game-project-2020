@@ -36,6 +36,12 @@ public class WalkingOpponent extends Opponent {
 
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 		int a = y;
+		if (m_model.m_room.isBlocked(x, a)) {
+			int b = m_model.m_room.getWitdh();
+			int c = m_model.m_room.getWitdh();
+			int l = (int) (Math.random()*b);
+			int k = (int) (Math.random()*c);
+		}
 		while (!m_model.m_room.isBlocked(x, a)) {
 			a += 40;
 		}
@@ -164,7 +170,7 @@ public class WalkingOpponent extends Opponent {
 				}
 
 			} else if (cat.toString().equals("A")) {
-				if (m_model.getPlayer().gotpower()) {
+				if (m_model.getPlayer().gotpower() && !(m_model.mode == m_model.VILLAGE)) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x,
 							hitBox.y + hitBox.height / 2)) {
 						return true;
@@ -181,7 +187,7 @@ public class WalkingOpponent extends Opponent {
 					return true;
 				}
 			} else if (cat.toString().equals("A")) {
-				if (m_model.getPlayer().gotpower()) {
+				if (m_model.getPlayer().gotpower() && !(m_model.mode == m_model.VILLAGE)) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.x-5, hitBox.y + hitBox.height / 2)) {
 						return true;
 					}
@@ -189,7 +195,7 @@ public class WalkingOpponent extends Opponent {
 			}
 		} else if (dir.toString().equals("H")) {
 			if (cat.toString().equals("A")) {
-				if (m_model.getPlayer().gotpower()) {
+				if (m_model.getPlayer().gotpower() && !(m_model.mode == m_model.VILLAGE)) {
 					int xHB = m_model.getPlayer().getHitBox().x;
 					int yHB = m_model.getPlayer().getHitBox().y;
 					int widthHB = m_model.getPlayer().getHitBox().width;
@@ -212,7 +218,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.getPlayer().gotpower()) {
+		if (m_model.getPlayer().gotpower() && !(m_model.mode == m_model.VILLAGE)) {
 			int xPlayer = m_model.getPlayer().getCoord().X();
 			int yPlayer = m_model.getPlayer().getCoord().Y();
 			if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
