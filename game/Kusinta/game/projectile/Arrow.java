@@ -1,6 +1,7 @@
 package projectile;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
@@ -33,11 +34,11 @@ public class Arrow extends Projectile {
 		m_width = image.getWidth(null);
 
 		if (m_direction.toString().equals("E")) {
-			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
+			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
-			hitBox = new Coord((int) (m_coord.X() - (m_width / 2) * Math.cos(m_angle)),
-					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
+			hitBox = new Coord((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1.5)),
+					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))));
 		}
 
 	}
@@ -49,14 +50,16 @@ public class Arrow extends Projectile {
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 
 		if (image != null) {
-			int w = m_width;
-			int h = m_height;
+			int w = (int)(m_width * 1.5);
+			int h = (int)(m_height/1.5);
+//			g.setColor(Color.blue);
+//			g.fillRect(hitBox.X() - 5, hitBox.Y() - 5, 10, 10);
 			if (m_direction.toString().equals("E")) {
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(image, 0, 0, w, h, null);
+				bg.drawImage(image, 0, h/4, w, h, null);
 			} else {
 				bg.rotate(m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(image, m_width, 0, -w, h, null);
+				bg.drawImage(image, m_width, h/4, -w, h, null);
 			}
 		}
 		bg.dispose();
