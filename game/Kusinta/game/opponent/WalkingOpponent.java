@@ -256,10 +256,16 @@ public class WalkingOpponent extends Opponent {
 				if (m_direction.toString().equals("E")) {
 					m_x += walkingSpeed;
 					hitBox.translate(m_x - m_coord.X(), 0);
+					if(collidedWith != null) {
+						collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
+					}
 					m_coord.setX(m_x);
 				} else {
 					m_x -= walkingSpeed;
 					hitBox.translate(-(m_coord.X() - m_x), 0);
+					if(collidedWith != null) {
+						collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
+					}
 					m_coord.setX(m_x);
 				}
 			}

@@ -370,7 +370,7 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		if (shooting) {
+		if (shooting && gotpower()) {
 			if (m_image_index > 12)
 				m_image_index = 9;
 			img = bIShooting[m_image_index];
