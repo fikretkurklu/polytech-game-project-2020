@@ -15,6 +15,7 @@ import automaton.Direction;
 import game.graphics.View;
 import opponent.WalkingOpponent;
 import opponent.FlyingOpponent;
+import opponent.Key;
 import opponent.Opponent;
 import hud.HUD;
 import player.Player;
@@ -43,6 +44,7 @@ public class Model {
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
 	public Automaton walkingOpponentAutomaton;
+	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 	public Room m_room;
 	public Underworld m_underworld;
@@ -50,6 +52,8 @@ public class Model {
 	boolean set = false;
 	LinkedList<Opponent> m_opponents;
 	public HUD m_hud;
+
+	public Key key;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
@@ -61,6 +65,7 @@ public class Model {
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
 		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
+		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
@@ -69,10 +74,14 @@ public class Model {
 		int HUD_h = m_height / 9;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		m_opponents = new LinkedList<Opponent>();
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 100));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1220, new Direction("E"), this, 100, 100, 1000, 100, 5));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000,
+				100, 100));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 800, 1220, new Direction("E"), this, 100, 100,
+				1000, 100, 5));
 		setCenterScreenPlayer();
 		setVillageEnv();
+
+		key = new Key(keyDropAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), this);
 	}
 
 	private void switchPlayer() {
@@ -94,7 +103,7 @@ public class Model {
 			switchPlayer();
 			m_player.reset();
 		}
-			
+
 		m_village = null;
 		mode = ROOM;
 	}
@@ -113,17 +122,17 @@ public class Model {
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
-		switch(mode) {
-		case ROOM :
+		switch (mode) {
+		case ROOM:
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
-			} else if (- x_decalage > m_room.getWitdh() - m_width) {
+			} else if (-x_decalage > m_room.getWitdh() - m_width) {
 				x_decalage = -(m_room.getWitdh() - m_width);
 			}
 			if (m_y + y_decalage > 0) {
 				y_decalage = m_y;
-			} else if (- y_decalage > m_room.getHeight() - m_height) {
-				y_decalage = - (m_room.getHeight() - m_height);
+			} else if (-y_decalage > m_room.getHeight() - m_height) {
+				y_decalage = -(m_room.getHeight() - m_height);
 			}
 			break;
 		}
@@ -146,7 +155,7 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
-		
+
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
@@ -158,6 +167,7 @@ public class Model {
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
 			}
+			key.paint(gp);
 			m_hud.paint(g);
 			break;
 		case UNDERWORLD:
@@ -168,6 +178,9 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		}
+
+		
+
 		gp.dispose();
 	}
 
@@ -209,17 +222,17 @@ public class Model {
 	public int getYDecalage() {
 		return y_decalage;
 	}
-	
+
 	public PlayerSoul getPlayerSoul() {
-		return (PlayerSoul)m_player;
+		return (PlayerSoul) m_player;
 	}
-	
+
 	public Player getPlayer() {
-		return (Player)m_player;
+		return (Player) m_player;
 	}
-	
-	public LinkedList<Opponent> getOpponent(){
+
+	public LinkedList<Opponent> getOpponent() {
 		return m_opponents;
 	}
-	
+
 }
