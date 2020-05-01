@@ -11,4 +11,8 @@ public class Direction {
 	public String toString() {
 		return m_dir;
 	}
+	
+	public void setDirection(String dir) {
+		m_dir = dir;
+	}
 }

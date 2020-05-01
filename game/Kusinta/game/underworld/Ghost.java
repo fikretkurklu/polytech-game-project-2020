@@ -19,12 +19,13 @@ import game.Coord;
 import game.Model;
 import underworld.PlayerSoul;
 
-
 public class Ghost extends Entity {
 
 	public static final int SPEED = 1;
 
-	public static final int SIZE = (int) (1.5*Element.SIZE);
+	public static final int SIZE = (int) (Element.SIZE);
+
+	public static final String[] dirs = { "N", "E", "W", "S" };
 
 	Coord m_coord;
 	Model m_model;
@@ -33,9 +34,6 @@ public class Ghost extends Entity {
 	Image m_images[];
 	long m_imageElapsed;
 	int m_width, m_height = SIZE;
-
-	int xHitbox[];
-	int yHitbox[];
 	boolean leftOrientation, movingUp, movingDown, move;
 	int m_image_index;
 	boolean isAttacking = false, isFollowing = false;
@@ -73,8 +71,6 @@ public class Ghost extends Entity {
 		}
 	}
 
-
-
 	@Override
 	public boolean turn(Direction dir) {
 		return changeOrientation();
@@ -94,7 +90,6 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean move(Direction dir) {
-		move = false;
 		boolean flag = false;
 		if (m_direction.toString().equals("W")) {
 			m_coord.translateX(-SPEED);
@@ -128,8 +123,7 @@ public class Ghost extends Entity {
 			Coord playerCoord = null;
 			if (catString.equals("A"))
 				playerCoord = getPlayer().getCoord();
-			else if (((PlayerSoul) getPlayer()).lure != null
-					&& !((PlayerSoul) getPlayer()).lure.disapered)
+			else if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered)
 				playerCoord = ((PlayerSoul) getPlayer()).lure.getCoord();
 			else
 				return false;
@@ -144,9 +138,6 @@ public class Ghost extends Entity {
 				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
 			} else if (dir.toString().equals("W")) {
 				d = m_coord.X() - playerCoord.X();
-				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
-			} else if (dir.toString().equals("N")) {
-				d = playerCoord.X() - m_coord.X();
 				return (playerCoord.Y() == m_coord.Y()) && (0 <= d && d <= m_range);
 			} else if (dir.toString().equals("NE")) {
 				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
@@ -193,21 +184,26 @@ public class Ghost extends Entity {
 	public boolean cell(Direction dir, Category cat) {
 		Coord block, playerBlock;
 		Coord coord = null;
+		boolean res = false;
 		if (cat.toString().equals("O")) {
 			if (dir.toString().equals("F")) {
 				if (m_direction.toString().equals("N")) {
 					block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+					res = m_model.m_underworld.isBlocked(block.X(), block.Y());
 				} else if (m_direction.toString().equals("S")) {
 					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+					res = m_model.m_underworld.isBlocked(block.X(), block.Y());
 				} else if (m_direction.toString().equals("W")) {
-					 block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+					block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
+					res = m_model.m_underworld.isBlocked(block.X(), block.Y());
 				} else if (m_direction.toString().equals("E")) {
-					 block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
+					res = m_model.m_underworld.isBlocked(block.X(), block.Y());
 				}
+				if (res) {
+					m_direction.setDirection((dirs[(int) (Math.random() * dirs.length)]));
+				}
+				return res;
 			}
 			// return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
 		} else if (cat.toString().equals("A")) {
@@ -220,46 +216,50 @@ public class Ghost extends Entity {
 			if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
 				coord = ((PlayerSoul) getPlayer()).lure.getCoord();
 				// return ((PlayerSoul) m_model.getPlayer()).lure.getCoord().isEqual(m_coord);
-			}else
+			} else
 				return false;
 		}
 		// Modifier egalités de coord pour garder une distance
 
 		if (dir.toString().equals("N")) {
-			 block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 10;
 		} else if (dir.toString().equals("S")) {
-			 block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 10;
 		} else if (dir.toString().equals("E")) {
-			 block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25;
+			block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 10;
 		} else if (dir.toString().equals("W")) {
-			 block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25;
+			block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 10;
 		} else if (dir.toString().equals("NE")) {
-			 block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y() - SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25 && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y() - SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 25
+					&& Math.abs(coord.Y() - m_coord.Y()) <= 25;
 		} else if (dir.toString().equals("NW")) {
-			 block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y() - SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25 && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y() - SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 25
+					&& Math.abs(coord.Y() - m_coord.Y()) <= 25;
 		} else if (dir.toString().equals("SE")) {
-			 block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y() + SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25 && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y() + SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 25
+					&& Math.abs(coord.Y() - m_coord.Y()) <= 25;
 		} else if (dir.toString().equals("SW")) {
-			 block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y() + SIZE);
-			 playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X()-m_coord.X()) <= 25 && Math.abs(coord.Y()-m_coord.Y()) <= 25;
+			block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y() + SIZE);
+			playerBlock = getBlockCoord(coord.X(), coord.Y());
+			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 25
+					&& Math.abs(coord.Y() - m_coord.Y()) <= 25;
 		} else if (dir.toString().equals("H")) {
-			return Math.abs(coord.X()-m_coord.X()) <= 50 && Math.abs(coord.Y()-m_coord.Y()) <= 50;
-			//return coord.isEqual(m_coord);
+			return m_coord.isEqual(coord);
+			// return coord.isEqual(m_coord);
 		}
 		return false;
 	}
@@ -288,22 +288,23 @@ public class Ghost extends Entity {
 			m_coord.translateY(SPEED);
 			flag = true;
 		} else if (dir.toString().equals("NE")) {
-			m_direction = new Direction("N");
+			m_direction.setDirection("N");
+			;
 			m_coord.translate(SPEED, -SPEED);
 			leftOrientation = false;
 			flag = true;
 		} else if (dir.toString().equals("NW")) {
-			m_direction = new Direction("N");
+			m_direction.setDirection("N");
 			leftOrientation = true;
 			m_coord.translate(-SPEED, -SPEED);
 			flag = true;
 		} else if (dir.toString().equals("SW")) {
-			m_direction = new Direction("S");
+			m_direction.setDirection("S");
 			leftOrientation = true;
 			m_coord.translate(-SPEED, SPEED);
 			flag = true;
 		} else if (dir.toString().equals("SE")) {
-			m_direction = new Direction("S");
+			m_direction.setDirection("S");
 			leftOrientation = false;
 			m_coord.translate(SPEED, SPEED);
 			flag = true;
@@ -355,6 +356,7 @@ public class Ghost extends Entity {
 	public void quitAttackMode() {
 		if (isAttacking) {
 			isAttacking = false;
+//			m_direction.setDirection((dirs[(int) (Math.random() * dirs.length)]));
 		}
 	}
 
@@ -372,15 +374,19 @@ public class Ghost extends Entity {
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
-			m_imageElapsed = 0;
-			m_image_index++;
-			if (isAttacking) {
-				if (m_image_index > 8) {
+		if (isAttacking) {
+			if (m_imageElapsed > 200) {
+				m_imageElapsed = 0;
+				m_image_index++;
+				if (m_image_index < 3 || m_image_index > 8) {
+					((PlayerSoul) getPlayer()).getDamage();
 					m_image_index = 3;
 				}
-			} else {
+			}
+		} else {
+			if (m_imageElapsed > 150) {
 				m_imageElapsed = 0;
+				m_image_index++;
 				if (m_image_index >= 3) {
 					m_image_index = 0;
 				}
@@ -393,8 +399,8 @@ public class Ghost extends Entity {
 	PlayerSoul getPlayer() {
 		return m_model.getPlayerSoul();
 	}
-	
+
 	Coord getBlockCoord(int x, int y) {
-		return m_model.m_underworld.blockCoord(x,y);
+		return m_model.m_underworld.blockCoord(x, y);
 	}
 }

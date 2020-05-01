@@ -15,7 +15,7 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
-	public final static int MAX_GHOSTS = 3;
+	public final static int MAX_GHOSTS = 10;
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
@@ -38,6 +38,9 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
+	private long m_BlockAElapsed;
+	private int m_RealWidth;
+	private int m_RealHeight;
 
 	public Underworld(AutomatonLibrary AL, int width, int height, Model model) {
 		m_model = model;
@@ -73,6 +76,8 @@ public class Underworld {
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
+			m_RealWidth = nbCol * Element.SIZE;
+			m_RealHeight = nbRow * Element.SIZE;
 			m_elements = new Element[nbRow * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
@@ -208,6 +213,15 @@ public class Underworld {
 	}
 
 	public void tick(long elapsed) {
+		m_BlockAElapsed += elapsed;
+		if (m_BlockAElapsed > 10000) {
+			m_BlockAElapsed = 0;
+			for (int i = 0; i < m_elements.length; i ++) {
+				if (m_elements[i].getAutomaton() != null) {
+					m_elements[i].getAutomaton().step(m_elements[i]);
+				}
+			}
+		}
 		for (int i = 0; i < m_clouds.length; i++) {
 			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
@@ -226,6 +240,7 @@ public class Underworld {
 		if (gateCreated)
 			m_gate.tick(elapsed);
 	}
+	
 
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
@@ -266,4 +281,10 @@ public class Underworld {
 		gateCreated = true;
 	}
 
+	public int getWitdh() {
+		return m_RealWidth;
+	}
+	public int getHeight() {
+		return m_RealHeight;
+	}
 }

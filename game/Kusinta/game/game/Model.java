@@ -110,8 +110,8 @@ public class Model {
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
-//		switch(mode) {
-//		case ROOM :
+		switch(mode) {
+		case ROOM :
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
 			} else if (- x_decalage > m_room.getWitdh() - m_width) {
@@ -122,9 +122,21 @@ public class Model {
 			} else if (- y_decalage > m_room.getHeight() - m_height) {
 				y_decalage = - (m_room.getHeight() - m_height);
 			}
-//			break;
+			break;
+		case UNDERWORLD : 
+			if (m_x + x_decalage > 0) {
+				x_decalage = -m_x;
+			} else if (- x_decalage > m_underworld.getWitdh() - m_width) {
+				x_decalage = -(m_underworld.getWitdh() - m_width);
+			}
+			if (m_y + y_decalage > 0) {
+				y_decalage = m_y;
+			} else if (- y_decalage > m_underworld.getHeight() - m_height) {
+				y_decalage = - (m_underworld.getHeight() - m_height);
+			}
+			break;
 		}
-//	}
+	}
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
