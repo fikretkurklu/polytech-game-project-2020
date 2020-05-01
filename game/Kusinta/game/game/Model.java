@@ -110,8 +110,8 @@ public class Model {
 	public void setCenterScreenPlayer() {
 		x_decalage = m_width / 2 - m_player.getCoord().X();
 		y_decalage = m_height / 2 - m_player.getCoord().Y();
-		switch(mode) {
-		case ROOM :
+//		switch(mode) {
+//		case ROOM :
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
 			} else if (- x_decalage > m_room.getWitdh() - m_width) {
@@ -122,9 +122,9 @@ public class Model {
 			} else if (- y_decalage > m_room.getHeight() - m_height) {
 				y_decalage = - (m_room.getHeight() - m_height);
 			}
-			break;
+//			break;
 		}
-	}
+//	}
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
@@ -158,7 +158,7 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		case UNDERWORLD:
-			m_underworld.paint(gp, width, height);
+			m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			break;
 		case VILLAGE:
 			m_village.paint(g, width, height);

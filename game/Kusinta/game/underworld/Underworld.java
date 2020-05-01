@@ -165,8 +165,12 @@ public class Underworld {
 		throw new Exception("Code room err: " + code);
 	}
 
-	public void paint(Graphics g, int width, int height) {
-		for (int i = 0; i < m_elements.length; i++) {
+	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
+		m_width = width;
+		m_height = height;
+		int start = (- y_decalage / Element.SIZE) * nbCol;
+		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+		for (int i = start; i < end; i++) {
 			m_elements[i].paint(g);
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
