@@ -18,19 +18,19 @@ public class Direction {
 	public static final String SEs = "SE";
 	public static final String SWs = "SW";
 
-	public static Direction N = new Direction(Ns);
-	public static Direction S = new Direction(Ss);
-	public static Direction E = new Direction(Es);
-	public static Direction W = new Direction(Ws);
-	public static Direction F = new Direction(Fs);
-	public static Direction B = new Direction(Bs);
-	public static Direction L = new Direction(Ls);
-	public static Direction R = new Direction(Rs);
-	public static Direction H = new Direction(Hs);
-	public static Direction NE = new Direction(NEs);
-	public static Direction NW = new Direction(NWs);
-	public static Direction SE = new Direction(SEs);
-	public static Direction SW = new Direction(SWs);
+	public static final Direction N = new Direction(Ns);
+	public static final Direction S = new Direction(Ss);
+	public static final Direction E = new Direction(Es);
+	public static final Direction W = new Direction(Ws);
+	public static final Direction F = new Direction(Fs);
+	public static final Direction B = new Direction(Bs);
+	public static final Direction L = new Direction(Ls);
+	public static final Direction R = new Direction(Rs);
+	public static final Direction H = new Direction(Hs);
+	public static final Direction NE = new Direction(NEs);
+	public static final Direction NW = new Direction(NWs);
+	public static final Direction SE = new Direction(SEs);
+	public static final Direction SW = new Direction(SWs);
 
 	public Direction(String dir) {
 		m_dir = dir;

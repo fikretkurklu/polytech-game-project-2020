@@ -17,18 +17,18 @@ public class Category {
 	public static final String ATs = "@";
 	public static final String UNDERSCOREs = "_";
 
-	public static Category A = new Category(As);
-	public static Category C = new Category(Cs);
-	public static Category D = new Category(Ds);
-	public static Category G = new Category(Gs);
-	public static Category J = new Category(Js);
-	public static Category M = new Category(Ms);
-	public static Category O = new Category(Os);
-	public static Category P = new Category(Ps);
-	public static Category T = new Category(Ts);
-	public static Category V = new Category(Vs);
-	public static Category AT = new Category(ATs);
-	public static Category UNDERSCORE = new Category(UNDERSCOREs);
+	public static final Category A = new Category(As);
+	public static final Category C = new Category(Cs);
+	public static final Category D = new Category(Ds);
+	public static final Category G = new Category(Gs);
+	public static final Category J = new Category(Js);
+	public static final Category M = new Category(Ms);
+	public static final Category O = new Category(Os);
+	public static final Category P = new Category(Ps);
+	public static final Category T = new Category(Ts);
+	public static final Category V = new Category(Vs);
+	public static final Category AT = new Category(ATs);
+	public static final Category UNDERSCORE = new Category(UNDERSCOREs);
 
 	public Category(String category) {
 		m_category = category;
