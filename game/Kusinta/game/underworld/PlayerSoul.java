@@ -131,12 +131,20 @@ public class PlayerSoul extends Character {
 	public boolean key(int keycode) {
 		switch (keycode) {
 		case Controller.K_Z:
+			if (zPressed == true)
+				return zPressed;
 			return zPressed;
 		case Controller.K_Q:
+			if (qPressed == true)
+				return qPressed;
 			return qPressed;
 		case Controller.K_S:
+			if (sPressed == true)
+				return sPressed;
 			return sPressed;
 		case Controller.K_D:
+			if (dPressed == true)
+				return dPressed;
 			return dPressed;
 		case Controller.K_SPACE:
 			return spacePressed;
@@ -153,7 +161,7 @@ public class PlayerSoul extends Character {
 	public boolean closest(Category cat, Direction dir) {
 		int xCenter = m_coord.X() + (m_width / 2);
 		int yCenter = m_coord.Y() + (m_height / 2);
-		if (cat.toString().equals("P")) {
+		if (cat.toString().contentEquals("P")) {
 			for (int i = 0; i < m_model.m_underworld.m_fragments.length; i++) {
 				if ((!m_model.m_underworld.m_fragments[i].picked)
 						&& (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
@@ -221,16 +229,20 @@ public class PlayerSoul extends Character {
 		turn(dir);
 		switch (m_direction.toString()) {
 		case "N":
-			m_coord.translate(0, -DISTANCE);
+			if (zPressed)
+				m_coord.translate(0, -DISTANCE);
 			break;
 		case "S":
-			m_coord.translate(0, DISTANCE);
+			if (sPressed)
+				m_coord.translate(0, DISTANCE);
 			break;
 		case "E":
-			m_coord.translate(DISTANCE, 0);
+			if (dPressed)
+				m_coord.translate(DISTANCE, 0);
 			break;
 		case "W":
-			m_coord.translate(-DISTANCE, 0);
+			if (qPressed)
+				m_coord.translate(-DISTANCE, 0);
 			break;
 		default:
 			return false;
@@ -245,6 +257,8 @@ public class PlayerSoul extends Character {
 		escape = true;
 		m_model.m_underworld.activateGate();
 		animationMode = ESCAPE;
+		dashAvailable = false;
+		DISTANCE = 6;
 		m_image_index = sizeDashAnimation;
 		return true;
 	}
@@ -265,19 +279,11 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean jump(Direction dir) {
 		if (dashAvailable) {
-			switch (m_direction.toString()) {
-			case "N":
-			case "S":
-			case "E":
-			case "W":
 				DISTANCE = DASHSPEED;
 				dashAvailable = false;
 				animationMode = DASH;
 				m_image_index = sizeAnimation;
 				return true;
-			default:
-				return false;
-			}
 		}
 		return false;
 	}
@@ -351,13 +357,8 @@ public class PlayerSoul extends Character {
 				break;
 			case DASH:
 				if (m_image_index >= sizeDashAnimation) {
-					if (escape) {
-						animationMode = ESCAPE;
-						m_image_index = sizeDashAnimation;
-					} else {
-						animationMode = NORMAL;
-						m_image_index = 0;
-					}
+					animationMode = NORMAL;
+					m_image_index = 0;
 					DISTANCE = NORMALSPEED;
 				}
 				break;

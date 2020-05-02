@@ -105,7 +105,7 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
-		if (!m_direction.toString().equals(dir.toString()))
+		if (!(dir.toString().equals(m_direction.toString())))
 			m_direction = dir;
 		return true;
 	}

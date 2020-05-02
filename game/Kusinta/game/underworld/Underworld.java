@@ -103,8 +103,8 @@ public class Underworld {
 	public static final int YMIN = 172;
 
 	private void generateGhosts(Ghost[] ghosts) {
-		String[] dirs = { "N", "E", "W", "S" };
-		Direction dir = new Direction(dirs[(int) (Math.random() * dirs.length)]);
+		Direction [] dirs = { Direction.N, Direction.E, Direction.W, Direction.S };
+		Direction dir = dirs[(int) (Math.random() * dirs.length)];
 		int x, y;
 		for (int i = 0; i < ghosts.length; i++) {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
@@ -115,7 +115,7 @@ public class Underworld {
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
 			ghosts[i] = new Ghost(dir, new Coord(x, y), ghostAutomaton, m_model);
-			if (dir.toString().equals("W"))
+			if (dir == Direction.W)
 				ghosts[i].leftOrientation = true;
 		}
 	}
@@ -227,13 +227,10 @@ public class Underworld {
 			}
 		}
 		for (int i = 0; i < m_clouds.length; i++) {
-			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
 					m_clouds[i].reactivate();
 				}
 				m_clouds[i].tick(elapsed);
-				m_clouds[i].getAutomaton().step(m_clouds[i]);
-			}
 		}
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);

@@ -8,7 +8,7 @@ public class ActionThrow extends Action{
 	
 	public ActionThrow(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionThrow(Direction direction, int percentage) {

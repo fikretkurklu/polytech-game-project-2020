@@ -33,7 +33,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if ((dir.toString().equals("B")) && (cat.toString().equals("O"))) {
+		if ((dir == Direction.B) && (cat == Category.O)) {
 			return m_coord.X() + m_width <= 0;
 		}
 		return false;
@@ -75,5 +75,6 @@ public class Cloud extends Element{
 		      timeElapsed = 0;
 		      move = true;
 		    }
+		    m_automaton.step(this);
 	}
 }

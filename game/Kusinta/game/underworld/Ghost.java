@@ -289,28 +289,28 @@ public class Ghost extends Entity {
 			m_direction = dir;
 			m_coord.translateY(SPEED);
 			flag = true;
-		} else if (dir.toString().equals("NE")) {
-			m_direction.setDirection("N");
-			;
-			m_coord.translate(SPEED, -SPEED);
-			leftOrientation = false;
-			flag = true;
-		} else if (dir.toString().equals("NW")) {
-			m_direction.setDirection("N");
-			leftOrientation = true;
-			m_coord.translate(-SPEED, -SPEED);
-			flag = true;
-		} else if (dir.toString().equals("SW")) {
-			m_direction.setDirection("S");
-			leftOrientation = true;
-			m_coord.translate(-SPEED, SPEED);
-			flag = true;
-		} else if (dir.toString().equals("SE")) {
-			m_direction.setDirection("S");
-			leftOrientation = false;
-			m_coord.translate(SPEED, SPEED);
-			flag = true;
 		}
+//		} else if (dir.toString().equals("NE")) {
+//			m_direction.setDirection("N");
+//			m_coord.translate(SPEED, -SPEED);
+//			leftOrientation = false;
+//			flag = true;
+//		} else if (dir.toString().equals("NW")) {
+//			m_direction.setDirection("N");
+//			leftOrientation = true;
+//			m_coord.translate(-SPEED, -SPEED);
+//			flag = true;
+//		} else if (dir.toString().equals("SW")) {
+//			m_direction.setDirection("S");
+//			leftOrientation = true;
+//			m_coord.translate(-SPEED, SPEED);
+//			flag = true;
+//		} else if (dir.toString().equals("SE")) {
+//			m_direction.setDirection("S");
+//			leftOrientation = false;
+//			m_coord.translate(SPEED, SPEED);
+//			flag = true;
+//		}
 		if (flag)
 			m_hitbox.setLocation(m_coord.X(), m_coord.Y());
 		return flag;
@@ -348,7 +348,6 @@ public class Ghost extends Entity {
 			leftOrientation = false;
 			movingUp = false;
 			movingDown = true;
-			;
 		} else if (dir.toString().equals("H")) {
 
 		}
