@@ -25,7 +25,7 @@ public class Ghost extends Entity {
 
 	public static final int SIZE = (int) (Element.SIZE);
 
-	public static final String[] dirs = { "N", "E", "W", "S" };
+//	public static final String[] dirs = { "N", "E", "W", "S" };
 
 	Coord m_coord;
 	Model m_model;
@@ -202,9 +202,9 @@ public class Ghost extends Entity {
 					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
 					res = m_model.m_underworld.isBlocked(block.X(), block.Y());
 				}
-				if (res) {
-					m_direction.setDirection((dirs[(int) (Math.random() * dirs.length)]));
-				}
+//				if (res) {
+//					m_direction.setDirection((dirs[(int) (Math.random() * dirs.length)]));
+//				}
 				return res;
 			}
 			// return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
