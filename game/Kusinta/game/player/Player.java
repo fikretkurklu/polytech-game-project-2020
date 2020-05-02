@@ -293,7 +293,12 @@ public class Player extends Character {
 			falling = false;
 			jumping = false;
 		}
-
+		if (!falling) {
+			if(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()-5)){
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y()-5);
+				m_coord.setY(blockTop);
+			}
+		}
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
 			if (m_invincibleElapsed > 1000) {
