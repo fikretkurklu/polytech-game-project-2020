@@ -30,6 +30,8 @@ public class Coin extends Entity {
 	public Model m_model;
 	int m_value;
 	
+	int position, aller;
+	
 	protected boolean falling;
 	long m_time;
 	private int y_gravity;
@@ -52,6 +54,9 @@ public class Coin extends Entity {
 		
 		m_time = 0;
 		falling = false;
+		
+		position = 0;
+		aller = 1;
 		
 		try {
 			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
@@ -94,8 +99,15 @@ public class Coin extends Entity {
 	public void paint(Graphics g) {
 		int w = m_width / 4;
 		int h = m_height / 4;
+		
+		position = (position + aller);
+		if(position == 10) {
+			aller = -1;
+		} else if(position == 0) {
+			aller = 1;
+		}
 
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, w, h, null);
+		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h + position, w, h, null);
 	}
 	
 	public void tick(long elapsed) {

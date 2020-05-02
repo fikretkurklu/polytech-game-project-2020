@@ -173,7 +173,8 @@ public class FlyingOpponent extends Opponent {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 					try {
-						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+						m_model.addCoin(
+								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -297,7 +298,7 @@ public class FlyingOpponent extends Opponent {
 			double r;
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y();
+			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight()/2;
 
 			int x = player_x - m_x;
 			int y = m_y - player_y;
@@ -315,7 +316,11 @@ public class FlyingOpponent extends Opponent {
 				angle = -angle;
 			}
 			try {
-				addProjectile(m_x, m_y, angle, this, direc);
+				if (direc.toString().equals("E")) {
+					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
+				} else {
+					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

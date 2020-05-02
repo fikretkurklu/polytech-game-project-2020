@@ -147,7 +147,7 @@ public class WalkingOpponent extends Opponent {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 					try {
-						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
