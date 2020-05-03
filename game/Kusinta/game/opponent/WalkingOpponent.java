@@ -40,8 +40,8 @@ public class WalkingOpponent extends Opponent {
 		while (m_model.m_room.isBlocked(a, b)) {
 			int c = m_model.m_room.getWitdh();
 			int d = m_model.m_room.getWitdh();
-			a = (int) (Math.random() * (c+1));
-			b = (int) (Math.random() * (d+1));
+			a = (int) (Math.random() * (c + 1));
+			b = (int) (Math.random() * (d + 1));
 		}
 		while (!m_model.m_room.isBlocked(a, b)) {
 			b += 40;
@@ -147,7 +147,8 @@ public class WalkingOpponent extends Opponent {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 					try {
-						m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
+						m_model.addCoin(
+								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
