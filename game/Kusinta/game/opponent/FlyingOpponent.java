@@ -15,7 +15,7 @@ import projectile.Projectile;
 
 public class FlyingOpponent extends Opponent {
 
-	public static final int SPEED_FLY = 1;
+	public static final int SPEED_FLY = 2;
 
 	protected boolean shooting;
 
@@ -24,6 +24,9 @@ public class FlyingOpponent extends Opponent {
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
 
+	int SPEED_WALK_TICK = 4;
+	long m_moveElapsed;
+	
 	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 
 		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
@@ -63,6 +66,9 @@ public class FlyingOpponent extends Opponent {
 		m_image_index = 0;
 
 		m_money = 200;
+
+		m_moveElapsed = 0;
+
 	}
 
 	public boolean move(Direction dir) {
@@ -157,7 +163,11 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
@@ -171,6 +181,7 @@ public class FlyingOpponent extends Opponent {
 			if (!gotpower()) {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
+					dropKey();
 					try {
 						m_model.addCoin(
 								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
@@ -297,7 +308,7 @@ public class FlyingOpponent extends Opponent {
 			double r;
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight()/2;
+			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
 
 			int x = player_x - m_x;
 			int y = m_y - player_y;

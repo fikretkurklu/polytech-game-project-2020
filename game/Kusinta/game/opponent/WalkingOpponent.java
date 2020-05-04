@@ -14,7 +14,7 @@ import game.Model;
 public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	public int walkingSpeed = 1;
+	public int walkingSpeed = 2;
 
 	protected enum CurrentState {
 		isAttacking, isMoving, isDead
@@ -31,8 +31,11 @@ public class WalkingOpponent extends Opponent {
 
 	boolean alreadyMove;
 
+	int SPEED_WALK_TICK = 4;
+	long m_moveElapsed;
+	
 	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
-
+	
 		super(automaton, x, y, dir, model,  100, 100, 1000, 100, 5);
 		int a = x;
 		int b = y;
@@ -52,7 +55,7 @@ public class WalkingOpponent extends Opponent {
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
 
-		AttackStrength = m_currentStatMap.get(CurrentStat.Strength)*2;
+		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
 		deathSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
@@ -80,6 +83,9 @@ public class WalkingOpponent extends Opponent {
 		m_image_index = 0;
 
 		m_money = 100;
+
+		m_moveElapsed = 0;
+
 	}
 
 	@Override
@@ -135,7 +141,11 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
 
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
@@ -145,6 +155,7 @@ public class WalkingOpponent extends Opponent {
 			case isDead:
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
+					dropKey();
 					try {
 						m_model.addCoin(
 								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
