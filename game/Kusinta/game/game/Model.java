@@ -94,7 +94,10 @@ public class Model {
 
 		diametre = 0;
 		
-		m_key = new Key(keyDropAutomaton, 900, 1000, this);
+		m_key = null;
+		
+		Key key = new Key(keyDropAutomaton, 0, 0, this);
+		m_opponents.get(0).setKey(key);
 	}
 
 	private void switchPlayer() {

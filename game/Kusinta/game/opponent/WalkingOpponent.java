@@ -30,7 +30,7 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	boolean alreadyMove;
-	
+
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
 
@@ -56,7 +56,7 @@ public class WalkingOpponent extends Opponent {
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
 
-		AttackStrength = m_currentStatMap.get(CurrentStat.Strength)*2;
+		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
 		deathSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
@@ -84,7 +84,7 @@ public class WalkingOpponent extends Opponent {
 		m_image_index = 0;
 
 		m_money = 100;
-		
+
 		m_moveElapsed = 0;
 
 	}
@@ -156,6 +156,7 @@ public class WalkingOpponent extends Opponent {
 			case isDead:
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
+					dropKey();
 					try {
 						m_model.addCoin(
 								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
