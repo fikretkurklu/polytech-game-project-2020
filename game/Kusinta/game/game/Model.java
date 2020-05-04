@@ -83,7 +83,7 @@ public class Model {
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
 		int HUD_w = m_width / 3;
-		int HUD_h = m_height / 9;
+		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
@@ -262,8 +262,8 @@ public class Model {
 		return (PlayerSoul) m_player;
 	}
 
-	public Player getPlayer() {
-		return (Player) m_player;
+	public Character getPlayer() {
+		return m_player;
 	}
 
 	public LinkedList<Opponent> getOpponent() {
