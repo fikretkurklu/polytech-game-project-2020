@@ -14,7 +14,7 @@ import game.Model;
 public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	public int walkingSpeed = 1;
+	public int walkingSpeed = 2;
 
 	protected enum CurrentState {
 		isAttacking, isMoving, isDead
@@ -30,6 +30,9 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	boolean alreadyMove;
+	
+	int SPEED_WALK_TICK = 4;
+	long m_moveElapsed;
 
 	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws Exception {
@@ -81,6 +84,9 @@ public class WalkingOpponent extends Opponent {
 		m_image_index = 0;
 
 		m_money = 100;
+		
+		m_moveElapsed = 0;
+
 	}
 
 	@Override
@@ -136,7 +142,11 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
 
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {

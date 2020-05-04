@@ -264,4 +264,13 @@ public class Room{
 	public int getHeight() {
 		return m_RealHeight;
 	}
+
+	public Door getDoor() {
+		for (int i = 0; i< m_decor.length; i++) {
+			if(m_decor[i] instanceof Door) {
+				return (Door) m_decor[i];
+			}
+		}
+		return null;
+	}
 }

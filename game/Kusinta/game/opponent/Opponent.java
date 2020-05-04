@@ -16,9 +16,6 @@ import projectile.Arrow;
 public abstract class Opponent extends Character {
 	
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	
-	int SPEED_WALK_TICK = 4;
-	long m_moveElapsed;
 
 	protected Arrow collidedWith;
 	
@@ -27,8 +24,6 @@ public abstract class Opponent extends Character {
 	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
-
-		m_moveElapsed = 0;
 	}
 	
 	@Override

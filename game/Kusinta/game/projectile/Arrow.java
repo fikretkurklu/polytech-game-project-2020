@@ -1,6 +1,7 @@
 package projectile;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
@@ -36,7 +37,7 @@ public class Arrow extends Projectile {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
-			hitBox = new Coord((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1.5)),
+			hitBox = new Coord((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
 					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))));
 		}
 
@@ -55,7 +56,7 @@ public class Arrow extends Projectile {
 //			g.fillRect(hitBox.X() - 5, hitBox.Y() - 5, 10, 10);
 			if (m_direction.toString().equals("E")) {
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(image, 0, h/4, w, h, null);
+				bg.drawImage(image, -10, h/4, w, h, null);
 			} else {
 				bg.rotate(m_angle, m_width / 2, m_height / 2);
 				bg.drawImage(image, w, h/4, -w, h, null);
