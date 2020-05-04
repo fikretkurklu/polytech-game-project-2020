@@ -418,7 +418,6 @@ public class Player extends Character {
 
 	public void setMoney(int money) {
 		m_money = money;
-		System.out.println(m_money);
 	}
 
 	public int getMoney() {
