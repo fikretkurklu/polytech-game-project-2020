@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import automaton.*;
 import game.Controller;
 import game.Model;
+import opponent.BossKey;
 import projectile.Arrow;
 import room.Door;
 import environnement.Element;
@@ -40,6 +41,8 @@ public class Player extends Character {
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
+	
+	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -68,6 +71,7 @@ public class Player extends Character {
 		setMoney(10000);
 
 		m_key = null;
+		m_bossKey = null;
 	}
 
 	public void reset() {
@@ -267,7 +271,7 @@ public class Player extends Character {
 				|| h.contains(hitBox.x + hitBox.width, y1)
 				|| h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if(door) {
+		if(door && m_key != null) {
 			d.activate();
 		}
 	}
@@ -499,5 +503,9 @@ public class Player extends Character {
 			paintInvincible = true;
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
+	}
+	
+	public void setBossKey(BossKey key) {
+		m_bossKey = key;
 	}
 }
