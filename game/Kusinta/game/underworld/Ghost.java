@@ -38,10 +38,9 @@ public class Ghost extends Entity {
 	int m_width, m_height = SIZE;
 	boolean leftOrientation, movingUp, movingDown, move;
 	int m_image_index;
-	boolean isAttacking = false, isFollowing = false;
+	boolean isAttacking = false, isFollowing = false, isLure;
 	int m_range = 200;
 	Rectangle m_hitbox;
-
 	private long m_moveElapsed;
 
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) {
@@ -164,11 +163,13 @@ public class Ghost extends Entity {
 //		}
 		if (catString.equals("A") || catString.equals("C")) {
 			Coord playerCoord = null;
-			if (catString.equals("A"))
+			if (catString.equals("A")) {
 				playerCoord = getPlayer().getCoord();
-			else if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered)
+				isLure = false;
+			}else if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
 				playerCoord = ((PlayerSoul) getPlayer()).lure.getCoord();
-			else
+				isLure = true;
+			}else
 				return false;
 			if (dir ==  Direction.N) {
 				d = m_coord.Y() - playerCoord.Y();
@@ -232,11 +233,12 @@ public class Ghost extends Entity {
 //				return false;
 //			}
 			coord = getPlayer().getCoord();
+			isLure = false;
 			// return m_model.getPlayer().getCoord().isEqual(m_coord);
 		} else if (cat.toString().equals("C")) {
 			if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
 				coord = ((PlayerSoul) getPlayer()).lure.getCoord();
-				// return ((PlayerSoul) m_model.getPlayer()).lure.getCoord().isEqual(m_coord);
+				isLure = true;
 			} else
 				return false;
 		}
@@ -399,7 +401,8 @@ public class Ghost extends Entity {
 			m_image_index++;
 			if (isAttacking) {
 				if (m_image_index > 8) {
-//					((PlayerSoul) getPlayer()).getDamage();
+					if (!isLure)
+						((PlayerSoul) getPlayer()).getDamage();
 					m_image_index = 3;
 				}
 			} else {
@@ -421,5 +424,9 @@ public class Ghost extends Entity {
 
 	Coord getBlockCoord(int x, int y) {
 		return m_model.m_underworld.blockCoord(x, y);
+	}
+	
+	public boolean gotstuff(){
+		return isAttacking;
 	}
 }
