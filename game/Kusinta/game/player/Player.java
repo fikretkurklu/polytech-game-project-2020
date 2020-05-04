@@ -50,7 +50,7 @@ public class Player extends Character {
 		loadImageProjectile(PATH_ARROW);
 
 		DIMENSION = SIZE / (bI[0].getHeight());
-		float ratio = (float) ((float)bI[0].getWidth()) / (float) (bI[0].getHeight());
+		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -58,8 +58,7 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		hitBox = new Rectangle(m_x - (m_width / 4) + 5, m_y - (m_height - 15), m_width/2 - 10,
-				m_height - 15);
+		hitBox = new Rectangle(m_x - (m_width / 4) + 5, m_y - (m_height - 15), m_width / 2 - 10, m_height - 15);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -94,18 +93,8 @@ public class Player extends Character {
 	public boolean move(Direction dir) { // bouger
 
 		if (!shooting && !jumping) {
-			min_image_index = 8;
-			max_image_index = 13;
+			setImageIndex(8,13);
 		}
-
-//		if(moving)
-//		if (!falling && shooting && m_image_index > 7)
-//			m_image_index = m_image_index - 6;
-
-//		if (shooting) {
-//			if (m_image_index <= 5)
-//				m_image_index = m_image_index + 6;
-//		}
 
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
@@ -138,23 +127,18 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
-				min_image_index = 120;
-				max_image_index = 123;
+				setImageIndex(120,123);
+				if ((qPressed || dPressed) && m_image_index <= 123)
+					setImageIndex(114, 117);
+					m_image_index = m_image_index + 6;
 			} else {
-				min_image_index = 15;
-				max_image_index = 23;
+				setImageIndex(15, 23);
+				m_image_index = 16;
 			}
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
-			
-//			if (shooting) {
-//				if (m_image_index <= 5)
-//					m_image_index = m_image_index + 6;
-//			}
-//			if (!shooting)
-//				m_image_index = 16;
-			
+
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -175,7 +159,6 @@ public class Player extends Character {
 
 	private void gravity(long t) {
 		if (falling) {
-			falling = true;
 			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
 					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
 					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
@@ -218,12 +201,10 @@ public class Player extends Character {
 		if (!shooting) {
 			if (jumping || falling || moving) {
 				m_image_index = 120;
-				min_image_index = 120;
-				max_image_index = 123;
+				setImageIndex(120, 123);
 			} else {
 				m_image_index = 114;
-				min_image_index = 114;
-				max_image_index = 117;
+				setImageIndex(114, 117);
 			}
 
 			shooting = true;
@@ -298,11 +279,21 @@ public class Player extends Character {
 					m_model.setDiametre(1);
 				}
 			} else {
-				if (!shooting && !falling && !moving) {
-					min_image_index = 0;
-					max_image_index = 3;
+				if (shooting && (m_image_index == 117 || m_image_index == 123)) {
+					shoot();
+				} else if (jumping && !shooting && m_image_index == 17) {
+					m_image_index = 22;
+				} else if (falling && m_image_index == 23) {
+					m_image_index = 23;
+				} else {
+					m_image_index++;
 				}
-				m_image_index++;
+
+				if (!shooting && !falling && !moving) {
+					setImageIndex(0, 3);
+
+				}
+
 				if (m_image_index < min_image_index || m_image_index > max_image_index) {
 					m_image_index = min_image_index;
 				}
@@ -329,22 +320,29 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
+		
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
 		img = bI[m_image_index];
-//		System.out.println(m_image_index);
 
 		int w = m_width;
 		int h = m_height;
+
+		int H;
+		if (shooting && !jumping) {
+			H = 17;
+		} else {
+			H = 0;
+		}
 		if (!invincible) {
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//			g.setColor(Color.blue);
+//			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 			if (m_direction.toString().equals("E")) {
-				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+				g.drawImage(img, m_x - (w / 2), m_y - h + H, w, h, null);
 			} else {
-				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+				g.drawImage(img, m_x + (w / 2), m_y - h + H, -w, h, null);
 			}
 		} else {
 			if (paintInvincible) {
@@ -439,5 +437,13 @@ public class Player extends Character {
 
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
+	}
+	
+	public void setImageIndex(int min, int max) {
+		if(min_image_index != min || max_image_index != max) {
+			m_imageElapsed = 200;
+		}
+		min_image_index = min;
+		max_image_index = max;
 	}
 }
