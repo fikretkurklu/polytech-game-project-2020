@@ -90,4 +90,6 @@ Ghost (State0){
   | True ? Move : (State1)
   *(ExtraMove)
   |True ? Move :(State1)
+  *(ExtraMove0)
+  |True ? Move :(State0)
 }
