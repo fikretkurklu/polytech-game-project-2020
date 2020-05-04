@@ -57,6 +57,8 @@ public class Model {
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
 
+	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
+
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
@@ -98,9 +100,8 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(playerAutomaton, 0, 0, new Direction("E"), this));
 
-		
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 
@@ -182,16 +183,16 @@ public class Model {
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
-		if(m_key != null) {
+		if (m_key != null) {
 			m_key.tick(elapsed);
 		}
-		if(m_bossKey != null) {
+		if (m_bossKey != null) {
 			m_bossKey.tick(elapsed);
 		}
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
-		for (Coin coin: m_coins) {
+		for (Coin coin : m_coins) {
 			coin.tick(elapsed);
 		}
 		m_hud.tick(elapsed);
@@ -251,10 +252,6 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
-	}
-
-	public void setPressed(int keyChar, boolean b) {
-		m_player.setPressed(keyChar, b);
 	}
 
 	/*
@@ -322,6 +319,32 @@ public class Model {
 
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
+	}
+
+	public void setPressed(int keyCode, boolean pressed) {
+		switch (keyCode) {
+		case Controller.K_Q:
+			qPressed = pressed;
+			break;
+		case Controller.K_Z:
+			zPressed = pressed;
+			break;
+		case Controller.K_D:
+			dPressed = pressed;
+			break;
+		case Controller.K_SPACE:
+			espPressed = pressed;
+			break;
+		case Controller.K_A:
+			aPressed = pressed;
+			break;
+		case Controller.K_E:
+			ePressed = pressed;
+			break;
+		case Controller.K_V:
+			vPressed = pressed;
+			break;
+		}
 	}
 
 }

@@ -14,7 +14,6 @@ import game.Model;
 public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	public int walkingSpeed = 2;
 
 	protected enum CurrentState {
 		isAttacking, isMoving, isDead
@@ -30,10 +29,10 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	boolean alreadyMove;
-	
+
 	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
-	
-		super(automaton, x, y, dir, model,  100, 100, 1000, 100, 5);
+
+		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
 		int a = x;
 		int b = y;
 		while (m_model.m_room.isBlocked(a, b)) {
@@ -48,6 +47,8 @@ public class WalkingOpponent extends Opponent {
 		int yCor = m_model.m_room.blockTop(a, b);
 		m_coord.setX(a);
 		m_coord.setY(yCor);
+
+		SPEED_MOVE = 2;
 
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
@@ -88,8 +89,8 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		// Draw hitbox
-//		gp.setColor(Color.blue);
-//		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		gp.setColor(Color.blue);
+		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		Image image = null;
 		switch (m_state) {
@@ -267,6 +268,11 @@ public class WalkingOpponent extends Opponent {
 	public boolean move(Direction dir) {
 		if (!alreadyMove) {
 			if (!(m_state.equals(CurrentState.isDead))) {
+				
+				if (!dir.toString().equals(m_direction.toString())) {
+					turn(dir);
+				}
+				
 				int m_x = m_coord.X();
 
 				if (!(m_state.equals(CurrentState.isMoving))) {
@@ -274,23 +280,14 @@ public class WalkingOpponent extends Opponent {
 				}
 				m_state = CurrentState.isMoving;
 
-				if (m_direction.toString().equals("E")) {
-					m_x += walkingSpeed;
-					hitBox.translate(m_x - m_coord.X(), 0);
-					if (collidedWith != null) {
-						collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
-					}
-					m_coord.setX(m_x);
-				} else {
-					m_x -= walkingSpeed;
-					hitBox.translate(-(m_coord.X() - m_x), 0);
-					if (collidedWith != null) {
-						collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
-					}
-					m_coord.setX(m_x);
+				super.move(dir);
+
+				if (collidedWith != null) {
+					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
 				}
 			}
 		}
+
 		alreadyMove = !alreadyMove;
 		return true;
 	}
@@ -298,9 +295,9 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean pop(Direction dir) {
 		if (!(m_state.equals(CurrentState.isDead))) {
-			walkingSpeed *= 2;
+			SPEED_MOVE *= 2;
 			move(dir);
-			walkingSpeed /= 2;
+			SPEED_MOVE /= 2;
 		}
 		return true;
 	}

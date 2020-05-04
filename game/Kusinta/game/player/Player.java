@@ -19,7 +19,6 @@ public class Player extends Character {
 	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
 	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
 
-	int SPEED_WALK = 2;
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
@@ -56,6 +55,8 @@ public class Player extends Character {
 
 		min_image_index = 0;
 		max_image_index = 3;
+		
+		SPEED_MOVE = 2;
 
 		reset();
 		setMoney(10000);
@@ -64,13 +65,6 @@ public class Player extends Character {
 	}
 
 	public void reset() {
-		qPressed = false;
-		zPressed = false;
-		dPressed = false;
-		espPressed = false;
-		aPressed = false;
-		ePressed = false;
-		vPressed = false;
 		m_imageElapsed = 0;
 		jumping = false;
 		falling = false;
@@ -85,31 +79,13 @@ public class Player extends Character {
 		if (!shooting && !jumping) {
 			setImageIndex(8, 13);
 		}
-
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
-
+		
+		super.move(dir);
+		
 		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
 			turn(dir);
 		}
-
-		if (dir.toString().equals("E")) {
-			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - 1)
-					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height)
-					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_WALK, m_y - m_height / 2)) {
-				m_x += SPEED_WALK;
-				m_coord.setX(m_x);
-				hitBox.translate(SPEED_WALK, 0);
-			}
-		} else if (dir.toString().equals("W")) {
-			if (!checkBlock(hitBox.x - SPEED_WALK, m_y - 1) && !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height)
-					&& !checkBlock(hitBox.x - SPEED_WALK, m_y - m_height / 2)) {
-				m_x -= SPEED_WALK;
-				m_coord.setX(m_x);
-				hitBox.translate(-SPEED_WALK, 0);
-			}
-		}
-
+		
 		return true;
 	}
 
@@ -118,18 +94,13 @@ public class Player extends Character {
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
 				setImageIndex(120, 123);
-				if ((qPressed || dPressed) && m_image_index <= 123)
+				if ((m_model.qPressed || m_model.dPressed) && m_image_index <= 123)
 					setImageIndex(114, 117);
 				m_image_index = m_image_index + 6;
 			} else {
 				setImageIndex(15, 23);
 				m_image_index = 16;
 			}
-			y_gravity = m_coord.Y();
-			jumping = true;
-			falling = true;
-
-			m_time = m_ratio_y;
 			super.jump(dir);
 		}
 
@@ -150,7 +121,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-		boolean moving = qPressed || dPressed;
+		boolean moving = m_model.qPressed || m_model.dPressed;
 
 		if (!shooting) {
 			if (jumping || falling || moving) {
@@ -184,7 +155,7 @@ public class Player extends Character {
 	public void tick(long elapsed) {
 		super.tick(elapsed);
 
-		boolean moving = qPressed || dPressed;
+		boolean moving = m_model.qPressed || m_model.dPressed;
 
 		if (invincible) {
 			m_invincibleElapsed += elapsed;

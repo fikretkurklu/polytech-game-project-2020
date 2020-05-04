@@ -63,7 +63,7 @@ public class Controller implements GameCanvasListener {
 			return;
 		}
 		if (m_game.m_model.actualMode == Model.mode.ROOM) {
-			m_game.m_model.m_player.setPressed((int) ' ', true);
+			m_game.m_model.setPressed((int) ' ', true);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class Controller implements GameCanvasListener {
 			m_game.m_model.m_underworld.m_player.setPressed((int) 'v', false);
 			return;
 		}
-		m_game.m_model.m_player.setPressed((int) ' ', false);
+		m_game.m_model.setPressed((int) ' ', false);
 
 	}
 
@@ -117,7 +117,7 @@ public class Controller implements GameCanvasListener {
 	public void keyPressed(KeyEvent e) {
 		switch (m_game.m_model.actualMode) {
 		case ROOM:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
+			m_game.m_model.setPressed((int) e.getKeyChar(), true);
 			break;
 		case UNDERWORLD:
 			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), true);
@@ -132,7 +132,7 @@ public class Controller implements GameCanvasListener {
 	public void keyReleased(KeyEvent e) {
 		switch (m_game.m_model.actualMode) {
 		case ROOM:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
+			m_game.m_model.setPressed((int) e.getKeyChar(), false);
 			break;
 		case UNDERWORLD:
 			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), false);

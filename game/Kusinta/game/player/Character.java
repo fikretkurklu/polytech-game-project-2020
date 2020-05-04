@@ -33,13 +33,13 @@ public abstract class Character extends Entity {
 	public Model m_model;
 	protected Direction m_direction;
 
+	protected int SPEED_MOVE;
+
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
 
 	int MAX_LIFE = 100;
-
-	protected boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 
@@ -96,6 +96,32 @@ public abstract class Character extends Entity {
 		for (int i = 0; i < stuffTable.length; i++) {
 			m_equipments.put(stuffTable[i], null);
 		}
+	}
+
+	@Override
+	public boolean move(Direction dir) { // bouger
+
+		int m_x = m_coord.X();
+		int m_y = m_coord.Y();
+
+		if (dir.equals(Direction.E)) {
+			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - 1)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height)
+					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height / 2)) {
+				m_x += SPEED_MOVE;
+				m_coord.setX(m_x);
+				hitBox.translate(SPEED_MOVE, 0);
+			}
+		} else if (dir.equals(Direction.W)) {
+			if (!checkBlock(hitBox.x - SPEED_MOVE, m_y - 1) && !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height)
+					&& !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height / 2)) {
+				m_x -= SPEED_MOVE;
+				m_coord.setX(m_x);
+				hitBox.translate(-SPEED_MOVE, 0);
+			}
+		}
+
+		return true;
 	}
 
 	public Rectangle getHitBox() {
@@ -165,14 +191,23 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
-		gravity(m_time);
+		if (!falling) {
+			y_gravity = m_coord.Y();
+			jumping = true;
+			falling = true;
 
+			m_time = m_ratio_y;
+
+			gravity(m_time);
+		}
+		
 		return true;
 	}
 
 	public void tick(long elapsed) {
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
+
 		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
 			if (!falling) {
 				y_gravity = m_coord.Y();
@@ -191,8 +226,9 @@ public abstract class Character extends Entity {
 			jumping = false;
 		}
 		if (!falling) {
-			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - 5)) {
-				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - 5);
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+				hitBox.translate(0, -(m_coord.Y() - blockTop));
 				m_coord.setY(blockTop);
 			}
 		}
@@ -200,9 +236,9 @@ public abstract class Character extends Entity {
 
 	private void gravity(long t) {
 		if (falling) {
-			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
-					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
-					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
+			if (checkBlock(m_coord.X(), hitBox.y)
+					|| checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
+					|| checkBlock(hitBox.x + 2, hitBox.y)) {
 				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
@@ -324,7 +360,7 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean isMoving() {
-		boolean moving = qPressed || dPressed;
+		boolean moving = m_model.qPressed || m_model.dPressed;
 
 		return moving;
 	}
@@ -337,50 +373,22 @@ public abstract class Character extends Entity {
 		m_key = key;
 	}
 
-	public void setPressed(int keyCode, boolean pressed) {
-		if (gotpower()) {
-			switch (keyCode) {
-			case Controller.K_Q:
-				qPressed = pressed;
-				break;
-			case Controller.K_Z:
-				zPressed = pressed;
-				break;
-			case Controller.K_D:
-				dPressed = pressed;
-				break;
-			case Controller.K_SPACE:
-				espPressed = pressed;
-				break;
-			case Controller.K_A:
-				aPressed = pressed;
-				break;
-			case Controller.K_E:
-				ePressed = pressed;
-				break;
-			case Controller.K_V:
-				vPressed = pressed;
-				break;
-			}
-		}
-	}
-
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
-			return qPressed;
+			return m_model.qPressed;
 		} else if (keyCode == Controller.K_Z) {
-			return zPressed;
+			return m_model.zPressed;
 		} else if (keyCode == Controller.K_D) {
-			return dPressed;
+			return m_model.dPressed;
 		} else if (keyCode == Controller.K_SPACE) {
-			return espPressed;
+			return m_model.espPressed;
 		} else if (keyCode == Controller.K_A) {
-			return aPressed;
+			return m_model.aPressed;
 		} else if (keyCode == Controller.K_E) {
-			return ePressed;
+			return m_model.ePressed;
 		} else if (keyCode == Controller.K_V)
-			return vPressed;
+			return m_model.vPressed;
 		return false;
 	}
 
