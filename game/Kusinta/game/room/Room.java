@@ -197,10 +197,16 @@ public class Room{
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		int start = (- y_decalage / Element.SIZE) * nbCol;
-		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_background.length);
-		for (int i = start; i < end; i++) {
-			m_background[i].paint(g);
+		int y_start = (- y_decalage / Element.SIZE) * nbCol;
+		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_background.length);
+		
+		int x_start = (- x_decalage / Element.SIZE);
+		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
+		
+		for (int i = y_start; i < y_end; i+= nbCol) {
+			for (int j = i + x_start; j < i + x_end; j ++) {
+				m_background[j].paint(g);
+			}
 		}
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].paint(g);
