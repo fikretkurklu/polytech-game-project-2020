@@ -1,5 +1,6 @@
 package player;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -49,16 +50,16 @@ public class Player extends Character {
 		loadImageProjectile(PATH_ARROW);
 
 		DIMENSION = SIZE / (bI[0].getHeight());
-		float ratio = (float) (bI[0].getWidth() * 2) / (float) (5 * bI[0].getHeight());
+		float ratio = (float) ((float)bI[0].getWidth()) / (float) (bI[0].getHeight());
 
-		m_height = DIMENSION * bI[0].getHeight();
+		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height), 2 * (m_width / 2 + 3 * DIMENSION),
-				m_height);
+		hitBox = new Rectangle(m_x - (m_width / 4) + 5, m_y - (m_height - 15), m_width/2 - 10,
+				m_height - 15);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -146,12 +147,14 @@ public class Player extends Character {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
+			
 //			if (shooting) {
 //				if (m_image_index <= 5)
 //					m_image_index = m_image_index + 6;
 //			}
 //			if (!shooting)
 //				m_image_index = 16;
+			
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -299,7 +302,7 @@ public class Player extends Character {
 					min_image_index = 0;
 					max_image_index = 3;
 				}
-				//m_image_index++;
+				m_image_index++;
 				if (m_image_index < min_image_index || m_image_index > max_image_index) {
 					m_image_index = min_image_index;
 				}
@@ -331,26 +334,28 @@ public class Player extends Character {
 
 		BufferedImage img;
 		img = bI[m_image_index];
-		System.out.println(m_image_index);
+//		System.out.println(m_image_index);
 
-		int w = DIMENSION * m_width;
+		int w = m_width;
 		int h = m_height;
-//		if (!invincible) {
+		if (!invincible) {
+		g.setColor(Color.blue);
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 			if (m_direction.toString().equals("E")) {
 				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
-//		} else {
-//			if (paintInvincible) {
-//				if (m_direction.toString().equals("E")) {
-//					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
-//				} else {
-//					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
-//				}
-//			}
-//			paintInvincible = !paintInvincible;
-//		}
+		} else {
+			if (paintInvincible) {
+				if (m_direction.toString().equals("E")) {
+					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+				} else {
+					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+				}
+			}
+			paintInvincible = !paintInvincible;
+		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
