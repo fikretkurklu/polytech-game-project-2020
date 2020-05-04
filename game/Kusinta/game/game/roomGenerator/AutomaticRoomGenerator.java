@@ -668,7 +668,6 @@ public class AutomaticRoomGenerator {
 	public void type1Generator(int row, int col) throws IOException {
 		AddPlatformHard(1+row, 0+col, 2, 4);
 		AddPlatformHard(3+row, 5+col, 2, 2);
-		AddPlatformHard(2+row, 6+col, 2, 2);
 		AddPlatformHard(7+row, 2+col, 2, 3);
 		AddPlatformHard(5+row, 2+col, 2, 2);
 		AddPlatformHard(8+row, 0+col, 2, 2);
