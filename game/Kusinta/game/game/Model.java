@@ -262,8 +262,8 @@ public class Model {
 		return (PlayerSoul) m_player;
 	}
 
-	public Player getPlayer() {
-		return (Player) m_player;
+	public Character getPlayer() {
+		return m_player;
 	}
 
 	public LinkedList<Opponent> getOpponent() {
