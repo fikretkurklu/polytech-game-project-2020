@@ -41,7 +41,7 @@ public class Player extends Character {
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
-	
+
 	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
@@ -87,7 +87,7 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
-		invincible = false;
+		invincible = true;
 		paintInvincible = true;
 	}
 
@@ -149,7 +149,8 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		try {
-			m_model.setVillageEnv();
+			if (!falling && !jumping && !shooting)
+				m_model.setVillageEnv();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -266,11 +267,9 @@ public class Player extends Character {
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
-		door = h.contains(hitBox.x, y1)
-				|| h.contains(hitBox.x + hitBox.width, y1)
-				|| h.contains(hitBox.x, y2)
+		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if(door && m_key != null) {
+		if (door && m_key != null) {
 			d.activate();
 		}
 	}
@@ -503,7 +502,7 @@ public class Player extends Character {
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
 	}
-	
+
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
 	}
