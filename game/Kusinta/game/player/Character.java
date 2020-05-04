@@ -87,7 +87,6 @@ public abstract class Character extends Entity {
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
-	public abstract void reset();
 	
 	public Coord getCoord() {
 		return m_coord;

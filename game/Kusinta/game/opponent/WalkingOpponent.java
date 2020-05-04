@@ -342,12 +342,6 @@ public class WalkingOpponent extends Opponent {
 		return true;
 	}
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void attackHitBox() {
 		int w = (int) (m_width / 1.5) - 75;
 		int h = (int) (m_height / 1.5) - 70;

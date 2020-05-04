@@ -346,9 +346,4 @@ public class FlyingOpponent extends Opponent {
 		m_projectiles.remove(projectile);
 	}
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-	}
-
 }
