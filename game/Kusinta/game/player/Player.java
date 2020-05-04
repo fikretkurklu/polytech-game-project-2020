@@ -27,7 +27,6 @@ public class Player extends Character {
 
 	int DIMENSION;
 
-	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 	boolean falling, jumping, shooting, invincible, paintInvincible;
 
 	int y_gravity;
@@ -41,7 +40,7 @@ public class Player extends Character {
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
-	
+
 	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
@@ -83,7 +82,6 @@ public class Player extends Character {
 		ePressed = false;
 		vPressed = false;
 		m_imageElapsed = 0;
-		moving = false;
 		jumping = false;
 		falling = false;
 		shooting = false;
@@ -94,7 +92,15 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 
-		moving = true;
+		boolean moving = qPressed || dPressed;
+
+		if (!shooting && !falling)
+			m_image_index = 8;
+
+//		if(moving)
+//		if (!falling && shooting && m_image_index > 7)
+//			m_image_index = m_image_index - 6;
+
 		if (shooting) {
 			if (m_image_index <= 5)
 				m_image_index = m_image_index + 6;
@@ -190,8 +196,23 @@ public class Player extends Character {
 		}
 	}
 
+	public boolean pick(Direction dir) {
+		checkDoor();
+		return true;
+	}
+
 	@Override
 	public boolean egg(Direction dir) { // tir
+		boolean moving = qPressed || dPressed;
+
+		if (!shooting) {
+			if (jumping || falling || moving) {
+				m_image_index = 9;
+			} else {
+				m_image_index = 2;
+			}
+		}
+
 		if (!shooting) {
 			shooting = true;
 
@@ -205,73 +226,15 @@ public class Player extends Character {
 		return false;
 	}
 
-	public void setPressed(int keyCode, boolean pressed) {
-		if (gotpower()) {
-			switch (keyCode) {
-			case Controller.K_Q:
-				qPressed = pressed;
-				if (pressed) {
-					if (!shooting && !falling && !moving)
-						m_image_index = 8;
-					moving = true;
-				} else {
-					moving = false;
-					if (!falling && shooting && m_image_index > 7)
-						m_image_index = m_image_index - 6;
-				}
-				break;
-			case Controller.K_Z:
-				zPressed = pressed;
-				break;
-			case Controller.K_D:
-				dPressed = pressed;
-				if (pressed) {
-					if (!shooting && !falling && !moving)
-						m_image_index = 8;
-					moving = true;
-				} else {
-					moving = false;
-					if (!falling && shooting && m_image_index > 7)
-						m_image_index = m_image_index - 6;
-				}
-				break;
-			case Controller.K_SPACE:
-				espPressed = pressed;
-				if (pressed) {
-					if (!shooting) {
-						if (jumping || falling || moving) {
-							m_image_index = 9;
-						} else {
-							m_image_index = 2;
-						}
-					}
-				}
-				break;
-			case Controller.K_A:
-				aPressed = pressed;
-				break;
-			case Controller.K_E:
-				ePressed = pressed;
-				checkDoor();
-				break;
-			case Controller.K_V:
-				vPressed = pressed;
-				break;
-			}
-		}
-	}
-
 	private void checkDoor() {
 		boolean door;
 		Door d = m_model.m_room.getDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
-		door = h.contains(hitBox.x, y1)
-				|| h.contains(hitBox.x + hitBox.width, y1)
-				|| h.contains(hitBox.x, y2)
+		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if(door && m_key != null) {
+		if (door && m_key != null) {
 			d.activate();
 		}
 	}
@@ -296,6 +259,8 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+		boolean moving = qPressed || dPressed;
+
 		m_ratio_x = elapsed;
 		m_ratio_y = elapsed;
 		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
@@ -504,7 +469,7 @@ public class Player extends Character {
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
 	}
-	
+
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
 	}

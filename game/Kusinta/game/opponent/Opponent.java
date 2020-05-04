@@ -16,6 +16,8 @@ import projectile.Arrow;
 public abstract class Opponent extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	
+	protected boolean moving;
 
 	protected Arrow collidedWith;
 
@@ -28,6 +30,8 @@ public abstract class Opponent extends Character {
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
 		m_key = null;
+		
+		moving = false;
 	}
 
 	@Override

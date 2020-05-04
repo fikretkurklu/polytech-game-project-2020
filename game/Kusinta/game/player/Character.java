@@ -19,6 +19,7 @@ import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
+import game.Controller;
 import game.Coord;
 import game.Model;
 import opponent.Key;
@@ -31,6 +32,8 @@ public abstract class Character extends Entity {
 	public static enum CurrentStat { Resistance, Strength, Attackspeed, MaxLife, Life };
 
 	int MAX_LIFE = 100;
+	
+	protected boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 	
@@ -45,7 +48,6 @@ public abstract class Character extends Entity {
 
 	protected Rectangle hitBox;
 	
-	protected boolean moving;
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -154,7 +156,6 @@ public abstract class Character extends Entity {
 
 	public abstract void paint(Graphics gp);
 
-	public abstract void setPressed(int keyChar, boolean b);
 
 	public int getHeight() {
 		return m_height;
@@ -249,6 +250,8 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean isMoving() {
+		boolean moving = qPressed || dPressed;
+
 		return moving;
 	}
 	
@@ -258,5 +261,33 @@ public abstract class Character extends Entity {
 	
 	public void setKey(Key key) {
 		m_key = key;
+	}
+	
+	public void setPressed(int keyCode, boolean pressed) {
+		if (gotpower()) {
+			switch (keyCode) {
+			case Controller.K_Q:
+				qPressed = pressed;
+				break;
+			case Controller.K_Z:
+				zPressed = pressed;
+				break;
+			case Controller.K_D:
+				dPressed = pressed;
+				break;
+			case Controller.K_SPACE:
+				espPressed = pressed;
+				break;
+			case Controller.K_A:
+				aPressed = pressed;
+				break;
+			case Controller.K_E:
+				ePressed = pressed;
+				break;
+			case Controller.K_V:
+				vPressed = pressed;
+				break;
+			}
+		}
 	}
 }

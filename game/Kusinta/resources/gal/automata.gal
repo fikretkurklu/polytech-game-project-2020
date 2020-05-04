@@ -7,13 +7,15 @@ Player_donjon(Init){
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
   | Key(v) ? Pop() : (Init)    
+  | Key(a) ? Pick() : (Init)
   
   * (Doing)       
   | ! GotPower() ? Explode () : ()  
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
-  | Key(v) ? Pop() : (Init)  
+  | Key(v) ? Pop() : (Init) 
+  | Key(a) ? Pick() : (Init) 
   | Key(z) ? Jump: (Doing)
   | Key(SPACE) ? Egg() : (Doing)
 }
