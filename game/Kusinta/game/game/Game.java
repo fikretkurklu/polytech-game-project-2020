@@ -35,7 +35,7 @@ import game.graphics.View;
 
 public class Game {
 
-	static Game game;
+	public static Game game;
 
 	public static void main(String args[]) throws Exception {
 		try {
@@ -51,7 +51,7 @@ public class Game {
 	Controller m_controller;
 	Model m_model;
 	Sound m_music;
-	boolean gameOver;
+	public boolean gameOver;
 
 	Game() throws Exception {
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();

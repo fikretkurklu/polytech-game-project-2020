@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 import automaton.*;
 import game.Controller;
 import game.Model;
+import game.Model.mode;
+import opponent.BossKey;
 import projectile.Arrow;
 import room.Door;
 import environnement.Element;
@@ -41,6 +43,8 @@ public class Player extends Character {
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
 
+	protected BossKey m_bossKey;
+
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
 		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 16, 7);
@@ -68,6 +72,7 @@ public class Player extends Character {
 		setMoney(10000);
 
 		m_key = null;
+		m_bossKey = null;
 	}
 
 	public void reset() {
@@ -144,11 +149,8 @@ public class Player extends Character {
 
 	@Override
 	public boolean pop(Direction dir) {
-		try {
-			m_model.setVillageEnv();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		reset();
+		m_model.switchEnv(mode.VILLAGE);
 		return true;
 	}
 
@@ -262,11 +264,9 @@ public class Player extends Character {
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
-		door = h.contains(hitBox.x, y1)
-				|| h.contains(hitBox.x + hitBox.width, y1)
-				|| h.contains(hitBox.x, y2)
+		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if(door) {
+		if (door && m_key != null) {
 			d.activate();
 		}
 	}
@@ -498,5 +498,9 @@ public class Player extends Character {
 			paintInvincible = true;
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
+	}
+
+	public void setBossKey(BossKey key) {
+		m_bossKey = key;
 	}
 }

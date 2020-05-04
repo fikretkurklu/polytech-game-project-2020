@@ -16,6 +16,7 @@ import automaton.Direction;
 import environnement.Element;
 import game.Controller;
 import game.Coord;
+import game.Game;
 import game.Model;
 import player.Character;
 
@@ -50,7 +51,7 @@ public class PlayerSoul extends Character {
 
 	int animationMode = NORMAL;
 
-	boolean hidden, escape, escaped;
+	boolean hidden, escape, escapedOrDead;
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
@@ -72,7 +73,7 @@ public class PlayerSoul extends Character {
 		moveAvailable = true;
 		hidden = false;
 		escape = false;
-		escaped = false;
+		escapedOrDead = false;
 		animationMode = NORMAL;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		loadImage();
@@ -146,20 +147,12 @@ public class PlayerSoul extends Character {
 	public boolean key(int keycode) {
 		switch (keycode) {
 		case Controller.K_Z:
-			if (zPressed == true)
-				return zPressed;
 			return zPressed;
 		case Controller.K_Q:
-			if (qPressed == true)
-				return qPressed;
 			return qPressed;
 		case Controller.K_S:
-			if (sPressed == true)
-				return sPressed;
 			return sPressed;
 		case Controller.K_D:
-			if (dPressed == true)
-				return dPressed;
 			return dPressed;
 		case Controller.K_SPACE:
 			return spacePressed;
@@ -384,7 +377,7 @@ public class PlayerSoul extends Character {
 	public void paint(Graphics g) {
 		if (hidden)
 			return;
-		if (escaped)
+		if (escapedOrDead)
 			return;
 		if (m_images != null) {
 			if (leftOrientation)
@@ -401,7 +394,7 @@ public class PlayerSoul extends Character {
 	}
 
 	public void tick(long elapsed) {
-		if (escaped)
+		if (escapedOrDead)
 			return;
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
@@ -409,12 +402,14 @@ public class PlayerSoul extends Character {
 			m_image_index++;
 			switch (animationMode) {
 			case DEAD:
-				if (m_image_index >= sizeDeathAnimation)
-					escaped = true;
+				if (m_image_index >= sizeDeathAnimation) {
+					escapedOrDead = true;
+					Game.game.gameOver = true;
+				}
 				return;
 			case ESCAPED:
 				if (m_image_index >= sizeDashAnimation)
-					escaped = true;
+					escapedOrDead = true;
 				return;
 			case NORMAL:
 				if (m_image_index >= sizeAnimation) {
@@ -462,12 +457,6 @@ public class PlayerSoul extends Character {
 			}
 		}
 		m_automaton.step(this);
-	}
-
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

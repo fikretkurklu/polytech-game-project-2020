@@ -54,6 +54,7 @@ public abstract class Character extends Entity {
 
 	protected Image imageProjectile;
 	protected Image[] imageProjectiles;
+	
 	public Key m_key;
 	
 	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
@@ -86,7 +87,6 @@ public abstract class Character extends Entity {
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
-	public abstract void reset();
 	
 	public Coord getCoord() {
 		return m_coord;

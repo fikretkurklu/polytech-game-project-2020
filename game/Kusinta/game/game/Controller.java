@@ -51,25 +51,25 @@ public class Controller implements GameCanvasListener {
 		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
 		System.out.println("   modifiers=" + e.getModifiersEx());
 		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.mode == Model.VILLAGE) {
+		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
 			m_game.m_model.m_village.Clicked();
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (m_game.m_model.mode == Model.UNDERWORLD) {
+		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
 			m_game.m_model.m_player.setPressed((int) 'v', true);
 			return;
 		}
-		if (m_game.m_model.mode == Model.ROOM) {
+		if (m_game.m_model.actualMode == Model.mode.ROOM) {
 			m_game.m_model.m_player.setPressed((int) ' ', true);
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (m_game.m_model.mode == Model.UNDERWORLD) {
+		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
 			m_game.m_model.m_player.setPressed((int) 'v', false);
 			return;
 		}
@@ -104,7 +104,7 @@ public class Controller implements GameCanvasListener {
 //		System.out.println("   modifiers=" + e.getModifiersEx());
 //		System.out.println("   buttons=" + e.getButton());
 		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
-		if (m_game.m_model.mode == Model.VILLAGE) {
+		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
 			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
 		}
 	}

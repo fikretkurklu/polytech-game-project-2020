@@ -26,11 +26,10 @@ public class FlyingOpponent extends Opponent {
 
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
+	
+	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 
-	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws Exception {
-
-		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
+		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
 
 		m_imageElapsed = 0;
 
@@ -210,7 +209,7 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.mode == m_model.ROOM) {
+		if (m_model.actualMode == Model.mode.ROOM) {
 			boolean d = m_model.getPlayer().gotpower();
 			if (d) {
 
@@ -258,7 +257,7 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 
-		if (dir.toString().equals("H") && m_model.mode == m_model.ROOM) {
+		if (dir.toString().equals("H") && m_model.actualMode == Model.mode.ROOM) {
 			int xHB = m_model.getPlayer().getHitBox().x;
 			int yHB = m_model.getPlayer().getHitBox().y;
 			int widthHB = m_model.getPlayer().getHitBox().width;
@@ -345,11 +344,6 @@ public class FlyingOpponent extends Opponent {
 
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
-	}
-
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
 	}
 
 }

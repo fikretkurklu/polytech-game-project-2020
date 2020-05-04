@@ -37,7 +37,7 @@ public class HUDCoin {
 		}
 		coinIco = m_images[0];
 		font = new Font("Georgia", Font.BOLD, 20);
-		moneyC = new Coord(m_x + coinIco.getHeight(null) * 3 / 2, m_y + m_height / 3 * 2 - font.getSize() / 2);
+		moneyC = new Coord(m_x + coinIco.getHeight(null), m_y + m_height / 3 * 2 - font.getSize() / 2);
 
 	}
 
