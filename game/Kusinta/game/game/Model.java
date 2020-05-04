@@ -130,7 +130,7 @@ public class Model {
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
 				break;
 			case GAMEOVER:
-
+				break;
 			}
 			actualMode = m;
 		} catch (IOException e) {
