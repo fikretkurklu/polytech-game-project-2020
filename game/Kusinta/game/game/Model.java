@@ -197,7 +197,7 @@ public class Model {
 		}
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
-//		m_underworld.tick(elapsed);
+		//m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -244,6 +244,8 @@ public class Model {
 		case VILLAGE:
 			m_village.paint(g, width, height);
 			m_hud.paint(g);
+			break;
+		default:
 			break;
 		}
 

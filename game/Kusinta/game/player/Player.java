@@ -1,6 +1,4 @@
 package player;
-
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -21,8 +19,6 @@ public class Player extends Character {
 
 	int SPEED_WALK_TICK = 4;
 
-	int DIMENSION;
-
 	boolean shooting, invincible, paintInvincible;
 
 	long m_imageElapsed;
@@ -38,16 +34,12 @@ public class Player extends Character {
 
 		loadImageProjectile(PATH_ARROW);
 
-		DIMENSION = SIZE / (bI[0].getHeight());
 		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
-
-		hitBox = new Rectangle(m_x - (m_width / 4) + 5, m_y - (m_height - 15), m_width / 2 - 10, m_height - 15);
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 15);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -75,17 +67,14 @@ public class Player extends Character {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-
 		if (!shooting && !jumping) {
 			setImageIndex(8, 13);
 		}
-		
 		super.move(dir);
-		
-		if (!dir.toString().equals(m_direction.toString()) && !shooting) {
+		if (dir !=  m_direction && !shooting) {
 			turn(dir);
 		}
-		
+
 		return true;
 	}
 
@@ -94,9 +83,10 @@ public class Player extends Character {
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
 				setImageIndex(120, 123);
-				if ((m_model.qPressed || m_model.dPressed) && m_image_index <= 123)
+				if (isMoving())
 					setImageIndex(114, 117);
-				m_image_index = m_image_index + 6;
+				else
+					setImageIndex(120, 123);
 			} else {
 				setImageIndex(15, 23);
 				m_image_index = 16;
@@ -121,19 +111,15 @@ public class Player extends Character {
 
 	@Override
 	public boolean egg(Direction dir) { // tir
-		boolean moving = m_model.qPressed || m_model.dPressed;
-
 		if (!shooting) {
-			if (jumping || falling || moving) {
+			if (jumping || falling || isMoving()) {
 				m_image_index = 120;
 				setImageIndex(120, 123);
 			} else {
 				m_image_index = 114;
 				setImageIndex(114, 117);
 			}
-
 			shooting = true;
-
 			return true;
 		}
 		return false;
@@ -154,8 +140,6 @@ public class Player extends Character {
 
 	public void tick(long elapsed) {
 		super.tick(elapsed);
-
-		boolean moving = m_model.qPressed || m_model.dPressed;
 
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
@@ -185,13 +169,13 @@ public class Player extends Character {
 					shoot();
 				} else if (jumping && !shooting && m_image_index == 17) {
 					m_image_index = 22;
-				} else if ((falling && !jumping) || (jumping && m_image_index == 23)) {
+				} else if (!shooting && ((falling && !jumping) || (jumping && m_image_index == 23))) {
 					setImageIndex(23, 23);
 				} else {
 					m_image_index++;
 				}
 
-				if (!shooting && !falling && !moving) {
+				if (!shooting && !falling && !isMoving()) {
 					setImageIndex(0, 3);
 				}
 
@@ -207,9 +191,9 @@ public class Player extends Character {
 			if (shooting) {
 				int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
 				if (mouse_x > m_coord.X()) {
-					turn(new Direction("E"));
+					turn(Direction.E);
 				} else {
-					turn(new Direction("W"));
+					turn(Direction.W);
 				}
 			}
 			m_automaton.step(this);
@@ -238,8 +222,6 @@ public class Player extends Character {
 			H = 0;
 		}
 		if (!invincible) {
-//			g.setColor(Color.blue);
-//			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 			if (m_direction.toString().equals("E")) {
 				g.drawImage(img, m_x - (w / 2), m_y - h + H, w, h, null);
 			} else {
@@ -261,20 +243,9 @@ public class Player extends Character {
 		}
 	}
 
-	public void setGravity(int g) {
-		G = g;
-	}
-
-	public void setMoney(int money) {
-		m_money = money;
-	}
-
-	public int getMoney() {
-		return m_money;
-	}
-
 	public void shoot() {
 		if (shooting) {
+			shooting = false;
 			int m_x = m_coord.X() + hitBox.width / 2;
 			int m_y = m_coord.Y() - m_height / 2;
 			Direction direc;
@@ -299,7 +270,7 @@ public class Player extends Character {
 				angle = -angle;
 			}
 
-			shooting = false;
+			
 
 			try {
 				if (direc.toString().equals("E")) {

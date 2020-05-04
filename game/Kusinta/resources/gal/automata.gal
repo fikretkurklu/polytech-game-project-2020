@@ -11,13 +11,14 @@ Player_donjon(Init){
   
   * (Doing)       
   | ! GotPower() ? Explode () : ()  
+  | Key(SPACE) ? Egg() : (Doing)
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
   | Key(v) ? Pop() : (Init) 
   | Key(a) ? Pick() : (Init) 
   | Key(z) ? Jump: (Doing)
-  | Key(SPACE) ? Egg() : (Doing)
+  
 }
 
 Block (Inactif) {                

@@ -1,7 +1,6 @@
 package projectile;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
@@ -52,8 +51,6 @@ public class Arrow extends Projectile {
 		if (image != null) {
 			int w = (int)(m_width * 1.5);
 			int h = (int)(m_height/1.5);
-//			g.setColor(Color.blue);
-//			g.fillRect(hitBox.X() - 5, hitBox.Y() - 5, 10, 10);
 			if (m_direction.toString().equals("E")) {
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
 				bg.drawImage(image, -10, h/4, w, h, null);
@@ -66,9 +63,6 @@ public class Arrow extends Projectile {
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
-
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-
 	}
 
 	public float getAlpha() {

@@ -361,7 +361,6 @@ public abstract class Character extends Entity {
 
 	public boolean isMoving() {
 		boolean moving = m_model.qPressed || m_model.dPressed;
-
 		return moving;
 	}
 
