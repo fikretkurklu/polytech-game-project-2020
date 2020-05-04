@@ -149,8 +149,8 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		try {
-			if (!falling && !jumping && !shooting)
-				m_model.setVillageEnv();
+			reset();
+			m_model.setVillageEnv();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -505,5 +505,10 @@ public class Player extends Character {
 
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
+	}
+	
+	public void setInvincibility() {
+		invincible = true;
+		paintInvincible = true;
 	}
 }

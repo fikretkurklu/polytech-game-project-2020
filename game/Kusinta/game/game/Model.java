@@ -131,6 +131,8 @@ public class Model {
 		if (!(m_player instanceof Player)) {
 			switchPlayer();
 		}
+		
+		((Player)m_player).setInvincibility();
 
 		m_village = null;
 		mode = ROOM;
