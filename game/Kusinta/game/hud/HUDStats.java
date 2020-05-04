@@ -56,7 +56,7 @@ public class HUDStats {
 		g.setColor(BG_COLOR);
 		int i = 0;
 		for (String l : statsDrawned) {
-			g.drawString(l, m_x + m_width / 2 - l.length() * font.getSize() / 2, m_y + (i + 1) * font.getSize() * 2);
+			g.drawString(l, m_x + m_width / 2 - l.length() * font.getSize() / 2, m_y + (i + 2) * font.getSize() * 2);
 			i++;
 		}
 	}
