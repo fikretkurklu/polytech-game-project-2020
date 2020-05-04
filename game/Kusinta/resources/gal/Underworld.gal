@@ -48,8 +48,9 @@ Lure (Init){
 Ghost (State0){
 
 	*(State0)
-  |True ? Move : (State0)
   |GotStuff ? : (State1)
+  |Cell(F, O) ? Turn : (ExtraMove)     
+  |True ? Move : (State0)
 	*(State1)
   | Cell(N, A) ? Hit(N): (State1)
   | Cell(S, A) ? Hit(S): (State1)
