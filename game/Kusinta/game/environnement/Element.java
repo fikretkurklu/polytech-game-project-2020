@@ -82,5 +82,9 @@ public abstract class Element extends Entity{
 	public boolean isSolid() {
 		return __isSolid;
 	}
+	
+	public void setVisible(boolean v) {
+		__isVisible = v;
+	}
 
 }

@@ -66,6 +66,7 @@ public class Key extends Entity {
 	public boolean wizz(Direction dir) {
 		m_model.m_player.setKey(this);
 		m_model.setKey(null);
+		m_model.m_room.getDoor().setVisible(true);
 
 		return false;
 	}

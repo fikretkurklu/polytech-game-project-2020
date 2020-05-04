@@ -8,6 +8,7 @@ import automaton.*;
 import game.Controller;
 import game.Model;
 import projectile.Arrow;
+import room.Door;
 import environnement.Element;
 
 public class Player extends Character {
@@ -246,11 +247,27 @@ public class Player extends Character {
 				break;
 			case Controller.K_E:
 				ePressed = pressed;
+				checkDoor();
 				break;
 			case Controller.K_V:
 				vPressed = pressed;
 				break;
 			}
+		}
+	}
+
+	private void checkDoor() {
+		boolean door;
+		Door d = m_model.m_room.getDoor();
+		Rectangle h = d.getHitBox();
+		int y1 = hitBox.y + 3 * hitBox.height / 4;
+		int y2 = hitBox.y + hitBox.height / 4;
+		door = h.contains(hitBox.x, y1)
+				|| h.contains(hitBox.x + hitBox.width, y1)
+				|| h.contains(hitBox.x, y2)
+				|| h.contains(hitBox.x + hitBox.width, y2);
+		if(door) {
+			d.activate();
 		}
 	}
 
@@ -294,8 +311,8 @@ public class Player extends Character {
 			jumping = false;
 		}
 		if (!falling) {
-			if(m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()-5)){
-				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y()-5);
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - 5)) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - 5);
 				m_coord.setY(blockTop);
 			}
 		}
