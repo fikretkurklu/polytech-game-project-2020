@@ -123,9 +123,8 @@ public class Model {
 				m_village = null;
 				break;
 			case UNDERWORLD:
-
-				m_underworld.m_player = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
-						m_underworld.getStartCoord().Y(), Direction.E, this);
+				m_underworld.setPlayer(new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
+						m_underworld.getStartCoord().Y(), Direction.E, this));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);

@@ -238,7 +238,8 @@ public class Underworld {
 				}
 				m_clouds[i].tick(elapsed);
 		}
-		m_player.tick(elapsed);
+		if (playerCreated)
+			m_player.tick(elapsed);
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);
 		}

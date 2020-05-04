@@ -154,8 +154,8 @@ public class Ghost extends Entity {
 			if (cat == Category.A) {
 				playerCoord = getPlayer().getCoord();
 				isLure = false;
-			}else if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
-				playerCoord = ((PlayerSoul) getPlayer()).lure.getCoord();
+			}else if (( getPlayer()).lure != null && !( getPlayer()).lure.disapered) {
+				playerCoord = ( getPlayer()).lure.getCoord();
 				isLure = true;
 			}else
 				return false;
@@ -219,8 +219,8 @@ public class Ghost extends Entity {
 			coord = getPlayer().getCoord();
 			isLure = false;
 		} else if (cat == Category.C) {
-			if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
-				coord = ((PlayerSoul) getPlayer()).lure.getCoord();
+			if (( getPlayer()).lure != null && !( getPlayer()).lure.disapered) {
+				coord = ( getPlayer()).lure.getCoord();
 				isLure = true;
 			} else
 				return false;
@@ -410,6 +410,6 @@ public class Ghost extends Entity {
 	}
 	
 	public boolean gotstuff(){
-		return isAttacking;
+		return m_model.m_underworld.playerCreated;
 	}
 }
