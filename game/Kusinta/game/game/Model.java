@@ -87,8 +87,8 @@ public class Model {
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 5));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this, 100, 100, 1000, 100, 5));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
 		setCenterScreenPlayer();
 		setVillageEnv();
 

@@ -31,10 +31,9 @@ public class WalkingOpponent extends Opponent {
 
 	boolean alreadyMove;
 
-	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws Exception {
+	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 
-		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
+		super(automaton, x, y, dir, model,  100, 100, 1000, 100, 5);
 		int a = x;
 		int b = y;
 		while (m_model.m_room.isBlocked(a, b)) {

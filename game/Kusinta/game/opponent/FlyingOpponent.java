@@ -24,10 +24,9 @@ public class FlyingOpponent extends Opponent {
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
 
-	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws Exception {
+	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 
-		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
+		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
 
 		m_imageElapsed = 0;
 
