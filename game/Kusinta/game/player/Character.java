@@ -106,7 +106,7 @@ public abstract class Character extends Entity {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		if (dir.equals(Direction.E)) {
+		if (dir == Direction.E) {
 			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - 1)
 					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height)
 					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height / 2)) {
@@ -114,7 +114,7 @@ public abstract class Character extends Entity {
 				m_coord.setX(m_x);
 				hitBox.translate(SPEED_MOVE, 0);
 			}
-		} else if (dir.equals(Direction.W)) {
+		} else if (dir == Direction.W) {
 			if (!checkBlock(hitBox.x - SPEED_MOVE, m_y - 1) && !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height)
 					&& !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height / 2)) {
 				m_x -= SPEED_MOVE;
@@ -211,6 +211,7 @@ public abstract class Character extends Entity {
 		m_ratio_y = elapsed;
 
 		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
+			System.out.println("Wrong 1 ");
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -221,6 +222,7 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
+			System.out.println("Wrong 2 ");
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
@@ -410,9 +412,9 @@ public abstract class Character extends Entity {
 			int y = m_y - baseY;
 
 			if (baseX > m_x) {
-				direc = new Direction("E");
+				direc = Direction.E;
 			} else {
-				direc = new Direction("W");
+				direc = Direction.W;
 			}
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
@@ -422,7 +424,7 @@ public abstract class Character extends Entity {
 				angle = -angle;
 			}
 			try {
-				if (direc.toString().equals("E")) {
+				if (direc== Direction.E) {
 					addProjectile(type, m_x + hitBox.width / 2, m_y, angle, this, direc);
 				} else {
 					addProjectile(type, m_x - hitBox.width / 2, m_y, angle, this, direc);

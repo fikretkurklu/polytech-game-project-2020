@@ -37,7 +37,7 @@ public class MagicProjectile extends Projectile {
 		m_height = DIMENSION * images[0].getHeight(null);
 		m_width = (int) (ratio * images[0].getWidth(null));
 
-		if (m_direction.toString().equals("E")) {
+		if (m_direction == Direction.E) {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
@@ -62,7 +62,7 @@ public class MagicProjectile extends Projectile {
 		if (images != null) {
 			int w = m_width;
 			int h = m_height;
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				bg.rotate(-m_angle, m_width / 2, m_height/2);
 				bg.drawImage(img, 0, 0, w, h, null);
 			} else {

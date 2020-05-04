@@ -17,10 +17,16 @@ import player.Character;
 
 public abstract class Projectile extends Entity {
 
-	public enum proj {ARROW, MAGIC_PROJECTILE};
+	public enum proj {
+		ARROW, MAGIC_PROJECTILE
+	};
+
 	protected int SPEED = 9;
-	
-	protected enum State {OK_STATE, HIT_STATE};
+
+	protected enum State {
+		OK_STATE, HIT_STATE
+	};
+
 	public static final int SIZE = 86;
 
 	protected double m_angle;
@@ -30,7 +36,7 @@ public abstract class Projectile extends Entity {
 	int moving;
 
 	protected State m_State;
-	
+
 	protected Character m_shooter;
 	protected Character collidingWith;
 	protected Model m_model;
@@ -45,24 +51,25 @@ public abstract class Projectile extends Entity {
 
 	protected Image image;
 
-	public Projectile( Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Direction direction) {
+	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter,
+			Direction direction) {
 		super(projectileAutomaton);
-		
-		m_coord = new Coord(x,y);
+
+		m_coord = new Coord(x, y);
 		m_angle = angle;
 		m_direction = direction;
 
 		m_shooter = shooter;
 		m_model = shooter.getModel();
-		
+
 		m_State = State.OK_STATE;
-		
+
 		m_alpha = 1f;
 
 		m_dead_time = 0;
 
 		moving = 0;
-		
+
 		m_strength = 15;
 
 	}
@@ -73,7 +80,7 @@ public abstract class Projectile extends Entity {
 		int tmpY = m_coord.Y();
 
 		if (moving == 0) {
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				m_coord.setX((int) (m_coord.X() + SPEED * Math.cos(m_angle)));
 				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
 			} else {
@@ -110,7 +117,7 @@ public abstract class Projectile extends Entity {
 	public long getDeadTime() {
 		return m_dead_time;
 	}
-	
+
 	public State getState() {
 		return m_State;
 	}
@@ -122,17 +129,17 @@ public abstract class Projectile extends Entity {
 		}
 		return true;
 	}
-	
+
 	public void setCollidingWith(Character cha) {
-		if(collidingWith != cha) {
+		if (collidingWith != cha) {
 			collidingWith = cha;
 			collidingWith.loseLife(m_strength);
 		}
 	}
-	
+
 	public void setSpeed(int speed) {
 		SPEED = speed;
 	}
-	
-	public abstract void paint(Graphics g) ;
+
+	public abstract void paint(Graphics g);
 }

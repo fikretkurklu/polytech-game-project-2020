@@ -33,7 +33,7 @@ public class Arrow extends Projectile {
 		m_height = image.getHeight(null);
 		m_width = image.getWidth(null);
 
-		if (m_direction.toString().equals("E")) {
+		if (m_direction == Direction.E) {
 			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
@@ -52,7 +52,7 @@ public class Arrow extends Projectile {
 		if (image != null) {
 			int w = (int)(m_width * 1.5);
 			int h = (int)(m_height/1.5);
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
 				bg.drawImage(image, -10, h/4, w, h, null);
 			} else {

@@ -42,7 +42,7 @@ public class Coin extends Entity {
 
 	int m_width, m_height;
 
-	public Coin(Automaton automaton, int x, int y, int value, Model model) throws Exception {
+	public Coin(Automaton automaton, int x, int y, int value, Model model) {
 		super(automaton);
 
 		m_coord = new Coord();

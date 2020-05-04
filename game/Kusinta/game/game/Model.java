@@ -25,10 +25,6 @@ import player.Character;
 
 public class Model {
 
-//	public final static int VILLAGE = 0;
-//	public final static int ROOM = 1;
-//	public final static int UNDERWORLD = 2;
-
 	public static enum mode {
 		VILLAGE, ROOM, UNDERWORLD, GAMEOVER
 	};
@@ -90,12 +86,11 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(600, 1700), new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(), new Direction("E"), this));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(600, 1700), Direction.E, this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
-
 		diametre = 0;
 
 		m_key = null;

@@ -108,7 +108,7 @@ public class WalkingOpponent extends Opponent {
 			break;
 		}
 
-		if (m_direction.toString().equals("E")) {
+		if (m_direction== Direction.E) {
 			gp.drawImage(image, hitBox.x - image.getWidth(null) / 2, m_coord.Y() - m_height + 70, m_width, m_height,
 					null);
 		} else {
@@ -169,8 +169,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-
-		if (dir.toString().equals("E")) {
+		if (dir== Direction.E) {
 			if (cat.toString().equals("O")) {
 				if ((m_model.m_room.isBlocked(hitBox.x + hitBox.width, hitBox.y + hitBox.height / 2)
 						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, hitBox.y + hitBox.height - 1)
@@ -188,7 +187,7 @@ public class WalkingOpponent extends Opponent {
 					}
 				}
 			}
-		} else if (dir.toString().equals("W")) {
+		} else if (dir == Direction.W) {
 			if (cat.toString().equals("O")) {
 				if ((m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height / 2)
 						|| m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height - 1)
@@ -203,7 +202,7 @@ public class WalkingOpponent extends Opponent {
 					}
 				}
 			}
-		} else if (dir.toString().equals("H")) {
+		} else if (dir == Direction.H) {
 			if (cat.toString().equals("A") && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					int xHB = m_model.getPlayer().getHitBox().x;
@@ -233,7 +232,7 @@ public class WalkingOpponent extends Opponent {
 				int xPlayer = m_model.getPlayer().getCoord().X();
 				int yPlayer = m_model.getPlayer().getCoord().Y();
 				if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
-					if (dir.toString().equals("E")) {
+					if (dir== Direction.E) {
 						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
 							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
 							for (int i = 0; i < 10; i++) {
@@ -243,7 +242,7 @@ public class WalkingOpponent extends Opponent {
 							}
 							return true;
 						}
-					} else if (dir.toString().equals("W")) {
+					} else if (dir == Direction.W) {
 						if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
 							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
 							for (int i = 0; i < 10; i++) {
@@ -265,7 +264,7 @@ public class WalkingOpponent extends Opponent {
 		if (!alreadyMove) {
 			if (!(m_state.equals(CurrentState.isDead))) {
 				
-				if (!dir.toString().equals(m_direction.toString())) {
+				if (dir != m_direction) {
 					turn(dir);
 				}
 				
@@ -331,7 +330,7 @@ public class WalkingOpponent extends Opponent {
 	public void attackHitBox() {
 		int w = (int) (m_width / 1.5) - 75;
 		int h = (int) (m_height / 1.5) - 70;
-		if (m_direction.toString().equals("E")) {
+		if (m_direction == Direction.E) {
 			hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w + 40, h);
 		} else {
 			hitBox = new Rectangle(m_coord.X() - w / 2 - 40, m_coord.Y() - h, w + 40, h);

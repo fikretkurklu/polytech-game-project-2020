@@ -10,20 +10,17 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import game.Model;
-import projectile.MagicProjectile;
 import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
 
 	public static final int SPEED_FLY = 2;
 
-	
-
 	Image[] death;
 	Image[] flight;
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
-	
+
 	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
@@ -77,7 +74,7 @@ public class FlyingOpponent extends Opponent {
 			}
 			moving = true;
 
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				m_x += SPEED_FLY;
 				hitBox.translate(m_x - m_coord.X(), 0);
 				if (collidedWith != null) {
@@ -112,9 +109,9 @@ public class FlyingOpponent extends Opponent {
 			int player_x = playerCoord.X();
 
 			if (player_x > m_coord.X()) {
-				turn(new Direction("E"));
+				turn(Direction.E);
 			} else {
-				turn(new Direction("W"));
+				turn(Direction.W);
 			}
 
 			return true;
@@ -124,8 +121,6 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-//		g.setColor(Color.blue);
-//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
 		if (!gotpower()) {
 			image = death[m_image_index];
@@ -134,7 +129,7 @@ public class FlyingOpponent extends Opponent {
 		} else {
 			image = flight[m_image_index];
 		}
-		if (m_direction.toString().equals("E")) {
+		if (m_direction == Direction.E) {
 			g.drawImage(image, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
 			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
@@ -154,7 +149,7 @@ public class FlyingOpponent extends Opponent {
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			((MagicProjectile) m_projectiles.get(i)).paint(g);
+			m_projectiles.get(i).paint(g);
 		}
 	}
 
@@ -175,13 +170,8 @@ public class FlyingOpponent extends Opponent {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 					dropKey();
-					try {
-						m_model.addCoin(
-								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+
 				}
 				m_image_index = (m_image_index + 1) % 6;
 			} else {
@@ -190,7 +180,8 @@ public class FlyingOpponent extends Opponent {
 			if (shooting) {
 				if (m_image_index == 3) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2, proj.MAGIC_PROJECTILE);
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
+							proj.MAGIC_PROJECTILE);
 				}
 			}
 		}
@@ -267,7 +258,7 @@ public class FlyingOpponent extends Opponent {
 		}
 
 		if (m_direction.toString().equals(dir.toString())) {
-			if (dir.toString().equals("E")) {
+			if (dir== Direction.E) {
 
 				int x = hitBox.x + hitBox.width + 1;
 				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)

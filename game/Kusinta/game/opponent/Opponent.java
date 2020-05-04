@@ -45,7 +45,7 @@ public abstract class Opponent extends Character {
 			m_moveElapsed -= SPEED_WALK_TICK;
 			m_automaton.step(this);
 		}
-		if(this instanceof WalkingOpponent) {
+		if (this instanceof WalkingOpponent) {
 			super.tick(elapsed);
 		}
 	}

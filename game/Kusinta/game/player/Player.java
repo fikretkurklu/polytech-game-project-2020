@@ -222,14 +222,14 @@ public class Player extends Character {
 			H = 0;
 		}
 		if (!invincible) {
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				g.drawImage(img, m_x - (w / 2), m_y - h + H, w, h, null);
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h + H, -w, h, null);
 			}
 		} else {
 			if (paintInvincible) {
-				if (m_direction.toString().equals("E")) {
+				if (m_direction == Direction.E) {
 					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
 				} else {
 					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
