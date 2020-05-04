@@ -94,9 +94,14 @@ public class Model {
 		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
+<<<<<<< HEAD
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		
+=======
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+>>>>>>> 7c9a58093792a59304370f01a67596fdb05cfa0e
 		setCenterScreenPlayer();
 		setVillageEnv();
 
