@@ -56,7 +56,7 @@ public class WalkingOpponent extends Opponent {
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
 
-		AttackStrength = 20;
+		AttackStrength = m_currentStatMap.get(CurrentStat.Strength)*2;
 
 		deathSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
