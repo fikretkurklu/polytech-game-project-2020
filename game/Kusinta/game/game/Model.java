@@ -101,7 +101,7 @@ public class Model {
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
 
 		
-		switchEnv(mode.VILLAGE);
+		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 
 		diametre = 0;
@@ -130,7 +130,7 @@ public class Model {
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
 				break;
 			case GAMEOVER:
-
+				break;
 			}
 			actualMode = m;
 		} catch (IOException e) {
@@ -181,7 +181,7 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
+//		m_player.tick(elapsed);
 //		if(m_key != null) {
 //			m_key.tick(elapsed);
 //		}
