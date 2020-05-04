@@ -1,10 +1,14 @@
 package underworld;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -41,6 +45,7 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
+	Image[] ghostImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
@@ -91,6 +96,7 @@ public class Underworld {
 			}
 			f.close();
 			generateClouds(m_clouds);
+			ghostImages = loadGhostImage();
 			generateGhosts(m_ghosts);
 			generateFragments(m_fragments);
 			generateGate();
@@ -122,7 +128,7 @@ public class Underworld {
 				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
-			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model);
+			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages);
 		}
 	}
 
@@ -315,5 +321,25 @@ public class Underworld {
 	}
 	public int getHeight() {
 		return m_RealHeight;
+	}
+	
+	public Image[] loadGhostImage() {
+		int len = UnderworldParam.ghostImage.length;
+		Image[] images;
+		images = new Image[len];
+		File imageFile;
+		Image image;
+		for (int i = 0; i < len; i++) {
+			imageFile = new File(UnderworldParam.ghostImage[i]);
+			try {
+				image =  ImageIO.read(imageFile);
+				images[i] = image.getScaledInstance(Ghost.SIZE, Ghost.SIZE, 0);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return images;
+//				m_images[i] = image.getScaledInstance(SIZE, SIZE, 0);
 	}
 }
