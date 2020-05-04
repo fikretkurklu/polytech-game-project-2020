@@ -171,21 +171,6 @@ public class Underworld {
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
-		/*
-		 * if (code.equals("ES")) { return new UnderworldEmptySpace(coord, ESIM); } else
-		 * if (code.contentEquals("LS")) { return new UndWall(coord, UWIM, "LS",
-		 * wallAutomaton); } else if (code.contentEquals("RS")) { return new
-		 * UndWall(coord, UWIM, "RS", wallAutomaton); } else if
-		 * (code.contentEquals("SB")) { return new UndWall(coord, UWIM, "HS",
-		 * wallAutomaton); } else if (code.contentEquals("OW")) { return new
-		 * UndWall(coord, UWIM, "W", wallAutomaton); } else if
-		 * (code.contentEquals("WB")) { return new UndWall(coord, UWIM, "B",
-		 * wallAutomaton); } else if (code.contentEquals("IOW")) { return new
-		 * UndWall(coord, UWIM, "IOW", wallAutomaton); } else if
-		 * (code.contentEquals("RWB")) { return new UndWall(coord, UWIM, "RWB",
-		 * wallAutomaton); } else if (code.contentEquals("OWD")) { return new
-		 * UndWall(coord, UWIM, "OWD", wallAutomaton); }
-		 */
 		if (code.equals("IW")) {
 			return new UndInnerWall(coord, UIWM);
 		} else if (code.contentEquals("OW_E")) {
@@ -205,10 +190,15 @@ public class Underworld {
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		int start = (- y_decalage / Element.SIZE) * nbCol;
-		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
-		for (int i = start; i < end; i++) {
-			m_elements[i].paint(g);
+		int y_start = (-y_decalage / Element.SIZE) * nbCol;
+		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+
+		int x_start = (-x_decalage / Element.SIZE);
+		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
+		for (int i = y_start; i < y_end; i += nbCol) {
+			for (int j = i + x_start; j < i + x_end; j++) {
+				m_elements[j].paint(g);
+			}
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);

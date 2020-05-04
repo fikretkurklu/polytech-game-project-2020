@@ -14,7 +14,7 @@ import underworld.PlayerSoul;
 
 public class Ghost extends Entity {
 
-	public static final int SPEED = 2;
+	public static final int SPEED = 1;
 
 	public static final int SIZE = (int) (Element.SIZE);
 
@@ -281,26 +281,26 @@ public class Ghost extends Entity {
 			break;
 		case Direction.NEs:
 			m_direction = Direction.N;
-			m_coord.translate((int) (SPEED / Math.sqrt(2)), (int) (-SPEED / Math.sqrt(2)));
+			m_coord.translate(SPEED, -SPEED);
 			leftOrientation = false;
 			flag = true;
 			break;
 		case Direction.NWs:
 			m_direction = Direction.N;
 			leftOrientation = true;
-			m_coord.translate((int) (-SPEED / Math.sqrt(2)), (int) (-SPEED / Math.sqrt(2)));
+			m_coord.translate(-SPEED, -SPEED);
 			flag = true;
 			break;
 		case Direction.SWs:
 			m_direction = Direction.S;
 			leftOrientation = true;
-			m_coord.translate((int) (-SPEED / Math.sqrt(2)), (int) (SPEED / Math.sqrt(2)));
+			m_coord.translate(-SPEED, SPEED);
 			flag = true;
 			break;
 		case Direction.SEs:
 			m_direction = Direction.S;
 			leftOrientation = false;
-			m_coord.translate((int) (SPEED / Math.sqrt(2)), (int) (SPEED / Math.sqrt(2)));
+			m_coord.translate(SPEED, SPEED);
 			flag = true;
 			break;
 		}
@@ -376,7 +376,6 @@ public class Ghost extends Entity {
 
 	public void paint(Graphics g) {
 		if (m_images != null) {
-//			calculateHitbox();
 			if (leftOrientation)
 				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
 			else
@@ -392,9 +391,10 @@ public class Ghost extends Entity {
 			m_imageElapsed = 0;
 			m_image_index++;
 			if (isAttacking) {
-				if (m_image_index > 8) {
+				if (m_image_index == 4)
 					if (!isLure)
 						getPlayer().getDamage();
+				if (m_image_index > 8) {
 					m_image_index = 3;
 				}
 			} else {
@@ -419,6 +419,10 @@ public class Ghost extends Entity {
 	}
 
 	public boolean gotstuff() {
-		return m_model.m_underworld.playerCreated;
+		boolean res = m_model.m_underworld.playerCreated && !getPlayer().escapedOrDead;
+		if (!res) {
+			isAttacking = false;
+		}
+		return res;
 	}
 }

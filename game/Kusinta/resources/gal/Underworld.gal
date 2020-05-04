@@ -52,6 +52,7 @@ Ghost (State0){
   |Cell(F, O) ? Turn : (ExtraMove0)     
   |True ? Move : (State0)
 	*(State1)
+  | !GotStuff ? : (State0) 
   | Cell(N, A) ? Hit(N): (State1)
   | Cell(S, A) ? Hit(S): (State1)
   | Cell(E, A) ? Hit(E): (State1)
