@@ -15,7 +15,7 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
-	public final static int MAX_GHOSTS = 3;
+	public final static int MAX_GHOSTS = 10;
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
