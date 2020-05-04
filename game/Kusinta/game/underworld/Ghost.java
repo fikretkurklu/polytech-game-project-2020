@@ -218,8 +218,7 @@ public class Ghost extends Entity {
 		} else if (cat == Category.A) {
 			coord = getPlayer().getCoord();
 			isLure = false;
-			// return m_model.getPlayer().getCoord().isEqual(m_coord);
-		} else if (cat.toString().equals("C")) {
+		} else if (cat == Category.C) {
 			if (((PlayerSoul) getPlayer()).lure != null && !((PlayerSoul) getPlayer()).lure.disapered) {
 				coord = ((PlayerSoul) getPlayer()).lure.getCoord();
 				isLure = true;
