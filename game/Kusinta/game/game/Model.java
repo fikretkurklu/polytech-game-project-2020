@@ -101,7 +101,7 @@ public class Model {
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
 
 		
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 
 		diametre = 0;
@@ -181,22 +181,22 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-//		m_player.tick(elapsed);
-//		if(m_key != null) {
-//			m_key.tick(elapsed);
-//		}
-//		if(m_bossKey != null) {
-//			m_bossKey.tick(elapsed);
-//		}
-//		for (Opponent op : m_opponents) {
-//			op.tick(elapsed);
-//		}
-//		for (Coin coin: m_coins) {
-//			coin.tick(elapsed);
-//		}
-//		m_hud.tick(elapsed);
-//		m_room.tick(elapsed);
-		m_underworld.tick(elapsed);
+		m_player.tick(elapsed);
+		if(m_key != null) {
+			m_key.tick(elapsed);
+		}
+		if(m_bossKey != null) {
+			m_bossKey.tick(elapsed);
+		}
+		for (Opponent op : m_opponents) {
+			op.tick(elapsed);
+		}
+		for (Coin coin: m_coins) {
+			coin.tick(elapsed);
+		}
+		m_hud.tick(elapsed);
+		m_room.tick(elapsed);
+//		m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
