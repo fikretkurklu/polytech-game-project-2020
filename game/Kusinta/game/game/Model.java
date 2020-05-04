@@ -100,7 +100,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(playerAutomaton, 0, 0, new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
