@@ -8,7 +8,7 @@ public class ActionEgg extends Action {
 	
 	public ActionEgg(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionEgg(Direction direction, int percentage) {

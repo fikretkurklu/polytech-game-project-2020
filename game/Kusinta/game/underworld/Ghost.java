@@ -25,7 +25,7 @@ public class Ghost extends Entity {
 
 	public static final int SIZE = (int) (Element.SIZE);
 
-	public static final String[] dirs = { "N", "E", "W", "S" };
+//	public static final String[] dirs = { "N", "E", "W", "S" };
 
 	Coord m_coord;
 	Model m_model;
@@ -255,14 +255,11 @@ public class Ghost extends Entity {
 			// return coord.isEqual(m_coord);
 		}
 		return false;
-
 	}
 
 	public boolean PopOrWizz(Direction dir, Coord coord) {
 //		int d = (int) Math.sqrt((coord.X() - m_coord.X()) * (coord.X() - m_coord.X())
 //				+ (coord.Y() - m_coord.Y()) * (coord.Y() - m_coord.Y()));
-		Coord playerCoord = getPlayer().getCoord();
-
 		isFollowing = true;
 		boolean flag = false;
 		if (dir.toString().equals("W")) {
@@ -357,7 +354,7 @@ public class Ghost extends Entity {
 
 	public void paint(Graphics g) {
 		if (m_images != null) {
-//			calculatem_hitbox();
+//			calculateHitbox();
 			if (leftOrientation)
 				g.drawImage(m_images[m_image_index], m_coord.X() + SIZE, m_coord.Y(), -SIZE, SIZE, null);
 			else

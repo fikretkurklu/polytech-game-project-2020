@@ -9,7 +9,7 @@ public class ActionWizz extends Action{
 	
 	public ActionWizz(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionWizz(Direction direction, int percentage) {

@@ -9,7 +9,7 @@ public class ActionPop extends Action{
 	
 	public ActionPop(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionPop(Direction direction, int percentage) {

@@ -47,22 +47,22 @@ public class Lure extends Projectile {
 	}
 
 	private void setPosition() {
-		hitBox = new Rectangle(getCoord().X(), getCoord().Y(), SIZE, SIZE);
+		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		int xUp = hitBox.x + (SIZE / 2);
 		int xDown = hitBox.x + (SIZE / 2);
 		int yRight = hitBox.y + (SIZE / 2);
 		int yLeft = hitBox.y + (SIZE / 2);
 
 		if (checkBlock(xUp, hitBox.y))
-			getCoord().setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+			m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
 		if (checkBlock(xDown, hitBox.y + SIZE))
-			getCoord().setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+			m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
 		if (checkBlock(hitBox.x + SIZE, yRight))
-			getCoord().setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+			m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
 		if (checkBlock(hitBox.x, yLeft))
-			getCoord().setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 		
-		hitBox.setLocation(getCoord().X(), getCoord().Y());
+		hitBox.setLocation(m_coord.X(), m_coord.Y());
 	}
 
 	private void loadImage() {

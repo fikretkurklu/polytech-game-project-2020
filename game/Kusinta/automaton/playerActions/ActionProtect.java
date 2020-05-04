@@ -8,7 +8,7 @@ public class ActionProtect extends Action{
 	
 	public ActionProtect(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionProtect(Direction direction, int percentage) {
