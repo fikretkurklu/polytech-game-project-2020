@@ -13,7 +13,6 @@ import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
-import game.Model;
 import player.Character;
 import projectile.Projectile;
 
@@ -36,8 +35,8 @@ public class Lure extends Projectile {
 
 	Rectangle hitBox;
 
-	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
-		super(projectileAutomaton, x, y, angle, shooter, model, null);
+	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter) {
+		super(projectileAutomaton, x, y, angle, shooter, null);
 		appearing = true;
 		normal = false;
 		disapearing = false;

@@ -23,7 +23,10 @@ import game.Controller;
 import game.Coord;
 import game.Model;
 import opponent.Key;
+import projectile.Arrow;
+import projectile.MagicProjectile;
 import projectile.Projectile;
+import projectile.Projectile.proj;
 
 public abstract class Character extends Entity {
 
@@ -38,9 +41,6 @@ public abstract class Character extends Entity {
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
-
-	int MAX_LIFE = 100;
-
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 
 	int m_width, m_height;
@@ -67,9 +67,11 @@ public abstract class Character extends Entity {
 	protected boolean falling, jumping;
 	protected long m_ratio_x, m_ratio_y, m_time;
 	protected int y_gravity;
+	
+	protected boolean shooting;
 
-	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws IOException {
+	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
+			int resistance, int strength) throws IOException {
 		super(automaton);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
@@ -200,7 +202,7 @@ public abstract class Character extends Entity {
 
 			gravity(m_time);
 		}
-		
+
 		return true;
 	}
 
@@ -236,8 +238,7 @@ public abstract class Character extends Entity {
 
 	private void gravity(long t) {
 		if (falling) {
-			if (checkBlock(m_coord.X(), hitBox.y)
-					|| checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
+			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
 				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
@@ -393,6 +394,58 @@ public abstract class Character extends Entity {
 
 	public boolean checkBlock(int x, int y) {
 		return m_model.m_room.isBlocked(x, y);
+	}
+
+	public void shoot(int baseX, int baseY, proj type) {
+		if (shooting) {
+			shooting = false;
+			int m_x = m_coord.X() + hitBox.width / 2;
+			int m_y = m_coord.Y() - m_height / 2;
+
+			Direction direc;
+			float angle;
+			double r;
+
+			int x = baseX - m_x;
+			int y = m_y - baseY;
+
+			if (baseX > m_x) {
+				direc = new Direction("E");
+			} else {
+				direc = new Direction("W");
+			}
+
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			angle = (float) Math.asin(Math.abs(y) / r);
+
+			if (baseY > m_y) {
+				angle = -angle;
+			}
+			try {
+				if (direc.toString().equals("E")) {
+					addProjectile(type, m_x + hitBox.width / 2, m_y, angle, this, direc);
+				} else {
+					addProjectile(type, m_x - hitBox.width / 2, m_y, angle, this, direc);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void addProjectile(proj type, int x, int y, double angle, Character shooter, Direction direction)
+			throws Exception {
+		switch (type) {
+		case ARROW:
+			m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, shooter, direction));
+			break;
+		case MAGIC_PROJECTILE:
+			m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, shooter, direction));
+			break;
+		default:
+			break;
+		}
+
 	}
 
 }

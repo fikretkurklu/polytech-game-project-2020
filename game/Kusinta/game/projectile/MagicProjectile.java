@@ -9,7 +9,7 @@ import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
-import opponent.FlyingOpponent;
+import player.Character;
 
 public class MagicProjectile extends Projectile {
 
@@ -24,9 +24,9 @@ public class MagicProjectile extends Projectile {
 	int m_height;
 	int m_width;
 
-	public MagicProjectile(Automaton projectileAutomaton, int x, int y, double angle, FlyingOpponent shooter,
+	public MagicProjectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter,
 			Direction direction) throws Exception {
-		super(projectileAutomaton, x, y, angle, shooter, shooter.getModel(), direction);
+		super(projectileAutomaton, x, y, angle, shooter, direction);
 
 		images = m_shooter.getProjectileImages();
 

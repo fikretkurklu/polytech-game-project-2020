@@ -11,13 +11,13 @@ import automaton.Direction;
 import game.Coord;
 import game.Model;
 import projectile.MagicProjectile;
-import projectile.Projectile;
+import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
 
 	public static final int SPEED_FLY = 2;
 
-	protected boolean shooting;
+	
 
 	Image[] death;
 	Image[] flight;
@@ -189,8 +189,8 @@ public class FlyingOpponent extends Opponent {
 			}
 			if (shooting) {
 				if (m_image_index == 3) {
-					shoot();
-					shooting = false;
+					Coord playerCoord = m_model.getPlayer().getCoord();
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2, proj.MAGIC_PROJECTILE);
 				}
 			}
 		}
@@ -290,53 +290,4 @@ public class FlyingOpponent extends Opponent {
 		}
 		return false;
 	}
-
-	public void shoot() {
-		if (shooting) {
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y() - m_height / 2;
-
-			Direction direc;
-			float angle;
-			double r;
-			Coord playerCoord = m_model.getPlayer().getCoord();
-			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
-
-			int x = player_x - m_x;
-			int y = m_y - player_y;
-
-			if (player_x > m_x) {
-				direc = new Direction("E");
-			} else {
-				direc = new Direction("W");
-			}
-
-			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
-
-			if (player_y > m_y) {
-				angle = -angle;
-			}
-			try {
-				if (direc.toString().equals("E")) {
-					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
-				} else {
-					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void addProjectile(int x, int y, double angle, FlyingOpponent opponent, Direction direction)
-			throws Exception {
-		m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
-	}
-
-	public void removeProjectile(Projectile projectile) {
-		m_projectiles.remove(projectile);
-	}
-
 }

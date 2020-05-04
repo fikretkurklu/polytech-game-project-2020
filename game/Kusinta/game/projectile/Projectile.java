@@ -17,6 +17,7 @@ import player.Character;
 
 public abstract class Projectile extends Entity {
 
+	public enum proj {ARROW, MAGIC_PROJECTILE};
 	protected int SPEED = 9;
 	
 	protected enum State {OK_STATE, HIT_STATE};
@@ -44,7 +45,7 @@ public abstract class Projectile extends Entity {
 
 	protected Image image;
 
-	public Projectile( Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Direction direction) {
+	public Projectile( Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Direction direction) {
 		super(projectileAutomaton);
 		
 		m_coord = new Coord(x,y);
@@ -52,7 +53,7 @@ public abstract class Projectile extends Entity {
 		m_direction = direction;
 
 		m_shooter = shooter;
-		m_model = model;
+		m_model = shooter.getModel();
 		
 		m_State = State.OK_STATE;
 		

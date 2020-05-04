@@ -50,7 +50,7 @@ public class Model {
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
 
-	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
+	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
 	public Underworld m_underworld;
@@ -116,6 +116,7 @@ public class Model {
 		aPressed = false;
 		ePressed = false;
 		vPressed = false;
+		sPressed = false;
 		try {
 			switch (m) {
 			case ROOM:
@@ -180,7 +181,9 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		m_player.tick(elapsed);
+		if (actualMode == mode.ROOM)
+			m_player.tick(elapsed);
+		
 		if (m_key != null) {
 			m_key.tick(elapsed);
 		}
@@ -252,6 +255,7 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
+		m_mouseCoord.translate(-x_decalage,- y_decalage);
 	}
 
 	/*
@@ -344,7 +348,11 @@ public class Model {
 		case Controller.K_V:
 			vPressed = pressed;
 			break;
+		case Controller.K_S:
+			sPressed = pressed;
+			break;
 		}
+		
 	}
 
 }

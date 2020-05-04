@@ -8,7 +8,7 @@ import game.Coord;
 import game.Model;
 import game.Model.mode;
 import opponent.BossKey;
-import projectile.Arrow;
+import projectile.Projectile.proj;
 import room.Door;
 import environnement.Element;
 
@@ -20,7 +20,7 @@ public class Player extends Character {
 
 	int SPEED_WALK_TICK = 4;
 
-	boolean shooting, invincible, paintInvincible;
+	boolean invincible, paintInvincible;
 
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
@@ -167,7 +167,7 @@ public class Player extends Character {
 				}
 			} else {
 				if (shooting && (m_image_index == 117 || m_image_index == 123)) {
-					shoot();
+					super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
 				} else if (jumping && !shooting && m_image_index == 17) {
 					m_image_index = 22;
 				} else if (!shooting && ((falling && !jumping) || (jumping && m_image_index == 23))) {
@@ -190,8 +190,7 @@ public class Player extends Character {
 		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
 			if (shooting) {
-				int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-				if (mouse_x > m_coord.X()) {
+				if (m_model.m_mouseCoord.X() > m_coord.X()) {
 					turn(Direction.E);
 				} else {
 					turn(Direction.W);
@@ -243,52 +242,6 @@ public class Player extends Character {
 			m_projectiles.get(i).paint(g);
 		}
 	}
-
-	public void shoot() {
-		if (shooting) {
-			shooting = false;
-			int m_x = m_coord.X() + hitBox.width / 2;
-			int m_y = m_coord.Y() - m_height / 2;
-			Direction direc;
-			double angle;
-			double r;
-			int mouse_x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			int mouse_y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
-
-			int x = mouse_x - m_x;
-			int y = m_y - mouse_y;
-
-			if (mouse_x > m_x) {
-				direc = new Direction("E");
-			} else {
-				direc = new Direction("W");
-			}
-
-			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = Math.asin(Math.abs(y) / r);
-
-			if (mouse_y > m_y) {
-				angle = -angle;
-			}
-
-			
-
-			try {
-				if (direc.toString().equals("E")) {
-					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
-				} else {
-					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void addProjectile(int x, int y, double angle, Player player, Direction direction) throws Exception {
-		m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, player, direction));
-	}
-
 	@Override
 	public boolean explode() {
 		if (!gotpower())

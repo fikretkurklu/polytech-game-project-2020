@@ -12,6 +12,7 @@ import environnement.Element;
 import game.Coord;
 import opponent.Opponent;
 import player.Player;
+import player.Character;
 
 public class Arrow extends Projectile {
 
@@ -21,9 +22,9 @@ public class Arrow extends Projectile {
 	int m_height;
 	int m_width;
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction)
+	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Character shooter, Direction direction)
 			throws Exception {
-		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
+		super(arrowAutomaton, x, y, angle, shooter, direction);
 
 		image = m_shooter.getProjectileImage();
 
