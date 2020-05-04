@@ -5,7 +5,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import automaton.*;
-import game.Controller;
 import game.Model;
 import opponent.BossKey;
 import projectile.Arrow;
@@ -17,7 +16,6 @@ public class Player extends Character {
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
 	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
-	private final String PATH_SPRITE_TIR = "resources/Player/spriteArcher.png";
 
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
@@ -37,16 +35,16 @@ public class Player extends Character {
 
 	long m_time;
 
-	BufferedImage[] bIShooting;
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
+
+	int min_image_index, max_image_index;
 
 	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
-		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 16, 7);
-		bIShooting = m_model.loadSprite(PATH_SPRITE_TIR, 4, 4);
+		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 18, 7);
 
 		loadImageProjectile(PATH_ARROW);
 
@@ -66,10 +64,12 @@ public class Player extends Character {
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
 
+		min_image_index = 0;
+		max_image_index = 3;
+
 		reset();
 		setMoney(10000);
 
-		m_key = null;
 		m_bossKey = null;
 	}
 
@@ -92,19 +92,19 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 
-		boolean moving = qPressed || dPressed;
-
-		if (!shooting && !falling)
-			m_image_index = 8;
+		if (!shooting && !jumping) {
+			min_image_index = 8;
+			max_image_index = 13;
+		}
 
 //		if(moving)
 //		if (!falling && shooting && m_image_index > 7)
 //			m_image_index = m_image_index - 6;
 
-		if (shooting) {
-			if (m_image_index <= 5)
-				m_image_index = m_image_index + 6;
-		}
+//		if (shooting) {
+//			if (m_image_index <= 5)
+//				m_image_index = m_image_index + 6;
+//		}
 
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
@@ -136,15 +136,22 @@ public class Player extends Character {
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
+			if (shooting) {
+				min_image_index = 120;
+				max_image_index = 123;
+			} else {
+				min_image_index = 15;
+				max_image_index = 23;
+			}
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
-			if (shooting) {
-				if (m_image_index <= 5)
-					m_image_index = m_image_index + 6;
-			}
-			if (!shooting)
-				m_image_index = 16;
+//			if (shooting) {
+//				if (m_image_index <= 5)
+//					m_image_index = m_image_index + 6;
+//			}
+//			if (!shooting)
+//				m_image_index = 16;
 			m_time = m_ratio_y;
 			gravity(m_time);
 		}
@@ -207,20 +214,17 @@ public class Player extends Character {
 
 		if (!shooting) {
 			if (jumping || falling || moving) {
-				m_image_index = 9;
+				m_image_index = 120;
+				min_image_index = 120;
+				max_image_index = 123;
 			} else {
-				m_image_index = 2;
+				m_image_index = 114;
+				min_image_index = 114;
+				max_image_index = 117;
 			}
-		}
 
-		if (!shooting) {
 			shooting = true;
 
-			if (jumping || falling || moving) {
-				m_image_index = 9;
-			} else {
-				m_image_index = 2;
-			}
 			return true;
 		}
 		return false;
@@ -237,25 +241,6 @@ public class Player extends Character {
 		if (door && m_key != null) {
 			d.activate();
 		}
-	}
-
-	@Override
-	public boolean key(int keyCode) {
-		if (keyCode == Controller.K_Q) {
-			return qPressed;
-		} else if (keyCode == Controller.K_Z) {
-			return zPressed;
-		} else if (keyCode == Controller.K_D) {
-			return dPressed;
-		} else if (keyCode == Controller.K_SPACE) {
-			return espPressed;
-		} else if (keyCode == Controller.K_A) {
-			return aPressed;
-		} else if (keyCode == Controller.K_E) {
-			return ePressed;
-		} else if (keyCode == Controller.K_V)
-			return vPressed;
-		return false;
 	}
 
 	public void tick(long elapsed) {
@@ -309,33 +294,15 @@ public class Player extends Character {
 				if (m_image_index == 68 && m_model.getDiametre() == 0) {
 					m_model.setDiametre(1);
 				}
-			} else if (shooting) {
-				m_image_index++;
-				if ((moving || falling || jumping) && m_image_index > 12) {
-					shoot();
-					shooting = false;
-				} else if (m_image_index > 6 && !falling && !moving) {
-					shoot();
-					shooting = false;
-				} else if (m_image_index == 6 || m_image_index == 7 || m_image_index == 12 || m_image_index == 13) {
-					shoot();
-					shooting = false;
-				}
-
-			} else if (jumping || falling) {
-				m_image_index = (m_image_index - 15 + 1) % 9 + 15;
-				if (falling && !jumping)
-					m_image_index = 23;
-				if (m_image_index == 18)
-					m_image_index = 22;
-				if (m_image_index >= 22)
-					m_image_index = 22;
-			} else if (moving) {
-				m_image_index = (m_image_index - 8 + 1) % 6 + 8;
-				if (m_image_index < 8)
-					m_image_index = 8;
 			} else {
-				m_image_index = (m_image_index + 1) % 4;
+				if (!shooting && !falling && !moving) {
+					min_image_index = 0;
+					max_image_index = 3;
+				}
+				//m_image_index++;
+				if (m_image_index < min_image_index || m_image_index > max_image_index) {
+					m_image_index = min_image_index;
+				}
 			}
 		}
 
@@ -363,32 +330,27 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		if (shooting && gotpower()) {
-			if (m_image_index > 12)
-				m_image_index = 9;
-			img = bIShooting[m_image_index];
-		} else {
-			img = bI[m_image_index];
-		}
+		img = bI[m_image_index];
+		System.out.println(m_image_index);
 
 		int w = DIMENSION * m_width;
 		int h = m_height;
-		if (!invincible) {
+//		if (!invincible) {
 			if (m_direction.toString().equals("E")) {
 				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
 			} else {
 				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
 			}
-		} else {
-			if (paintInvincible) {
-				if (m_direction.toString().equals("E")) {
-					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
-				} else {
-					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
-				}
-			}
-			paintInvincible = !paintInvincible;
-		}
+//		} else {
+//			if (paintInvincible) {
+//				if (m_direction.toString().equals("E")) {
+//					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+//				} else {
+//					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+//				}
+//			}
+//			paintInvincible = !paintInvincible;
+//		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);

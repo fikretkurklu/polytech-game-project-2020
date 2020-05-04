@@ -72,6 +72,8 @@ public abstract class Character extends Entity {
 		m_projectiles = new LinkedList<Projectile>();
 
 		m_model = model;
+		
+		m_key = null;
 
 		m_image_index = 0;
 
@@ -290,4 +292,24 @@ public abstract class Character extends Entity {
 			}
 		}
 	}
+	
+	@Override
+	public boolean key(int keyCode) {
+		if (keyCode == Controller.K_Q) {
+			return qPressed;
+		} else if (keyCode == Controller.K_Z) {
+			return zPressed;
+		} else if (keyCode == Controller.K_D) {
+			return dPressed;
+		} else if (keyCode == Controller.K_SPACE) {
+			return espPressed;
+		} else if (keyCode == Controller.K_A) {
+			return aPressed;
+		} else if (keyCode == Controller.K_E) {
+			return ePressed;
+		} else if (keyCode == Controller.K_V)
+			return vPressed;
+		return false;
+	}
+
 }
