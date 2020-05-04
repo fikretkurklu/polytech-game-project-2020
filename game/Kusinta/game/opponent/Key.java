@@ -15,7 +15,7 @@ import game.Coord;
 import game.Model;
 import environnement.Element;
 
-public class Key extends Entity {
+public abstract class Key extends Entity {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
@@ -38,11 +38,6 @@ public class Key extends Entity {
 		m_coord.setX(x);
 		m_coord.setY(y);
 
-		m_image = loadImage("resources/Room/dropable/Golden_Key.png");
-
-		m_width = m_image.getWidth(null);
-		m_height = m_image.getHeight(null);
-
 		m_model = model;
 
 		m_time = 0;
@@ -58,15 +53,6 @@ public class Key extends Entity {
 		if (playerHitBox.contains(m_coord.X() + (w / 2), m_coord.Y() - (h / 2))) {
 			return true;
 		}
-
-		return false;
-	}
-
-	@Override
-	public boolean wizz(Direction dir) {
-		m_model.m_player.setKey(this);
-		m_model.setKey(null);
-		m_model.m_room.getDoor().setVisible(true);
 
 		return false;
 	}

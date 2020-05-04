@@ -15,9 +15,11 @@ import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
 import opponent.WalkingOpponent;
+import opponent.BossKey;
 import opponent.Coin;
 import opponent.FlyingOpponent;
 import opponent.Key;
+import opponent.NormalKey;
 import opponent.Opponent;
 import hud.HUD;
 import player.Player;
@@ -63,6 +65,7 @@ public class Model {
 	public HUD m_hud;
 
 	public Key m_key;
+	public BossKey m_bossKey;
 	public Coin m_coin;
 	float diametre;
 
@@ -70,6 +73,7 @@ public class Model {
 		m_view = view;
 		m_width = w;
 		m_height = h;
+		
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
@@ -79,25 +83,33 @@ public class Model {
 		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
+		
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
+		
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this, 100, 100, 1000, 100, 5));
 		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this, 100, 100, 1000, 100, 5));
+		
 		setCenterScreenPlayer();
 		setVillageEnv();
 
 		diametre = 0;
 		
 		m_key = null;
+		m_bossKey = null;
 		
-		Key key = new Key(keyDropAutomaton, 0, 0, this);
+		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
+		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
+		
 		m_opponents.get(0).setKey(key);
+		m_opponents.get(1).setKey(bKey);
 	}
 
 	private void switchPlayer() {
@@ -159,6 +171,9 @@ public class Model {
 		if(m_key != null) {
 			m_key.tick(elapsed);
 		}
+		if(m_bossKey != null) {
+			m_bossKey.tick(elapsed);
+		}
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
@@ -185,6 +200,10 @@ public class Model {
 			
 			if(m_key != null) {
 				m_key.paint(gp);
+			}
+			
+			if(m_bossKey != null) {
+				m_bossKey.paint(gp);
 			}
 			
 			for (Coin coin: m_coins) {
@@ -295,6 +314,10 @@ public class Model {
 	
 	public void setKey(Key key) {
 		m_key = key;
+	}
+	
+	public void setBossKey(BossKey key) {
+		m_bossKey = key;
 	}
 
 }
