@@ -104,7 +104,7 @@ public class Underworld {
 
 	private void generateGhosts(Ghost[] ghosts) {
 		String[] dirs = { "N", "E", "W", "S" };
-		Direction dir = new Direction(dirs[(int) (Math.random() * dirs.length)]);
+		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
 		int x, y;
 		for (int i = 0; i < ghosts.length; i++) {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
