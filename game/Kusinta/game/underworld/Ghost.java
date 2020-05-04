@@ -77,7 +77,7 @@ public class Ghost extends Entity {
 	@Override
 	public boolean turn(Direction dir) {
 		boolean flag = false;
-		Direction randDir = dirs[(int) (Math.random()*3)];;
+		Direction randDir = dirs[(int) (Math.random()*3)];
 		if (m_direction ==  Direction.W) {
 			if (randDir == Direction.W) {
 				m_direction = Direction.E;
@@ -362,7 +362,7 @@ public class Ghost extends Entity {
 		if (isAttacking) {
 			isAttacking = false;
 			m_image_index = 0;
-//			m_direction.setDirection((dirs[(int) (Math.random() * 3)]));
+			m_direction = dirs[(int) (Math.random()*3)];
 		}
 	}
 
