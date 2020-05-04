@@ -15,7 +15,7 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
-	public final static int MAX_GHOSTS = 10;
+	public final static int MAX_GHOSTS = 3;
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
@@ -103,8 +103,8 @@ public class Underworld {
 	public static final int YMIN = 172;
 
 	private void generateGhosts(Ghost[] ghosts) {
-		String[] dirs = { "N", "E", "W", "S" };
-		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
+//		String[] dirs = { "N", "E", "W", "S" };
+//		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
 		int x, y;
 		for (int i = 0; i < ghosts.length; i++) {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
@@ -114,9 +114,7 @@ public class Underworld {
 				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
-			ghosts[i] = new Ghost(dir, new Coord(x, y), ghostAutomaton, m_model);
-			if (dir == Direction.W)
-				ghosts[i].leftOrientation = true;
+			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model);
 		}
 	}
 
