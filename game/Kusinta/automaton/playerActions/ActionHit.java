@@ -9,7 +9,7 @@ public class ActionHit extends Action {
 	
 	public ActionHit(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionHit(Direction direction, int percentage) {

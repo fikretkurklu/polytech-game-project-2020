@@ -21,6 +21,7 @@
 package game;
 
 import java.awt.Graphics;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -50,26 +51,26 @@ public class Controller implements GameCanvasListener {
 		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
 		System.out.println("   modifiers=" + e.getModifiersEx());
 		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.mode == Model.VILLAGE) {
+		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
 			m_game.m_model.m_village.Clicked();
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (m_game.m_model.mode == Model.UNDERWORLD) {
-			m_game.m_model.m_player.setPressed((int) 'v', true);
+		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
+			m_game.m_model.m_underworld.m_player.setPressed((int) 'v', true);
 			return;
 		}
-		if (m_game.m_model.mode == Model.ROOM) {
+		if (m_game.m_model.actualMode == Model.mode.ROOM) {
 			m_game.m_model.m_player.setPressed((int) ' ', true);
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (m_game.m_model.mode == Model.UNDERWORLD) {
-			m_game.m_model.m_player.setPressed((int) 'v', false);
+		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
+			m_game.m_model.m_underworld.m_player.setPressed((int) 'v', false);
 			return;
 		}
 		m_game.m_model.m_player.setPressed((int) ' ', false);
@@ -103,7 +104,7 @@ public class Controller implements GameCanvasListener {
 //		System.out.println("   modifiers=" + e.getModifiersEx());
 //		System.out.println("   buttons=" + e.getButton());
 		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
-		if (m_game.m_model.mode == Model.VILLAGE) {
+		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
 			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
 		}
 	}
@@ -114,12 +115,32 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
+		switch (m_game.m_model.actualMode) {
+		case ROOM:
+			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), true);
+			break;
+		case GAMEOVER:
+		case VILLAGE:
+			break;
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
+		switch (m_game.m_model.actualMode) {
+		case ROOM:
+			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), false);
+			break;
+		case GAMEOVER:
+		case VILLAGE:
+			break;
+		}
 	}
 
 	@Override

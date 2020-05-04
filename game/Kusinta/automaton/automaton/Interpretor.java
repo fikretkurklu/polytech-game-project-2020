@@ -39,19 +39,29 @@ public class Interpretor implements IVisitor {
 		String name = cat.toString();
 		switch(name) {
 			case "A":
+				return automaton.Category.A;
 			case "C" :
+				return automaton.Category.C;
 			case "D" :
+				return automaton.Category.D;
 			case "G" :
+				return automaton.Category.G;
 			case "J" :
+				return automaton.Category.J;
 			case "M" :
+				return automaton.Category.M;
 			case "O" :
+				return automaton.Category.O;
 			case "P" :
+				return automaton.Category.P;
 			case "T" :
+				return automaton.Category.T;
 			case "V" :
+				return automaton.Category.V;
 			case "@" :
+				return automaton.Category.AT;
 			case "_" :
-				return new automaton.Category(name);
-				
+				return automaton.Category.UNDERSCORE;
 			default :
 				return null;
 		}
@@ -62,20 +72,31 @@ public class Interpretor implements IVisitor {
 		String name = dir.toString();
 		switch(name) {
 			case "N":
+				return automaton.Direction.N;
 			case "E" :
+				return automaton.Direction.E;
 			case "W" :
+				return automaton.Direction.W;
 			case "S" :
+				return automaton.Direction.S;
 			case "F" : // Front
+				return automaton.Direction.F;
 			case "B" : // Back
+				return automaton.Direction.B;
 			case "L" : // On my left
+				return automaton.Direction.L;
 			case "R" : // On my right
+				return automaton.Direction.R;
 			case "H" : // Here
+				return automaton.Direction.H;
 			case "NE" :
+				return automaton.Direction.NE;
 			case "NW" :
+				return automaton.Direction.NW;
 			case "SE" :
+				return automaton.Direction.SE;
 			case "SW" :
-				return new automaton.Direction(name);
-				
+				return automaton.Direction.SW;
 			default :
 				return null;
 		}

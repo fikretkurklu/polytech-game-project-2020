@@ -43,14 +43,16 @@ public class Automaton {
 			for (int i = 0; i < transitions.length; i++) {
 				if (transitions[i].m_condition.eval(e)) {
 					Action actions[] = (Action[]) transitions[i].m_actions;
-					if (actions.length == 1)
+					if (actions.length == 1) {
 						actions[0].apply(e);
-					else if (actions.length > 1)
+					} else if (actions.length > 1) {
 						randomAction(actions).apply(e);
-					if (transitions[i].finalState.getName().equals("_"))
+					}
+					if (transitions[i].finalState.getName().equals("_")) {
 						e.setCurrentState(randomState(mapTransitions));
-					else
+					} else {
 						e.setCurrentState(transitions[i].finalState);
+					}
 					return;
 				}
 			}

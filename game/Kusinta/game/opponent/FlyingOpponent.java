@@ -209,7 +209,7 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.mode == m_model.ROOM) {
+		if (m_model.actualMode == Model.mode.ROOM) {
 			boolean d = m_model.getPlayer().gotpower();
 			if (d) {
 
@@ -257,7 +257,7 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 
-		if (dir.toString().equals("H") && m_model.mode == m_model.ROOM) {
+		if (dir.toString().equals("H") && m_model.actualMode == Model.mode.ROOM) {
 			int xHB = m_model.getPlayer().getHitBox().x;
 			int yHB = m_model.getPlayer().getHitBox().y;
 			int widthHB = m_model.getPlayer().getHitBox().width;

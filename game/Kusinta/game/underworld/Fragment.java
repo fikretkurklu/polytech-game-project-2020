@@ -25,9 +25,9 @@ public class Fragment extends Element{
 	public Fragment(Automaton automaton, Coord coord, Model model) {
 		super(false, true, coord, automaton);
 		m_model = model;
-		m_width = (int) (Element.SIZE / 2);
-		m_height = (int) (Element.SIZE / 2);
-		hitBox = new Rectangle(m_coord.X() - (int)(Element.SIZE/1.5), m_coord.Y() - (int)(Element.SIZE/1.5), Element.SIZE * 2, Element.SIZE * 2);
+		m_width = (int) (SIZE / 2);
+		m_height = (int) (SIZE / 2);
+		hitBox = new Rectangle(m_coord.X() - (int)(SIZE/1.5), m_coord.Y() - (int)(SIZE/1.5), SIZE * 2, SIZE * 2);
 		try {
 			m_images = m_model.loadSprite(UnderworldParam.fragmentSprite, 3, 3);
 		} catch (IOException e) {

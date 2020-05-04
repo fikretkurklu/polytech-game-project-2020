@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import automaton.*;
 import game.Model;
+import game.Model.mode;
 import opponent.BossKey;
 import projectile.Arrow;
 import room.Door;
@@ -148,12 +149,8 @@ public class Player extends Character {
 
 	@Override
 	public boolean pop(Direction dir) {
-		try {
-			reset();
-			m_model.setVillageEnv();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		reset();
+		m_model.switchEnv(mode.VILLAGE);
 		return true;
 	}
 

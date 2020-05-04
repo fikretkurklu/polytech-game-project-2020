@@ -189,7 +189,7 @@ public class WalkingOpponent extends Opponent {
 					return true;
 				}
 
-			} else if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
+			} else if (cat.toString().equals("A") && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x,
 							hitBox.y + hitBox.height / 2)) {
@@ -206,7 +206,7 @@ public class WalkingOpponent extends Opponent {
 						|| !m_model.m_room.isBlocked(hitBox.x - 5, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
-			} else if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
+			} else if (cat.toString().equals("A") && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.x - 5, hitBox.y + hitBox.height / 2)) {
 						return true;
@@ -214,7 +214,7 @@ public class WalkingOpponent extends Opponent {
 				}
 			}
 		} else if (dir.toString().equals("H")) {
-			if (cat.toString().equals("A") && m_model.mode == m_model.ROOM) {
+			if (cat.toString().equals("A") && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					int xHB = m_model.getPlayer().getHitBox().x;
 					int yHB = m_model.getPlayer().getHitBox().y;
@@ -238,7 +238,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.mode == m_model.ROOM) {
+		if (m_model.actualMode == Model.mode.ROOM) {
 			if (m_model.getPlayer().gotpower()) {
 				int xPlayer = m_model.getPlayer().getCoord().X();
 				int yPlayer = m_model.getPlayer().getCoord().Y();

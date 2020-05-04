@@ -3,6 +3,7 @@ package village;
 import java.awt.Graphics;
 
 import game.Model;
+import game.Model.mode;
 import player.Player;
 
 public class Village {
@@ -137,6 +138,6 @@ public class Village {
 	}
 
 	public static void leaveVillage() throws Exception {
-		m_model.setRoomEnv();
+		m_model.switchEnv(mode.ROOM);
 	}
 }

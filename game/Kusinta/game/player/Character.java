@@ -63,7 +63,7 @@ public abstract class Character extends Entity {
 		super(automaton);
 		
 		setStat(attackSpeed, maxLife, resistance, strength);
-		setCurrentStat(attackSpeed, maxLife, resistance, strength);
+		setCurrentStat(attackSpeed, life, resistance, strength);
 		
 		m_coord = new Coord(x,y);
 		
@@ -111,7 +111,7 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
-		if (!m_direction.toString().equals(dir.toString()))
+		if (dir != m_direction)
 			m_direction = dir;
 		return true;
 	}
