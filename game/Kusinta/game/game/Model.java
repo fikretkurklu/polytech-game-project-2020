@@ -131,8 +131,6 @@ public class Model {
 		if (!(m_player instanceof Player)) {
 			switchPlayer();
 		}
-		
-		m_player.reset();
 
 		m_village = null;
 		mode = ROOM;
