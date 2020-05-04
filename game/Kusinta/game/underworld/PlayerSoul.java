@@ -55,8 +55,8 @@ public class PlayerSoul extends Character {
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
-		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
+	public PlayerSoul(Automaton automaton, Coord C, Direction dir, Model model) throws IOException {
+		super(automaton, C, dir, model, 100, 100, 0, 0, 0);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;

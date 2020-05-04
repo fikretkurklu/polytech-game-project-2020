@@ -64,12 +64,6 @@ public class Coin extends Entity {
 
 			m_width = m_image.getWidth(null);
 			m_height = m_image.getHeight(null);
-
-			/*
-			 * int size = m_width / 4; for (int i = 0; i< m_images.length; i++) {
-			 * m_images[i] = m_images[i].getScaledInstance(size, size,
-			 * java.awt.Image.SCALE_SMOOTH); }
-			 */
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +85,7 @@ public class Coin extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		m_model.m_player.setMoney(m_model.m_player.getMoney() + m_value);
+		m_model.m_player.setMoney(m_value);
 		m_model.removeCoin(this);
 
 		return false;

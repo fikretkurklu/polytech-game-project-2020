@@ -14,13 +14,7 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
-import opponent.WalkingOpponent;
-import opponent.BossKey;
-import opponent.Coin;
-import opponent.FlyingOpponent;
-import opponent.Key;
-import opponent.NormalKey;
-import opponent.Opponent;
+import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -48,7 +42,6 @@ public class Model {
 	public mode actualMode;
 
 	private AutomatonLibrary m_AL;
-	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
@@ -80,7 +73,6 @@ public class Model {
 		m_height = h;
 
 		m_AL = new AutomatonLibrary();
-		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
@@ -90,8 +82,7 @@ public class Model {
 		lureAutomaton = m_AL.getAutomaton("Lure");
 
 		start();
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), Direction.E,
-				this);
+		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -99,8 +90,8 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(600, 1700), new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(), new Direction("E"), this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
@@ -118,14 +109,21 @@ public class Model {
 	}
 
 	public void switchEnv(mode m) {
+		qPressed = false;
+		zPressed = false;
+		dPressed = false;
+		espPressed = false;
+		aPressed = false;
+		ePressed = false;
+		vPressed = false;
 		try {
 			switch (m) {
 			case ROOM:
 				m_village = null;
 				break;
 			case UNDERWORLD:
-				m_underworld.setPlayer(new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
-						m_underworld.getStartCoord().Y(), Direction.E, this));
+				m_underworld.setPlayer(
+						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, this));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -197,7 +195,7 @@ public class Model {
 		}
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
-		//m_underworld.tick(elapsed);
+		// m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {

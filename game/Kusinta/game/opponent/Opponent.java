@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import automaton.Automaton;
 import automaton.Direction;
 import environnement.Element;
+import game.Coord;
 import game.Model;
 import player.Character;
 import projectile.Arrow;
@@ -28,9 +29,9 @@ public abstract class Opponent extends Character {
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
 
-	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
+	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
-		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
+		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
 		m_key = null;
 

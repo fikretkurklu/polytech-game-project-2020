@@ -68,14 +68,14 @@ public abstract class Character extends Entity {
 	protected long m_ratio_x, m_ratio_y, m_time;
 	protected int y_gravity;
 
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
+	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
 		setCurrentStat(attackSpeed, life, resistance, strength);
 
-		m_coord = new Coord(x, y);
+		m_coord = new Coord(C);
 
 		m_direction = dir;
 

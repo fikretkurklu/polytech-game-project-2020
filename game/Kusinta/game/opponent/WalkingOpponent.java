@@ -9,6 +9,7 @@ import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
 import environnement.Element;
+import game.Coord;
 import game.Model;
 
 public class WalkingOpponent extends Opponent {
@@ -30,23 +31,18 @@ public class WalkingOpponent extends Opponent {
 
 	boolean alreadyMove;
 
-	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
+	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
-		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
-		int a = x;
-		int b = y;
-		while (m_model.m_room.isBlocked(a, b)) {
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
+		while (m_model.m_room.isBlocked(m_coord)) {
 			int c = m_model.m_room.getWitdh();
 			int d = m_model.m_room.getWitdh();
-			a = (int) (Math.random() * (c + 1));
-			b = (int) (Math.random() * (d + 1));
+			m_coord.setCoord((int) (Math.random() * (c + 1)),(int) (Math.random() * (d + 1)));
 		}
-		while (!m_model.m_room.isBlocked(a, b)) {
-			b += 40;
+		while (!m_model.m_room.isBlocked(m_coord)) {
+			m_coord.translateY(40);
 		}
-		int yCor = m_model.m_room.blockTop(a, b);
-		m_coord.setX(a);
-		m_coord.setY(yCor);
+		m_coord.setY(m_model.m_room.blockTop(m_coord));
 
 		SPEED_MOVE = 2;
 
