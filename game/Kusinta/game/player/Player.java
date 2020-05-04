@@ -145,6 +145,7 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		try {
+			reset();
 			m_model.setVillageEnv();
 		} catch (Exception e) {
 			e.printStackTrace();
