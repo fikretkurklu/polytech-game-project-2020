@@ -19,23 +19,12 @@ public class Player extends Character {
 	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
 	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
 
-	double G = 9.81;
-	double ACCELERATION_JUMP = 1.8;
-
 	int SPEED_WALK = 2;
 	int SPEED_WALK_TICK = 4;
 
 	int DIMENSION;
 
-	boolean falling, jumping, shooting, invincible, paintInvincible;
-
-	int y_gravity;
-	int dt_y;
-	double speed_y;
-
-	long m_ratio_x, m_ratio_y;
-
-	long m_time;
+	boolean shooting, invincible, paintInvincible;
 
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
@@ -94,7 +83,7 @@ public class Player extends Character {
 	public boolean move(Direction dir) { // bouger
 
 		if (!shooting && !jumping) {
-			setImageIndex(8,13);
+			setImageIndex(8, 13);
 		}
 
 		int m_x = m_coord.X();
@@ -128,10 +117,10 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
-				setImageIndex(120,123);
+				setImageIndex(120, 123);
 				if ((qPressed || dPressed) && m_image_index <= 123)
 					setImageIndex(114, 117);
-					m_image_index = m_image_index + 6;
+				m_image_index = m_image_index + 6;
 			} else {
 				setImageIndex(15, 23);
 				m_image_index = 16;
@@ -141,7 +130,7 @@ public class Player extends Character {
 			falling = true;
 
 			m_time = m_ratio_y;
-			gravity(m_time);
+			super.jump(dir);
 		}
 
 		return true;
@@ -152,38 +141,6 @@ public class Player extends Character {
 		reset();
 		m_model.switchEnv(mode.VILLAGE);
 		return true;
-	}
-
-	private void gravity(long t) {
-		if (falling) {
-			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
-					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
-					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
-				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
-				hitBox.translate(0, -(m_coord.Y() - botBlock));
-				m_coord.setY(botBlock);
-				y_gravity = m_coord.Y();
-				jumping = false;
-				t = (long) 0.1;
-				m_time = t;
-			}
-
-			if (!jumping && !shooting)
-				m_image_index = 23;
-
-			double C;
-			if (jumping) {
-				C = ACCELERATION_JUMP;
-			} else {
-				C = 0;
-			}
-
-			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
-			hitBox.translate(0, -(m_coord.Y() - newY));
-			m_coord.setY(newY);
-		} else {
-			m_time = 0;
-		}
 	}
 
 	public boolean pick(Direction dir) {
@@ -225,33 +182,10 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+		super.tick(elapsed);
+
 		boolean moving = qPressed || dPressed;
 
-		m_ratio_x = elapsed;
-		m_ratio_y = elapsed;
-		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
-			if (!falling) {
-				y_gravity = m_coord.Y();
-				m_time = 0;
-			} else {
-				m_time += elapsed;
-			}
-			falling = true;
-			if (m_time >= 10)
-				gravity(m_time);
-		} else if (falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
-			hitBox.translate(0, -(m_coord.Y() - topBlock));
-			m_coord.setY(topBlock);
-			falling = false;
-			jumping = false;
-		}
-		if (!falling) {
-			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - 5)) {
-				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - 5);
-				m_coord.setY(blockTop);
-			}
-		}
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
 			if (m_invincibleElapsed > 1000) {
@@ -280,15 +214,14 @@ public class Player extends Character {
 					shoot();
 				} else if (jumping && !shooting && m_image_index == 17) {
 					m_image_index = 22;
-				} else if (falling && m_image_index == 23) {
-					m_image_index = 23;
+				} else if ((falling && !jumping) || (jumping && m_image_index == 23)) {
+					setImageIndex(23, 23);
 				} else {
 					m_image_index++;
 				}
 
 				if (!shooting && !falling && !moving) {
 					setImageIndex(0, 3);
-
 				}
 
 				if (m_image_index < min_image_index || m_image_index > max_image_index) {
@@ -317,7 +250,7 @@ public class Player extends Character {
 	}
 
 	public void paint(Graphics g) {
-		
+
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
@@ -355,10 +288,6 @@ public class Player extends Character {
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
-	}
-
-	public boolean checkBlock(int x, int y) {
-		return m_model.m_room.isBlocked(x, y);
 	}
 
 	public void setGravity(int g) {
@@ -435,9 +364,9 @@ public class Player extends Character {
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
 	}
-	
+
 	public void setImageIndex(int min, int max) {
-		if(min_image_index != min || max_image_index != max) {
+		if (min_image_index != min || max_image_index != max) {
 			m_imageElapsed = 200;
 		}
 		min_image_index = min;

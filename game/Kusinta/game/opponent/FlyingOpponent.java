@@ -23,9 +23,6 @@ public class FlyingOpponent extends Opponent {
 	Image[] flight;
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
-
-	int SPEED_WALK_TICK = 4;
-	long m_moveElapsed;
 	
 	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 
@@ -163,11 +160,7 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void tick(long elapsed) {
-		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
-			m_automaton.step(this);
-		}
+		super.tick(elapsed);
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;

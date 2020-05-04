@@ -30,9 +30,6 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	boolean alreadyMove;
-
-	int SPEED_WALK_TICK = 4;
-	long m_moveElapsed;
 	
 	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 	
@@ -91,8 +88,8 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		// Draw hitbox
-		gp.setColor(Color.blue);
-		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		gp.setColor(Color.blue);
+//		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		Image image = null;
 		switch (m_state) {
@@ -141,11 +138,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public void tick(long elapsed) {
-		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
-			m_automaton.step(this);
-		}
+		super.tick(elapsed);
 
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {

@@ -16,7 +16,7 @@ import projectile.Arrow;
 public abstract class Opponent extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	
+
 	protected boolean moving;
 
 	protected Arrow collidedWith;
@@ -24,24 +24,29 @@ public abstract class Opponent extends Character {
 	Key m_key;
 
 	int m_width, m_height;
+	
+	int SPEED_WALK_TICK = 4;
+	long m_moveElapsed;
 
 	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
 		m_key = null;
-		
+
 		moving = false;
 	}
 
 	@Override
 	public void tick(long elapsed) {
-		m_automaton.step(this);
-	}
-
-	@Override
-	public void setPressed(int keyChar, boolean b) {
-		// TODO Auto-generated method stub
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
+		if(this instanceof WalkingOpponent) {
+			super.tick(elapsed);
+		}
 	}
 
 	public Image loadImage(String path) throws Exception {

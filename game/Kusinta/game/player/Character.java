@@ -27,16 +27,22 @@ import projectile.Projectile;
 
 public abstract class Character extends Entity {
 
+	double G = 9.81;
+	double ACCELERATION_JUMP = 1.8;
+
 	public Model m_model;
 	protected Direction m_direction;
-	public static enum CurrentStat { Resistance, Strength, Attackspeed, MaxLife, Life };
+
+	public static enum CurrentStat {
+		Resistance, Strength, Attackspeed, MaxLife, Life
+	};
 
 	int MAX_LIFE = 100;
-	
+
 	protected boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
 
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
-	
+
 	int m_width, m_height;
 
 	protected LinkedList<Projectile> m_projectiles;
@@ -47,32 +53,36 @@ public abstract class Character extends Entity {
 	protected Character collidingWith;
 
 	protected Rectangle hitBox;
-	
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
-	
+
 	public HashMap<Stats, Integer> m_defaultStatMap;
 
 	protected Image imageProjectile;
 	protected Image[] imageProjectiles;
-	
+
 	public Key m_key;
-	
-	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life, int attackSpeed, int resistance, int strength) throws IOException {
+
+	protected boolean falling, jumping;
+	protected long m_ratio_x, m_ratio_y, m_time;
+	protected int y_gravity;
+
+	public Character(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
+			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton);
-		
+
 		setStat(attackSpeed, maxLife, resistance, strength);
 		setCurrentStat(attackSpeed, life, resistance, strength);
-		
-		m_coord = new Coord(x,y);
-		
+
+		m_coord = new Coord(x, y);
+
 		m_direction = dir;
-		
+
 		m_projectiles = new LinkedList<Projectile>();
 
 		m_model = model;
-		
+
 		m_key = null;
 
 		m_image_index = 0;
@@ -87,11 +97,11 @@ public abstract class Character extends Entity {
 			m_equipments.put(stuffTable[i], null);
 		}
 	}
-	
+
 	public Rectangle getHitBox() {
 		return hitBox;
 	}
-	
+
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -107,7 +117,6 @@ public abstract class Character extends Entity {
 	public LinkedList<Projectile> getProjectiles() {
 		return m_projectiles;
 	}
-	
 
 	@Override
 	public boolean turn(Direction dir) {
@@ -145,19 +154,80 @@ public abstract class Character extends Entity {
 	public int getMoney() {
 		return m_money;
 	}
-	
+
 	public int getStat(CurrentStat stat) {
 		return m_currentStatMap.get(stat);
 	}
-	
-	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment(){
+
+	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment() {
 		return m_equipments;
 	}
 
-	public abstract void tick(long elapsed);
+	@Override
+	public boolean jump(Direction dir) { // sauter
+		gravity(m_time);
+
+		return true;
+	}
+
+	public void tick(long elapsed) {
+		m_ratio_x = elapsed;
+		m_ratio_y = elapsed;
+		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
+			if (!falling) {
+				y_gravity = m_coord.Y();
+				m_time = 0;
+			} else {
+				m_time += elapsed;
+			}
+			falling = true;
+			if (m_time >= 10)
+				gravity(m_time);
+		} else if (falling) {
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			hitBox.translate(0, -(m_coord.Y() - topBlock));
+			m_coord.setY(topBlock);
+			falling = false;
+			jumping = false;
+		}
+		if (!falling) {
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - 5)) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - 5);
+				m_coord.setY(blockTop);
+			}
+		}
+	}
+
+	private void gravity(long t) {
+		if (falling) {
+			if (checkBlock(m_coord.X(), m_coord.Y() - m_height)
+					|| checkBlock((hitBox.x + hitBox.width) - 2, m_coord.Y() - m_height)
+					|| checkBlock(hitBox.x + 2, m_coord.Y() - m_height)) {
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				hitBox.translate(0, -(m_coord.Y() - botBlock));
+				m_coord.setY(botBlock);
+				y_gravity = m_coord.Y();
+				jumping = false;
+				t = (long) 0.1;
+				m_time = t;
+			}
+
+			double C;
+			if (jumping) {
+				C = ACCELERATION_JUMP;
+			} else {
+				C = 0;
+			}
+
+			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
+			hitBox.translate(0, -(m_coord.Y() - newY));
+			m_coord.setY(newY);
+		} else {
+			m_time = 0;
+		}
+	}
 
 	public abstract void paint(Graphics gp);
-
 
 	public int getHeight() {
 		return m_height;
@@ -166,7 +236,7 @@ public abstract class Character extends Entity {
 	public int getLife() {
 		return (m_currentStatMap.get(CurrentStat.Life));
 	}
-	
+
 	public Equipment addEquipment(Equipment equipment) {
 		Stuff stuff = equipment.toStuff();
 		Equipment res = null;
@@ -182,7 +252,6 @@ public abstract class Character extends Entity {
 		m_currentStatMap.put(CurrentStat.Strength, m_defaultStatMap.get(Stats.Strengh));
 		m_currentStatMap.put(CurrentStat.MaxLife, m_defaultStatMap.get(Stats.Health));
 		m_currentStatMap.put(CurrentStat.Life, m_defaultStatMap.get(Stats.Health));
-		
 
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
@@ -191,21 +260,23 @@ public abstract class Character extends Entity {
 				int resistance = m_currentStatMap.get(CurrentStat.Resistance);
 				int strength = m_currentStatMap.get(CurrentStat.Strength);
 				int maxlife = m_currentStatMap.get(CurrentStat.MaxLife);
-				m_currentStatMap.put(CurrentStat.Attackspeed, attackSpeed+tmpEquipment.getModification(Stats.AttackSpeed));
-				m_currentStatMap.put(CurrentStat.Resistance, resistance+tmpEquipment.getModification(Stats.Resistance));
-				m_currentStatMap.put(CurrentStat.Strength, strength+tmpEquipment.getModification(Stats.Strengh));
-				m_currentStatMap.put(CurrentStat.MaxLife, maxlife+tmpEquipment.getModification(Stats.Health));
+				m_currentStatMap.put(CurrentStat.Attackspeed,
+						attackSpeed + tmpEquipment.getModification(Stats.AttackSpeed));
+				m_currentStatMap.put(CurrentStat.Resistance,
+						resistance + tmpEquipment.getModification(Stats.Resistance));
+				m_currentStatMap.put(CurrentStat.Strength, strength + tmpEquipment.getModification(Stats.Strengh));
+				m_currentStatMap.put(CurrentStat.MaxLife, maxlife + tmpEquipment.getModification(Stats.Health));
 			}
 			m_currentStatMap.put(CurrentStat.Life, m_currentStatMap.get(CurrentStat.MaxLife));
 		}
 		return res;
 	}
-	
+
 	public void removeEquipment(Equipment equipment) {
 		Stuff stuff = equipment.toStuff();
 		m_equipments.put(stuff, null);
 	}
-	
+
 	public void setStat(int attackspeed, int health, int resistance, int strength) {
 		m_defaultStatMap = new HashMap<>();
 		m_defaultStatMap.put(Stats.AttackSpeed, attackspeed);
@@ -213,7 +284,7 @@ public abstract class Character extends Entity {
 		m_defaultStatMap.put(Stats.Resistance, resistance);
 		m_defaultStatMap.put(Stats.Strengh, strength);
 	}
-	
+
 	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
 		m_currentStatMap = new HashMap<>();
 		int life = health;
@@ -223,17 +294,18 @@ public abstract class Character extends Entity {
 		m_currentStatMap.put(CurrentStat.Strength, strength);
 		m_currentStatMap.put(CurrentStat.Attackspeed, attackspeed);
 	}
-	
+
 	public void setMoney(int money) {
 		m_money += money;
 	}
-	
+
 	public void loadImageProjectile(String path) throws Exception {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
 			imageProjectile = ImageIO.read(imageFile);
-			double ratio = (double)imageProjectile.getHeight(null)/(double)imageProjectile.getWidth(null);
-			imageProjectile = imageProjectile.getScaledInstance((int)(1.5*Element.SIZE*ratio), (int)(1.5*Element.SIZE), 0);
+			double ratio = (double) imageProjectile.getHeight(null) / (double) imageProjectile.getWidth(null);
+			imageProjectile = imageProjectile.getScaledInstance((int) (1.5 * Element.SIZE * ratio),
+					(int) (1.5 * Element.SIZE), 0);
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
@@ -256,15 +328,15 @@ public abstract class Character extends Entity {
 
 		return moving;
 	}
-	
+
 	public Key getKey() {
 		return m_key;
 	}
-	
+
 	public void setKey(Key key) {
 		m_key = key;
 	}
-	
+
 	public void setPressed(int keyCode, boolean pressed) {
 		if (gotpower()) {
 			switch (keyCode) {
@@ -292,7 +364,7 @@ public abstract class Character extends Entity {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
@@ -310,6 +382,10 @@ public abstract class Character extends Entity {
 		} else if (keyCode == Controller.K_V)
 			return vPressed;
 		return false;
+	}
+
+	public boolean checkBlock(int x, int y) {
+		return m_model.m_room.isBlocked(x, y);
 	}
 
 }
