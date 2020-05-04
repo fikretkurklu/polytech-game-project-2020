@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
@@ -13,7 +14,12 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import opponent.WalkingOpponent;
+import opponent.BossKey;
+import opponent.Coin;
 import opponent.FlyingOpponent;
+import opponent.Key;
+import opponent.NormalKey;
 import opponent.Opponent;
 import hud.HUD;
 import player.Player;
@@ -25,147 +31,210 @@ import player.Character;
 
 public class Model {
 
-	public final static int VILLAGE = 0;
-	public final static int ROOM = 1;
-	public final static int UNDERWORLD = 2;
+//	public final static int VILLAGE = 0;
+//	public final static int ROOM = 1;
+//	public final static int UNDERWORLD = 2;
+
+	public static enum mode {
+		VILLAGE, ROOM, UNDERWORLD, GAMEOVER
+	};
 
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
 	public Character m_player;
-	Character m_playerSave;
 	View m_view;
-	public int mode;
+
+	public mode actualMode;
+
 	private AutomatonLibrary m_AL;
 	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
+	public Automaton walkingOpponentAutomaton;
+	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
+	public Automaton coinDropAutomaton;
+
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
+
 	boolean set = false;
 	LinkedList<Opponent> m_opponents;
+	LinkedList<Coin> m_coins;
+
 	public HUD m_hud;
+
+	public Key m_key;
+	public BossKey m_bossKey;
+	public Coin m_coin;
+	float diametre;
 
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
 		m_width = w;
 		m_height = h;
+
 		m_AL = new AutomatonLibrary();
 		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
+		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
+		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
+		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
+
 		start();
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
-				Direction.E, this);
+		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), Direction.E,
+				this);
 		int HUD_w = m_width / 3;
-		int HUD_h = m_height / 9;
+		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+
 		m_opponents = new LinkedList<Opponent>();
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, Direction.E, this, 100, 100, 1000, 100, 10));
-		setUnderworldEnv();
+		m_coins = new LinkedList<Coin>();
+
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+
+		
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
-		//setVillageEnv();
+
+		diametre = 0;
+
+		m_key = null;
+		m_bossKey = null;
+
+		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
+		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
+
+		m_opponents.get(0).setKey(key);
+		m_opponents.get(1).setKey(bKey);
 	}
 
-	private void switchPlayer() {
-		Character tmp = m_player;
-		m_player = m_playerSave;
-		m_playerSave = tmp;
+	public void switchEnv(mode m) {
+		try {
+			switch (m) {
+			case ROOM:
+				m_village = null;
+				break;
+			case UNDERWORLD:
+
+				m_underworld.m_player = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
+						m_underworld.getStartCoord().Y(), Direction.E, this);
+				break;
+			case VILLAGE:
+				m_village = new Village(m_width, m_height, this, (Player) m_player);
+				break;
+			case GAMEOVER:
+
+			}
+			actualMode = m;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height, this);
-		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
-				m_underworld.getStartCoord().Y(), Direction.E, this);
-		mode = ROOM;
-	}
-
-	public void setRoomEnv() throws Exception {
-		if (!(m_player instanceof Player)) {
-			switchPlayer();
-			m_player.reset();
-		}
-			
-		m_village = null;
-		mode = ROOM;
-	}
-
-	public void setUnderworldEnv() throws Exception {
-		if (!(m_player instanceof PlayerSoul))
-			switchPlayer();
-		mode = UNDERWORLD;
-	}
-
-	public void setVillageEnv() throws Exception {
-		m_village = new Village(m_width, m_height, this, (Player) m_player);
-		mode = VILLAGE;
 	}
 
 	public void setCenterScreenPlayer() {
-		x_decalage = m_width / 2 - m_player.getCoord().X();
-		y_decalage = m_height / 2 - m_player.getCoord().Y();
-		switch(mode) {
-		case ROOM :
+		switch (actualMode) {
+		case ROOM:
+			x_decalage = m_width / 2 - m_player.getCoord().X();
+			y_decalage = m_height / 2 - m_player.getCoord().Y();
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
-			} else if (- x_decalage > m_room.getWitdh() - m_width) {
+			} else if (-x_decalage > m_room.getWitdh() - m_width) {
 				x_decalage = -(m_room.getWitdh() - m_width);
 			}
 			if (m_y + y_decalage > 0) {
 				y_decalage = m_y;
-			} else if (- y_decalage > m_room.getHeight() - m_height) {
-				y_decalage = - (m_room.getHeight() - m_height);
+			} else if (-y_decalage > m_room.getHeight() - m_height) {
+				y_decalage = -(m_room.getHeight() - m_height);
 			}
 			break;
-		case UNDERWORLD : 
+		case UNDERWORLD:
+			x_decalage = m_width / 2 - m_underworld.m_player.getCoord().X();
+			y_decalage = m_height / 2 - m_underworld.m_player.getCoord().Y();
 			if (m_x + x_decalage > 0) {
 				x_decalage = -m_x;
-			} else if (- x_decalage > m_underworld.getWitdh() - m_width) {
+			} else if (-x_decalage > m_underworld.getWitdh() - m_width) {
 				x_decalage = -(m_underworld.getWitdh() - m_width);
 			}
 			if (m_y + y_decalage > 0) {
 				y_decalage = m_y;
-			} else if (- y_decalage > m_underworld.getHeight() - m_height) {
-				y_decalage = - (m_underworld.getHeight() - m_height);
+			} else if (-y_decalage > m_underworld.getHeight() - m_height) {
+				y_decalage = -(m_underworld.getHeight() - m_height);
 			}
 			break;
+		default:
+			x_decalage = 0;
+			y_decalage = 0;
 		}
 	}
 
 	public void tick(long elapsed) {
 		m_player.tick(elapsed);
-		switch (mode) {
-		case ROOM:
-			for (Opponent op : m_opponents) {
-				op.tick(elapsed);
-			}
-			m_hud.tick(elapsed);
-			m_room.tick(elapsed);
-			break;
-		case UNDERWORLD:
-			m_underworld.tick(elapsed);
-			break;
-		}
+//		if(m_key != null) {
+//			m_key.tick(elapsed);
+//		}
+//		if(m_bossKey != null) {
+//			m_bossKey.tick(elapsed);
+//		}
+//		for (Opponent op : m_opponents) {
+//			op.tick(elapsed);
+//		}
+//		for (Coin coin: m_coins) {
+//			coin.tick(elapsed);
+//		}
+//		m_hud.tick(elapsed);
+//		m_room.tick(elapsed);
+		m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
-		
+
 		m_width = width;
 		m_height = height;
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
-		switch (mode) {
+		switch (actualMode) {
 		case ROOM:
 			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
-			m_player.paint(gp);
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
+			}
+
+			if (m_key != null) {
+				m_key.paint(gp);
+			}
+
+			if (m_bossKey != null) {
+				m_bossKey.paint(gp);
+			}
+
+			for (Coin coin : m_coins) {
+				coin.paint(gp);
+			}
+
+			m_player.paint(gp);
+			if (!m_player.gotpower() && diametre > 0) {
+				g.setColor(Color.BLACK);
+				int x = (int) (m_player.getCoord().X() + x_decalage - diametre / 2);
+				int y = (int) ((m_player.getCoord().Y() + y_decalage) - (diametre / 2));
+				g.fillOval(x, y, (int) diametre, (int) diametre);
+				if (diametre >= m_view.getWidth() * 1.5) {
+					switchEnv(mode.UNDERWORLD);
+				}
+				diametre *= 1.5;
 			}
 			m_hud.paint(g);
 			break;
@@ -177,6 +246,7 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		}
+
 		gp.dispose();
 	}
 
@@ -218,17 +288,41 @@ public class Model {
 	public int getYDecalage() {
 		return y_decalage;
 	}
-	
-	public PlayerSoul getPlayerSoul() {
-		return (PlayerSoul)m_player;
+
+	public Character getPlayer() {
+		return m_player;
 	}
-	
-	public Player getPlayer() {
-		return (Player)m_player;
-	}
-	
-	public LinkedList<Opponent> getOpponent(){
+
+	public LinkedList<Opponent> getOpponent() {
 		return m_opponents;
 	}
-	
+
+	public void addCoin(Coin coin) {
+		m_coins.add(coin);
+	}
+
+	public void removeCoin(Coin coin) {
+		m_coins.remove(coin);
+	}
+
+	public View getView() {
+		return m_view;
+	}
+
+	public void setDiametre(float r) {
+		diametre = r;
+	}
+
+	public float getDiametre() {
+		return diametre;
+	}
+
+	public void setKey(Key key) {
+		m_key = key;
+	}
+
+	public void setBossKey(BossKey key) {
+		m_bossKey = key;
+	}
+
 }

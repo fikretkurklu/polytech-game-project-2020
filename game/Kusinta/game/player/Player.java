@@ -7,7 +7,10 @@ import java.awt.image.BufferedImage;
 import automaton.*;
 import game.Controller;
 import game.Model;
+import game.Model.mode;
+import opponent.BossKey;
 import projectile.Arrow;
+import room.Door;
 import environnement.Element;
 
 public class Player extends Character {
@@ -26,7 +29,7 @@ public class Player extends Character {
 	int DIMENSION;
 
 	boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed;
-	boolean falling, jumping, shooting;
+	boolean falling, jumping, shooting, invincible, paintInvincible;
 
 	int y_gravity;
 	int dt_y;
@@ -34,11 +37,13 @@ public class Player extends Character {
 
 	long m_ratio_x, m_ratio_y;
 
-	long m_time, m_shot_time;
+	long m_time;
 
 	BufferedImage[] bIShooting;
 	long m_imageElapsed;
-	long m_moveElapsed;
+	long m_moveElapsed, m_invincibleElapsed;
+
+	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 		super(automaton, x, y, dir, model, 100, 100, 1000, 0, 0);
@@ -59,13 +64,15 @@ public class Player extends Character {
 		hitBox = new Rectangle(m_x - (m_width / 2 + 3 * DIMENSION), m_y - (m_height), 2 * (m_width / 2 + 3 * DIMENSION),
 				m_height);
 
-		m_shot_time = System.currentTimeMillis();
-
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
+		m_invincibleElapsed = 0;
 
 		reset();
 		setMoney(10000);
+
+		m_key = null;
+		m_bossKey = null;
 	}
 
 	public void reset() {
@@ -81,6 +88,8 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
+		invincible = false;
+		paintInvincible = true;
 	}
 
 	@Override
@@ -140,11 +149,8 @@ public class Player extends Character {
 
 	@Override
 	public boolean pop(Direction dir) {
-		try {
-			m_model.setVillageEnv();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		reset();
+		m_model.switchEnv(mode.VILLAGE);
 		return true;
 	}
 
@@ -197,55 +203,71 @@ public class Player extends Character {
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
-		switch (keyCode) {
-		case Controller.K_Q:
-			qPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_Z:
-			zPressed = pressed;
-			break;
-		case Controller.K_D:
-			dPressed = pressed;
-			if (pressed) {
-				if (!shooting && !falling && !moving)
-					m_image_index = 8;
-				moving = true;
-			} else {
-				moving = false;
-				if (!falling && shooting && m_image_index > 7)
-					m_image_index = m_image_index - 6;
-			}
-			break;
-		case Controller.K_SPACE:
-			espPressed = pressed;
-			if (pressed) {
-				if (!shooting) {
-					if (jumping || falling || moving) {
-						m_image_index = 9;
-					} else {
-						m_image_index = 2;
+		if (gotpower()) {
+			switch (keyCode) {
+			case Controller.K_Q:
+				qPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_Z:
+				zPressed = pressed;
+				break;
+			case Controller.K_D:
+				dPressed = pressed;
+				if (pressed) {
+					if (!shooting && !falling && !moving)
+						m_image_index = 8;
+					moving = true;
+				} else {
+					moving = false;
+					if (!falling && shooting && m_image_index > 7)
+						m_image_index = m_image_index - 6;
+				}
+				break;
+			case Controller.K_SPACE:
+				espPressed = pressed;
+				if (pressed) {
+					if (!shooting) {
+						if (jumping || falling || moving) {
+							m_image_index = 9;
+						} else {
+							m_image_index = 2;
+						}
 					}
 				}
+				break;
+			case Controller.K_A:
+				aPressed = pressed;
+				break;
+			case Controller.K_E:
+				ePressed = pressed;
+				checkDoor();
+				break;
+			case Controller.K_V:
+				vPressed = pressed;
+				break;
 			}
-			break;
-		case Controller.K_A:
-			aPressed = pressed;
-			break;
-		case Controller.K_E:
-			ePressed = pressed;
-			break;
-		case Controller.K_V:
-			vPressed = pressed;
-			break;
+		}
+	}
+
+	private void checkDoor() {
+		boolean door;
+		Door d = m_model.m_room.getDoor();
+		Rectangle h = d.getHitBox();
+		int y1 = hitBox.y + 3 * hitBox.height / 4;
+		int y2 = hitBox.y + hitBox.height / 4;
+		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
+				|| h.contains(hitBox.x + hitBox.width, y2);
+		if (door && m_key != null) {
+			d.activate();
 		}
 	}
 
@@ -288,6 +310,19 @@ public class Player extends Character {
 			falling = false;
 			jumping = false;
 		}
+		if (!falling) {
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() - 5)) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() - 5);
+				m_coord.setY(blockTop);
+			}
+		}
+		if (invincible) {
+			m_invincibleElapsed += elapsed;
+			if (m_invincibleElapsed > 1000) {
+				invincible = false;
+				m_invincibleElapsed = 0;
+			}
+		}
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
@@ -295,12 +330,15 @@ public class Player extends Character {
 			attackspeed = m_currentStatMap.get(CurrentStat.Attackspeed);
 			attackspeed = 200 / (attackspeed / 1000);
 		}
+
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
 
 			if (!gotpower()) {
 				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
-
+				if (m_image_index == 68 && m_model.getDiametre() == 0) {
+					m_model.setDiametre(1);
+				}
 			} else if (shooting) {
 				m_image_index++;
 				if ((moving || falling || jumping) && m_image_index > 12) {
@@ -355,7 +393,7 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		if (shooting) {
+		if (shooting && gotpower()) {
 			if (m_image_index > 12)
 				m_image_index = 9;
 			img = bIShooting[m_image_index];
@@ -365,10 +403,21 @@ public class Player extends Character {
 
 		int w = DIMENSION * m_width;
 		int h = m_height;
-		if (m_direction.toString().equals("E")) {
-			g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+		if (!invincible) {
+			if (m_direction.toString().equals("E")) {
+				g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+			} else {
+				g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+			}
 		} else {
-			g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+			if (paintInvincible) {
+				if (m_direction.toString().equals("E")) {
+					g.drawImage(img, m_x - (w / 2), m_y - h, w, h, null);
+				} else {
+					g.drawImage(img, m_x + (w / 2), m_y - h, -w, h, null);
+				}
+			}
+			paintInvincible = !paintInvincible;
 		}
 
 		for (int i = 0; i < m_projectiles.size(); i++) {
@@ -384,9 +433,17 @@ public class Player extends Character {
 		G = g;
 	}
 
+	public void setMoney(int money) {
+		m_money = money;
+	}
+
+	public int getMoney() {
+		return m_money;
+	}
+
 	public void shoot() {
 		if (shooting) {
-			int m_x = m_coord.X();
+			int m_x = m_coord.X() + hitBox.width / 2;
 			int m_y = m_coord.Y() - m_height / 2;
 			Direction direc;
 			double angle;
@@ -413,7 +470,11 @@ public class Player extends Character {
 			shooting = false;
 
 			try {
-				addProjectile(m_x, m_y, angle, this, direc);
+				if (direc.toString().equals("E")) {
+					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
+				} else {
+					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -429,5 +490,17 @@ public class Player extends Character {
 		if (!gotpower())
 			m_image_index = 66;
 		return true;
+	}
+
+	public void loseLife(int l) {
+		if (!invincible) {
+			invincible = true;
+			paintInvincible = true;
+			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
+		}
+	}
+
+	public void setBossKey(BossKey key) {
+		m_bossKey = key;
 	}
 }

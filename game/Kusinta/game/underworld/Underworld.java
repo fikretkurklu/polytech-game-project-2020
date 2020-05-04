@@ -19,7 +19,10 @@ public class Underworld {
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
+	boolean playerCreated = false;
+	public boolean gameOver = false;
 
+	public PlayerSoul m_player;
 	AutomatonLibrary m_al;
 	String mapFile;
 	int m_width, m_height;
@@ -101,6 +104,11 @@ public class Underworld {
 	public static final int XMIN = 1290;
 	public static final int YMAX = 3784;
 	public static final int YMIN = 172;
+	
+	public void setPlayer(PlayerSoul player) {
+		m_player = player;
+		playerCreated = true;
+	}
 
 	private void generateGhosts(Ghost[] ghosts) {
 //		String[] dirs = { "N", "E", "W", "S" };
@@ -199,7 +207,7 @@ public class Underworld {
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
 		}
-		m_model.getPlayerSoul().paint(g);
+		m_player.paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
@@ -230,6 +238,7 @@ public class Underworld {
 				}
 				m_clouds[i].tick(elapsed);
 		}
+		m_player.tick(elapsed);
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);
 		}

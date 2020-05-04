@@ -118,7 +118,7 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		Coord lureCoord = m_model.getPlayerSoul().lure.getCoord();
+		Coord lureCoord = getPlayer().lure.getCoord();
 		return PopOrWizz(dir, lureCoord);
 	}
 
@@ -385,7 +385,7 @@ public class Ghost extends Entity {
 			if (isAttacking) {
 				if (m_image_index > 8) {
 					if (!isLure)
-						((PlayerSoul) getPlayer()).getDamage();
+						getPlayer().getDamage();
 					m_image_index = 3;
 				}
 			} else {
@@ -402,7 +402,7 @@ public class Ghost extends Entity {
 	}
 
 	PlayerSoul getPlayer() {
-		return m_model.getPlayerSoul();
+		return m_model.m_underworld.m_player;
 	}
 
 	Coord getBlockCoord(int x, int y) {
