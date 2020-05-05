@@ -35,8 +35,8 @@ Fleche (Init) {
 MagicProj (Init) {
   *(Init)
   | Cell(H,P) ? Explode() : ()
-  | Cell(H,V) ? Move : (Init)
   | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
 }
 
 Decor (Inactif) {                

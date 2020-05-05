@@ -124,16 +124,11 @@ public abstract class Entity {
 						return true;
 					}
 				} else if (cat == Category.O) {
-					x = hitBox.x + hitBox.width + 1 + X_MOVE;
+					x = hitBox.x + hitBox.width + X_MOVE;
 					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
 							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
 							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
-				} else if (cat == Category.V) {
-					x = hitBox.x + hitBox.width + 1 + X_MOVE;
-					return !(m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
-				}
+				} 
 				return false;
 			case Direction.Es:
 				if (cat == Category.O) {

@@ -39,11 +39,11 @@ public class MagicProjectile extends Projectile {
 		m_width = (int) (ratio * images[0].getWidth(null));
 
 		if (m_direction == Direction.E) {
-			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
-					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2)),
+					(int) (m_coord.Y()), 10, 10);
 		} else {
-			hitBox = new Rectangle((int) (m_coord.X() - (m_width / 2) * Math.cos(m_angle)),
-					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
+			hitBox = new Rectangle((int) (m_coord.X() - (m_width / 2)),
+					(int) (m_coord.Y()),10,10);
 		}
 
 		m_imageElapsed = 0;
@@ -71,6 +71,7 @@ public class MagicProjectile extends Projectile {
 				bg.drawImage(img, m_width, 0, -w, h, null);
 			}
 		}
+		bg.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		bg.dispose();
 
 	}
