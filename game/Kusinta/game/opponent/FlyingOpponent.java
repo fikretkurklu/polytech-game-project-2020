@@ -14,8 +14,6 @@ import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
 
-	public static final int SPEED_FLY = 2;
-
 	Image[] death;
 	Image[] flight;
 	Image[] attack;
@@ -63,6 +61,8 @@ public class FlyingOpponent extends Opponent {
 
 		m_moveElapsed = 0;
 
+		SPEED_MOVE = 2;
+
 	}
 
 	public boolean move(Direction dir) {
@@ -74,20 +74,12 @@ public class FlyingOpponent extends Opponent {
 			}
 			moving = true;
 
-			if (m_direction == Direction.E) {
-				m_x += SPEED_FLY;
-				hitBox.translate(m_x - m_coord.X(), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
-				}
-				m_coord.setX(m_x);
-			} else {
-				m_x -= SPEED_FLY;
-				hitBox.translate(-(m_coord.X() - m_x), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
-				}
-				m_coord.setX(m_x);
+			turn(dir);
+
+			super.move(dir);
+
+			if (collidedWith != null) {
+				collidedWith.getCoord().translate(m_coord.X() - m_x, 0);
 			}
 		}
 		return true;
@@ -148,8 +140,9 @@ public class FlyingOpponent extends Opponent {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 
-		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		// draw hitBox
+//		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
+//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
@@ -243,7 +236,8 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 
-		if (dir.toString().equals("H") && m_model.actualMode == Model.mode.ROOM) {
+		if (dir == Direction.H && m_model.actualMode == Model.mode.ROOM) {
+
 			int xHB = m_model.getPlayer().getHitBox().x;
 			int yHB = m_model.getPlayer().getHitBox().y;
 			int widthHB = m_model.getPlayer().getHitBox().width;
@@ -254,33 +248,34 @@ public class FlyingOpponent extends Opponent {
 					|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
 					|| hitBox.contains(xHB, yHB + heightHB / 2) || hitBox.contains(xHB + widthHB / 2, yHB)) {
 				collidingWith = m_model.getPlayer();
+
 				return true;
 			}
 			return false;
-		}
+		} else if (dir == Direction.E) {
 
-		if (m_direction.toString().equals(dir.toString())) {
-			if (dir== Direction.E) {
+			int x = hitBox.x + hitBox.width + 1;
+			if ((m_model.m_room.isBlocked(x + SPEED_MOVE, hitBox.y + hitBox.height / 2)
+					|| m_model.m_room.isBlocked(x + SPEED_MOVE, hitBox.y + hitBox.height - 1)
+					|| m_model.m_room.isBlocked(x + SPEED_MOVE, hitBox.y + 1))) {
 
-				int x = hitBox.x + hitBox.width + 1;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-					return true;
-				} else {
-					return false;
-				}
-			} else if (dir.toString().equals("W")) {
-				int x = hitBox.x;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-					return true;
-				} else {
-					return false;
-				}
+				return true;
+			} else {
+				return false;
+			}
+		} else if (dir == Direction.W) {
+
+			int x = hitBox.x;
+			if ((m_model.m_room.isBlocked(x - SPEED_MOVE, hitBox.y + hitBox.height / 2)
+					|| m_model.m_room.isBlocked(x - SPEED_MOVE, hitBox.y + hitBox.height - 1)
+					|| m_model.m_room.isBlocked(x - SPEED_MOVE, hitBox.y + 1))) {
+
+				return true;
+			} else {
+				return false;
 			}
 		}
+
 		return false;
 	}
 }

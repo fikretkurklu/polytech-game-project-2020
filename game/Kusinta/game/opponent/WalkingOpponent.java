@@ -85,8 +85,8 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		// Draw hitbox
-		gp.setColor(Color.blue);
-		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		gp.setColor(Color.blue);
+//		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		Image image = null;
 		switch (m_state) {
@@ -277,7 +277,7 @@ public class WalkingOpponent extends Opponent {
 				super.move(dir);
 
 				if (collidedWith != null) {
-					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
+					collidedWith.getCoord().translate( m_coord.X() - m_x, 0);
 				}
 			}
 		}

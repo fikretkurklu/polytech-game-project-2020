@@ -37,15 +37,21 @@ Decor (Inactif) {
   | True ? : (Inactif)
 }
 
-FlyingOpponents (Init) {
-*(Init)
-  | Cell(H, A) ? Power : (Init)  
+FlyingOpponents (East) {
+*(East)
+  | Cell(H, A) ? Power : (East)  
   | ! GotPower() ? Explode() : ()        
-  | Cell(E, O) ? Turn(W) : (Init)
-  | Cell(W, O) ? Turn(E) : (Init)
-  | Closest(A, E) ? Egg(E) : (Init)
-  | Closest(A, W) ? Egg(W) : (Init)
-  | True ? Move(E) : (Init) 
+  | Cell(E, O) ? Turn(W) : (West)
+  | Closest(A, E) ? Egg(E) : (East)
+  | Closest(A, W) ? Egg(W) : (East)
+  | True ? Move(E) : (East) 
+ *(West)
+  | Cell(H, A) ? Power : (West)  
+  | ! GotPower() ? Explode() : ()        
+  | Cell(W, O) ? Turn(E) : (East)
+  | Closest(A, E) ? Egg(E) : (West)
+  | Closest(A, W) ? Egg(W) : (West)
+  | True ? Move(W) : (West) 
 }
 
 WalkingOpponents (East) {
