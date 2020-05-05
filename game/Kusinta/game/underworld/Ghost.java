@@ -30,7 +30,7 @@ public class Ghost extends Entity {
 
 	Image m_images[];
 	long m_imageElapsed;
-	int m_width, m_height = SIZE;
+	int m_width = SIZE, m_height = SIZE;
 	boolean leftOrientation, movingUp, movingDown, move;
 	int m_image_index;
 	boolean isAttacking = false, isFollowing = false, isLure;
@@ -132,6 +132,9 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
+/*		if (getPlayer().hidden) {
+			return false;
+		}*/
 		quitAttackMode();
 		int d = 0;
 		if (cat == Category.A || cat == Category.C) {
@@ -425,9 +428,9 @@ public class Ghost extends Entity {
 	}
 
 	public boolean gotstuff() {
-		boolean res = m_model.m_underworld.playerCreated && !getPlayer().escapedOrDead;
+		boolean res = m_model.m_underworld.playerCreated && !getPlayer().escapedOrDead && !getPlayer().hidden;
 		if (!res) {
-			isAttacking = false;
+			quitAttackMode();
 		}
 		return res;
 	}
