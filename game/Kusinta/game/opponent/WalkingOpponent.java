@@ -46,8 +46,10 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if (dir.toString().equals("E")) {
-			if (cat.toString().equals("O")) {
+		String direc = dir.toString();
+		String categ = cat.toString();
+		if (direc.equals("E")) {
+			if (categ.equals("O")) {
 				if (!m_model.m_room.isBlocked(m_coord.X() - hitBox.x / 2, m_coord.Y() + 1)
 						|| m_model.m_room.isBlocked(m_coord.X() - hitBox.x / 2, m_coord.Y() - m_height / 2)
 						|| m_model.m_room.isBlocked(m_coord.X() - hitBox.x / 2, m_coord.Y() - 1)

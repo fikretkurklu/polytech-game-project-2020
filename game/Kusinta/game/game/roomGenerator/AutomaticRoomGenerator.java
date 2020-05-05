@@ -197,7 +197,6 @@ public class AutomaticRoomGenerator {
 
 	}
 
-
 	/*
 	 * 
 	 * This method checks the room and add the required changes
@@ -586,11 +585,9 @@ public class AutomaticRoomGenerator {
 	 * 
 	 */
 
-	public void changeBlock(int i, int j) {
-		String blockType = "";
+	public void changeBlock(int i, int j, String blockType) {
 		m_elementTable[i][j] = blockType;
 	}
-
 
 	/*
 	 * 
@@ -609,8 +606,7 @@ public class AutomaticRoomGenerator {
 		}
 		writer.close();
 	}
-	
-	
+
 	/*
 	 * 
 	 * This method allow to create of File of the given name. If the name is already
@@ -620,9 +616,8 @@ public class AutomaticRoomGenerator {
 
 	public void getFile(int nbRoom) {
 		File f1 = new File("resources/Room/Sample/room" + nbRoom + ".sample");
-		file =  f1;
+		file = f1;
 	}
-
 
 	/*
 	 * 
@@ -664,44 +659,357 @@ public class AutomaticRoomGenerator {
 		}
 
 	}
-	
+
 	public void type1Generator(int row, int col) throws IOException {
-		AddPlatformHard(1+row, 0+col, 2, 4);
-		AddPlatformHard(3+row, 5+col, 2, 2);
-		AddPlatformHard(7+row, 2+col, 2, 3);
-		AddPlatformHard(5+row, 2+col, 2, 2);
-		AddPlatformHard(8+row, 0+col, 2, 2);
-		AddPlatformHard(8+row, 6+col, 2, 2);
-		AddPlatformHard(5+row, 8+col, 2, 2);
-		verification();
- 	}
-	
-	public void type2Generator(int row, int col) throws IOException {
-		AddPlatformHard(8+row, 4+col, 2, 2);
-		AddPlatformHard(6+row, 0+col, 3, 3);
-		AddPlatformHard(6+row, 7+col, 3, 3);
-		AddPlatformHard(4+row, 4+col, 2, 2);
-		AddPlatformHard(2+row, 1+col, 2, 2);
-		AddPlatformHard(1+row, 0+col, 2, 2);
-		AddPlatformHard(2+row, 7+col, 2, 2);
-		AddPlatformHard(1+row, 8+col, 2, 2);
-		AddPlatformHard(0+row, 4+col, 2, 2);
-		verification();
+		AddPlatformHard(8 + row, 5 + col, 2, 2);
+		AddPlatformHard(7 + row, 0 + col, 3, 2);
+		AddPlatformHard(5 + row, 8 + col, 2, 2);
+		AddPlatformHard(3 + row, 5 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 4);
+	}
+
+	public void type2Generator(int row, int col) {
+		AddPlatformHard(8 + row, 4 + col, 2, 2);
+		AddPlatformHard(6 + row, 0 + col, 2, 3);
+		AddPlatformHard(6 + row, 7 + col, 2, 3);
+		AddPlatformHard(3 + row, 4 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 2);
+		AddPlatformHard(2 + row, 8 + col, 2, 2);
+	}
+
+	public void type3Generator(int row, int col) throws IOException {
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(5 + row, 0 + col, 3, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 2);
+		AddPlatformHard(2 + row, 6 + col, 2, 2);
+		AddPlatformHard(0 + row, 8 + col, 2, 2);
+	}
+
+	public void type4Generator(int row, int col) {
+		AddPlatformHard(8 + row, 5 + col, 2, 4);
+		AddPlatformHard(5 + row, 1 + col, 2, 3);
+		AddPlatformHard(2 + row, 6 + col, 2, 3);
+		AddPlatformHard(2 + row, 1 + col, 3, 2);
+	}
+
+	public void type5Generator(int row, int col) {
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(6 + row, 0 + col, 2, 6);
+		AddPlatformHard(4 + row, 0 + col, 2, 4);
+		AddPlatformHard(2 + row, 0 + col, 2, 2);
+		AddPlatformHard(2 + row, 6 + col, 2, 2);
+	}
+
+	public void type6Generator(int row, int col) {
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(8 + row, 5 + col, 2, 3);
+		AddPlatformHard(6 + row, 2 + col, 2, 2);
+		AddPlatformHard(3 + row, 5 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 3);
+		AddPlatformHard(2 + row, 6 + col, 2, 4);
+		AddPlatformHard(0 + row, 6 + col, 2, 2);
+	}
+
+	public void leftElevator1(int row, int col) {
+		AddPlatformHard(9 + row, 3 + col, 2, 4);
+		AddPlatformHard(7 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 2 + col, 2, 3);
+		AddPlatformHard(4 + row, 2 + col, 2, 2);
+		AddPlatformHard(3 + row, 1 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 2);
+		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+	}
+
+	public void leftElevator2(int row, int col) {
+		AddPlatformHard(9 + row, 3 + col, 2, 4);
+		AddPlatformHard(8 + row, 7 + col, 2, 3);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 4 + col, 2, 2);
+		AddPlatformHard(3 + row, 0 + col, 2, 4);
+		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+	}
+
+	public void leftElevator3(int row, int col) {
+		AddPlatformHard(9 + row, 3 + col, 2, 4);
+		AddPlatformHard(8 + row, 6 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 2);
+		AddPlatformHard(3 + row, 1 + col, 3, 2);
+		AddPlatformHard(2 + row, 6 + col, 2, 4);
+		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(0 + row, 5 + col, 2, 2);
+		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+	}
+
+	public void rightElevator1(int row, int col) {
+		AddPlatformHard(9 + row, 6 + col, 2, 4);
+		AddPlatformHard(6 + row, 0 + col, 2, 4);
+		AddPlatformHard(7 + row, 7 + col, 2, 3);
+		AddPlatformHard(4 + row, 0 + col, 2, 2);
+		AddPlatformHard(2 + row, 3 + col, 2, 2);
+		AddPlatformHard(1 + row, 4 + col, 2, 2);
+		AddPlatformHard(0 + row, 5 + col, 2, 2);
+		AddPlatformHard(-1 + row, 6 + col, 2, 4);
+	}
+
+	public void rightElevator2(int row, int col) {
+		AddPlatformHard(9 + row, 6 + col, 2, 4);
+		AddPlatformHard(7 + row, 8 + col, 2, 2);
+		AddPlatformHard(6 + row, 0 + col, 2, 5);
+		AddPlatformHard(3 + row, 6 + col, 2, 4);
+		AddPlatformHard(2 + row, 0 + col, 2, 4);
+		AddPlatformHard(0 + row, 1 + col, 2, 2);
+		AddPlatformHard(-1 + row, 6 + col, 2, 4);
+	}
+
+	public void rightElevator3(int row, int col) {
+		AddPlatformHard(9 + row, 6 + col, 2, 4);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 0 + col, 2, 6);
+		AddPlatformHard(3 + row, 1 + col, 2, 2);
+		AddPlatformHard(1 + row, 4 + col, 2, 6);
+		AddPlatformHard(-1 + row, 6 + col, 2, 4);
+	}
+
+	public void midPlatform1(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		int rand = (int) (Math.random() * 2);
+		switch (rand) {
+		case (1):
+			changeBlock(5 + row, 3 + col, "ES_WO");
+			break;
+		case (2):
+			changeBlock(5 + row, 7 + col, "ES_WO");
+			break;
+		}
+		// changeBlock(5 + row, 3 + col, "ES_WO");
+		// changeBlock(5 + row, 7 + col, "ES_WO");
+	}
+
+	public void midPlatform2(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 4);
+		int rand = (int) (Math.random() * 2);
+		switch (rand) {
+		case (1):
+			changeBlock(2 + row, 2 + col, "ES_FO");
+			break;
+		case (2):
+			changeBlock(2 + row, 6 + col, "ES_FO");
+			break;
+		}
+		// changeBlock(2 + row, 2 + col, "ES_FO");
+		// changeBlock(2 + row, 6 + col, "ES_FO");
+	}
+
+	public void midPlatform3(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 3);
+		AddPlatformHard(6 + row, 7 + col, 2, 3);
+		AddPlatformHard(4 + row, 3 + col, 3, 4);
+		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(1 + row, 8 + col, 2, 2);
+		changeBlock(1 + row, 4 + col, "ES_FO");
+	}
+
+	public void midPlatform4(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 1 + col, 2, 2);
+		AddPlatformHard(4 + row, 2 + col, 2, 2);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		int rand = (int) (Math.random() * 2);
+		switch (rand) {
+		case (1):
+			changeBlock(1 + row, 2 + col, "ES_FO");
+			break;
+		case (2):
+			changeBlock(1 + row, 7 + col, "ES_FO");
+			break;
+		}
+		// changeBlock(1 + row, 2 + col, "ES_FO");
+		// changeBlock(1 + row, 7 + col, "ES_FO");
+	}
+
+	public void midPlatform5(int row, int col) {
+		AddPlatformHard(8 + row, 3 + col, 2, 4);
+		AddPlatformHard(7 + row, 2 + col, 2, 2);
+		AddPlatformHard(7 + row, 6 + col, 2, 2);
+		AddPlatformHard(6 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 8 + col, 2, 2);
+		int rand = (int) (Math.random() * 2);
+		switch (rand) {
+		case (1):
+			changeBlock(1 + row, 3 + col, "ES_FO");
+			break;
+		case (2):
+			changeBlock(2 + row, 5 + col, "ES_FO");
+			break;
+		}
+		// changeBlock(1 + row, 3 + col, "ES_FO");
+		// changeBlock(2 + row, 5 + col, "ES_FO");
+	}
+
+	public void midPlatform6(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 5);
+		int rand = (int) (Math.random() * 2);
+		switch (rand) {
+		case (1):
+			changeBlock(4 + row, 2 + col, "ES_FO");
+			break;
+		case (2):
+			changeBlock(0 + row, 6 + col, "ES_FO");
+			break;
+		}
+		// changeBlock(4 + row, 2 + col, "ES_FO");
+		// changeBlock(0 + row, 6 + col, "ES_FO");
+	}
+
+	public void initial1(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		AddInitialpoint(5 + row, 5 + col);
+	}
+
+	public void initial2(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 4);
+		AddInitialpoint(4 + row, 3 + col);
+	}
+
+	public void initial3(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 3);
+		AddPlatformHard(6 + row, 7 + col, 2, 3);
+		AddPlatformHard(4 + row, 3 + col, 3, 4);
+		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(1 + row, 8 + col, 2, 2);
+		AddInitialpoint(3 + row, 5 + col);
+	}
+
+	public void initial4(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 1 + col, 2, 2);
+		AddPlatformHard(4 + row, 2 + col, 2, 2);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		AddInitialpoint(2 + row, 4 + col);
+	}
+
+	public void initial5(int row, int col) {
+		AddPlatformHard(8 + row, 3 + col, 2, 4);
+		AddPlatformHard(7 + row, 2 + col, 2, 2);
+		AddPlatformHard(7 + row, 6 + col, 2, 2);
+		AddPlatformHard(6 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 8 + col, 2, 2);
+		AddInitialpoint(7 + row, 4 + col);
+	}
+
+	public void initial6(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 5);
+		AddInitialpoint(1 + row, 1 + col);
+	}
+
+	public void door1(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		changeBlock(5 + row, 3 + col, "ES_WO");
+		changeBlock(5 + row, 7 + col, "ES_WO");
+		AddDoor(5 + row, 5 + col);
+	}
+
+	public void door2(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 4);
+		changeBlock(2 + row, 2 + col, "ES_FO");
+		changeBlock(2 + row, 6 + col, "ES_FO");
+		AddDoor(4 + row, 3 + col);
+	}
+
+	public void door3(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 3);
+		AddPlatformHard(6 + row, 7 + col, 2, 3);
+		AddPlatformHard(4 + row, 3 + col, 3, 4);
+		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(1 + row, 8 + col, 2, 2);
+		changeBlock(1 + row, 4 + col, "ES_FO");
+		AddDoor(3 + row, 5 + col);
+	}
+
+	public void door4(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 1 + col, 2, 2);
+		AddPlatformHard(4 + row, 2 + col, 2, 2);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		changeBlock(1 + row, 2 + col, "ES_FO");
+		changeBlock(1 + row, 7 + col, "ES_FO");
+		AddDoor(2 + row, 4 + col);
+	}
+
+	public void door5(int row, int col) {
+		AddPlatformHard(8 + row, 3 + col, 2, 4);
+		AddPlatformHard(7 + row, 2 + col, 2, 2);
+		AddPlatformHard(7 + row, 6 + col, 2, 2);
+		AddPlatformHard(6 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 0 + col, 2, 2);
+		AddPlatformHard(5 + row, 8 + col, 2, 2);
+		changeBlock(1 + row, 3 + col, "ES_FO");
+		changeBlock(2 + row, 5 + col, "ES_FO");
+		AddDoor(7 + row, 4 + col);
+	}
+
+	public void door6(int row, int col) {
+		AddPlatformHard(6 + row, 0 + col, 2, 10);
+		AddPlatformHard(4 + row, 6 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 5);
+		changeBlock(4 + row, 2 + col, "ES_FO");
+		changeBlock(0 + row, 6 + col, "ES_FO");
+		AddDoor(1 + row, 1 + col);
 	}
 
 	public static void main(String[] args) throws IOException {
-		AutomaticRoomGenerator Room = new AutomaticRoomGenerator(1, 30, 30);
+		AutomaticRoomGenerator Room = new AutomaticRoomGenerator(1, 36, 46);
 		Room.emptyMapGenerator();
-		Room.type1Generator(0+10, 0+10);
-		Room.type2Generator(0+10, 10+10);
-		Room.type2Generator(10+10, 0+10);
-		Room.type1Generator(10+10,10+10);
-		Room.AddInitialpoint(3+10, 4+10+10);
+		Room.leftElevator3(23, 3);
+		Room.rightElevator1(23, 33);
+		Room.midPlatform3(23, 13);
+		Room.midPlatform6(23, 23);
+		Room.leftElevator2(13, 3);
+		Room.initial2(13, 13);
+		Room.midPlatform5(13, 23);
+		Room.rightElevator2(13, 33);
+		Room.leftElevator1(3, 3);
+		Room.midPlatform1(3, 13);
+		Room.midPlatform4(3, 23);
+		Room.rightElevator3(3, 33);
+
+		/*
+		 * for (int i = 3; i < 33; i += 10) { for (int j = 3; j < 33; j += 10) { int
+		 * rand = (int) (Math.random() * 6) + 1; switch (rand) { case (1):
+		 * Room.type1Generator(i, j); break; case (2): Room.type2Generator(i, j); break;
+		 * case (3): Room.type3Generator(i, j); break; case (4): Room.type4Generator(i,
+		 * j); break; case (5): Room.type5Generator(i, j); break; case (6):
+		 * Room.type6Generator(i, j); break; } } }
+		 */
 		Room.AddCompleteBorder(3);
+		Room.verification();
 		Room.updateTextDocument();
 	}
 
 }
-
-	
-
