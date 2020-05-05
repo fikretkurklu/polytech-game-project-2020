@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
+import game.ImageLoader;
 import player.Player;
 import player.Character.CurrentStat;
 
@@ -20,13 +21,13 @@ public class HUDFont {
 	Rectangle fgRect;
 	long updateElpased;
 	
-	public HUDFont(int x, int y, int w, int h, Player p) {
+	public HUDFont(int x, int y, int w, int h, Player p) throws Exception {
 		m_x = x;
 		m_y = y;
 		m_width = w;
 		m_height = h;
 		m_player = p;
-		bg = HUD.loadImage(BG, w, h);
+		bg = ImageLoader.loadImage(BG, w, h);
 		hudCoin = new HUDCoin(w/5, h/2, w/2, h/2, p);
 		bgRect = new Rectangle(w/5, h /8, w/3*2, h/3);
 		updateBar();

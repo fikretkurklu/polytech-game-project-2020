@@ -3,6 +3,7 @@ package room;
 import automaton.Automaton;
 import environnement.Decor;
 import game.Coord;
+import game.ImageLoader;
 
 public class Stage extends Decor{
 
@@ -11,7 +12,7 @@ public class Stage extends Decor{
 		int n = (int) (Math.random() * 2) + 1;
 		String image_path = "resources/Room/decors/stage"+n+".png";
 		try {
-			super.loadImage(image_path);
+			__image = ImageLoader.loadImage(image_path, SIZE);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

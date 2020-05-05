@@ -9,7 +9,7 @@ public class ActionMove extends Action{
 	
 	public ActionMove(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionMove(Direction direction, int percentage) {

@@ -10,7 +10,7 @@ public class ActionJump extends Action {
 	
 	public ActionJump(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionJump(Direction direction, int percentage) {

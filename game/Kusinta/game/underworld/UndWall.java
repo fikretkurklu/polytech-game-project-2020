@@ -3,6 +3,7 @@ package underworld;
 import automaton.Automaton;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 
 public class UndWall extends Element{
 	
@@ -12,7 +13,7 @@ public class UndWall extends Element{
 		m_orientation = orientation;
 		String path = UWImageManager.get(m_orientation);
 		if (path != null) {
-			loadImage(path);
+			__image = ImageLoader.loadImage(path, SIZE);
 		}		
 	}
 }

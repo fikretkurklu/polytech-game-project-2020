@@ -211,6 +211,10 @@ public class Room {
 		}
 		return true;
 	}
+	
+	public boolean isBlocked(Coord C) {
+		return isBlocked(C.X(), C.Y());
+	}
 
 	public int blockTop(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
@@ -268,5 +272,9 @@ public class Room {
 			}
 		}
 		return null;
+	}
+
+	public int blockTop(Coord c) {
+		return blockTop(c.X(), c.Y());
 	}
 }

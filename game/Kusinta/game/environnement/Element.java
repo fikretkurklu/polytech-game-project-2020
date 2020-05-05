@@ -2,9 +2,6 @@ package environnement;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Entity;
@@ -41,25 +38,6 @@ public abstract class Element extends Entity{
 		m_coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
-	}
-
-	public void loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			__image = ImageIO.read(imageFile);
-			__image = __image.getScaledInstance(SIZE, SIZE, 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
-	public void loadImage(String path, int width, int height) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			__image = ImageIO.read(imageFile);
-			__image = __image.getScaledInstance(width, height, 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
 	}
 	
 	public void setCoord(Coord coord) {

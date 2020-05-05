@@ -5,6 +5,11 @@ Cloud (Init){
   * ()
 }
 
+Gate (Init){
+  * (Init)
+  | True ? : (Init)
+}
+
 Fragment (Init){	
   * (Init)
   | GotPower ? : (Init)
@@ -15,8 +20,11 @@ Fragment (Init){
 
 PlayerSoul (Init) {
   * (Init)
-  | Key(z) & Key(s) ? : (Init)
-  | Key(q) & Key(d) ? : (Init)
+  | ! GotPower ? Pop(S) : ()
+  | Closest(G,H) ? Pop(N) : ()
+  | Closest(O,H) ? : (Mv)
+  | True ? : (Mv)
+  * (Mv)
   | Key(z) & ! Cell(N,O) ? Move(N) : (Actions)
   | Key(s) & ! Cell(S,O) ? Move(S) : (Actions)
   | Key(q) & ! Cell(W,O) ? Move(W) : (Actions)
@@ -28,6 +36,7 @@ PlayerSoul (Init) {
   | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)
   | True ? : (Init)
+  * ()
 }
 
 Lure (Init){
@@ -36,26 +45,31 @@ Lure (Init){
 	*()
 }
 
-Ghost (State1){
+Ghost (State0){
+
+	*(State0)
+  |GotStuff ? : (State1)
+  |Cell(F, O) ? Turn : (ExtraMove0)     
+  |True ? Move : (State0)
 	*(State1)
   | Cell(N, A) ? Hit(N): (State1)
   | Cell(S, A) ? Hit(S): (State1)
   | Cell(E, A) ? Hit(E): (State1)
   | Cell(W, A) ? Hit(W): (State1)
-  | Cell(SE, A) ? Hit(SE): (State1)
   | Cell(NE, A) ? Hit(NE): (State1)
-  | Cell(SW, A) ? Hit(SW): (State1)
   | Cell(NW, A) ? Hit(NW): (State1)
+  | Cell(SE, A) ? Hit(SE): (State1)
+  | Cell(SW, A) ? Hit(SW): (State1)
   | Cell(H, A) ? Hit(H): (State1)
   | Cell(N, C) ? Hit(N): (State1)
   | Cell(S, C) ? Hit(S): (State1)
   | Cell(E, C) ? Hit(E): (State1)
   | Cell(W, C) ? Hit(W): (State1)
-  | Cell(SE, C) ? Hit(SE): (State1)
   | Cell(NE, C) ? Hit(NE): (State1)
-  | Cell(SW, C) ? Hit(SW): (State1)
   | Cell(NW, C) ? Hit(NW): (State1)
-  | Cell(H, C) ? Hit(H): (State1)
+  | Cell(SE, C) ? Hit(SE): (State1)
+  | Cell(SW, C) ? Hit(SW): (State1)
+  | Cell(H, C) ? Hit(S): (State1)
   | Closest(C, NE) ? Wizz(NE): (State1)
   | Closest(C, NW) ? Wizz(NW): (State1)
   | Closest(C, SE) ? Wizz(SE): (State1)
@@ -72,8 +86,10 @@ Ghost (State1){
   | Closest(A, W) ? Pop(W) : (State1)
   | Closest(A, S) ? Pop(S) : (State1)
   | Closest(A, E) ? Pop(E) : (State1)
-  | Cell(F, O) ? Turn : (ExtraMove)   
+  | Cell(F, O) ? Turn : (ExtraMove)  
   | True ? Move : (State1)
   *(ExtraMove)
   |True ? Move :(State1)
+  *(ExtraMove0)
+  |True ? Move :(State0)
 }
