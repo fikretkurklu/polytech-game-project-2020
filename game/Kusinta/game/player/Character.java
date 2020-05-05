@@ -433,7 +433,7 @@ public abstract class Character extends Entity {
 			m_projectiles.add(new Arrow(m_model.arrowAutomaton, x, y, angle, shooter, direction));
 			break;
 		case MAGIC_PROJECTILE:
-			m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, shooter, direction));
+			m_projectiles.add(new MagicProjectile(m_model.magicProjAutomaton, x, y, angle, shooter, direction));
 			break;
 		default:
 			break;

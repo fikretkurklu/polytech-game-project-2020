@@ -3,6 +3,7 @@ package projectile;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -34,10 +35,10 @@ public class Arrow extends Projectile {
 		m_width = image.getWidth(null);
 
 		if (m_direction == Direction.E) {
-			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
-			hitBox = new Coord((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
+			hitBox = new Rectangle((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
 					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))));
 		}
 
@@ -81,7 +82,7 @@ public class Arrow extends Projectile {
 		boolean c;
 		if (cat.toString().equals("_")) {
 			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
+					|| (m_model.m_room.isBlocked(hitBox.x, hitBox.y)));
 			if (c) {
 				m_State = State.HIT_STATE;
 				return true;
@@ -89,7 +90,7 @@ public class Arrow extends Projectile {
 
 			LinkedList<Opponent> opponents = m_model.getOpponent();
 			for (Opponent op : opponents) {
-				c = op.getHitBox().contains(hitBox.X(), hitBox.Y())
+				c = op.getHitBox().contains(hitBox.x, hitBox.y)
 						|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
 				if (c) {
 					m_State = State.HIT_STATE;
@@ -100,7 +101,7 @@ public class Arrow extends Projectile {
 			}
 		} else {
 			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
+					|| (m_model.m_room.isBlocked(hitBox.x, hitBox.y)));
 			if (m_State == State.HIT_STATE) {
 				return !c;
 			}

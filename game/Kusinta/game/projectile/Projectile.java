@@ -39,13 +39,11 @@ public abstract class Projectile extends Entity {
 
 	protected Character m_shooter;
 	protected Character collidingWith;
-	protected Model m_model;
 
 	protected long m_dead_time;
 
 	protected float m_alpha;
 
-	protected Coord hitBox;
 
 	protected BufferedImage bImage;
 
@@ -96,7 +94,9 @@ public abstract class Projectile extends Entity {
 	}
 
 	@Override
-	public abstract boolean cell(Direction dir, Category cat);
+	public boolean cell(Direction dir, Category cat) {
+		return super.cell(dir, cat);
+	}
 
 	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);

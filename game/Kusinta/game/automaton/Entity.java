@@ -20,8 +20,8 @@ public abstract class Entity {
 
 	protected int m_width, m_height;
 
-	protected int X_MOVE; 
-	
+	protected int X_MOVE;
+
 	public Entity() {
 	}
 
@@ -123,15 +123,24 @@ public abstract class Entity {
 							|| hitBox.contains(xHB + widthHB / 2, yHB)) {
 						return true;
 					}
+				} else if (cat == Category.O) {
+					x = hitBox.x + hitBox.width + 1 + X_MOVE;
+					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+				} else if (cat == Category.V) {
+					x = hitBox.x + hitBox.width + 1 + X_MOVE;
+					return !(m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
 				}
 				return false;
 			case Direction.Es:
-				x = hitBox.x + hitBox.width + 1 + X_MOVE;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-					return true;
-
+				if (cat == Category.O) {
+					x = hitBox.x + hitBox.width + 1 + X_MOVE;
+					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
 				}
 				return false;
 			case Direction.Ws:
@@ -148,6 +157,7 @@ public abstract class Entity {
 			}
 		}
 		return false;
+
 	}
 
 	public boolean closest(Category cat, Direction dir) {
