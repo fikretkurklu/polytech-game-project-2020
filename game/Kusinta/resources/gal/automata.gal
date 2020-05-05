@@ -64,18 +64,18 @@ FlyingOpponents (East) {
 
 WalkingOpponents (East) {
 *(East)
-  | Cell(H, A) ? Power : (East)
+  | Cell(H, P) ? Power : (East)
   | ! GotPower() ? Explode() : ()
-  | Cell(E, A) ? Wizz() : (East)
   | Cell(E, O) ? Turn(W) : (West)
-  | Closest(A, E) ? Pop(E) : (East)
+  | Cell(E, P) ? Wizz() : (East)
+  | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
-  | Cell(H, A) ? Power : (West)
+  | Cell(H, P) ? Power : (West)
   | ! GotPower() ? Explode() : ()
-  | Cell(W, A) ? Wizz() : (West)
   | Cell(W, O) ? Turn(E) : (East)
-  | Closest(A, W) ? Pop(W) : (West)
+  | Cell(W, P) ? Wizz() : (West)
+  | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
 }
 
