@@ -304,9 +304,9 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean egg(Direction dir) {
 		if (lureAvailable) {
-			int x = m_model.m_mouseCoord.X();
-			int y = m_model.m_mouseCoord.Y();
-			if (m_model.m_underworld.isBlocked(x, y))
+			int x = m_model.m_mouseCoord.X() - Lure.SIZE/2;
+			int y = m_model.m_mouseCoord.Y() - Lure.SIZE/2;
+			if (m_model.m_underworld.checkPosition(x, y, 0, Lure.SIZE))
 				return false;
 			lure = new Lure(m_model.lureAutomaton, new Coord(x,y) , 0, this, m_direction, m_model.m_underworld.lureImages, m_model);
 			lureAvailable = false;

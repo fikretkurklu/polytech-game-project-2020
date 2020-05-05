@@ -16,7 +16,8 @@ import projectile.Projectile;
 
 public class Lure extends Projectile {
 
-	public static final int SIZE = (int) Element.SIZE;
+	public static final int SIZE = Element.SIZE;
+	
 	Image m_images[];
 	boolean appearing, disapearing, disapered, normal;
 
@@ -39,27 +40,27 @@ public class Lure extends Projectile {
 		disapered = false;
 		m_imageElapsed = 0;
 		m_images = images;
-		setPosition();
+//		setPosition();
 	}
 
-	private void setPosition() {
-		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		int xUp = hitBox.x + (SIZE / 2);
-		int xDown = hitBox.x + (SIZE / 2);
-		int yRight = hitBox.y + (SIZE / 2);
-		int yLeft = hitBox.y + (SIZE / 2);
-
-		if (checkBlock(xUp, hitBox.y))
-			m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
-		if (checkBlock(xDown, hitBox.y + SIZE))
-			m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
-		if (checkBlock(hitBox.x + SIZE, yRight))
-			m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
-		if (checkBlock(hitBox.x, yLeft))
-			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
-		
-		hitBox.setLocation(m_coord.X(), m_coord.Y());
-	}
+//	private void setPosition() {
+//		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
+//		int xUp = hitBox.x + (SIZE / 2);
+//		int xDown = hitBox.x + (SIZE / 2);
+//		int yRight = hitBox.y + (SIZE / 2);
+//		int yLeft = hitBox.y + (SIZE / 2);
+//
+//		if (checkBlock(xUp, hitBox.y))
+//			m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+//		if (checkBlock(xDown, hitBox.y + SIZE))
+//			m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+//		if (checkBlock(hitBox.x + SIZE, yRight))
+//			m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+//		if (checkBlock(hitBox.x, yLeft))
+//			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+//		
+//		hitBox.setLocation(m_coord.X(), m_coord.Y());
+//	}
 
 	public void paint(Graphics g) {
 		if (m_images != null) {

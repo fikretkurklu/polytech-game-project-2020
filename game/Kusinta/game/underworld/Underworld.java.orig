@@ -37,7 +37,6 @@ public class Underworld {
 	int nbRow;
 	int nbCol;
 	Cloud[] m_clouds;
-	Iterator<Ghost> it;
 	LinkedList<Ghost> m_ghosts;
 	Fragment[] m_fragments;
 	Gate m_gate;
@@ -119,8 +118,13 @@ public class Underworld {
 	public static final int YMIN = 172;
 
 	private void generateGhosts() {
+<<<<<<< Updated upstream
 		for (int i = 0; i < 5; i++) {
 			addGhost();
+=======
+		for (int i = 0; i < MAX_GHOSTS; i++) {
+			m_ghosts.add(new Ghost(Direction.E, generatePosition(0, Element.SIZE), ghostAutomaton, m_model, ghostImages));
+>>>>>>> Stashed changes
 		}
 	}
 	
@@ -187,6 +191,7 @@ public class Underworld {
 //		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
 		int y_start = (-y_decalage / Element.SIZE) * nbCol;
 		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+
 		int x_start = (-x_decalage / Element.SIZE);
 		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
 		for (int i = y_start; i < y_end; i += nbCol) {
@@ -201,9 +206,11 @@ public class Underworld {
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
-		it = m_ghosts.iterator(); 
+		Iterator<Ghost> it = m_ghosts.iterator(); 
+		Ghost tmp;
 		while (it.hasNext()) {
-			it.next().paint(g);
+			tmp = it.next();
+			tmp.paint(g);
 		}
 		if (gateCreated)
 			m_gate.paint(g);
@@ -230,9 +237,11 @@ public class Underworld {
 				m_clouds[i].tick(elapsed);
 		}
 		m_player.tick(elapsed);
-		it = m_ghosts.iterator(); 
+		Iterator<Ghost> it = m_ghosts.iterator(); 
+		Ghost tmp;
 		while (it.hasNext()) {
-			it.next().tick(elapsed);
+			tmp = it.next();
+			tmp.tick(elapsed);
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].tick(elapsed);
@@ -298,7 +307,7 @@ public class Underworld {
 	}
 	
 	public void addGhost() {
-		m_ghosts.add(new Ghost(Direction.E, generatePosition(0 , Ghost.SIZE), ghostAutomaton, m_model, ghostImages));
+		m_ghosts.add(new Ghost(Direction.E, generatePosition(), ghostAutomaton, m_model, ghostImages));
 	}
 
 }
