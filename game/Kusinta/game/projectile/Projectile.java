@@ -21,8 +21,6 @@ public abstract class Projectile extends Entity {
 		ARROW, MAGIC_PROJECTILE
 	};
 
-	protected int SPEED = 9;
-
 	protected enum State {
 		OK_STATE, HIT_STATE
 	};
@@ -69,6 +67,8 @@ public abstract class Projectile extends Entity {
 		moving = 0;
 
 		m_strength = 15;
+		
+		X_MOVE = 9;
 
 	}
 
@@ -80,18 +80,17 @@ public abstract class Projectile extends Entity {
 
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
-				System.out.println("Test");
-				m_coord.setX((int) (m_coord.X() + SPEED * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
+				m_coord.setX((int) (m_coord.X() + X_MOVE * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
 			} else {
-				System.out.println("Test1");
-				m_coord.setX((int) (m_coord.X() - SPEED * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
+				m_coord.setX((int) (m_coord.X() - X_MOVE * Math.cos(m_angle)));
+				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
 			}
+			hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
 		}
 		moving = (moving + 1) % 3;
 
-		hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
+		
 
 		return true;
 	}
@@ -137,7 +136,7 @@ public abstract class Projectile extends Entity {
 	}
 
 	public void setSpeed(int speed) {
-		SPEED = speed;
+		X_MOVE = speed;
 	}
 
 	public abstract void paint(Graphics g);
