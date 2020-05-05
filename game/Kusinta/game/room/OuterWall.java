@@ -3,6 +3,7 @@ package room;
 import automaton.Automaton;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 
 public class OuterWall extends Element {
 
@@ -21,7 +22,7 @@ public class OuterWall extends Element {
 		m_orientation = orientation;
 		String path = OWImageManager.get(m_orientation);
 		if (path != null) {
-			loadImage(path);
+			__image = ImageLoader.loadImage(path, SIZE);
 		}		
 	}
 	

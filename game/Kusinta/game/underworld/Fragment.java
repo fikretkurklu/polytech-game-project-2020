@@ -9,6 +9,7 @@ import java.io.IOException;
 import automaton.Automaton;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 
 public class Fragment extends Element{
@@ -29,7 +30,7 @@ public class Fragment extends Element{
 		m_height = (int) (SIZE / 2);
 		hitBox = new Rectangle(m_coord.X() - (int)(SIZE/1.5), m_coord.Y() - (int)(SIZE/1.5), SIZE * 2, SIZE * 2);
 		try {
-			m_images = m_model.loadSprite(UnderworldParam.fragmentSprite, 3, 3);
+			m_images = ImageLoader.loadBufferedSprite(UnderworldParam.fragmentSprite, 3, 3);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

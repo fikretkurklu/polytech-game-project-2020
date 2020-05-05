@@ -42,25 +42,6 @@ public abstract class Element extends Entity{
 		__isVisible = isVisible;
 		__isSolid = isSolid;
 	}
-
-	public void loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			__image = ImageIO.read(imageFile);
-			__image = __image.getScaledInstance(SIZE, SIZE, 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
-	public void loadImage(String path, int width, int height) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			__image = ImageIO.read(imageFile);
-			__image = __image.getScaledInstance(width, height, 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
 	
 	public void setCoord(Coord coord) {
 		m_coord = coord;

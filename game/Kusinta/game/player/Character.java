@@ -327,17 +327,6 @@ public abstract class Character extends Entity {
 		m_money += money;
 	}
 
-	public void loadImageProjectile(String path) throws Exception {
-		File imageFile = new File(path);
-		if (imageFile.exists()) {
-			imageProjectile = ImageIO.read(imageFile);
-			double ratio = (double) imageProjectile.getHeight(null) / (double) imageProjectile.getWidth(null);
-			imageProjectile = imageProjectile.getScaledInstance((int) (1.5 * Element.SIZE * ratio),
-					(int) (1.5 * Element.SIZE), 0);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
 
 	public Image getProjectileImage() {
 		return imageProjectile;

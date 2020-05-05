@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import automaton.Automaton;
 import environnement.Decor;
 import game.Coord;
+import game.ImageLoader;
 
 public class Door extends Decor {
 
@@ -15,7 +16,7 @@ public class Door extends Decor {
 		super(false, false, true, coord, room, automaton);
 		String path = DImageManager.get("");
 		if (path != null) {
-			loadImage(path);
+			__image = ImageLoader.loadImage(path, SIZE);
 		}
 		m_width = (int) (__image.getWidth(null) * 1.5);
 		m_height = (int) (__image.getHeight(null) * 1.5);

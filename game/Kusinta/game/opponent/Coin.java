@@ -13,6 +13,7 @@ import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import hud.HUD;
 import environnement.Element;
@@ -59,7 +60,7 @@ public class Coin extends Entity {
 		aller = -1;
 
 		try {
-			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
+			m_images = ImageLoader.loadBufferedSprite(COIN_ICO_SPRITE, 1, 6);
 			m_image = m_images[0];
 
 			m_width = m_image.getWidth(null);
@@ -141,18 +142,6 @@ public class Coin extends Entity {
 
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
 		m_coord.setY(newY);
-	}
-
-	public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
 	}
 
 }

@@ -9,6 +9,7 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import projectile.Projectile.proj;
 
@@ -30,21 +31,21 @@ public class FlyingOpponent extends Opponent {
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
-			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png");
+			imageProjectiles[i] = ImageLoader.loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png", SIZE);
 		}
 		death = new Image[6];
 		for (int i = 0; i < 6; i++) {
-			death[i] = loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png");
+			death[i] = ImageLoader.loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png", SIZE);
 		}
 
 		flight = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			flight[i] = loadImage("resources/oppenent/jin/Flight" + (i + 1) + ".png");
+			flight[i] = ImageLoader.loadImage("resources/oppenent/jin/Flight" + (i + 1) + ".png", SIZE);
 		}
 
 		attack = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			attack[i] = loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png");
+			attack[i] = ImageLoader.loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png", SIZE);
 		}
 
 		m_width = flight[0].getWidth(null);
@@ -243,11 +244,14 @@ public class FlyingOpponent extends Opponent {
 			case Direction.Hs:
 				if (cat == Category.P) {
 					collidingWith = m_model.getPlayer();
+
 					return true;
 				}
 			}
+
 		}
 		return b;
+
 
 	}
 }

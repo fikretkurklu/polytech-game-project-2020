@@ -1,6 +1,7 @@
 package underworld;
 
 import game.Coord;
+import game.ImageLoader;
 import environnement.Element;
 
 public class UnderworldEmptySpace extends Element {
@@ -9,7 +10,7 @@ public class UnderworldEmptySpace extends Element {
 		super(false, true, coord);
 		String path = ESImageManager.get("");
 		if (path != null) {
-			loadImage(path);
+			__image = ImageLoader.loadImage(path, SIZE);
 		}
 	}
 }

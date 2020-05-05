@@ -16,6 +16,7 @@ import automaton.Direction;
 import automaton.Entity;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import underworld.PlayerSoul;
 
@@ -49,29 +50,7 @@ public class Ghost extends Entity {
 		m_coord = coord;
 		m_direction = dir;
 		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		loadImage();
-	}
-
-	private void loadImage() {
-		m_width = SIZE;
-		m_height = SIZE;
-		int len = UnderworldParam.ghostImage.length;
-		m_images = new Image[len];
-		File imageFile;
-		Image image;
-		m_image_index = 0;
-		m_imageElapsed = 0;
-		leftOrientation = false;
-		try {
-			for (int i = 0; i < len; i++) {
-				imageFile = new File(UnderworldParam.ghostImage[i]);
-				image = ImageIO.read(imageFile);
-				m_images[i] = image.getScaledInstance(SIZE, SIZE, 0);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ImageLoader.loadImageGhost(SIZE, m_width, m_height, m_image_index, m_imageElapsed, leftOrientation);
 	}
 
 	@Override

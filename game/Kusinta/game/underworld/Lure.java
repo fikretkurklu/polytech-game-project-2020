@@ -13,6 +13,7 @@ import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 import player.Character;
 import projectile.Projectile;
 
@@ -42,7 +43,7 @@ public class Lure extends Projectile {
 		disapearing = false;
 		disapered = false;
 		setPosition();
-		loadImage();
+		m_images = ImageLoader.loadImageLure(m_apparitionImages, m_disaparitionImages, sizeApearingAnimation, sizeAnimation, m_imageIndex, m_imageElapsed);
 	}
 
 	private void setPosition() {
@@ -62,29 +63,6 @@ public class Lure extends Projectile {
 			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 		
 		hitBox.setLocation(m_coord.X(), m_coord.Y());
-	}
-
-	private void loadImage() {
-		m_apparitionImages = new Image[sizeApearingAnimation];
-		m_disaparitionImages = new Image[sizeApearingAnimation];
-		m_images = new Image[sizeAnimation];
-		File imageFile;
-		m_imageIndex = 0;
-		m_imageElapsed = 0;
-		try {
-			for (int i = 0; i < sizeApearingAnimation; i++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[i]);
-				m_apparitionImages[i] = ImageIO.read(imageFile);
-				m_disaparitionImages[6 - i] = ImageIO.read(imageFile);
-			}
-			for (int j = 0; j < sizeAnimation; j++) {
-				imageFile = new File(UnderworldParam.lureImage[j]);
-				m_images[j] = ImageIO.read(imageFile);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void paint(Graphics g) {
