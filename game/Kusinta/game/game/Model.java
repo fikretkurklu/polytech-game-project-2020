@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
@@ -94,9 +95,8 @@ public class Model {
 		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+		
+		opponentCreator();
 
 		setCenterScreenPlayer();
 		setVillageEnv();
@@ -320,4 +320,15 @@ public class Model {
 		m_bossKey = key;
 	}
 
+	public void opponentCreator() throws Exception {
+		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
+		for (int i = 0; i < coordFO.length; i++) {
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i].X(), coordFO[i].Y(), new Direction("E"), this));
+		}
+		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+		for (int i = 0; i < coordWO.length; i++) {
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coordWO[i].X(), coordWO[i].Y(), new Direction("E"), this));
+		}
+	}
+	
 }

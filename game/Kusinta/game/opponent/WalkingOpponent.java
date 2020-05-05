@@ -37,19 +37,7 @@ public class WalkingOpponent extends Opponent {
 	public WalkingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
 	
 		super(automaton, x, y, dir, model,  100, 100, 1000, 100, 5);
-		int a = x;
-		int b = y;
-		while (m_model.m_room.isBlocked(a, b)) {
-			int c = m_model.m_room.getWitdh();
-			int d = m_model.m_room.getWitdh();
-			a = (int) (Math.random() * (c + 1));
-			b = (int) (Math.random() * (d + 1));
-		}
-		while (!m_model.m_room.isBlocked(a, b)) {
-			b += 40;
-		}
-		int yCor = m_model.m_room.blockTop(a, b);
-		m_coord.setX(a);
+		int yCor = m_model.m_room.blockBot(x, y);
 		m_coord.setY(yCor);
 
 		m_imageElapsed = 0;

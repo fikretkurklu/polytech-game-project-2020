@@ -726,7 +726,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 8 + col, 2, 2);
 		AddPlatformHard(5 + row, 4 + col, 2, 2);
 		AddPlatformHard(3 + row, 0 + col, 2, 4);
-		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
 	}
 
@@ -737,7 +737,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(5 + row, 3 + col, 2, 2);
 		AddPlatformHard(3 + row, 1 + col, 3, 2);
 		AddPlatformHard(2 + row, 6 + col, 2, 4);
-		AddPlatformHard(1 + row, 0 + col, 2, 2);
+		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(0 + row, 5 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
 	}
@@ -773,65 +773,67 @@ public class AutomaticRoomGenerator {
 	}
 
 	public void midPlatform1(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		int rand = (int) (Math.random() * 2);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		int rand = (int) (Math.random() * 2) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(5 + row, 3 + col, "ES_WO");
+			changeBlock(7 + row, 3 + col, "ES_WO");
 			break;
 		case (2):
-			changeBlock(5 + row, 7 + col, "ES_WO");
+			changeBlock(7 + row, 7 + col, "ES_WO");
 			break;
+		default:
+			changeBlock(7 + row, 3 + col, "ES_WO");
 		}
-		// changeBlock(5 + row, 3 + col, "ES_WO");
-		// changeBlock(5 + row, 7 + col, "ES_WO");
 	}
 
 	public void midPlatform2(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 3 + col, 2, 2);
-		AddPlatformHard(6 + row, 6 + col, 2, 4);
-		int rand = (int) (Math.random() * 2);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(7 + row, 3 + col, 2, 2);
+		AddPlatformHard(8 + row, 6 + col, 2, 4);
+		int rand = (int) (Math.random() * 2) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(2 + row, 2 + col, "ES_FO");
+			changeBlock(5 + row, 2 + col, "ES_FO");
 			break;
 		case (2):
-			changeBlock(2 + row, 6 + col, "ES_FO");
+			changeBlock(5 + row, 6 + col, "ES_FO");
 			break;
+		default:
+			changeBlock(5 + row, 2 + col, "ES_FO");
 		}
-		// changeBlock(2 + row, 2 + col, "ES_FO");
-		// changeBlock(2 + row, 6 + col, "ES_FO");
 	}
 
 	public void midPlatform3(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 3);
-		AddPlatformHard(6 + row, 7 + col, 2, 3);
-		AddPlatformHard(4 + row, 3 + col, 3, 4);
-		AddPlatformHard(1 + row, 0 + col, 2, 2);
-		AddPlatformHard(1 + row, 8 + col, 2, 2);
-		changeBlock(1 + row, 4 + col, "ES_FO");
+		AddPlatformHard(8 + row, 0 + col, 2, 3);
+		AddPlatformHard(8 + row, 7 + col, 2, 3);
+		AddPlatformHard(6 + row, 3 + col, 3, 4);
+		AddPlatformHard(3 + row, 0 + col, 2, 2);
+		AddPlatformHard(3 + row, 8 + col, 2, 2);
+		changeBlock(4 + row, 4 + col, "ES_FO");
 	}
 
 	public void midPlatform4(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(6 + row, 8 + col, 2, 2);
-		AddPlatformHard(5 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 1 + col, 2, 2);
-		AddPlatformHard(4 + row, 2 + col, 2, 2);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(3 + row, 3 + col, 2, 4);
-		int rand = (int) (Math.random() * 2);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(8 + row, 8 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 2 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 4);
+		int rand = (int) (Math.random() * 3) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(1 + row, 2 + col, "ES_FO");
+			changeBlock(4 + row, 2 + col, "ES_FO");
 			break;
 		case (2):
-			changeBlock(1 + row, 7 + col, "ES_FO");
+			changeBlock(4 + row, 7 + col, "ES_FO");
 			break;
+		case (3):
+			break;
+		default:
+			changeBlock(4 + row, 2 + col, "ES_FO");
 		}
-		// changeBlock(1 + row, 2 + col, "ES_FO");
-		// changeBlock(1 + row, 7 + col, "ES_FO");
 	}
 
 	public void midPlatform5(int row, int col) {
@@ -842,66 +844,70 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 7 + col, 2, 2);
 		AddPlatformHard(5 + row, 0 + col, 2, 2);
 		AddPlatformHard(5 + row, 8 + col, 2, 2);
-		int rand = (int) (Math.random() * 2);
+		int rand = (int) (Math.random() * 3) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(1 + row, 3 + col, "ES_FO");
+			changeBlock(2 + row, 3 + col, "ES_FO");
 			break;
 		case (2):
-			changeBlock(2 + row, 5 + col, "ES_FO");
+			changeBlock(3 + row, 5 + col, "ES_FO");
 			break;
+		case (3):
+			break;
+		default:
+			changeBlock(2 + row, 3 + col, "ES_FO");
 		}
-		// changeBlock(1 + row, 3 + col, "ES_FO");
-		// changeBlock(2 + row, 5 + col, "ES_FO");
 	}
 
 	public void midPlatform6(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 5);
-		int rand = (int) (Math.random() * 2);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(4 + row, 0 + col, 2, 5);
+		int rand = (int) (Math.random() * 3) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(4 + row, 2 + col, "ES_FO");
+			changeBlock(7 + row, 2 + col, "ES_WO");
 			break;
 		case (2):
-			changeBlock(0 + row, 6 + col, "ES_FO");
+			changeBlock(3 + row, 3 + col, "ES_WO");
 			break;
+		case (3):
+			break;
+		default:
+			changeBlock(7 + row, 2 + col, "ES_WO");
 		}
-		// changeBlock(4 + row, 2 + col, "ES_FO");
-		// changeBlock(0 + row, 6 + col, "ES_FO");
 	}
 
 	public void initial1(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		AddInitialpoint(5 + row, 5 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddInitialpoint(7 + row, 5 + col);
 	}
 
 	public void initial2(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 3 + col, 2, 2);
-		AddPlatformHard(6 + row, 6 + col, 2, 4);
-		AddInitialpoint(4 + row, 3 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(7 + row, 3 + col, 2, 2);
+		AddPlatformHard(8 + row, 6 + col, 2, 4);
+		AddInitialpoint(6 + row, 3 + col);
 	}
 
 	public void initial3(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 3);
-		AddPlatformHard(6 + row, 7 + col, 2, 3);
-		AddPlatformHard(4 + row, 3 + col, 3, 4);
-		AddPlatformHard(1 + row, 0 + col, 2, 2);
-		AddPlatformHard(1 + row, 8 + col, 2, 2);
-		AddInitialpoint(3 + row, 5 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 3);
+		AddPlatformHard(8 + row, 7 + col, 2, 3);
+		AddPlatformHard(6 + row, 3 + col, 3, 4);
+		AddPlatformHard(3 + row, 0 + col, 2, 2);
+		AddPlatformHard(3 + row, 8 + col, 2, 2);
+		AddInitialpoint(5 + row, 5 + col);
 	}
 
 	public void initial4(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(6 + row, 8 + col, 2, 2);
-		AddPlatformHard(5 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 1 + col, 2, 2);
-		AddPlatformHard(4 + row, 2 + col, 2, 2);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(3 + row, 3 + col, 2, 4);
-		AddInitialpoint(2 + row, 4 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(8 + row, 8 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 2 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 4);
+		AddInitialpoint(4 + row, 5 + col);
 	}
 
 	public void initial5(int row, int col) {
@@ -916,49 +922,49 @@ public class AutomaticRoomGenerator {
 	}
 
 	public void initial6(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 5);
-		AddInitialpoint(1 + row, 1 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(4 + row, 0 + col, 2, 5);
+		AddInitialpoint(3 + row, 1 + col);
 	}
 
 	public void door1(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		changeBlock(5 + row, 3 + col, "ES_WO");
-		changeBlock(5 + row, 7 + col, "ES_WO");
-		AddDoor(5 + row, 5 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		changeBlock(7 + row, 3 + col, "ES_WO");
+		changeBlock(7 + row, 7 + col, "ES_WO");
+		AddDoor(7 + row, 5 + col);
 	}
 
 	public void door2(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 3 + col, 2, 2);
-		AddPlatformHard(6 + row, 6 + col, 2, 4);
-		changeBlock(2 + row, 2 + col, "ES_FO");
-		changeBlock(2 + row, 6 + col, "ES_FO");
-		AddDoor(4 + row, 3 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(7 + row, 3 + col, 2, 2);
+		AddPlatformHard(8 + row, 6 + col, 2, 4);
+		changeBlock(5 + row, 2 + col, "ES_FO");
+		changeBlock(5 + row, 6 + col, "ES_FO");
+		AddDoor(6 + row, 3 + col);
 	}
 
 	public void door3(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 3);
-		AddPlatformHard(6 + row, 7 + col, 2, 3);
-		AddPlatformHard(4 + row, 3 + col, 3, 4);
-		AddPlatformHard(1 + row, 0 + col, 2, 2);
-		AddPlatformHard(1 + row, 8 + col, 2, 2);
-		changeBlock(1 + row, 4 + col, "ES_FO");
-		AddDoor(3 + row, 5 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 3);
+		AddPlatformHard(8 + row, 7 + col, 2, 3);
+		AddPlatformHard(6 + row, 3 + col, 3, 4);
+		AddPlatformHard(3 + row, 0 + col, 2, 2);
+		AddPlatformHard(3 + row, 8 + col, 2, 2);
+		changeBlock(4 + row, 4 + col, "ES_FO");
+		AddDoor(5 + row, 5 + col);
 	}
 
 	public void door4(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 2);
-		AddPlatformHard(6 + row, 8 + col, 2, 2);
-		AddPlatformHard(5 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 1 + col, 2, 2);
-		AddPlatformHard(4 + row, 2 + col, 2, 2);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(3 + row, 3 + col, 2, 4);
-		changeBlock(1 + row, 2 + col, "ES_FO");
-		changeBlock(1 + row, 7 + col, "ES_FO");
-		AddDoor(2 + row, 4 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(8 + row, 8 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 2 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 4);
+		changeBlock(4 + row, 2 + col, "ES_FO");
+		changeBlock(4 + row, 7 + col, "ES_FO");
+		AddDoor(4 + row, 4 + col);
 	}
 
 	public void door5(int row, int col) {
@@ -969,44 +975,182 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 7 + col, 2, 2);
 		AddPlatformHard(5 + row, 0 + col, 2, 2);
 		AddPlatformHard(5 + row, 8 + col, 2, 2);
-		changeBlock(1 + row, 3 + col, "ES_FO");
-		changeBlock(2 + row, 5 + col, "ES_FO");
+		changeBlock(2 + row, 3 + col, "ES_FO");
+		changeBlock(3 + row, 5 + col, "ES_FO");
 		AddDoor(7 + row, 4 + col);
 	}
 
 	public void door6(int row, int col) {
-		AddPlatformHard(6 + row, 0 + col, 2, 10);
-		AddPlatformHard(4 + row, 6 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 5);
-		changeBlock(4 + row, 2 + col, "ES_FO");
-		changeBlock(0 + row, 6 + col, "ES_FO");
-		AddDoor(1 + row, 1 + col);
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(4 + row, 0 + col, 2, 5);
+		changeBlock(7 + row, 2 + col, "ES_WO");
+		changeBlock(3 + row, 3 + col, "ES_WO");
+		AddDoor(3 + row, 1 + col);
 	}
 
 	public static void main(String[] args) throws IOException {
-		AutomaticRoomGenerator Room = new AutomaticRoomGenerator(1, 36, 46);
-		Room.emptyMapGenerator();
-		Room.leftElevator3(23, 3);
-		Room.rightElevator1(23, 33);
-		Room.midPlatform3(23, 13);
-		Room.midPlatform6(23, 23);
-		Room.leftElevator2(13, 3);
-		Room.initial2(13, 13);
-		Room.midPlatform5(13, 23);
-		Room.rightElevator2(13, 33);
-		Room.leftElevator1(3, 3);
-		Room.midPlatform1(3, 13);
-		Room.midPlatform4(3, 23);
-		Room.rightElevator3(3, 33);
+		int row = (int) (Math.random() * (6 - 3 + 1)) + 3;
+		int col = (int) (Math.random() * (10 - 3 + 1)) + 3;
+		int Elevator = 1;
+		int leftElevatorCol = 0;
+		int rightElevatorCol = -1;
+		int midElevatorCol = -1;
+		if (col > 3 && col <= 8) {
+			Elevator = 2;
+		} else if (col > 8) {
+			Elevator = 3;
+		}
 
-		/*
-		 * for (int i = 3; i < 33; i += 10) { for (int j = 3; j < 33; j += 10) { int
-		 * rand = (int) (Math.random() * 6) + 1; switch (rand) { case (1):
-		 * Room.type1Generator(i, j); break; case (2): Room.type2Generator(i, j); break;
-		 * case (3): Room.type3Generator(i, j); break; case (4): Room.type4Generator(i,
-		 * j); break; case (5): Room.type5Generator(i, j); break; case (6):
-		 * Room.type6Generator(i, j); break; } } }
-		 */
+		if (Elevator == 2) {
+			if (col == 5 || col == 6) {
+				leftElevatorCol = (int) (Math.random() * 2);
+				rightElevatorCol = (int) (Math.random() * 2) + (col - 3);
+			} else if (col > 6) {
+				leftElevatorCol = (int) (Math.random() * 3);
+				rightElevatorCol = (int) (Math.random() * 3) + (col - 4);
+			} else {
+				rightElevatorCol = col - 1;
+			}
+		} else if (Elevator == 3) {
+			leftElevatorCol = (int) (Math.random() * 2);
+			rightElevatorCol = (int) (Math.random() * 2) + (col - 3);
+			int middle = col / 2;
+			midElevatorCol = (int) (Math.random() * 3) + (middle - 1);
+		}
+
+		int initialPositionRow = (int) (Math.random() * (row));
+		int initialPositionCol = (int) (Math.random() * (col));
+		while (initialPositionCol == leftElevatorCol || initialPositionCol == rightElevatorCol
+				|| initialPositionCol == midElevatorCol) {
+			initialPositionCol = (int) (Math.random() * (col));
+		}
+		
+		int initialDoorRow = (int) (Math.random() * (row));
+		int initialDoorCol = (int) (Math.random() * (col));
+		while (initialDoorCol == leftElevatorCol || initialDoorCol == rightElevatorCol
+				|| initialDoorCol == midElevatorCol
+				|| (initialDoorCol == initialPositionCol && initialDoorRow == initialPositionRow)
+				|| (initialDoorCol == initialPositionCol - 1 && initialDoorRow == initialPositionRow)
+						|| (initialDoorCol == initialPositionCol + 1 && initialDoorRow == initialPositionRow)
+						|| (initialDoorCol == initialPositionCol && initialDoorRow == initialPositionRow - 1)
+						|| (initialDoorCol == initialPositionCol && initialDoorRow == initialPositionRow + 1)) {
+			initialDoorRow = (int) (Math.random() * (row));
+			initialDoorCol = (int) (Math.random() * (col));
+		}
+		
+		AutomaticRoomGenerator Room = new AutomaticRoomGenerator(1, row * 10 + 6, col * 10 + 6);
+		Room.emptyMapGenerator();
+		for (int i = row - 1; i >= 0; i -= 1) {
+			for (int j = col - 1; j >= 0; j -= 1) {
+				if (j == leftElevatorCol) {
+					int randomElevator = (int) (Math.random() * 3) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.leftElevator1(10*i+3, j*10+3);
+						break;
+					case (2):
+						Room.leftElevator2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.leftElevator3(i*10+3, j*10+3);
+						break;
+					}
+				} else if (j == midElevatorCol) {
+					int randomElevator = (int) (Math.random() * 3) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.leftElevator1(i*10+3, j*10+3);
+						break;
+					case (2):
+						Room.leftElevator2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.leftElevator3(i*10+3, j*10+3);
+						break;
+					}
+				} else if (j == rightElevatorCol) {
+					int randomElevator = (int) (Math.random() * 3) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.rightElevator1(i*10+3, j*10+3);
+						break;
+					case (2):
+						Room.rightElevator2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.rightElevator3(i*10+3, j*10+3);
+						break;
+					}
+				} else if (j == initialDoorCol && i == initialDoorRow) {
+					int randomElevator = (int) (Math.random() * 6) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.door1(i*10+3, j*10+3);
+						break;
+					case (2):
+						Room.door2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.door3(i*10+3, j*10+3);
+						break;
+					case (4):
+						Room.door4(i*10+3, j*10+3);
+						break;
+					case (5):
+						Room.door5(i*10+3, j*10+3);
+						break;
+					case (6):
+						Room.door6(i*10+3, j*10+3);
+						break;
+					}
+				} else if (j == initialPositionCol && i == initialPositionRow) {
+					int randomElevator = (int) (Math.random() * 6) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.initial1(i*10+3, j*10+3);
+						break;
+					case (2):
+						Room.initial2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.initial3(i*10+3, j*10+3);
+						break;
+					case (4):
+						Room.initial4(i*10+3, j*10+3);
+						break;
+					case (5):
+						Room.initial5(i*10+3, j*10+3);
+						break;
+					case (6):
+						Room.initial6(i*10+3, j*10+3);
+						break;
+					}
+				} else {
+					int randomElevator = (int) (Math.random() * 6) + 1;
+					switch (randomElevator) {
+					case (1):
+						Room.midPlatform1(i*10+3, j*10+3);
+						break;
+					case (2):
+						Room.midPlatform2(i*10+3, j*10+3);
+						break;
+					case (3):
+						Room.midPlatform3(i*10+3, j*10+3);
+						break;
+					case (4):
+						Room.midPlatform4(i*10+3, j*10+3);
+						break;
+					case (5):
+						Room.midPlatform5(i*10+3, j*10+3);
+						break;
+					case (6):
+						Room.midPlatform6(i*10+3, j*10+3);
+						break;
+					}
+				}
+			}
+		}
 		Room.AddCompleteBorder(3);
 		Room.verification();
 		Room.updateTextDocument();

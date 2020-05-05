@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -142,9 +143,11 @@ public class Room {
 			Grow(false, new EmptySpace(coord, ESIM));
 			break;
 		case "ES_WO" :
+			Grow(false, new EmptySpace(coord, ESIM));
 			WOTable.add(coord);
 			break;
 		case "ES_FO" :
+			Grow(false, new EmptySpace(coord, ESIM));
 			FOTable.add(coord);
 			break;
 		default :
@@ -232,6 +235,22 @@ public class Room {
 		return startCoord;
 	}
 
+	public Coord[] getFlyingOpponentCoord() {
+		Coord[] coord = new Coord[FOTable.size()];
+		for (int i = 0; i < coord.length; i++) {
+			coord[i] = FOTable.remove();
+		}
+		return coord;
+	}
+	
+	public Coord[] getWalkingOpponentCoord() {
+		Coord[] coord = new Coord[WOTable.size()];
+		for (int i = 0; i < coord.length; i++) {
+			coord[i] = WOTable.remove();
+		}
+		return coord;
+	}
+	
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
