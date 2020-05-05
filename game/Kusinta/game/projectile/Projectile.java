@@ -74,14 +74,17 @@ public abstract class Projectile extends Entity {
 
 	@Override
 	public boolean move(Direction dir) {
+		
 		int tmpX = m_coord.X();
 		int tmpY = m_coord.Y();
 
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
+				System.out.println("Test");
 				m_coord.setX((int) (m_coord.X() + SPEED * Math.cos(m_angle)));
 				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
 			} else {
+				System.out.println("Test1");
 				m_coord.setX((int) (m_coord.X() - SPEED * Math.cos(m_angle)));
 				m_coord.setY((int) (m_coord.Y() - SPEED * Math.sin(m_angle)));
 			}
@@ -93,10 +96,6 @@ public abstract class Projectile extends Entity {
 		return true;
 	}
 
-	@Override
-	public boolean cell(Direction dir, Category cat) {
-		return super.cell(dir, cat);
-	}
 
 	public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);

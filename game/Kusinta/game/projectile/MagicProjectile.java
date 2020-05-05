@@ -107,6 +107,7 @@ public class MagicProjectile extends Projectile {
 				this.setCollidingWith(m_model.getPlayer());
 				return true;
 			}
+			m_State = State.OK_STATE;
 		}
 		return b;
 	}
