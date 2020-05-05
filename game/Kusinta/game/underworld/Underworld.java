@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -110,7 +111,7 @@ public class Underworld {
 		playerCreated = true;
 	}
 
-	private void generateGhosts(Ghost[] ghosts) {
+	private void generateGhosts(Ghost[] ghosts) throws IOException {
 //		String[] dirs = { "N", "E", "W", "S" };
 //		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
 		int x, y;
