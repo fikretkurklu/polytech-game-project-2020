@@ -98,18 +98,6 @@ public abstract class Projectile extends Entity {
 	@Override
 	public abstract boolean cell(Direction dir, Category cat);
 
-	public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image img;
-		if (imageFile.exists()) {
-			img = ImageIO.read(imageFile);
-			img = img.getScaledInstance(SIZE, SIZE, 0);
-			return img;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}
-
 	public void tick(long elapsed) {
 		m_automaton.step(this);
 	}

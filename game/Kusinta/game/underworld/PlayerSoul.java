@@ -16,6 +16,7 @@ import automaton.Direction;
 import environnement.Element;
 import game.Coord;
 import game.Game;
+import game.ImageLoader;
 import game.Model;
 import player.Character;
 
@@ -66,43 +67,8 @@ public class PlayerSoul extends Character {
 		escapedOrDead = false;
 		animationMode = NORMAL;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		loadImage();
+		m_images = ImageLoader.loadImagePlayerSoul(m_image_index, m_imageElapsed, sizeAnimation, sizeDeathAnimation, sizeDashAnimation, sizeEscapeAnimation);
 	}
-
-	private void loadImage() {
-		m_images = new Image[sizeDeathAnimation];
-		File imageFile;
-		m_image_index = 0;
-		m_imageElapsed = 0;
-		try {
-			for (int i = 0; i < sizeAnimation; i++) {
-				imageFile = new File(UnderworldParam.playerSoulImage[i]);
-				m_images[i] = ImageIO.read(imageFile);
-			}
-			for (int j = sizeAnimation; j < sizeDashAnimation; j++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[j - sizeAnimation]);
-				m_images[j] = ImageIO.read(imageFile);
-			}
-			for (int k = sizeDashAnimation; k < sizeEscapeAnimation; k++) {
-				imageFile = new File(UnderworldParam.playerSoulEscapeImage[k - sizeDashAnimation]);
-				m_images[k] = ImageIO.read(imageFile);
-			}
-			for (int l = sizeEscapeAnimation; l < 6 + sizeEscapeAnimation; l++) {
-				imageFile = new File(UnderworldParam.playerSoulDeathImage[l - sizeEscapeAnimation]);
-				m_images[l] = ImageIO.read(imageFile);
-			}
-			BufferedImage[] deathTmp = m_model.loadSprite(UnderworldParam.deathSprite, 7, 7);
-			int index = 6 + sizeEscapeAnimation;
-			for (int m = 14; m < 42; m++) {
-				m_images[index] = deathTmp[m];
-				index++;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {

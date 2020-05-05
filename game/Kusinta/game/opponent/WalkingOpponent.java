@@ -10,6 +10,7 @@ import automaton.Automaton;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 
 public class WalkingOpponent extends Opponent {
@@ -53,17 +54,17 @@ public class WalkingOpponent extends Opponent {
 
 		deathSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
-			deathSprite[i] = loadImage("resources/oppenent/demon/Death" + (i + 1) + ".png");
+			deathSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Death" + (i + 1) + ".png", SIZE);
 		}
 
 		walkingSprite = new Image[6];
 		for (int i = 0; i < 6; i++) {
-			walkingSprite[i] = loadImage("resources/oppenent/demon/Walk" + (i + 1) + ".png");
+			walkingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Walk" + (i + 1) + ".png", SIZE);
 		}
 
 		attackingSprite = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			attackingSprite[i] = loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png");
+			attackingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png", SIZE);
 		}
 
 		m_width = walkingSprite[0].getWidth(null) * 2;

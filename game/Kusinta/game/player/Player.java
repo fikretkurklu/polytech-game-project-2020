@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import automaton.*;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import game.Model.mode;
 import opponent.BossKey;
@@ -31,9 +32,9 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
-		bI = m_model.loadSprite(PATH_SPRITE_PLAYER, 18, 7);
+		bI = ImageLoader.loadBufferedSprite(PATH_SPRITE_PLAYER, 18, 7);
 
-		loadImageProjectile(PATH_ARROW);
+		imageProjectile = ImageLoader.loadImageProjectile(PATH_ARROW);
 
 		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
 

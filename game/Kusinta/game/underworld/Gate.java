@@ -9,6 +9,7 @@ import java.io.IOException;
 import automaton.Automaton;
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 
 public class Gate extends Element {
@@ -31,7 +32,7 @@ public class Gate extends Element {
 		loopAnimation = false;
 		hitBox = new Rectangle(m_coord.X() + SIZE, m_coord.Y() + SIZE, SIZE * 2, SIZE * 2);
 		try {
-			m_images = m_model.loadSprite(UnderworldParam.gateSprite, 6, 6);
+			m_images = ImageLoader.loadBufferedSprite(UnderworldParam.gateSprite, 6, 6);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
