@@ -48,18 +48,18 @@ public class PlayerSoul extends Character {
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model, Image[] images) throws IOException {
-		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
+	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model) throws IOException {
+		super(automaton, c, dir, 100, 100, 0, 0, 0, model);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
-		qPressed = false;
-		zPressed = false;
-		dPressed = false;
-		sPressed = false;
-		vPressed = false;
-		ePressed = false;
-		spacePressed = false;
+//		qPressed = false;
+//		zPressed = false;
+//		dPressed = false;
+//		sPressed = false;
+//		vPressed = false;
+//		ePressed = false;
+//		spacePressed = false;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
@@ -73,59 +73,60 @@ public class PlayerSoul extends Character {
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
 		m_images = images;
+		m_model = model;
 	}
 
-	public void setPressed(int keyCode, boolean pressed) {
-		switch (keyCode) {
-		case Controller.K_Z:
-			zPressed = pressed;
-			break;
-		case Controller.K_Q:
-			qPressed = pressed;
-			if (qPressed)
-				leftOrientation = true;
-			break;
-		case Controller.K_S:
-			sPressed = pressed;
-			break;
-		case Controller.K_D:
-			dPressed = pressed;
-			if (dPressed)
-				leftOrientation = false;
-			break;
-		case Controller.K_E:
-			ePressed = pressed;
-			break;
-		case Controller.K_SPACE:
-			spacePressed = pressed;
-			break;
-		case Controller.K_V:
-			vPressed = pressed;
-			break;
-		}
-	}
+//	public void setPressed(int keyCode, boolean pressed) {
+//		switch (keyCode) {
+//		case Controller.K_Z:
+//			zPressed = pressed;
+//			break;
+//		case Controller.K_Q:
+//			qPressed = pressed;
+//			if (m_model.qPressed)
+//				leftOrientation = true;
+//			break;
+//		case Controller.K_S:
+//			sPressed = pressed;
+//			break;
+//		case Controller.K_D:
+//			dPressed = pressed;
+//			if (m_model.dPressed)
+//				leftOrientation = false;
+//			break;
+//		case Controller.K_E:
+//			ePressed = pressed;
+//			break;
+//		case Controller.K_SPACE:
+//			spacePressed = pressed;
+//			break;
+//		case Controller.K_V:
+//			vPressed = pressed;
+//			break;
+//		}
+//	}
 
-	@Override
-	public boolean key(int keycode) {
-		switch (keycode) {
-		case Controller.K_Z:
-			return zPressed;
-		case Controller.K_Q:
-			return qPressed;
-		case Controller.K_S:
-			return sPressed;
-		case Controller.K_D:
-			return dPressed;
-		case Controller.K_SPACE:
-			return spacePressed;
-		case Controller.K_V:
-			return vPressed;
-		case Controller.K_E:
-			return ePressed;
-		default:
-			return false;
-		}
-	}
+//	@Override
+//	public boolean key(int keycode) {
+//		switch (keycode) {
+//		case Controller.K_Z:
+//			return zPressed;
+//		case Controller.K_Q:
+//			return qPressed;
+//		case Controller.K_S:
+//			return sPressed;
+//		case Controller.K_D:
+//			return dPressed;
+//		case Controller.K_SPACE:
+//			return spacePressed;
+//		case Controller.K_V:
+//			return vPressed;
+//		case Controller.K_E:
+//			return ePressed;
+//		default:
+//			return false;
+//		}
+//	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
@@ -210,39 +211,45 @@ public class PlayerSoul extends Character {
 		turn(dir);
 		switch (m_direction.toString()) {
 		case Direction.Ns:
-			if (qPressed) {
+			if (m_model.qPressed) {
+				leftOrientation = true;
 				m_coord.translate(-DISTANCE, -DISTANCE);
 				break;
 			}
-			if (dPressed) {
+			if (m_model.dPressed) {
+				leftOrientation = false;
 				m_coord.translate(DISTANCE, -DISTANCE);
 				break;
 			}
 			m_coord.translate(0, -DISTANCE);
 			break;
 		case Direction.Ss:
-			if (qPressed) {
+			if (m_model.qPressed) {
+				leftOrientation = true;
 				m_coord.translate(-DISTANCE, DISTANCE);
 				break;
 			}
-			if (dPressed) {
+			if (m_model.dPressed) {
+				leftOrientation = false;
 				m_coord.translate(DISTANCE, DISTANCE);
 				break;
 			}
 			m_coord.translate(0, DISTANCE);
 			break;
 		case Direction.Es:
-			if (zPressed) {
+			leftOrientation = false;
+			if (m_model.zPressed) {
 				m_coord.translate(DISTANCE, -DISTANCE);
 				break;
 			}
-			if (sPressed) {
+			if (m_model.sPressed) {
 				m_coord.translate(DISTANCE, DISTANCE);
 				break;
 			}
 			m_coord.translate(DISTANCE, 0);
 			break;
 		case Direction.Ws:
+			leftOrientation = true;
 			if (zPressed) {
 				m_coord.translate(-DISTANCE, -DISTANCE);
 				break;
@@ -307,11 +314,11 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean egg(Direction dir) {
 		if (lureAvailable) {
-			int x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			int y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+			int x = m_model.m_mouseCoord.X();
+			int y = m_model.m_mouseCoord.Y();
 			if (checkBlock(x, y))
 				return false;
-			lure = new Lure(m_model.lureAutomaton, x, y, 0, this, m_model, m_model.m_underworld.lureImages);
+			lure = new Lure(m_model.lureAutomaton, new Coord(x,y) , 0, this, m_direction, m_model.m_underworld.lureImages, m_model);
 			lureAvailable = false;
 			return true;
 		}

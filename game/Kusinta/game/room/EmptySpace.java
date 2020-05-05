@@ -2,6 +2,7 @@ package room;
 
 import environnement.Element;
 import game.Coord;
+import game.ImageLoader;
 
 public class EmptySpace extends Element {
 	
@@ -17,7 +18,7 @@ public class EmptySpace extends Element {
 		super(false, true, coord);
 		String path = ESImageManager.get("");
 		if (path != null) {
-			loadImage(path);
+			__image = ImageLoader.loadImage(path, SIZE);
 		}
 	}
 

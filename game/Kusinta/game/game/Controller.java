@@ -58,22 +58,31 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
-			m_game.m_model.m_underworld.m_player.setPressed((int) 'v', true);
-			return;
-		}
-		if (m_game.m_model.actualMode == Model.mode.ROOM) {
-			m_game.m_model.m_player.setPressed((int) ' ', true);
+		switch(m_game.m_model.actualMode) {
+		case ROOM:
+			m_game.m_model.setPressed((int) ' ', true);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.setPressed((int) 'v', true);
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (m_game.m_model.actualMode == Model.mode.UNDERWORLD) {
-			m_game.m_model.m_underworld.m_player.setPressed((int) 'v', false);
-			return;
+		switch(m_game.m_model.actualMode) {
+		case ROOM:
+			m_game.m_model.setPressed((int) ' ', false);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.setPressed((int) 'v', false);
+			break;
+		default:
+			break;
 		}
-		m_game.m_model.m_player.setPressed((int) ' ', false);
+		
 
 	}
 
@@ -115,32 +124,14 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (m_game.m_model.actualMode) {
-		case ROOM:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), true);
-			break;
-		case UNDERWORLD:
-			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), true);
-			break;
-		case GAMEOVER:
-		case VILLAGE:
-			break;
-		}
+		m_game.m_model.setPressed((int) e.getKeyChar(), true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch (m_game.m_model.actualMode) {
-		case ROOM:
-			m_game.m_model.m_player.setPressed((int) e.getKeyChar(), false);
-			break;
-		case UNDERWORLD:
-			m_game.m_model.m_underworld.m_player.setPressed((int) e.getKeyChar(), false);
-			break;
-		case GAMEOVER:
-		case VILLAGE:
-			break;
-		}
+
+		m_game.m_model.setPressed((int) e.getKeyChar(), false);
+
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import environnement.Element;
 
@@ -29,7 +30,7 @@ public class Cloud extends Element{
 		outScreen = false;
 		move = false;
 		try {
-			loadImage(UnderworldParam.cloudImage[2], m_width, m_height);
+			__image = ImageLoader.loadImage(UnderworldParam.cloudImage[2], m_width, m_height);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,27 +1,15 @@
 package game;
 
 import java.awt.Color;
-
 import java.awt.Graphics;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-
-import javax.imageio.ImageIO;
-
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
-import opponent.WalkingOpponent;
-import opponent.BossKey;
-import opponent.Coin;
-import opponent.FlyingOpponent;
-import opponent.Key;
-import opponent.NormalKey;
-import opponent.Opponent;
+import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -31,10 +19,6 @@ import village.Village;
 import player.Character;
 
 public class Model {
-
-//	public final static int VILLAGE = 0;
-//	public final static int ROOM = 1;
-//	public final static int UNDERWORLD = 2;
 
 	public static enum mode {
 		VILLAGE, ROOM, UNDERWORLD, GAMEOVER
@@ -49,14 +33,16 @@ public class Model {
 	public mode actualMode;
 
 	private AutomatonLibrary m_AL;
-	public Automaton playerAutomaton;
 	public Automaton arrowAutomaton;
+	public Automaton magicProjAutomaton;
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
 	public Automaton walkingOpponentAutomaton;
 	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
+
+	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
 	public Underworld m_underworld;
@@ -79,7 +65,6 @@ public class Model {
 		m_height = h;
 
 		m_AL = new AutomatonLibrary();
-		playerAutomaton = m_AL.getAutomaton("Player_donjon");
 		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
 		arrowAutomaton = m_AL.getAutomaton("Fleche");
 		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
@@ -87,10 +72,10 @@ public class Model {
 		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
+		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
 
 		start();
-		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(), Direction.E,
-				this);
+		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -98,13 +83,12 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, 600, 1700, new Direction("E"), this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, 0, 0, new Direction("E"), this));
+		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(800, 1700), Direction.E, this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
 
 		
 		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
-
 		diametre = 0;
 
 		m_key = null;
@@ -118,14 +102,22 @@ public class Model {
 	}
 
 	public void switchEnv(mode m) {
+		qPressed = false;
+		zPressed = false;
+		dPressed = false;
+		espPressed = false;
+		aPressed = false;
+		ePressed = false;
+		vPressed = false;
+		sPressed = false;
 		try {
 			switch (m) {
 			case ROOM:
 				m_village = null;
 				break;
 			case UNDERWORLD:
-				m_underworld.setPlayer(new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
-						m_underworld.getStartCoord().Y(), Direction.E, this, m_underworld.playerImages));
+				m_underworld.setPlayer(
+						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, m_underworld.playerImages, this));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -182,22 +174,24 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-//		m_player.tick(elapsed);
-//		if(m_key != null) {
+//		if (actualMode == mode.ROOM)
+//			m_player.tick(elapsed);
+//		
+//		if (m_key != null) {
 //			m_key.tick(elapsed);
 //		}
-//		if(m_bossKey != null) {
+//		if (m_bossKey != null) {
 //			m_bossKey.tick(elapsed);
 //		}
 //		for (Opponent op : m_opponents) {
 //			op.tick(elapsed);
 //		}
-//		for (Coin coin: m_coins) {
+//		for (Coin coin : m_coins) {
 //			coin.tick(elapsed);
 //		}
 //		m_hud.tick(elapsed);
 //		m_room.tick(elapsed);
-		m_underworld.tick(elapsed);
+		 m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -245,7 +239,7 @@ public class Model {
 			m_village.paint(g, width, height);
 			m_hud.paint(g);
 			break;
-		case GAMEOVER:
+		default:
 			break;
 		}
 
@@ -254,33 +248,7 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
-	}
-
-	public void setPressed(int keyChar, boolean b) {
-		m_player.setPressed(keyChar, b);
-	}
-
-	/*
-	 * Loading a sprite
-	 */
-	public BufferedImage[] loadSprite(String filename, int nrows, int ncols) throws IOException {
-		File imageFile = new File(filename);
-		if (imageFile.exists()) {
-			BufferedImage image = ImageIO.read(imageFile);
-			int width = image.getWidth(null) / ncols;
-			int height = image.getHeight(null) / nrows;
-
-			BufferedImage[] images = new BufferedImage[nrows * ncols];
-			for (int i = 0; i < nrows; i++) {
-				for (int j = 0; j < ncols; j++) {
-					int x = j * width;
-					int y = i * height;
-					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
-				}
-			}
-			return images;
-		}
-		return null;
+		m_mouseCoord.translate(-x_decalage,- y_decalage);
 	}
 
 	public int getXDecalage() {
@@ -325,6 +293,35 @@ public class Model {
 
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
+	}
+
+	public void setPressed(int keyCode, boolean pressed) {
+		switch (keyCode) {
+		case Controller.K_Q:
+			qPressed = pressed;
+			break;
+		case Controller.K_Z:
+			zPressed = pressed;
+			break;
+		case Controller.K_D:
+			dPressed = pressed;
+			break;
+		case Controller.K_SPACE:
+			espPressed = pressed;
+			break;
+		case Controller.K_A:
+			aPressed = pressed;
+			break;
+		case Controller.K_E:
+			ePressed = pressed;
+			break;
+		case Controller.K_V:
+			vPressed = pressed;
+			break;
+		case Controller.K_S:
+			sPressed = pressed;
+			break;
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -16,9 +17,7 @@ import projectile.Projectile;
 public class Lure extends Projectile {
 
 	public static final int SIZE = (int) Element.SIZE;
-
 	Image m_images[];
-
 	boolean appearing, disapearing, disapered, normal;
 
 	int m_imageIndex = UnderworldParam.sizeLureAnimation;
@@ -33,8 +32,9 @@ public class Lure extends Projectile {
 
 	private int animationMode = APPEARING;
 
-	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model, Image[] images) {
-		super(projectileAutomaton, x, y, angle, shooter, model, null);
+	public Lure(Automaton projectileAutomaton, Coord c, double angle, Character shooter, Direction dir, Image[] images, Model model) {
+		super(projectileAutomaton, c, angle, shooter, dir);
+		m_model = model;
 		disapearing = false;
 		disapered = false;
 		m_imageElapsed = 0;
