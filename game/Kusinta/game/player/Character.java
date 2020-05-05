@@ -36,6 +36,7 @@ public abstract class Character extends Entity {
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
+
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
 
 	protected LinkedList<Projectile> m_projectiles;
@@ -44,8 +45,6 @@ public abstract class Character extends Entity {
 	protected int m_image_index;
 
 	protected Character collidingWith;
-
-	
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -60,7 +59,7 @@ public abstract class Character extends Entity {
 	protected boolean falling, jumping;
 	protected long m_ratio_x, m_ratio_y, m_time;
 	protected int y_gravity;
-	
+
 	protected boolean shooting;
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
@@ -415,7 +414,7 @@ public abstract class Character extends Entity {
 				angle = -angle;
 			}
 			try {
-				if (direc== Direction.E) {
+				if (direc == Direction.E) {
 					addProjectile(type, m_x + hitBox.width / 2, m_y, angle, this, direc);
 				} else {
 					addProjectile(type, m_x - hitBox.width / 2, m_y, angle, this, direc);
