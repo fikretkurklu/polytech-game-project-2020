@@ -120,8 +120,10 @@ public class Underworld {
 	public static int HITBOXSIZE;
 
 	private void generateGhosts() {
+		HITBOXDIM = 0;
+		HITBOXSIZE = Element.SIZE;
 		for (int i = 0; i < MAX_GHOSTS; i++) {
-			addGhost();
+			m_ghosts.add(new Ghost(Direction.E, generatePosition(), ghostAutomaton, m_model, ghostImages));
 		}
 	}
 	
@@ -264,25 +266,7 @@ public class Underworld {
 		return true;
 	}
 
-	public int blockTop(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord().Y();
-		} else {
-			return 0;
-		}
-	}
-
 	public Coord blockCoord(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord();
-		} else {
-			return null;
-		}
-	}
-
-	public Coord blockBot(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
 			return m_elements[n].getCoord();
@@ -301,17 +285,4 @@ public class Underworld {
 	public int getHeight() {
 		return m_RealHeight;
 	}
-	
-	public void addGhost() {
-		int x, y;
-		x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-		y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		}
-		m_ghosts.add(new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages));
-	}
-
 }
