@@ -115,7 +115,6 @@ public class WalkingOpponent extends Opponent {
 			gp.drawImage(image, hitBox.x + hitBox.width + image.getWidth(null) / 2, m_coord.Y() - m_height + 70,
 					-m_width, m_height, null);
 		}
-
 		gp.setColor(Color.DARK_GRAY);
 		gp.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
@@ -170,15 +169,15 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		if (dir== Direction.E) {
-			if (cat.equals(Category.O)) {
-				if ((m_model.m_room.isBlocked(hitBox.x + hitBox.width, hitBox.y + hitBox.height / 2)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, hitBox.y + hitBox.height - 1)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, hitBox.y + 1))
+			if (cat == Category.O) {
+				if ((m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + hitBox.height / 2)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + hitBox.height - 1)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + 1))
 						|| !m_model.m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
 
-			} else if (cat.equals(Category.A) && m_model.actualMode == Model.mode.ROOM) {
+			} else if (cat == Category.A && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x,
 							hitBox.y + hitBox.height / 2)) {
@@ -188,14 +187,14 @@ public class WalkingOpponent extends Opponent {
 				}
 			}
 		} else if (dir == Direction.W) {
-			if (cat.equals(Category.O)) {
-				if ((m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height / 2)
-						|| m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height - 1)
-						|| m_model.m_room.isBlocked(hitBox.x, hitBox.y + 1))
-						|| !m_model.m_room.isBlocked(hitBox.x - 5, hitBox.y + hitBox.height + 1)) {
+			if (cat == Category.O) {
+				if ((m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + hitBox.height / 2)
+						|| m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + hitBox.height - 1)
+						|| m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + 1))
+						|| !m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
-			} else if (cat.equals(Category.A) && m_model.actualMode == Model.mode.ROOM) {
+			} else if (cat == Category.A && m_model.actualMode == Model.mode.ROOM) {
 				if (m_model.getPlayer().gotpower()) {
 					if (m_model.getPlayer().getHitBox().contains(hitBox.x - 5, hitBox.y + hitBox.height / 2)) {
 						return true;
