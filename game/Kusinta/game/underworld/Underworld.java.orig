@@ -119,9 +119,20 @@ public class Underworld {
 		HITBOXDIM = 0;
 		HITBOXSIZE = Element.SIZE;
 		for (int i = 0; i < ghosts.length; i++) {
-			ghosts[i] = new Ghost(dir, generatePosition(), ghostAutomaton, m_model, ghostImages);
+<<<<<<< HEAD
+			ghosts[i] = new Ghost(dir, generatePosition(), ghostAutomaton, m_model);
 			if (dir == Direction.W)
 				ghosts[i].leftOrientation = true;
+=======
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+			}
+			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages);
+>>>>>>> 2a111bd7b4548a90f289d7c87d5c226cb0169317
 		}
 	}
 	
