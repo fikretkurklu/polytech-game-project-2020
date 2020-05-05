@@ -44,7 +44,7 @@ public class WalkingOpponent extends Opponent {
 		}
 		m_coord.setY(m_model.m_room.blockTop(m_coord));
 
-		SPEED_MOVE = 2;
+		X_MOVE = 2;
 
 		m_imageElapsed = 0;
 		m_state = CurrentState.isMoving;
@@ -85,8 +85,8 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		// Draw hitbox
-		gp.setColor(Color.blue);
-		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+//		gp.setColor(Color.blue);
+//		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		Image image = null;
 		switch (m_state) {
@@ -170,9 +170,9 @@ public class WalkingOpponent extends Opponent {
 	public boolean cell(Direction dir, Category cat) {
 		if (dir== Direction.E) {
 			if (cat == Category.O) {
-				if ((m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + hitBox.height / 2)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + hitBox.height - 1)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + SPEED_MOVE, hitBox.y + 1))
+				if ((m_model.m_room.isBlocked(hitBox.x + hitBox.width + X_MOVE, hitBox.y + hitBox.height / 2)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + X_MOVE, hitBox.y + hitBox.height - 1)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width + X_MOVE, hitBox.y + 1))
 						|| !m_model.m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
@@ -188,9 +188,9 @@ public class WalkingOpponent extends Opponent {
 			}
 		} else if (dir == Direction.W) {
 			if (cat == Category.O) {
-				if ((m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + hitBox.height / 2)
-						|| m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + hitBox.height - 1)
-						|| m_model.m_room.isBlocked(hitBox.x - SPEED_MOVE, hitBox.y + 1))
+				if ((m_model.m_room.isBlocked(hitBox.x - X_MOVE, hitBox.y + hitBox.height / 2)
+						|| m_model.m_room.isBlocked(hitBox.x - X_MOVE, hitBox.y + hitBox.height - 1)
+						|| m_model.m_room.isBlocked(hitBox.x - X_MOVE, hitBox.y + 1))
 						|| !m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
 					return true;
 				}
@@ -289,9 +289,9 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean pop(Direction dir) {
 		if (!(m_state.equals(CurrentState.isDead))) {
-			SPEED_MOVE *= 2;
+			X_MOVE *= 2;
 			move(dir);
-			SPEED_MOVE /= 2;
+			X_MOVE /= 2;
 		}
 		return true;
 	}

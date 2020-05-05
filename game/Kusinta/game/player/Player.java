@@ -49,7 +49,7 @@ public class Player extends Character {
 		min_image_index = 0;
 		max_image_index = 3;
 		
-		SPEED_MOVE = 2;
+		X_MOVE = 2;
 
 		reset();
 		setMoney(10000);

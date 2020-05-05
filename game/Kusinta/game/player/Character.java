@@ -33,8 +33,6 @@ public abstract class Character extends Entity {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	protected int SPEED_MOVE;
-
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
@@ -102,19 +100,19 @@ public abstract class Character extends Entity {
 		int m_y = m_coord.Y();
 
 		if (dir == Direction.E) {
-			if (!checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - 1)
-					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height)
-					&& !checkBlock((hitBox.x + hitBox.width) + SPEED_MOVE, m_y - hitBox.height / 2)) {
-				m_x += SPEED_MOVE;
+			if (!checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - 1)
+					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height)
+					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height / 2)) {
+				m_x += X_MOVE;
 				m_coord.setX(m_x);
-				hitBox.translate(SPEED_MOVE, 0);
+				hitBox.translate(X_MOVE, 0);
 			}
 		} else if (dir == Direction.W) {
-			if (!checkBlock(hitBox.x - SPEED_MOVE, m_y - 1) && !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height)
-					&& !checkBlock(hitBox.x - SPEED_MOVE, m_y - hitBox.height / 2)) {
-				m_x -= SPEED_MOVE;
+			if (!checkBlock(hitBox.x - X_MOVE, m_y - 1) && !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height)
+					&& !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height / 2)) {
+				m_x -= X_MOVE;
 				m_coord.setX(m_x);
-				hitBox.translate(-SPEED_MOVE, 0);
+				hitBox.translate(-X_MOVE, 0);
 			}
 		}
 

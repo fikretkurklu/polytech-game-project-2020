@@ -14,8 +14,6 @@ import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
 
-	public static final int SPEED_FLY = 2;
-
 	Image[] death;
 	Image[] flight;
 	Image[] attack;
@@ -63,6 +61,8 @@ public class FlyingOpponent extends Opponent {
 
 		m_moveElapsed = 0;
 
+		X_MOVE = 2;
+
 	}
 
 	public boolean move(Direction dir) {
@@ -74,20 +74,10 @@ public class FlyingOpponent extends Opponent {
 			}
 			moving = true;
 
-			if (m_direction == Direction.E) {
-				m_x += SPEED_FLY;
-				hitBox.translate(m_x - m_coord.X(), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
-				}
-				m_coord.setX(m_x);
-			} else {
-				m_x -= SPEED_FLY;
-				hitBox.translate(-(m_coord.X() - m_x), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
-				}
-				m_coord.setX(m_x);
+			super.move(dir);
+
+			if (collidedWith != null) {
+				collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
 			}
 		}
 		return true;
@@ -148,8 +138,10 @@ public class FlyingOpponent extends Opponent {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 
-		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		//paint hitBox
+//		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
+//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

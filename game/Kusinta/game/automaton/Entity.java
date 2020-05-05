@@ -20,6 +20,8 @@ public abstract class Entity {
 
 	protected int m_width, m_height;
 
+	protected int X_MOVE; 
+	
 	public Entity() {
 	}
 
@@ -108,7 +110,7 @@ public abstract class Entity {
 			int x;
 			switch (dir.toString()) {
 			case Direction.Hs:
-				if (cat == Category.A) {
+				if (cat == Category.P) {
 					int xHB = m_model.getPlayer().getHitBox().x;
 					int yHB = m_model.getPlayer().getHitBox().y;
 					int widthHB = m_model.getPlayer().getHitBox().width;
@@ -124,7 +126,7 @@ public abstract class Entity {
 				}
 				return false;
 			case Direction.Es:
-				x = hitBox.x + hitBox.width + 1;
+				x = hitBox.x + hitBox.width + 1 + X_MOVE;
 				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
 						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
 						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
@@ -133,7 +135,7 @@ public abstract class Entity {
 				}
 				return false;
 			case Direction.Ws:
-				x = hitBox.x;
+				x = hitBox.x - X_MOVE;
 				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
 						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
 						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
