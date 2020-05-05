@@ -391,8 +391,8 @@ public abstract class Character extends Entity {
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
-			int m_x = m_coord.X() + hitBox.width / 2;
-			int m_y = m_coord.Y() - hitBox.height / 2;
+			int m_x = m_coord.X();
+			int m_y = hitBox.y + hitBox.height / 2;
 
 			Direction direc;
 			float angle;

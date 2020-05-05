@@ -1,5 +1,6 @@
 package projectile;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -38,13 +39,7 @@ public class MagicProjectile extends Projectile {
 		m_height = DIMENSION * images[0].getHeight(null);
 		m_width = (int) (ratio * images[0].getWidth(null));
 
-		if (m_direction == Direction.E) {
-			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2)),
-					(int) (m_coord.Y()), 10, 10);
-		} else {
-			hitBox = new Rectangle((int) (m_coord.X() - (m_width / 2)),
-					(int) (m_coord.Y()),10,10);
-		}
+		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
 		m_imageElapsed = 0;
 		m_image_index = 0;
@@ -71,7 +66,8 @@ public class MagicProjectile extends Projectile {
 				bg.drawImage(img, m_width, 0, -w, h, null);
 			}
 		}
-		bg.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		g.setColor(Color.blue);
+		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		bg.dispose();
 
 	}

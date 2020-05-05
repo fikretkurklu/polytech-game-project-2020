@@ -111,16 +111,17 @@ public abstract class Entity {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					int xHB = m_model.getPlayer().getHitBox().x;
-					int yHB = m_model.getPlayer().getHitBox().y;
-					int widthHB = m_model.getPlayer().getHitBox().width;
-					int heightHB = m_model.getPlayer().getHitBox().height;
-					if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
-							|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
-							|| hitBox.contains(xHB + widthHB, yHB + heightHB)
-							|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB)
-							|| hitBox.contains(xHB, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB / 2)
-							|| hitBox.contains(xHB + widthHB / 2, yHB)) {
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					int xHB = hitBox.x;
+					int yHB = hitBox.y;
+					int widthHB = hitBox.width;
+					int heightHB = hitBox.height;
+					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB) || playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB) || playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
 						return true;
 					}
 				} else if (cat == Category.O) {
