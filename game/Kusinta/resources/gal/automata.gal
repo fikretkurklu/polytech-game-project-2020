@@ -39,12 +39,12 @@ Decor (Inactif) {
 
 FlyingOpponents (Init) {
 *(Init)
-  | Cell(H, A) ? Power : (Init)  
+  | Cell(H, P) ? Power : (Init)  
   | ! GotPower() ? Explode() : ()        
   | Cell(E, O) ? Turn(W) : (Init)
   | Cell(W, O) ? Turn(E) : (Init)
-  | Closest(A, E) ? Egg(E) : (Init)
-  | Closest(A, W) ? Egg(W) : (Init)
+  | Closest(P, E) ? Egg(E) : (Init)
+  | Closest(P, W) ? Egg(W) : (Init)
   | True ? Move(E) : (Init) 
 }
 

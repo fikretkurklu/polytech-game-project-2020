@@ -122,7 +122,8 @@ public abstract class Entity {
 						return true;
 					}
 					return false;
-				}
+				} 
+				return false;
 			case Direction.Es:
 				x = hitBox.x + hitBox.width + 1;
 				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
