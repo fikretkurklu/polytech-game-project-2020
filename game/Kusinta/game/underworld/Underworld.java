@@ -7,9 +7,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.Iterator;
+import java.util.LinkedList;
 import javax.imageio.ImageIO;
-
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
@@ -18,7 +18,7 @@ import game.Model;
 import environnement.Element;
 
 public class Underworld {
-	public final static int MAX_CLOUDS = 7;
+	public final static int MAX_CLOUDS = 7; // Nombre de ghosts initial
 	public final static int MAX_GHOSTS = 10;
 	public final int MAX_FRAGMENTS = 4;
 	
@@ -36,7 +36,7 @@ public class Underworld {
 	int nbRow;
 	int nbCol;
 	Cloud[] m_clouds;
-	Ghost[] m_ghosts;
+	LinkedList<Ghost> m_ghosts;
 	Fragment[] m_fragments;
 	Gate m_gate;
 	UnderworldEmptySpaceImageManager ESIM;
@@ -62,7 +62,7 @@ public class Underworld {
 		UWIM = new UndWallImageManager(ambiance);
 		UIWM = new UndInnerWallManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
-		m_ghosts = new Ghost[MAX_GHOSTS];
+		m_ghosts = new LinkedList<Ghost>();
 		m_fragments = new Fragment[MAX_FRAGMENTS];
 		m_AL = AL;
 		try {
@@ -97,7 +97,7 @@ public class Underworld {
 			f.close();
 			generateClouds(m_clouds);
 			ghostImages = loadGhostImage();
-			generateGhosts(m_ghosts);
+			generateGhosts();
 			generateFragments(m_fragments);
 			generateGate();
 		} catch (Exception e) {
@@ -116,21 +116,12 @@ public class Underworld {
 		playerCreated = true;
 	}
 
-	private void generateGhosts(Ghost[] ghosts) {
-//		String[] dirs = { "N", "E", "W", "S" };
-//		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
-		int x, y;
-		for (int i = 0; i < ghosts.length; i++) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			}
-			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages);
+	private void generateGhosts() {
+		for (int i = 0; i < MAX_GHOSTS; i++) {
+			addGhost();
 		}
 	}
+	
 
 	private void generateClouds(Cloud[] clouds) {
 		int randomX;
@@ -207,8 +198,11 @@ public class Underworld {
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
-		for (int i = 0; i < m_ghosts.length; i++) {
-			m_ghosts[i].paint(g);
+		Iterator<Ghost> it = m_ghosts.iterator(); 
+		Ghost tmp;
+		while (it.hasNext()) {
+			tmp = it.next();
+			tmp.paint(g);
 		}
 		if (gateCreated)
 			m_gate.paint(g);
@@ -235,8 +229,11 @@ public class Underworld {
 				m_clouds[i].tick(elapsed);
 		}
 		m_player.tick(elapsed);
-		for (int i = 0; i < m_ghosts.length; i++) {
-			m_ghosts[i].tick(elapsed);
+		Iterator<Ghost> it = m_ghosts.iterator(); 
+		Ghost tmp;
+		while (it.hasNext()) {
+			tmp = it.next();
+			tmp.tick(elapsed);
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].tick(elapsed);
@@ -311,6 +308,18 @@ public class Underworld {
 	}
 	public int getHeight() {
 		return m_RealHeight;
+	}
+	
+	public void addGhost() {
+		int x, y;
+		x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+		y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		}
+		m_ghosts.add(new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages));
 	}
 	
 	public Image[] loadGhostImage() {
