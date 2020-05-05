@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
-
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
@@ -79,7 +78,6 @@ public class Underworld {
 			e1.printStackTrace();
 		}
 		try {
-			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
@@ -102,8 +100,12 @@ public class Underworld {
 			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
 			ghostImages = loadGhostImage();
 			playerImages = loadPlayerImage();
+<<<<<<< HEAD
 			lureImages = loadLureImage();
+			generateGhosts(m_ghosts);
+=======
 			generateGhosts();
+>>>>>>> c71ad98ec7e77cc68ca7c7adb584a9957bf1f9c9
 			generateFragments(m_fragments);
 			generateGate();
 		} catch (Exception e) {
@@ -198,6 +200,7 @@ public class Underworld {
 		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
 		int y_start = (-y_decalage / Element.SIZE) * nbCol;
 		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+
 		int x_start = (-x_decalage / Element.SIZE);
 		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
 		for (int i = y_start; i < y_end; i += nbCol) {
@@ -256,7 +259,6 @@ public class Underworld {
 			m_gate.tick(elapsed);
 	}
 	
-
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {

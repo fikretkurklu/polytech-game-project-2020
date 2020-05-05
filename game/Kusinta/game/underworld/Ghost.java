@@ -188,7 +188,7 @@ public class Ghost extends Entity {
 					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
 					return m_model.m_underworld.isBlocked(block.X(), block.Y());
 				} else if (m_direction == Direction.W) {
-					block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
+					block = getBlockCoord(m_coord.X(), m_coord.Y());
 					return m_model.m_underworld.isBlocked(block.X(), block.Y());
 				} else if (m_direction == Direction.E) {
 					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
