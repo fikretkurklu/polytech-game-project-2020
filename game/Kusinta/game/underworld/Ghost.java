@@ -180,19 +180,20 @@ public class Ghost extends Entity {
 		Coord block, playerBlock;
 		Coord coord = null;
 		if (cat == Category.O) {
+			isFollowing = false;
 			if (dir == Direction.F) {
 				if (m_direction == Direction.N) {
-					block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+//					block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
+					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y()-SIZE);
 				} else if (m_direction == Direction.S) {
-					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+//					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
+					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y()+SIZE);
 				} else if (m_direction == Direction.W) {
-					block = getBlockCoord(m_coord.X(), m_coord.Y());
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+//					block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
+					return m_model.m_underworld.isBlocked(m_coord.X()-SIZE, m_coord.Y());
 				} else if (m_direction == Direction.E) {
-					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
-					return m_model.m_underworld.isBlocked(block.X(), block.Y());
+//					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
+					return m_model.m_underworld.isBlocked(m_coord.X()+SIZE, m_coord.Y());
 				}
 				return false;
 			}
@@ -367,7 +368,7 @@ public class Ghost extends Entity {
 	}
 
 	public void quitAttackMode() {
-		if (isAttacking) {
+		if (isAttacking || isFollowing) {
 			isAttacking = false;
 			m_image_index = 0;
 			m_direction = dirs[(int) (Math.random() * 3)];

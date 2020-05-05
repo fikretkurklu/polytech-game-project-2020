@@ -19,7 +19,7 @@ import game.Model;
 import environnement.Element;
 
 public class Underworld {
-	public final static int MAX_CLOUDS = 7; // Nombre de ghosts initial
+	public final static int MAX_CLOUDS = 7; // Nombre de ghosts max
 	public final static int MAX_GHOSTS = 10;
 	public final int MAX_FRAGMENTS = 4;
 	
@@ -31,7 +31,7 @@ public class Underworld {
 	AutomatonLibrary m_al;
 	String mapFile;
 	int m_width, m_height;
-	Element[] m_elements;
+	Element[] m_elements, m_borders;
 	int ambiance = 1;
 	Coord startCoord;
 	int nbRow;
@@ -89,11 +89,12 @@ public class Underworld {
 			nbCol = Integer.parseInt(firstLine[1]);
 			m_RealWidth = nbCol * Element.SIZE;
 			m_RealHeight = nbRow * Element.SIZE;
-			m_elements = new Element[nbRow * nbCol];
+			m_elements = new Element[0];
+			m_borders = new Element[0];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
-					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
+					CodeElement(actualLigne[j], j, i);
 				}
 			}
 			f.close();
@@ -118,7 +119,7 @@ public class Underworld {
 	public static int HITBOXSIZE;
 
 	private void generateGhosts() {
-		for (int i = 0; i < MAX_GHOSTS; i++) {
+		for (int i = 0; i < 5; i++) {
 			addGhost();
 		}
 	}
@@ -169,30 +170,43 @@ public class Underworld {
 	}
 
 
-	public Element CodeElement(String code, int x, int y) throws Exception {
-		Coord coord = new Coord(x, y);
+	public void CodeElement(String code, int x, int y) throws Exception {
+		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
 		if (code.equals("")) {
-			return new UnderworldEmptySpace(coord);
+			Grow(false, new UnderworldEmptySpace(coord));
 		} else if (code.equals("IW")) {
-			return new UndInnerWall(coord, UIWM);
+			Grow(false, new UndInnerWall(coord, UIWM));
 		} else if (code.contentEquals("OW_E")) {
-			return new UndWall(coord, UWIM, "E", wallAutomaton);
+			Grow(true, new UndWall(coord, UWIM, "E", wallAutomaton));
 		} else if (code.contentEquals("OW_S")) {
-			return new UndWall(coord, UWIM, "S", wallAutomaton);
+			Grow(true, new UndWall(coord, UWIM, "S", wallAutomaton));
 		} else if (code.contentEquals("OW_N")) {
-			return new UndWall(coord, UWIM, "N", wallAutomaton);
+			Grow(true, new UndWall(coord, UWIM, "N", wallAutomaton));
 		} else if (code.contentEquals("OW_W")) {
-			return new UndWall(coord, UWIM, "W", wallAutomaton);
+			Grow(true, new UndWall(coord, UWIM, "W", wallAutomaton));
 		} else if (code.equals("ES")) {
-			return new UnderworldEmptySpace(coord, ESIM);
+			Grow(false, new UnderworldEmptySpace(coord, ESIM));
 		}
-		throw new Exception("Code room err: " + code);
+//		throw new Exception("Code room err: " + code);
+	}
+	
+	public void Grow(boolean isElement, Element add) {
+		if (isElement) {
+			Element[] tmp_elements = new Element[m_borders.length + 1];
+			System.arraycopy(m_borders, 0, tmp_elements, 0, m_borders.length);
+			tmp_elements[m_borders.length] = add;
+			m_borders = tmp_elements;
+		}
+		Element[] tmp_background = new Element[m_elements.length + 1];
+		System.arraycopy(m_elements, 0, tmp_background, 0, m_elements.length);
+		tmp_background[m_elements.length] = add;
+		m_elements = tmp_background;
 	}
 
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
+//		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
 		int y_start = (-y_decalage / Element.SIZE) * nbCol;
 		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
 
@@ -226,11 +240,11 @@ public class Underworld {
 
 	public void tick(long elapsed) {
 		m_BlockAElapsed += elapsed;
-		if (m_BlockAElapsed > 10000) {
+		if (m_BlockAElapsed > 1000) {
 			m_BlockAElapsed = 0;
-			for (int i = 0; i < m_elements.length; i ++) {
-				if (m_elements[i].getAutomaton() != null) {
-					m_elements[i].getAutomaton().step(m_elements[i]);
+			for (int i = 0; i < m_borders.length; i ++) {
+				if (m_borders[i].getAutomaton() != null) {
+					m_borders[i].getAutomaton().step(m_borders[i]);
 				}
 			}
 		}
@@ -262,15 +276,6 @@ public class Underworld {
 		return true;
 	}
 
-	public int blockTop(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord().Y();
-		} else {
-			return 0;
-		}
-	}
-
 	public Coord blockCoord(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
@@ -280,15 +285,6 @@ public class Underworld {
 		}
 	}
 
-	public Coord blockBot(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord();
-		} else {
-			return null;
-		}
-	}
-	
 	public void activateGate() {
 		gateCreated = true;
 	}
@@ -301,15 +297,7 @@ public class Underworld {
 	}
 	
 	public void addGhost() {
-		int x, y;
-		x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-		y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		}
-		m_ghosts.add(new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model, ghostImages));
+		m_ghosts.add(new Ghost(Direction.E, generatePosition(), ghostAutomaton, m_model, ghostImages));
 	}
 
 	public Image[] loadPlayerImage() {
@@ -345,6 +333,15 @@ public class Underworld {
 		return images;
 	}
 	
+
+	public Coord blockBot(int x, int y) {
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_elements[n].getCoord();
+		} else {
+			return null;
+		}
+	}
 
 	
 	public Image[] loadGhostImage() {

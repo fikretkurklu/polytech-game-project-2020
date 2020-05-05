@@ -2,7 +2,7 @@ package underworld;
 
 public interface UnderworldParam {
 	String backgroundFile = "resources/Underworld/Background/Sky.png";
-	String mapFile = "resources/Underworld/Sample/map5.sample";
+	String mapFile = "resources/Underworld/Sample/map3.sample";
 	int nbAmbiance = 1;
 	String[] cloudImage = {"resources/Underworld/Clouds/Cloud1.png", "resources/Underworld/Clouds/Cloud2.png", "resources/Underworld/Clouds/Cloud3.png"};
 	String[] playerSoulImage = {"resources/Underworld/PlayerSoul/PS1.png", "resources/Underworld/PlayerSoul/PS2.png", "resources/Underworld/PlayerSoul/PS3.png", "resources/Underworld/PlayerSoul/PS4.png"};
