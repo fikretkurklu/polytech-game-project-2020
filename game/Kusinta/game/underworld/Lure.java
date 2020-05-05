@@ -125,7 +125,7 @@ public class Lure extends Projectile {
 	}
 	
 	public Coord getBlockCoord(int x, int y) {
-		return m_model.m_underworld.blockBot(x, y);
+		return m_model.m_underworld.blockCoord(x, y);
 	}
 
 	@Override

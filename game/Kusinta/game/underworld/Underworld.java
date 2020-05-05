@@ -19,8 +19,8 @@ import game.Model;
 import environnement.Element;
 
 public class Underworld {
-	public final static int MAX_CLOUDS = 7; // Nombre de ghosts max
-	public final static int MAX_GHOSTS = 10;
+	public final static int MAX_CLOUDS = 7; 
+	public final static int MAX_GHOSTS = 10;// Nombre de ghosts max
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
@@ -279,25 +279,7 @@ public class Underworld {
 		return true;
 	}
 
-	public int blockTop(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord().Y();
-		} else {
-			return 0;
-		}
-	}
-
 	public Coord blockCoord(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord();
-		} else {
-			return null;
-		}
-	}
-
-	public Coord blockBot(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
 			return m_elements[n].getCoord();

@@ -9,7 +9,6 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
-import game.Controller;
 import game.Coord;
 import game.Game;
 import game.Model;
@@ -29,8 +28,6 @@ public class PlayerSoul extends Character {
 	long m_lureTimer;
 
 	int fragmentsPicked = 0;
-
-	boolean qPressed, zPressed, dPressed, sPressed, vPressed, ePressed, spacePressed;
 	boolean leftOrientation;
 
 	public static final int NORMAL = 1;
@@ -53,13 +50,6 @@ public class PlayerSoul extends Character {
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
-//		qPressed = false;
-//		zPressed = false;
-//		dPressed = false;
-//		sPressed = false;
-//		vPressed = false;
-//		ePressed = false;
-//		spacePressed = false;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
@@ -171,32 +161,32 @@ public class PlayerSoul extends Character {
 		switch (dir.toString()) {
 		case Direction.Ns:
 			int xUp = hitBox.x + (SIZE / 2);
-			if (checkBlock(xUp, hitBox.y)) {
-				m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+			if (m_model.m_underworld.isBlocked(xUp, hitBox.y)) {
+				m_coord.setY(m_model.m_underworld.blockCoord(xUp, hitBox.y).Y() + Element.SIZE);
 				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
 		case Direction.Ss:
 			int xDown = hitBox.x + (SIZE / 2);
-			if (checkBlock(xDown, hitBox.y + SIZE)) {
-				m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+			if (m_model.m_underworld.isBlocked(xDown, hitBox.y + SIZE)) {
+				m_coord.setY(m_model.m_underworld.blockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
 				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
 		case Direction.Es:
 			int yRight = hitBox.y + (SIZE / 2);
-			if (checkBlock(hitBox.x + SIZE, yRight)) {
-				m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+			if (m_model.m_underworld.isBlocked(hitBox.x + SIZE, yRight)) {
+				m_coord.setX(m_model.m_underworld.blockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
 				DISTANCE = NORMALSPEED;
 				return true;
 			}
 			return false;
 		case Direction.Ws:
 			int yLeft = hitBox.y + (SIZE / 2);
-			if (checkBlock(hitBox.x, yLeft)) {
-				m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+			if (m_model.m_underworld.isBlocked(hitBox.x, yLeft)) {
+				m_coord.setX(m_model.m_underworld.blockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 				DISTANCE = NORMALSPEED;
 				return true;
 			}
@@ -250,11 +240,11 @@ public class PlayerSoul extends Character {
 			break;
 		case Direction.Ws:
 			leftOrientation = true;
-			if (zPressed) {
+			if (m_model.zPressed) {
 				m_coord.translate(-DISTANCE, -DISTANCE);
 				break;
 			}
-			if (sPressed) {
+			if (m_model.sPressed) {
 				m_coord.translate(-DISTANCE, DISTANCE);
 				break;
 			}
@@ -316,7 +306,7 @@ public class PlayerSoul extends Character {
 		if (lureAvailable) {
 			int x = m_model.m_mouseCoord.X();
 			int y = m_model.m_mouseCoord.Y();
-			if (checkBlock(x, y))
+			if (m_model.m_underworld.isBlocked(x, y))
 				return false;
 			lure = new Lure(m_model.lureAutomaton, new Coord(x,y) , 0, this, m_direction, m_model.m_underworld.lureImages, m_model);
 			lureAvailable = false;
@@ -327,14 +317,6 @@ public class PlayerSoul extends Character {
 	
 	public void setVisibility(boolean bool) {
 		hidden = bool;
-	}
-
-	public boolean checkBlock(int x, int y) {
-		return m_model.m_underworld.isBlocked(x, y);
-	}
-
-	public Coord getBlockCoord(int x, int y) {
-		return m_model.m_underworld.blockBot(x, y);
 	}
 
 	public void getDamage() {
