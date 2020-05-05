@@ -321,6 +321,7 @@ public class Ghost extends Entity {
 	public boolean hit(Direction dir) {
 		boolean flag = false;
 		isAttacking = true;
+//		isFollowing = false;
 		switch (dir.toString()) {
 		case Direction.Ws:
 			leftOrientation = true;
@@ -377,6 +378,7 @@ public class Ghost extends Entity {
 
 	public void quitAttackMode() {
 		if (isAttacking || isFollowing) {
+			isFollowing = false;
 			isAttacking = false;
 			m_image_index = 0;
 			m_direction = dirs[(int) (Math.random() * 3)];
@@ -405,7 +407,7 @@ public class Ghost extends Entity {
 						getPlayer().getDamage();
 				if (m_image_index > 8) {
 					m_image_index = 3;
-				}
+				}				
 			} else {
 				if (m_image_index >= 3) {
 					m_image_index = 0;
