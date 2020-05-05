@@ -86,7 +86,6 @@ public class Underworld {
 				String[] actualLigne = f.readLine().split("/");
 				for (int j = 0; j < nbCol; j++) {
 					m_elements[i * nbCol + j] = CodeElement(actualLigne[j], j * Element.SIZE, i * Element.SIZE);
-					;
 				}
 			}
 			f.close();
@@ -105,27 +104,21 @@ public class Underworld {
 	public static final int YMAX = 3784;
 	public static final int YMIN = 172;
 	
-	public void setPlayer(PlayerSoul player) {
-		m_player = player;
-		playerCreated = true;
-	}
+	public static int HITBOXDIM;
+	public static int HITBOXSIZE;
 
 	private void generateGhosts(Ghost[] ghosts) {
-//		String[] dirs = { "N", "E", "W", "S" };
-//		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
-		int x, y;
+		Direction [] dirs = { Direction.N, Direction.E, Direction.W, Direction.S };
+		Direction dir = dirs[(int) (Math.random() * dirs.length)];
+		HITBOXDIM = 0;
+		HITBOXSIZE = Element.SIZE;
 		for (int i = 0; i < ghosts.length; i++) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			}
-			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model);
+			ghosts[i] = new Ghost(dir, generatePosition(), ghostAutomaton, m_model);
+			if (dir == Direction.W)
+				ghosts[i].leftOrientation = true;
 		}
 	}
-
+	
 	private void generateClouds(Cloud[] clouds) {
 		int randomX;
 		for (int i = 0; i < clouds.length; i++) {
@@ -133,35 +126,43 @@ public class Underworld {
 			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 500), m_model);
 		}
 	}
-
+	
 	private void generateFragments(Fragment[] fragments) {
-		int x, y;
+		HITBOXDIM = - (int)(Element.SIZE/1.5);
+		HITBOXSIZE = 2 * Element.SIZE;
 		for (int i = 0; i < fragments.length; i++) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-					|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-			}
-			HITBOXDIM = - (int)(Element.SIZE/1.5);
-			HITBOXSIZE = 2 * Element.SIZE;
-			fragments[i] = new Fragment(fragmentAutomaton, setPosition(x, y), m_model);
+			fragments[i] = new Fragment(fragmentAutomaton, generatePosition(), m_model);
 		}
 	}
 	
 	private void generateGate() {
-		int x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-		int y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
-				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
-			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
-			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
-		}
 		HITBOXDIM = Element.SIZE;
 		HITBOXSIZE = 2 * Element.SIZE;
-		m_gate = new Gate(gateAutomaton, setPosition(x,y), m_model);
+		m_gate = new Gate(gateAutomaton, generatePosition(), m_model);
 	}
+	
+	private Coord generatePosition() {
+		int x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+		int y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		Rectangle hitBox = new Rectangle(x + HITBOXDIM, y + HITBOXDIM, HITBOXSIZE, HITBOXSIZE);
+		int xRight = hitBox.x + HITBOXSIZE;
+		int yRight = hitBox.y + HITBOXSIZE;
+		while (isBlocked(xRight, hitBox.y) || isBlocked(xRight, yRight) 
+				|| isBlocked(hitBox.x, yRight) || isBlocked(hitBox.x, hitBox.y)
+				|| isBlocked(x, y)) {
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+			hitBox.setLocation(x + HITBOXDIM, y + HITBOXDIM);
+			xRight = hitBox.x + HITBOXSIZE;
+			yRight = hitBox.y + HITBOXSIZE;
+		}
+		return new Coord(x, y);
+	}
+	
+	public void setPlayer(PlayerSoul player) {
+		m_player = player;
+	}
+
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
@@ -247,27 +248,6 @@ public class Underworld {
 		}
 		if (gateCreated)
 			m_gate.tick(elapsed);
-	}
-	
-	public static int HITBOXDIM;
-	public static int HITBOXSIZE;
-	
-	private Coord setPosition(int x, int y) {
-		Rectangle hitBox = new Rectangle(x + HITBOXDIM, y + HITBOXDIM, HITBOXSIZE, HITBOXSIZE);
-		int xUp = hitBox.x + HITBOXSIZE/2;
-		int xDown = hitBox.x + HITBOXSIZE/2;
-		int yRight = hitBox.y + HITBOXSIZE/2;
-		int yLeft = hitBox.y + HITBOXSIZE/2;
-
-		if (isBlocked(xUp, hitBox.y))
-			y = blockCoord(xUp, hitBox.y).Y() + Element.SIZE;
-		if (isBlocked(xDown, hitBox.y + HITBOXSIZE))
-			y = blockCoord(xDown, hitBox.y + HITBOXSIZE).Y() - Element.SIZE;
-		if (isBlocked(hitBox.x + HITBOXSIZE, yRight))
-			x = blockCoord(hitBox.x + HITBOXSIZE, yRight).X() - Element.SIZE;
-		if (isBlocked(hitBox.x, yLeft))
-			x = blockCoord(hitBox.x, yLeft).X() + Element.SIZE;
-		return new Coord(x,y);
 	}
 	
 
