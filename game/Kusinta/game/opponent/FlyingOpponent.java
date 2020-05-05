@@ -242,45 +242,17 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-
-		if (dir.toString().equals("H") && m_model.actualMode == Model.mode.ROOM) {
-			int xHB = m_model.getPlayer().getHitBox().x;
-			int yHB = m_model.getPlayer().getHitBox().y;
-			int widthHB = m_model.getPlayer().getHitBox().width;
-			int heightHB = m_model.getPlayer().getHitBox().height;
-			if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
-					|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
-					|| hitBox.contains(xHB + widthHB, yHB + heightHB)
-					|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
-					|| hitBox.contains(xHB, yHB + heightHB / 2) || hitBox.contains(xHB + widthHB / 2, yHB)) {
-				collidingWith = m_model.getPlayer();
-				return true;
-			}
-			return false;
-		}
-
-		if (m_direction.toString().equals(dir.toString())) {
-			if (dir== Direction.E) {
-
-				int x = hitBox.x + hitBox.width + 1;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+		if (super.cell(dir, cat)) {
+			System.out.println("Test");
+			switch (dir.toString()) {
+			case Direction.Hs:
+				if (cat == Category.P) {
+					collidingWith = m_model.getPlayer();
 					return true;
-				} else {
-					return false;
-				}
-			} else if (dir.toString().equals("W")) {
-				int x = hitBox.x;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-					return true;
-				} else {
-					return false;
 				}
 			}
 		}
 		return false;
+
 	}
 }

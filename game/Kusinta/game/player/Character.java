@@ -33,17 +33,12 @@ public abstract class Character extends Entity {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 
-	public Model m_model;
-	protected Direction m_direction;
-
 	protected int SPEED_MOVE;
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
 	protected HashMap<CurrentStat, Integer> m_currentStatMap;
-
-	int m_width, m_height;
 
 	protected LinkedList<Projectile> m_projectiles;
 
@@ -52,7 +47,7 @@ public abstract class Character extends Entity {
 
 	protected Character collidingWith;
 
-	protected Rectangle hitBox;
+	
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;

@@ -23,8 +23,6 @@ public abstract class Opponent extends Character {
 	protected Arrow collidedWith;
 
 	Key m_key;
-
-	int m_width, m_height;
 	
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
