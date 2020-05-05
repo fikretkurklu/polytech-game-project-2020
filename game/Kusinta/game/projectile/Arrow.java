@@ -4,7 +4,6 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -23,9 +22,9 @@ public class Arrow extends Projectile {
 	int m_height;
 	int m_width;
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Character shooter, Direction direction)
+	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction)
 			throws Exception {
-		super(arrowAutomaton, x, y, angle, shooter, direction);
+		super(arrowAutomaton,c, angle, shooter, direction);
 
 		image = m_shooter.getProjectileImage();
 

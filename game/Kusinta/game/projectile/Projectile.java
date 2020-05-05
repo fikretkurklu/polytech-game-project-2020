@@ -3,16 +3,11 @@ package projectile;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
-import game.Model;
 import player.Character;
 
 public abstract class Projectile extends Entity {
@@ -46,11 +41,11 @@ public abstract class Projectile extends Entity {
 
 	protected Image image;
 
-	public Projectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter,
+	public Projectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
 			Direction direction) {
 		super(projectileAutomaton);
 
-		m_coord = new Coord(x, y);
+		m_coord = new Coord(c);
 		m_angle = angle;
 		m_direction = direction;
 

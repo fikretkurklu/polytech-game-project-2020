@@ -1,14 +1,10 @@
 package underworld;
 
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -254,7 +250,7 @@ public class PlayerSoul extends Character {
 			int y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
 			if (checkBlock(x, y))
 				return false;
-			lure = new Lure(m_model.lureAutomaton, x, y, 0, this);
+			lure = new Lure(m_model.lureAutomaton, new Coord(x, y), 0, this);
 			lureAvailable = false;
 			return true;
 		}

@@ -3,10 +3,6 @@ package underworld;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -36,8 +32,8 @@ public class Lure extends Projectile {
 
 	Rectangle hitBox;
 
-	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter) {
-		super(projectileAutomaton, x, y, angle, shooter, null);
+	public Lure(Automaton projectileAutomaton, Coord c, double angle, Character shooter) {
+		super(projectileAutomaton, c, angle, shooter, null);
 		appearing = true;
 		normal = false;
 		disapearing = false;

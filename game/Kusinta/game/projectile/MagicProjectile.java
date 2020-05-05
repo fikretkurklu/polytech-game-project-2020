@@ -26,9 +26,9 @@ public class MagicProjectile extends Projectile {
 	int m_height;
 	int m_width;
 
-	public MagicProjectile(Automaton projectileAutomaton, int x, int y, double angle, Character shooter,
+	public MagicProjectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
 			Direction direction) throws Exception {
-		super(projectileAutomaton, x, y, angle, shooter, direction);
+		super(projectileAutomaton, c, angle, shooter, direction);
 
 		images = m_shooter.getProjectileImages();
 
@@ -102,6 +102,7 @@ public class MagicProjectile extends Projectile {
 			if (cat == Category.P) {
 				m_State = State.HIT_STATE;
 				this.setCollidingWith(m_model.getPlayer());
+				collidingWith.loseLife(m_strength);
 				return true;
 			}
 			m_State = State.OK_STATE;
