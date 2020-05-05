@@ -12,4 +12,9 @@ public class UnderworldEmptySpace extends Element {
 			loadImage(path);
 		}
 	}
+	
+	public UnderworldEmptySpace(Coord coord) throws Exception {
+		super(false, false, coord);
+	}
+
 }

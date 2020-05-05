@@ -1,15 +1,10 @@
 package underworld;
 
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -31,10 +26,7 @@ public class PlayerSoul extends Character {
 	long m_dashTimer;
 	long m_lureTimer;
 
-	int sizeAnimation = UnderworldParam.playerSoulImage.length;
-	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length + sizeAnimation;
-	int sizeEscapeAnimation = sizeAnimation + sizeDashAnimation;
-	int sizeDeathAnimation = sizeEscapeAnimation + 34;
+	
 
 	int fragmentsPicked = 0;
 
@@ -55,7 +47,7 @@ public class PlayerSoul extends Character {
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model) throws IOException {
+	public PlayerSoul(Automaton automaton, int x, int y, Direction dir, Model model, Image[] images) throws IOException {
 		super(automaton, x, y, dir, model, 100, 100, 0, 0, 0);
 		m_width = SIZE;
 		m_height = SIZE;
@@ -76,41 +68,9 @@ public class PlayerSoul extends Character {
 		escapedOrDead = false;
 		animationMode = NORMAL;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		loadImage();
-	}
-
-	private void loadImage() {
-		m_images = new Image[sizeDeathAnimation];
-		File imageFile;
 		m_image_index = 0;
 		m_imageElapsed = 0;
-		try {
-			for (int i = 0; i < sizeAnimation; i++) {
-				imageFile = new File(UnderworldParam.playerSoulImage[i]);
-				m_images[i] = ImageIO.read(imageFile);
-			}
-			for (int j = sizeAnimation; j < sizeDashAnimation; j++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[j - sizeAnimation]);
-				m_images[j] = ImageIO.read(imageFile);
-			}
-			for (int k = sizeDashAnimation; k < sizeEscapeAnimation; k++) {
-				imageFile = new File(UnderworldParam.playerSoulEscapeImage[k - sizeDashAnimation]);
-				m_images[k] = ImageIO.read(imageFile);
-			}
-			for (int l = sizeEscapeAnimation; l < 6 + sizeEscapeAnimation; l++) {
-				imageFile = new File(UnderworldParam.playerSoulDeathImage[l - sizeEscapeAnimation]);
-				m_images[l] = ImageIO.read(imageFile);
-			}
-			BufferedImage[] deathTmp = m_model.loadSprite(UnderworldParam.deathSprite, 7, 7);
-			int index = 6 + sizeEscapeAnimation;
-			for (int m = 14; m < 42; m++) {
-				m_images[index] = deathTmp[m];
-				index++;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		m_images = images;
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
@@ -304,7 +264,7 @@ public class PlayerSoul extends Character {
 		escape = true;
 		m_model.m_underworld.activateGate();
 		animationMode = ESCAPE;
-		m_image_index = sizeDashAnimation;
+		m_image_index = UnderworldParam.sizeDashAnimation;
 		return true;
 	}
 
@@ -313,11 +273,11 @@ public class PlayerSoul extends Character {
 		switch (dir.toString()) {
 		case Direction.Ns:
 			animationMode = ESCAPED;
-			m_image_index = sizeAnimation;
+			m_image_index = UnderworldParam.sizeAnimation;
 			return true;
 		case Direction.Ss:
 			animationMode = DEAD;
-			m_image_index = sizeEscapeAnimation;
+			m_image_index = UnderworldParam.sizeEscapeAnimation;
 			return true;
 		default:
 			return false;
@@ -336,7 +296,7 @@ public class PlayerSoul extends Character {
 			DISTANCE = DASHSPEED;
 			dashAvailable = false;
 			animationMode = DASH;
-			m_image_index = sizeAnimation;
+			m_image_index = UnderworldParam.sizeAnimation;
 			return true;
 		}
 		return false;
@@ -402,30 +362,30 @@ public class PlayerSoul extends Character {
 			m_image_index++;
 			switch (animationMode) {
 			case DEAD:
-				if (m_image_index >= sizeDeathAnimation) {
+				if (m_image_index >= UnderworldParam.sizeDeathAnimation) {
 					escapedOrDead = true;
 					Game.game.gameOver = true;
 				}
 				return;
 			case ESCAPED:
-				if (m_image_index >= sizeDashAnimation)
+				if (m_image_index >= UnderworldParam.sizeDashAnimation)
 					escapedOrDead = true;
 				return;
 			case NORMAL:
-				if (m_image_index >= sizeAnimation) {
+				if (m_image_index >= UnderworldParam.sizeAnimation) {
 					m_image_index = 0;
 				}
 				break;
 			case ESCAPE:
-				if (m_image_index >= sizeEscapeAnimation) {
-					m_image_index = sizeDashAnimation;
+				if (m_image_index >= UnderworldParam.sizeEscapeAnimation) {
+					m_image_index = UnderworldParam.sizeDashAnimation;
 				}
 				break;
 			case DASH:
-				if (m_image_index >= sizeDashAnimation) {
+				if (m_image_index >= UnderworldParam.sizeDashAnimation) {
 					if (escape) {
 						animationMode = ESCAPE;
-						m_image_index = sizeDashAnimation;
+						m_image_index = UnderworldParam.sizeDashAnimation;
 					} else {
 						animationMode = NORMAL;
 						m_image_index = 0;

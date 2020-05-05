@@ -1,7 +1,8 @@
 package underworld;
 
 public interface UnderworldParam {
-	String mapFile = "resources/Underworld/Sample/map3.sample";
+	String backgroundFile = "resources/Underworld/Background/Sky.png";
+	String mapFile = "resources/Underworld/Sample/map5.sample";
 	int nbAmbiance = 1;
 	String[] cloudImage = {"resources/Underworld/Clouds/Cloud1.png", "resources/Underworld/Clouds/Cloud2.png", "resources/Underworld/Clouds/Cloud3.png"};
 	String[] playerSoulImage = {"resources/Underworld/PlayerSoul/PS1.png", "resources/Underworld/PlayerSoul/PS2.png", "resources/Underworld/PlayerSoul/PS3.png", "resources/Underworld/PlayerSoul/PS4.png"};
@@ -14,7 +15,13 @@ public interface UnderworldParam {
 	String fragmentSprite = "resources/Underworld/Fragment/CrystalsWhite.png";
 	String gateSprite = "resources/Underworld/Gate/Gate.png";
 	String deathSprite = "resources/Underworld/PlayerSoul/D5.png";
+	
 	int fragmentAnimationSize = 7;
 	int gateApparitionAnimationSize = 24;
 	int gateAnimationSize = 30;
+	
+	int sizeAnimation = UnderworldParam.playerSoulImage.length;
+	int sizeDashAnimation = UnderworldParam.lureApparitionImage.length + sizeAnimation;
+	int sizeEscapeAnimation = sizeAnimation + sizeDashAnimation;
+	int sizeDeathAnimation = sizeEscapeAnimation + 34;
 }
