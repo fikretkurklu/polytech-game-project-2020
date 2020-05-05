@@ -1,11 +1,14 @@
 package automaton;
 
 import java.awt.Rectangle;
+import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.State;
 import game.Coord;
 import game.Model;
+import opponent.Opponent;
+import player.Character;
 
 public abstract class Entity {
 
@@ -21,6 +24,8 @@ public abstract class Entity {
 	protected int m_width, m_height;
 
 	protected int X_MOVE;
+	
+	protected Character collidingWith;
 
 	public Entity() {
 	}
@@ -129,7 +134,17 @@ public abstract class Entity {
 					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
 							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
 							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
-				} 
+				} else if (cat == Category.A) {
+					LinkedList<Opponent> opponents = m_model.getOpponent();
+					for (Opponent op : opponents) {
+						if (op.getHitBox().contains(hitBox.x, hitBox.y)
+								|| op.getHitBox().contains(m_coord.X(), m_coord.Y())) {
+							this.setCollidingWith(op);
+							return true;
+						}
+					}
+					return false;
+				}
 				return false;
 			case Direction.Es:
 				if (cat == Category.O) {
@@ -174,6 +189,12 @@ public abstract class Entity {
 
 	public Automaton getAutomaton() {
 		return m_automaton;
+	}
+	
+	public void setCollidingWith(Character cha) {
+		if (collidingWith != cha) {
+			collidingWith = cha;
+		}
 	}
 
 }

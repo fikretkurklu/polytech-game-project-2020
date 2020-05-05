@@ -79,38 +79,15 @@ public class Arrow extends Projectile {
 	}
 
 	public boolean cell(Direction dir, Category cat) {
-		boolean c;
-		if (cat.toString().equals("_")) {
-			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.x, hitBox.y)));
-			if (c) {
-				m_State = State.HIT_STATE;
-				return true;
+		boolean b = super.cell(dir, cat);
+		if (b) {
+			if (cat == Category.A) {
+				collidingWith.loseLife(m_strength);
+				((Opponent) collidingWith).setCollidedWith(this);
 			}
-
-			LinkedList<Opponent> opponents = m_model.getOpponent();
-			for (Opponent op : opponents) {
-				c = op.getHitBox().contains(hitBox.x, hitBox.y)
-						|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
-				if (c) {
-					m_State = State.HIT_STATE;
-					this.setCollidingWith(op);
-					((Opponent) collidingWith).setCollidedWith(this);
-					return true;
-				}
-			}
-		} else {
-			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.x, hitBox.y)));
-			if (m_State == State.HIT_STATE) {
-				return !c;
-			}
-			if (!c) {
-				m_State = State.HIT_STATE;
-			}
-			return c;
 		}
-		return false;
+		
+		return b;
 	}
 
 	public Coord getCoord() {

@@ -36,7 +36,6 @@ public abstract class Projectile extends Entity {
 	protected State m_State;
 
 	protected Character m_shooter;
-	protected Character collidingWith;
 
 	protected long m_dead_time;
 
@@ -127,14 +126,7 @@ public abstract class Projectile extends Entity {
 		}
 		return true;
 	}
-
-	public void setCollidingWith(Character cha) {
-		if (collidingWith != cha) {
-			collidingWith = cha;
-			collidingWith.loseLife(m_strength);
-		}
-	}
-
+	
 	public void setSpeed(int speed) {
 		X_MOVE = speed;
 	}

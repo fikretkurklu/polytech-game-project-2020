@@ -44,7 +44,6 @@ public abstract class Character extends Entity {
 	BufferedImage[] bI;
 	protected int m_image_index;
 
-	protected Character collidingWith;
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;

@@ -29,7 +29,8 @@ Block (Inactif) {
 Fleche (Init) {
   *(Init)
   | Cell(H,A) ? Explode() : ()
-  | Cell(H,V) ? Move : (Init)
+  | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
 }
 
 MagicProj (Init) {
