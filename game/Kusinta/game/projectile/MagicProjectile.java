@@ -3,6 +3,7 @@ package projectile;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -38,10 +39,10 @@ public class MagicProjectile extends Projectile {
 		m_width = (int) (ratio * images[0].getWidth(null));
 
 		if (m_direction == Direction.E) {
-			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle)),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
-			hitBox = new Coord((int) (m_coord.X() - (m_width / 2) * Math.cos(m_angle)),
+			hitBox = new Rectangle((int) (m_coord.X() - (m_width / 2) * Math.cos(m_angle)),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		}
 
@@ -55,15 +56,15 @@ public class MagicProjectile extends Projectile {
 	public void paint(Graphics g) {
 
 		Image img = images[m_image_index];
-		
-		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height/2, m_width* 2, m_height * 2);
 
+		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
+				m_height * 2);
 
 		if (images != null) {
 			int w = m_width;
 			int h = m_height;
 			if (m_direction == Direction.E) {
-				bg.rotate(-m_angle, m_width / 2, m_height/2);
+				bg.rotate(-m_angle, m_width / 2, m_height / 2);
 				bg.drawImage(img, 0, 0, w, h, null);
 			} else {
 				bg.rotate(m_angle, m_width / 2, m_height / 2);
@@ -95,32 +96,20 @@ public class MagicProjectile extends Projectile {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		boolean c;
-		if (cat.toString().equals("_")) {
-			c = (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()));
-			if (c) {
+		boolean b = super.cell(dir, cat);
+		if (b) {
+			if (cat == Category.O) {
 				m_State = State.HIT_STATE;
 				return true;
 			}
-
-			c = m_model.getPlayer().getHitBox().contains(m_coord.X(), m_coord.Y());
-			if (c) {
+			if (cat == Category.P) {
 				m_State = State.HIT_STATE;
 				this.setCollidingWith(m_model.getPlayer());
 				return true;
 			}
-
-		} else {
-			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())));
-			if (m_State == State.HIT_STATE) {
-				return !c;
-			}
-			if (!c) {
-				m_State = State.HIT_STATE;
-			}
-			return c;
+			m_State = State.OK_STATE;
 		}
-		return false;
+		return b;
 	}
 
 }

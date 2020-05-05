@@ -28,8 +28,15 @@ Block (Inactif) {
 
 Fleche (Init) {
   *(Init)
-  | Cell(H,_) ? Explode() : ()
+  | Cell(H,A) ? Explode() : ()
   | Cell(H,V) ? Move : (Init)
+}
+
+MagicProj (Init) {
+  *(Init)
+  | Cell(H,P) ? Explode() : ()
+  | Cell(H,V) ? Move : (Init)
+  | Cell(H,O) ? Explode () : ()
 }
 
 Decor (Inactif) {                

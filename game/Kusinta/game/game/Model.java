@@ -39,6 +39,7 @@ public class Model {
 
 	private AutomatonLibrary m_AL;
 	public Automaton arrowAutomaton;
+	public Automaton magicProjAutomaton;
 	public Automaton playerSoulAutomaton;
 	public Automaton flyingOpponentAutomaton;
 	public Automaton walkingOpponentAutomaton;
@@ -76,6 +77,7 @@ public class Model {
 		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
+		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
 
 		start();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
