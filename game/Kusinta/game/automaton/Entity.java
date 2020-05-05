@@ -108,7 +108,7 @@ public abstract class Entity {
 			int x;
 			switch (dir.toString()) {
 			case Direction.Hs:
-				if (cat == Category.P) {
+				if (cat == Category.A) {
 					int xHB = m_model.getPlayer().getHitBox().x;
 					int yHB = m_model.getPlayer().getHitBox().y;
 					int widthHB = m_model.getPlayer().getHitBox().width;
@@ -121,8 +121,8 @@ public abstract class Entity {
 							|| hitBox.contains(xHB + widthHB / 2, yHB)) {
 						return true;
 					}
-					return false;
 				}
+				return false;
 			case Direction.Es:
 				x = hitBox.x + hitBox.width + 1;
 				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
