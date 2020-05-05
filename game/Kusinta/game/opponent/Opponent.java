@@ -11,7 +11,7 @@ import projectile.Arrow;
 
 public abstract class Opponent extends Character {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	protected static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	protected boolean moving;
 

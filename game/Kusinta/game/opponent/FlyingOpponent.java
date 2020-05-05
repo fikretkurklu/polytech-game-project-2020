@@ -48,9 +48,11 @@ public class FlyingOpponent extends Opponent {
 			attack[i] = ImageLoader.loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png", SIZE);
 		}
 
-		m_width = flight[0].getWidth(null);
-		m_height = flight[0].getHeight(null);
+		float ratio = (float) ((float) flight[0].getWidth(null)) / (float) (flight[0].getHeight(null));
 
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+		
 		int w = (int) (m_width / 1.7);
 		int h = (int) (m_height / 1.3);
 

@@ -66,8 +66,11 @@ public class MagicProjectile extends Projectile {
 				bg.drawImage(img, m_width, 0, -w, h, null);
 			}
 		}
-		g.setColor(Color.blue);
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
+		//paint HitBox
+//		g.setColor(Color.blue);
+//		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
 		bg.dispose();
 
 	}

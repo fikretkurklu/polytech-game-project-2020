@@ -84,7 +84,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(800, 1700), Direction.E, this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
+		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(800,1000), Direction.E, this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
