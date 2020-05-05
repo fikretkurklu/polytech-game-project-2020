@@ -3,18 +3,18 @@ package underworld;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.imageio.ImageIO;
+
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
 import environnement.Element;
 
@@ -47,7 +47,7 @@ public class Underworld {
 	AutomatonLibrary m_AL;
 	Model m_model;
 	Image background;
-	public Image[] ghostImages, playerImages;
+	public Image[] ghostImages, playerImages, lureImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
@@ -99,8 +99,10 @@ public class Underworld {
 			}
 			f.close();
 			generateClouds(m_clouds);
-			ghostImages = loadGhostImage();
-			playerImages = loadPlayerImage();
+			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
+			ghostImages = ImageLoader.loadGhostImage();
+			playerImages = ImageLoader.loadPlayerImage();
+			lureImages = ImageLoader.loadLureImage();
 			generateGhosts();
 			generateFragments(m_fragments);
 			generateGate();
@@ -268,12 +270,22 @@ public class Underworld {
 			m_gate.tick(elapsed);
 	}
 	
+
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
 			return m_elements[n].isSolid();
 		}
 		return true;
+	}
+
+	public int blockTop(int x, int y) {
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_elements[n].getCoord().Y();
+		} else {
+			return 0;
+		}
 	}
 
 	public Coord blockCoord(int x, int y) {
@@ -285,6 +297,15 @@ public class Underworld {
 		}
 	}
 
+	public Coord blockBot(int x, int y) {
+		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
+		if (n >= 0 && n < nbRow * nbCol) {
+			return m_elements[n].getCoord();
+		} else {
+			return null;
+		}
+	}
+	
 	public void activateGate() {
 		gateCreated = true;
 	}
@@ -300,67 +321,4 @@ public class Underworld {
 		m_ghosts.add(new Ghost(Direction.E, generatePosition(), ghostAutomaton, m_model, ghostImages));
 	}
 
-	public Image[] loadPlayerImage() {
-		Image[] images = new Image[UnderworldParam.sizeDeathAnimation];
-		File imageFile;
-		try {
-			for (int i = 0; i < UnderworldParam.sizeAnimation; i++) {
-				imageFile = new File(UnderworldParam.playerSoulImage[i]);
-				images[i] = ImageIO.read(imageFile);
-			}
-			for (int j = UnderworldParam.sizeAnimation; j < UnderworldParam.sizeDashAnimation; j++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[j - UnderworldParam.sizeAnimation]);
-				images[j] = ImageIO.read(imageFile);
-			}
-			for (int k = UnderworldParam.sizeDashAnimation; k < UnderworldParam.sizeEscapeAnimation; k++) {
-				imageFile = new File(UnderworldParam.playerSoulEscapeImage[k - UnderworldParam.sizeDashAnimation]);
-				images[k] = ImageIO.read(imageFile);
-			}
-			for (int l = UnderworldParam.sizeEscapeAnimation; l < 6 + UnderworldParam.sizeEscapeAnimation; l++) {
-				imageFile = new File(UnderworldParam.playerSoulDeathImage[l - UnderworldParam.sizeEscapeAnimation]);
-				images[l] = ImageIO.read(imageFile);
-			}
-			BufferedImage[] deathTmp = m_model.loadSprite(UnderworldParam.deathSprite, 7, 7);
-			int index = 6 + UnderworldParam.sizeEscapeAnimation;
-			for (int m = 14; m < 42; m++) {
-				images[index] = deathTmp[m];
-				index++;
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return images;
-	}
-	
-
-	public Coord blockBot(int x, int y) {
-		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
-		if (n >= 0 && n < nbRow * nbCol) {
-			return m_elements[n].getCoord();
-		} else {
-			return null;
-		}
-	}
-
-	
-	public Image[] loadGhostImage() {
-		int len = UnderworldParam.ghostImage.length;
-		Image[] images;
-		images = new Image[len];
-		File imageFile;
-		Image image;
-		for (int i = 0; i < len; i++) {
-			imageFile = new File(UnderworldParam.ghostImage[i]);
-			try {
-				image =  ImageIO.read(imageFile);
-				images[i] = image.getScaledInstance(Ghost.SIZE, Ghost.SIZE, 0);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return images;
-//				m_images[i] = image.getScaledInstance(SIZE, SIZE, 0);
-	}
 }

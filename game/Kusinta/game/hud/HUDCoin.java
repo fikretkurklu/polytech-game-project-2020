@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.io.IOException;
 
 import game.Coord;
+import game.ImageLoader;
 import player.Player;
 
 public class HUDCoin {
@@ -27,7 +28,7 @@ public class HUDCoin {
 		m_height = h;
 		m_player = p;
 		try {
-			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
+			m_images =  ImageLoader.loadImageSprite(COIN_ICO_SPRITE, 1, 6);
 			int size = m_width / 4;
 			for (int i = 0; i< m_images.length; i++) {
 				m_images[i] = m_images[i].getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);

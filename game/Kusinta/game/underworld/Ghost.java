@@ -1,5 +1,7 @@
 package underworld;
+
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -25,9 +27,10 @@ public class Ghost extends Entity {
 	Coord m_coord;
 	Model m_model;
 	Direction m_direction;
+
 	Image m_images[];
 	long m_imageElapsed;
-	int m_width = SIZE, m_height = SIZE;
+	int m_width, m_height = SIZE;
 	boolean leftOrientation, movingUp, movingDown, move;
 	int m_image_index;
 	boolean isAttacking = false, isFollowing = false, isLure;
@@ -139,7 +142,7 @@ public class Ghost extends Entity {
 			} else if ((getPlayer()).lure != null && !(getPlayer()).lure.disapered) {
 				playerCoord = (getPlayer()).lure.getCoord();
 				isLure = true;
-			} else
+			}else
 				return false;
 			switch (dir.toString()) {
 			case Direction.Ns:
@@ -174,6 +177,8 @@ public class Ghost extends Entity {
 		}
 		return false;
 	}
+
+
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {

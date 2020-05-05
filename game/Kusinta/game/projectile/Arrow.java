@@ -3,7 +3,7 @@ package projectile;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.LinkedList;
+import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -12,6 +12,7 @@ import environnement.Element;
 import game.Coord;
 import opponent.Opponent;
 import player.Player;
+import player.Character;
 
 public class Arrow extends Projectile {
 
@@ -21,9 +22,9 @@ public class Arrow extends Projectile {
 	int m_height;
 	int m_width;
 
-	public Arrow(Automaton arrowAutomaton, int x, int y, double angle, Player player, Direction direction)
+	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction)
 			throws Exception {
-		super(arrowAutomaton, x, y, angle, player, player.getModel(), direction);
+		super(arrowAutomaton,c, angle, shooter, direction);
 
 		image = m_shooter.getProjectileImage();
 
@@ -32,11 +33,11 @@ public class Arrow extends Projectile {
 		m_height = image.getHeight(null);
 		m_width = image.getWidth(null);
 
-		if (m_direction.toString().equals("E")) {
-			hitBox = new Coord((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
+		if (m_direction == Direction.E) {
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
 		} else {
-			hitBox = new Coord((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
+			hitBox = new Rectangle((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
 					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))));
 		}
 
@@ -51,9 +52,7 @@ public class Arrow extends Projectile {
 		if (image != null) {
 			int w = (int)(m_width * 1.5);
 			int h = (int)(m_height/1.5);
-//			g.setColor(Color.blue);
-//			g.fillRect(hitBox.X() - 5, hitBox.Y() - 5, 10, 10);
-			if (m_direction.toString().equals("E")) {
+			if (m_direction == Direction.E) {
 				bg.rotate(-m_angle, m_width / 2, m_height / 2);
 				bg.drawImage(image, -10, h/4, w, h, null);
 			} else {
@@ -65,9 +64,6 @@ public class Arrow extends Projectile {
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
-
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-
 	}
 
 	public float getAlpha() {
@@ -82,38 +78,18 @@ public class Arrow extends Projectile {
 	}
 
 	public boolean cell(Direction dir, Category cat) {
-		boolean c;
-		if (cat.toString().equals("_")) {
-			c = ((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-			if (c) {
+		boolean b = super.cell(dir, cat);
+		if (b) {
+			if (cat == Category.A) {
+				collidingWith.loseLife(m_strength);
+				((Opponent) collidingWith).setCollidedWith(this);
 				m_State = State.HIT_STATE;
-				return true;
-			}
-
-			LinkedList<Opponent> opponents = m_model.getOpponent();
-			for (Opponent op : opponents) {
-				c = op.getHitBox().contains(hitBox.X(), hitBox.Y())
-						|| op.getHitBox().contains(m_coord.X(), m_coord.Y());
-				if (c) {
-					m_State = State.HIT_STATE;
-					this.setCollidingWith(op);
-					((Opponent) collidingWith).setCollidedWith(this);
-					return true;
-				}
-			}
-		} else {
-			c = !((m_model.m_room.isBlocked(m_coord.X(), m_coord.Y()))
-					|| (m_model.m_room.isBlocked(hitBox.X(), hitBox.Y())));
-			if (m_State == State.HIT_STATE) {
-				return !c;
-			}
-			if (!c) {
+			} else if (cat == Category.O) {
 				m_State = State.HIT_STATE;
 			}
-			return c;
 		}
-		return false;
+		
+		return b;
 	}
 
 	public Coord getCoord() {
