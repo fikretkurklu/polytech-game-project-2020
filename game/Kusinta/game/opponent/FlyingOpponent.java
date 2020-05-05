@@ -148,6 +148,8 @@ public class FlyingOpponent extends Opponent {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 
+		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

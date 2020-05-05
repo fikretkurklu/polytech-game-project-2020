@@ -211,7 +211,6 @@ public abstract class Character extends Entity {
 		m_ratio_y = elapsed;
 
 		if (!checkBlock((hitBox.x + hitBox.width) - 1, m_coord.Y()) && !checkBlock(hitBox.x + 1, m_coord.Y())) {
-			System.out.println("Wrong 1 ");
 			if (!falling) {
 				y_gravity = m_coord.Y();
 				m_time = 0;
@@ -222,7 +221,6 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			System.out.println("Wrong 2 ");
 			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
@@ -402,7 +400,7 @@ public abstract class Character extends Entity {
 		if (shooting) {
 			shooting = false;
 			int m_x = m_coord.X() + hitBox.width / 2;
-			int m_y = m_coord.Y() - m_height / 2;
+			int m_y = m_coord.Y() - hitBox.height / 2;
 
 			Direction direc;
 			float angle;
