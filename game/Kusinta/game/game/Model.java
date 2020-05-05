@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
@@ -124,7 +125,7 @@ public class Model {
 				break;
 			case UNDERWORLD:
 				m_underworld.setPlayer(new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
-						m_underworld.getStartCoord().Y(), Direction.E, this));
+						m_underworld.getStartCoord().Y(), Direction.E, this, m_underworld.playerImages));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -243,6 +244,8 @@ public class Model {
 		case VILLAGE:
 			m_village.paint(g, width, height);
 			m_hud.paint(g);
+			break;
+		case GAMEOVER:
 			break;
 		}
 

@@ -3,6 +3,7 @@ package underworld;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -45,7 +46,8 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
-	Image[] ghostImages;
+	Image background;
+	public Image[] ghostImages, playerImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
@@ -76,6 +78,7 @@ public class Underworld {
 			e1.printStackTrace();
 		}
 		try {
+			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
@@ -96,6 +99,7 @@ public class Underworld {
 			f.close();
 			generateClouds(m_clouds);
 			ghostImages = loadGhostImage();
+			playerImages = loadPlayerImage();
 			generateGhosts(m_ghosts);
 			generateFragments(m_fragments);
 			generateGate();
@@ -167,12 +171,15 @@ public class Underworld {
 	
 	public void setPlayer(PlayerSoul player) {
 		m_player = player;
+		playerCreated = true;
 	}
 
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x, y);
-		if (code.equals("IW")) {
+		if (code.equals("")) {
+			return new UnderworldEmptySpace(coord);
+		} else if (code.equals("IW")) {
 			return new UndInnerWall(coord, UIWM);
 		} else if (code.contentEquals("OW_E")) {
 			return new UndWall(coord, UWIM, "E", wallAutomaton);
@@ -191,9 +198,9 @@ public class Underworld {
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
+		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
 		int y_start = (-y_decalage / Element.SIZE) * nbCol;
 		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
-
 		int x_start = (-x_decalage / Element.SIZE);
 		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
 		for (int i = y_start; i < y_end; i += nbCol) {
@@ -292,6 +299,41 @@ public class Underworld {
 	public int getHeight() {
 		return m_RealHeight;
 	}
+	
+	public Image[] loadPlayerImage() {
+		Image[] images = new Image[UnderworldParam.sizeDeathAnimation];
+		File imageFile;
+		try {
+			for (int i = 0; i < UnderworldParam.sizeAnimation; i++) {
+				imageFile = new File(UnderworldParam.playerSoulImage[i]);
+				images[i] = ImageIO.read(imageFile);
+			}
+			for (int j = UnderworldParam.sizeAnimation; j < UnderworldParam.sizeDashAnimation; j++) {
+				imageFile = new File(UnderworldParam.lureApparitionImage[j - UnderworldParam.sizeAnimation]);
+				images[j] = ImageIO.read(imageFile);
+			}
+			for (int k = UnderworldParam.sizeDashAnimation; k < UnderworldParam.sizeEscapeAnimation; k++) {
+				imageFile = new File(UnderworldParam.playerSoulEscapeImage[k - UnderworldParam.sizeDashAnimation]);
+				images[k] = ImageIO.read(imageFile);
+			}
+			for (int l = UnderworldParam.sizeEscapeAnimation; l < 6 + UnderworldParam.sizeEscapeAnimation; l++) {
+				imageFile = new File(UnderworldParam.playerSoulDeathImage[l - UnderworldParam.sizeEscapeAnimation]);
+				images[l] = ImageIO.read(imageFile);
+			}
+			BufferedImage[] deathTmp = m_model.loadSprite(UnderworldParam.deathSprite, 7, 7);
+			int index = 6 + UnderworldParam.sizeEscapeAnimation;
+			for (int m = 14; m < 42; m++) {
+				images[index] = deathTmp[m];
+				index++;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return images;
+	}
+	
+
 	
 	public Image[] loadGhostImage() {
 		int len = UnderworldParam.ghostImage.length;
