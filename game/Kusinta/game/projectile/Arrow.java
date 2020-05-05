@@ -84,6 +84,9 @@ public class Arrow extends Projectile {
 			if (cat == Category.A) {
 				collidingWith.loseLife(m_strength);
 				((Opponent) collidingWith).setCollidedWith(this);
+				m_State = State.HIT_STATE;
+			} else if (cat == Category.O) {
+				m_State = State.HIT_STATE;
 			}
 		}
 		

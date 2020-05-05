@@ -80,7 +80,7 @@ public class FlyingOpponent extends Opponent {
 			super.move(dir);
 
 			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
+				collidedWith.getCoord().translate(m_coord.X() - m_x , 0);
 			}
 		}
 		return true;
