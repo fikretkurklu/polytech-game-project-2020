@@ -242,8 +242,8 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		if (super.cell(dir, cat)) {
-			System.out.println("Test");
+		boolean b = super.cell(dir, cat);
+		if (b) {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
@@ -252,7 +252,7 @@ public class FlyingOpponent extends Opponent {
 				}
 			}
 		}
-		return false;
+		return b;
 
 	}
 }

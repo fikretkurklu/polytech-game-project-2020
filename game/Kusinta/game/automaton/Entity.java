@@ -105,6 +105,7 @@ public abstract class Entity {
 
 	public boolean cell(Direction dir, Category cat) {
 		if (m_model.actualMode == Model.mode.ROOM) {
+			int x;
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
@@ -123,24 +124,22 @@ public abstract class Entity {
 					return false;
 				}
 			case Direction.Es:
-				if (dir == m_direction) {
-					int x = hitBox.x + hitBox.width + 1;
-					if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-						return true;
-					}
-				} 
+				x = hitBox.x + hitBox.width + 1;
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+					return true;
+
+				}
 				return false;
 			case Direction.Ws:
-				if (dir == m_direction) {
-					int x = hitBox.x;
-					if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-						return true;
-					}
+				x = hitBox.x;
+				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
+						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+					return true;
 				}
+
 				return false;
 			default:
 				return false;
