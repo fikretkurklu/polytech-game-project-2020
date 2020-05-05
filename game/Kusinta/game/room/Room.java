@@ -13,11 +13,11 @@ import environnement.Decor;
 import environnement.Element;
 import game.Coord;
 
-public class Room{
+public class Room {
 
 	int nbRow;
 	int nbCol;
-	
+
 	AutomatonLibrary m_AL;
 	int m_width, m_height;
 
@@ -27,12 +27,12 @@ public class Room{
 	Decor[] m_decor; // liste de tout les décors affichable
 	int ambiance;
 	boolean isChanged;
-	
+
 	/*
 	 * Cette variable va nous servir à eviter que les décors ne soient pas trop
 	 * collé
 	 */
-	
+
 	int decorFreq;
 	Coord startCoord;
 
@@ -42,7 +42,7 @@ public class Room{
 	DoorImageManager DIM;
 	Automaton BlockAutomaton = null;
 	Automaton StaticDecorAutomaton = null;
-	
+
 	int m_BlockAElapsed = 0;
 	int m_RealWidth, m_RealHeight;
 	
@@ -71,40 +71,31 @@ public class Room{
 		
 		FOTable = new LinkedList<Coord>();
 		WOTable = new LinkedList<Coord>();
-		
+
 		BufferedReader f;
-		try {
-			roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
-			f = new BufferedReader(new FileReader(new File(roomFile)));
-			/*
-			 * Le fichier suis cette syntaxe: 
-			 * Row:Col 
-			 * CODE/CODE/CODE/...../ 
-			 * ...
-			 * ...
-			 * ...
-			 */
-			String[] firstLine = f.readLine().split(":");
-			nbRow = Integer.parseInt(firstLine[0]);
-			nbCol = Integer.parseInt(firstLine[1]);
-			m_RealWidth = nbCol * Element.SIZE;
-			m_RealHeight = nbRow * Element.SIZE;
-			//m_background = new Element[i * nbCol];
-			for (int i = 0; i < nbRow; i++) {
-				String[] actualLigne = f.readLine().split("/");
-				for (int j = 0; j < nbCol; j++) {
-					CodeElement(actualLigne[j], j, i);
-				}
+
+		roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
+		f = new BufferedReader(new FileReader(new File(roomFile)));
+		/*
+		 * Le fichier suis cette syntaxe: Row:Col CODE/CODE/CODE/...../ ... ... ...
+		 */
+		String[] firstLine = f.readLine().split(":");
+		nbRow = Integer.parseInt(firstLine[0]);
+		nbCol = Integer.parseInt(firstLine[1]);
+		m_RealWidth = nbCol * Element.SIZE;
+		m_RealHeight = nbRow * Element.SIZE;
+		// m_background = new Element[i * nbCol];
+		for (int i = 0; i < nbRow; i++) {
+			String[] actualLigne = f.readLine().split("/");
+			for (int j = 0; j < nbCol; j++) {
+				CodeElement(actualLigne[j], j, i);
 			}
-			f.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		f.close();
 	}
 
-	public void CodeElement(String code, int x, int y) throws Exception{
-		
+	public void CodeElement(String code, int x, int y) throws Exception {
+
 		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
 		switch(code) {
 		case "IW" :
@@ -158,37 +149,33 @@ public class Room{
 			break;
 		default :
 			throw new Exception("Code room err: " + code);
-		} 
-	}
+		}
+	} 
 
 	public void Grow(boolean isElement, Element add) {
 		if (isElement) {
-			Element[] tmp_elements= new Element[m_elements.length + 1];
+			Element[] tmp_elements = new Element[m_elements.length + 1];
 			System.arraycopy(m_elements, 0, tmp_elements, 0, m_elements.length);
 			tmp_elements[m_elements.length] = add;
 			m_elements = tmp_elements;
 		}
-		Element[] tmp_background= new Element[m_background.length + 1];
+		Element[] tmp_background = new Element[m_background.length + 1];
 		System.arraycopy(m_background, 0, tmp_background, 0, m_background.length);
 		tmp_background[m_background.length] = add;
 		m_background = tmp_background;
 	}
-	
+
 	/*
 	 * Methode qui va creer un nouveau décor a la position souhaitée, en fonction de
 	 * la fréquence d'appartition du décor. le boolean isDoor permet de spécifier
 	 * que l'ont veut creer une porte.
 	 */
-	public void newDecor(Coord coord, boolean isDoor) {
+	public void newDecor(Coord coord, boolean isDoor) throws Exception {
 		if (isDoor) {
 			Decor[] tmp_decor = new Decor[m_decor.length + 1];
 			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
-			try {
-				tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM, this, StaticDecorAutomaton);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			tmp_decor[m_decor.length] = new Door(new Coord(coord), DIM, this, StaticDecorAutomaton);
+
 			m_decor = tmp_decor;
 		} else {
 			int rand = (int) (Math.random() * 100);
@@ -225,10 +212,16 @@ public class Room{
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		int start = (- y_decalage / Element.SIZE) * nbCol;
-		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_background.length);
-		for (int i = start; i < end; i++) {
-			m_background[i].paint(g);
+		int y_start = (-y_decalage / Element.SIZE) * nbCol;
+		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_background.length);
+
+		int x_start = (-x_decalage / Element.SIZE);
+		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
+
+		for (int i = y_start; i < y_end; i += nbCol) {
+			for (int j = i + x_start; j < i + x_end; j++) {
+				m_background[j].paint(g);
+			}
 		}
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].paint(g);
@@ -246,7 +239,7 @@ public class Room{
 		}
 		return true;
 	}
-	
+
 	public int blockTop(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
@@ -255,6 +248,7 @@ public class Room{
 			return 0;
 		}
 	}
+
 	public int blockBot(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
@@ -263,33 +257,44 @@ public class Room{
 			return 0;
 		}
 	}
+
 	public void tick(long elapsed) {
-		
+
 		for (int i = 0; i < m_decor.length; i++) {
 			m_decor[i].tick(elapsed);
 		}
 		m_BlockAElapsed += elapsed;
 		if (m_BlockAElapsed > 1000) {
 			m_BlockAElapsed = 0;
-			for (int i = 0; i < m_elements.length; i ++) {
+			for (int i = 0; i < m_elements.length; i++) {
 				if (m_elements[i].getAutomaton() != null) {
 					m_elements[i].getAutomaton().step(m_elements[i]);
 				}
 			}
-			
-			for (int i = 0; i < m_decor.length; i ++) {
+
+			for (int i = 0; i < m_decor.length; i++) {
 				if (m_decor[i].getAutomaton() != null) {
 					m_decor[i].getAutomaton().step(m_decor[i]);
 				}
 			}
-			
+
 		}
 	}
-	
+
 	public int getWitdh() {
 		return m_RealWidth;
 	}
+
 	public int getHeight() {
 		return m_RealHeight;
+	}
+
+	public Door getDoor() {
+		for (int i = 0; i< m_decor.length; i++) {
+			if(m_decor[i] instanceof Door) {
+				return (Door) m_decor[i];
+			}
+		}
+		return null;
 	}
 }

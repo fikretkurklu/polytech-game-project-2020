@@ -62,3 +62,14 @@ WalkingOpponents (East) {
   | True ? Move(W) : (West)
 }
 
+KeyDrop (Init) {
+*(Init)
+  | Cell(H, A) ? Wizz : ()
+  | True ? : (Init)
+}
+
+CoinDrop (Init) {
+*(Init)
+  | Cell(H, A) ? Wizz : ()
+  | True ? : (Init)
+}
