@@ -8,21 +8,34 @@ import java.awt.Rectangle;
 import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
-import environnement.Element;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
 
 public class WalkingOpponent extends Opponent {
 
+<<<<<<< HEAD
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
+=======
+	protected enum CurrentState {
+		isAttacking, isMoving, isDead
+	};
+
+	CurrentState m_state;
+
+>>>>>>> master
 	int AttackStrength;
 	Image[] deathSprite;
 	Image[] walkingSprite;
 	Image[] attackingSprite;
 	int m_image_index, m_imageElapsed;
 
+<<<<<<< HEAD
+=======
+	boolean alreadyMove;
 	int hHitBox, wHitBox;
+
+>>>>>>> master
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);

@@ -1,6 +1,5 @@
 package projectile;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -66,8 +65,11 @@ public class MagicProjectile extends Projectile {
 				bg.drawImage(img, m_width, 0, -w, h, null);
 			}
 		}
-		g.setColor(Color.blue);
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
+		//paint HitBox
+//		g.setColor(Color.blue);
+//		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
 		bg.dispose();
 
 	}

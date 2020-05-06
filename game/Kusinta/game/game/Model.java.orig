@@ -81,10 +81,14 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
+<<<<<<< HEAD
 		bossAutomaton = m_AL.getAutomaton("Boss");
 		meteorAutomaton = m_AL.getAutomaton("Meteor");
+
+=======
 		
 		setRoom();
+>>>>>>> master
 		start();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
@@ -94,8 +98,11 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		
-		opponentCreator();
+<<<<<<< HEAD
 		m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
+=======
+		opponentCreator();
+>>>>>>> master
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
@@ -103,6 +110,10 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 	}
 
 	public void switchToNextRoom() throws Exception {

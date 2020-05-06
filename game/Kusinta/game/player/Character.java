@@ -18,7 +18,6 @@ import equipment.Stat.Stats;
 import game.Controller;
 import game.Coord;
 import game.Model;
-import opponent.Key;
 import projectile.Arrow;
 import projectile.MagicProjectile;
 import projectile.Metor;
@@ -49,7 +48,8 @@ public abstract class Character extends Entity {
 	protected Image imageProjectile;
 	protected Image[] imageProjectiles;
 
-	public Key m_key;
+	protected boolean m_key;
+	protected boolean m_bossKey;
 
 	protected boolean falling, jumping;
 	protected long m_ratio_x, m_ratio_y, m_time;
@@ -72,7 +72,7 @@ public abstract class Character extends Entity {
 
 		m_model = model;
 
-		m_key = null;
+		m_key = false;
 
 		m_image_index = 0;
 
@@ -112,6 +112,10 @@ public abstract class Character extends Entity {
 		return hitBox;
 	}
 
+	public void setCoord(Coord coord) {
+		m_coord = coord;
+	}
+	
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -337,12 +341,20 @@ public abstract class Character extends Entity {
 		return moving;
 	}
 
-	public Key getKey() {
+	public boolean getKey() {
 		return m_key;
 	}
 
-	public void setKey(Key key) {
+	public void setKey(boolean key) {
 		m_key = key;
+	}
+	
+	public boolean getBossKey() {
+		return m_bossKey;
+	}
+	
+	public void setBossKey(boolean key) {
+		m_bossKey = key;
 	}
 
 	@Override

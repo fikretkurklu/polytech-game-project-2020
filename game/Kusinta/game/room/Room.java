@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -44,6 +45,10 @@ public class Room {
 
 	int m_BlockAElapsed = 0;
 	int m_RealWidth, m_RealHeight;
+	
+	//Concernant la position des ennemis dans la room
+	LinkedList<Coord> FOTable;
+	LinkedList<Coord> WOTable;
 
 	public Room(AutomatonLibrary AL, int width, int height) throws Exception {
 		m_AL = AL;
@@ -63,10 +68,13 @@ public class Room {
 
 		StaticDecorAutomaton = m_AL.getAutomaton("Decor");
 		BlockAutomaton = m_AL.getAutomaton("Block");
+		
+		FOTable = new LinkedList<Coord>();
+		WOTable = new LinkedList<Coord>();
 
 		BufferedReader f;
 
-		roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
+		roomFile = RoomParam.roomFile[0];
 		f = new BufferedReader(new FileReader(new File(roomFile)));
 		/*
 		 * Le fichier suis cette syntaxe: Row:Col CODE/CODE/CODE/...../ ... ... ...
@@ -89,40 +97,62 @@ public class Room {
 	public void CodeElement(String code, int x, int y) throws Exception {
 
 		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
-		if (code.equals("IW")) {
+		switch(code) {
+		case "IW" :
 			Grow(false, new InnerWall(coord, IWIM));
-		} else if (code.equals("OW_E")) {
+			break;
+		case "OW_E" :
 			Grow(true, new OuterWall(coord, OWIM, "E", BlockAutomaton));
-		} else if (code.equals("OW_S")) {
+			break;
+		case "OW_S" :
 			Grow(true, new OuterWall(coord, OWIM, "S", BlockAutomaton));
-		} else if (code.equals("OW_W")) {
+			break;
+		case "OW_W" :
 			Grow(true, new OuterWall(coord, OWIM, "W", BlockAutomaton));
-		} else if (code.equals("OW_N")) {
+			break;
+		case "OW_N" :
 			Grow(true, new OuterWall(coord, OWIM, "N", BlockAutomaton));
-		} else if (code.equals("OW_SE")) {
+			break;
+		case "OW_SE" :
 			Grow(true, new OuterWall(coord, OWIM, "SE", BlockAutomaton));
-		} else if (code.equals("OW_SW")) {
+			break;
+		case "OW_SW" :
 			Grow(true, new OuterWall(coord, OWIM, "SW", BlockAutomaton));
-		} else if (code.equals("OW_NW")) {
+			break;
+		case "OW_NW" :
 			Grow(true, new OuterWall(coord, OWIM, "NW", BlockAutomaton));
-		} else if (code.equals("OW_NE")) {
+			break;
+		case "OW_NE" :
 			Grow(true, new OuterWall(coord, OWIM, "NE", BlockAutomaton));
-		} else if (code.equals("ES")) {
+			break;
+		case "ES" :
 			Grow(false, new EmptySpace(coord, ESIM));
-		} else if (code.equals("ES_D")) {
+			break;
+		case "ES_D" :
 			newDecor(coord, true);
 			Grow(false, new EmptySpace(coord, ESIM));
-		} else if (code.equals("ES_I")) {
+			break;
+		case "ES_I" :
 			startCoord = new Coord(coord);
 			startCoord.translate(Decor.SIZE / 2, Decor.SIZE);
 			Grow(false, new EmptySpace(coord, ESIM));
-		} else if (code.equals("ES_T")) {
+			break;
+		case "ES_T" :
 			newDecor(coord, false);
 			Grow(false, new EmptySpace(coord, ESIM));
+			break;
+		case "ES_WO" :
+			Grow(false, new EmptySpace(coord, ESIM));
+			WOTable.add(coord);
+			break;
+		case "ES_FO" :
+			Grow(false, new EmptySpace(coord, ESIM));
+			FOTable.add(coord);
+			break;
+		default :
+			throw new Exception("Code room err: " + code);
 		}
-		// throw new Exception("Code room err: " + code);
-
-	}
+	} 
 
 	public void Grow(boolean isElement, Element add) {
 		if (isElement) {
@@ -204,6 +234,22 @@ public class Room {
 		return startCoord;
 	}
 
+	public Coord[] getFlyingOpponentCoord() {
+		Coord[] coord = new Coord[FOTable.size()];
+		for (int i = 0; i < coord.length; i++) {
+			coord[i] = FOTable.remove();
+		}
+		return coord;
+	}
+	
+	public Coord[] getWalkingOpponentCoord() {
+		Coord[] coord = new Coord[WOTable.size()];
+		for (int i = 0; i < coord.length; i++) {
+			coord[i] = WOTable.remove();
+		}
+		return coord;
+	}
+	
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {

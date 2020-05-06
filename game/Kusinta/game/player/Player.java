@@ -63,7 +63,7 @@ public class Player extends Character {
 		jumping = false;
 		falling = false;
 		shooting = false;
-		invincible = false;
+		invincible = true;
 		paintInvincible = true;
 	}
 
@@ -135,7 +135,7 @@ public class Player extends Character {
 		int y2 = hitBox.y + hitBox.height / 4;
 		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if (door && m_key != null) {
+		if (door && m_key != false) {
 			d.activate();
 		}
 	}
@@ -257,11 +257,12 @@ public class Player extends Character {
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
 	}
-
-	public void setBossKey(BossKey key) {
-		m_bossKey = key;
+	
+	public void setInvincibility() {
+		invincible = true;
+		paintInvincible = true;
 	}
-
+	
 	public void setImageIndex(int min, int max) {
 		if (min_image_index != min || max_image_index != max) {
 			m_imageElapsed = 200;

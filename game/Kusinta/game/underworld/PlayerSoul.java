@@ -250,7 +250,12 @@ public class PlayerSoul extends Character {
 			int y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
 			if (checkBlock(x, y))
 				return false;
-			lure = new Lure(m_model.lureAutomaton, new Coord(x, y), 0, this);
+			try {
+				lure = new Lure(m_model.lureAutomaton, new Coord(x, y), 0, this);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			lureAvailable = false;
 			return true;
 		}

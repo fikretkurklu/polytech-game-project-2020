@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -40,7 +41,7 @@ public class Ghost extends Entity {
 	Rectangle m_hitbox;
 	private long m_moveElapsed;
 
-	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) {
+	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model) throws IOException {
 		super(automaton);
 		m_model = model;
 		m_coord = coord;
