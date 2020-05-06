@@ -15,6 +15,7 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.WalkingOpponent;
 import opponent.BossKey;
 import opponent.Coin;
@@ -55,6 +56,7 @@ public class Model {
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
 
+	public AutomaticRoomGenerator m_roomGenerator;
 	public Room m_room;
 	public Underworld m_underworld;
 	public Village m_village;
@@ -85,6 +87,7 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		
+		setRoom();
 		start();
 		m_player = new Player(playerAutomaton, m_room.getStartCoord().X(), m_room.getStartCoord().Y(),
 				new Direction("E"), this);
@@ -125,6 +128,11 @@ public class Model {
 		m_playerSave = new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord().X(),
 				m_underworld.getStartCoord().Y(), new Direction("E"), this);
 		mode = ROOM;
+	}
+	
+	public void setRoom() throws IOException {
+		m_roomGenerator = new AutomaticRoomGenerator();
+		m_roomGenerator.AutomaticGeneration();
 	}
 
 	public void setRoomEnv() throws Exception {

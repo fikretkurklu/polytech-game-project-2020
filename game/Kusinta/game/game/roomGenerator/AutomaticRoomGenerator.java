@@ -14,28 +14,14 @@ public class AutomaticRoomGenerator {
 	String[][] m_elementTable;
 	int m_row;
 	int m_col;
-
-	public AutomaticRoomGenerator(int nbRoom, int row, int col) {
-		this.getFile(nbRoom);
-		m_row = row;
-		m_col = col;
-		m_elementTable = new String[row][col];
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < col; j++) {
-				m_elementTable[i][j] = "";
-			}
-		}
-	}
-
-	public AutomaticRoomGenerator(int nbRoom, String[][] elementTable, int row, int col) {
-		this.getFile(nbRoom);
-		m_elementTable = elementTable;
-		m_row = row;
-		m_col = col;
+	
+	public AutomaticRoomGenerator() {
+		this.getFile();
+		m_elementTable = new String[0][0];
 	}
 
 	/*
-	 * This method is creating a table of empty spaces which creates an empty room
+	 * This method is creating a table of empty spaces which creates an empty this
 	 * It only put empty spaces were there is no wall
 	 * 
 	 */
@@ -52,8 +38,8 @@ public class AutomaticRoomGenerator {
 
 	/*
 	 * 
-	 * This method is used to add borders to the room of the given size This method
-	 * should be invoked last after you added every element in the room The added
+	 * This method is used to add borders to the this of the given size This method
+	 * should be invoked last after you added every element in the this The added
 	 * border will automatically merge with close platforms If you left some spaces
 	 * with no elements, this function will add empty spaces
 	 * 
@@ -199,7 +185,7 @@ public class AutomaticRoomGenerator {
 
 	/*
 	 * 
-	 * This method checks the room and add the required changes
+	 * This method checks the this and add the required changes
 	 * 
 	 */
 
@@ -566,7 +552,7 @@ public class AutomaticRoomGenerator {
 
 	/*
 	 * 
-	 * This method sets the door of the room at the given position The door cannot
+	 * This method sets the door of the this at the given position The door cannot
 	 * be over the initial point and cannot be over a wall
 	 * 
 	 */
@@ -614,8 +600,8 @@ public class AutomaticRoomGenerator {
 	 * 
 	 */
 
-	public void getFile(int nbRoom) {
-		File f1 = new File("resources/Room/Sample/room" + nbRoom + ".sample");
+	public void getFile() {
+		File f1 = new File("resources/Room/Sample/room1.sample");
 		file = f1;
 	}
 
@@ -660,7 +646,7 @@ public class AutomaticRoomGenerator {
 
 	}
 
-	public void type1Generator(int row, int col) throws IOException {
+	public void type1Generator(int row, int col) {
 		AddPlatformHard(8 + row, 5 + col, 2, 2);
 		AddPlatformHard(7 + row, 0 + col, 3, 2);
 		AddPlatformHard(5 + row, 8 + col, 2, 2);
@@ -677,7 +663,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(2 + row, 8 + col, 2, 2);
 	}
 
-	public void type3Generator(int row, int col) throws IOException {
+	public void type3Generator(int row, int col) {
 		AddPlatformHard(8 + row, 0 + col, 2, 10);
 		AddPlatformHard(5 + row, 0 + col, 3, 2);
 		AddPlatformHard(3 + row, 3 + col, 2, 2);
@@ -988,10 +974,26 @@ public class AutomaticRoomGenerator {
 		changeBlock(3 + row, 3 + col, "ES_WO");
 		AddDoor(3 + row, 1 + col);
 	}
+	
+	/*
+	 * 
+	 * This method automatically generates a this with a random size, a random start and a random door
+	 * 
+	 */
 
-	public static void main(String[] args) throws IOException {
+	public void AutomaticGeneration() throws IOException {
 		int row = (int) (Math.random() * (6 - 3 + 1)) + 3;
 		int col = (int) (Math.random() * (10 - 3 + 1)) + 3;
+		m_row = row*10+6;
+		m_col = col*10+6;
+		m_elementTable = new String[m_row][m_col];
+		
+		for (int i = 0; i < m_row; i++) {
+			for (int j = 0; j < m_col; j++) {
+				m_elementTable[i][j] = "";
+			}
+		}
+		
 		int Elevator = 1;
 		int leftElevatorCol = 0;
 		int rightElevatorCol = -1;
@@ -1039,121 +1041,120 @@ public class AutomaticRoomGenerator {
 			initialDoorCol = (int) (Math.random() * (col));
 		}
 		
-		AutomaticRoomGenerator Room = new AutomaticRoomGenerator(1, row * 10 + 6, col * 10 + 6);
-		Room.emptyMapGenerator();
+		this.emptyMapGenerator();
 		for (int i = row - 1; i >= 0; i -= 1) {
 			for (int j = col - 1; j >= 0; j -= 1) {
 				if (j == leftElevatorCol) {
 					int randomElevator = (int) (Math.random() * 3) + 1;
 					switch (randomElevator) {
 					case (1):
-						Room.leftElevator1(10*i+3, j*10+3);
+						this.leftElevator1(10*i+3, j*10+3);
 						break;
 					case (2):
-						Room.leftElevator2(i*10+3, j*10+3);
+						this.leftElevator2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.leftElevator3(i*10+3, j*10+3);
+						this.leftElevator3(i*10+3, j*10+3);
 						break;
 					}
 				} else if (j == midElevatorCol) {
 					int randomElevator = (int) (Math.random() * 3) + 1;
 					switch (randomElevator) {
 					case (1):
-						Room.leftElevator1(i*10+3, j*10+3);
+						this.leftElevator1(i*10+3, j*10+3);
 						break;
 					case (2):
-						Room.leftElevator2(i*10+3, j*10+3);
+						this.leftElevator2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.leftElevator3(i*10+3, j*10+3);
+						this.leftElevator3(i*10+3, j*10+3);
 						break;
 					}
 				} else if (j == rightElevatorCol) {
 					int randomElevator = (int) (Math.random() * 3) + 1;
 					switch (randomElevator) {
 					case (1):
-						Room.rightElevator1(i*10+3, j*10+3);
+						this.rightElevator1(i*10+3, j*10+3);
 						break;
 					case (2):
-						Room.rightElevator2(i*10+3, j*10+3);
+						this.rightElevator2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.rightElevator3(i*10+3, j*10+3);
+						this.rightElevator3(i*10+3, j*10+3);
 						break;
 					}
 				} else if (j == initialDoorCol && i == initialDoorRow) {
-					int randomElevator = (int) (Math.random() * 6) + 1;
-					switch (randomElevator) {
+					int randomDoor = (int) (Math.random() * 6) + 1;
+					switch (randomDoor) {
 					case (1):
-						Room.door1(i*10+3, j*10+3);
+						this.door1(i*10+3, j*10+3);
 						break;
 					case (2):
-						Room.door2(i*10+3, j*10+3);
+						this.door2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.door3(i*10+3, j*10+3);
+						this.door3(i*10+3, j*10+3);
 						break;
 					case (4):
-						Room.door4(i*10+3, j*10+3);
+						this.door4(i*10+3, j*10+3);
 						break;
 					case (5):
-						Room.door5(i*10+3, j*10+3);
+						this.door5(i*10+3, j*10+3);
 						break;
 					case (6):
-						Room.door6(i*10+3, j*10+3);
+						this.door6(i*10+3, j*10+3);
 						break;
 					}
 				} else if (j == initialPositionCol && i == initialPositionRow) {
-					int randomElevator = (int) (Math.random() * 6) + 1;
-					switch (randomElevator) {
+					int randomInitial = (int) (Math.random() * 6) + 1;
+					switch (randomInitial) {
 					case (1):
-						Room.initial1(i*10+3, j*10+3);
+						this.initial1(i*10+3, j*10+3);
 						break;
 					case (2):
-						Room.initial2(i*10+3, j*10+3);
+						this.initial2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.initial3(i*10+3, j*10+3);
+						this.initial3(i*10+3, j*10+3);
 						break;
 					case (4):
-						Room.initial4(i*10+3, j*10+3);
+						this.initial4(i*10+3, j*10+3);
 						break;
 					case (5):
-						Room.initial5(i*10+3, j*10+3);
+						this.initial5(i*10+3, j*10+3);
 						break;
 					case (6):
-						Room.initial6(i*10+3, j*10+3);
+						this.initial6(i*10+3, j*10+3);
 						break;
 					}
 				} else {
-					int randomElevator = (int) (Math.random() * 6) + 1;
-					switch (randomElevator) {
+					int randomMid = (int) (Math.random() * 6) + 1;
+					switch (randomMid) {
 					case (1):
-						Room.midPlatform1(i*10+3, j*10+3);
+						this.midPlatform1(i*10+3, j*10+3);
 						break;
 					case (2):
-						Room.midPlatform2(i*10+3, j*10+3);
+						this.midPlatform2(i*10+3, j*10+3);
 						break;
 					case (3):
-						Room.midPlatform3(i*10+3, j*10+3);
+						this.midPlatform3(i*10+3, j*10+3);
 						break;
 					case (4):
-						Room.midPlatform4(i*10+3, j*10+3);
+						this.midPlatform4(i*10+3, j*10+3);
 						break;
 					case (5):
-						Room.midPlatform5(i*10+3, j*10+3);
+						this.midPlatform5(i*10+3, j*10+3);
 						break;
 					case (6):
-						Room.midPlatform6(i*10+3, j*10+3);
+						this.midPlatform6(i*10+3, j*10+3);
 						break;
 					}
 				}
 			}
 		}
-		Room.AddCompleteBorder(3);
-		Room.verification();
-		Room.updateTextDocument();
+		this.AddCompleteBorder(3);
+		this.verification();
+		this.updateTextDocument();
 	}
 
 }
