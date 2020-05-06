@@ -1009,28 +1009,22 @@ public class AutomaticRoomGenerator {
 		for (int i = row - 1; i >= 0; i -= 1) {
 			for (int j = col - 1; j >= 0; j -= 1) {
 				if (j == leftElevatorCol) {
-					int randomElevator = (int) (Math.random() * 3) + 1;
+					int randomElevator = (int) (Math.random() * 2) + 1;
 					switch (randomElevator) {
 					case (1):
-						this.leftElevator1(10*i+3, j*10+3);
-						break;
-					case (2):
 						this.leftElevator2(i*10+3, j*10+3);
 						break;
-					case (3):
+					case (2):
 						this.leftElevator3(i*10+3, j*10+3);
 						break;
 					}
 				} else if (j == midElevatorCol) {
-					int randomElevator = (int) (Math.random() * 3) + 1;
+					int randomElevator = (int) (Math.random() * 2) + 1;
 					switch (randomElevator) {
 					case (1):
-						this.leftElevator1(i*10+3, j*10+3);
-						break;
-					case (2):
 						this.leftElevator2(i*10+3, j*10+3);
 						break;
-					case (3):
+					case (2):
 						this.leftElevator3(i*10+3, j*10+3);
 						break;
 					}
