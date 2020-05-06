@@ -142,9 +142,9 @@ public class Ghost extends Entity {
 			if (cat == Category.A) {
 				playerCoord = getPlayer().getCoord();
 				isLure = false;
-			} else if ((getPlayer()).lure != null && !(getPlayer()).lure.disapered) {
-				playerCoord = (getPlayer()).lure.getCoord();
-				isLure = true;
+//			} else if ((getPlayer()).lureActive()) {
+//				playerCoord = (getPlayer()).lure.getCoord();
+//				isLure = true;
 			}else
 				return false;
 			switch (dir.toString()) {
@@ -209,10 +209,10 @@ public class Ghost extends Entity {
 			coord = getPlayer().getCoord();
 			isLure = false;
 		} else if (cat == Category.C) {
-			if ((getPlayer()).lure != null && !(getPlayer()).lure.disapered) {
-				coord = (getPlayer()).lure.getCoord();
-				isLure = true;
-			} else
+//			if (getPlayer().lureActive()) {
+//				coord = (getPlayer()).lure.getCoord();
+//				isLure = true;
+//			} else
 				return false;
 		}
 		// Modifier egalités de coord pour garder une distance

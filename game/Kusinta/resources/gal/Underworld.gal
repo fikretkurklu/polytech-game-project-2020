@@ -41,8 +41,10 @@ PlayerSoul (Init) {
 
 Lure (Init){
 	* (Init)
-	| True ? : (Init)
-	*()
+	| GotPower ? : (Init)
+	| True ? Explode : (Animation)
+	* (Animation)
+	| True ? : (Animation)
 }
 
 Ghost (State0){

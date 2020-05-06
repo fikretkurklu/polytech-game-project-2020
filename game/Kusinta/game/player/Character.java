@@ -23,6 +23,7 @@ import projectile.Arrow;
 import projectile.MagicProjectile;
 import projectile.Projectile;
 import projectile.Projectile.proj;
+import underworld.Lure;
 
 public abstract class Character extends Entity {
 
@@ -419,6 +420,9 @@ public abstract class Character extends Entity {
 			break;
 		case MAGIC_PROJECTILE:
 			m_projectiles.add(new MagicProjectile(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			break;
+		case LURE:
+			m_projectiles.add(new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
 			break;
 		default:
 			break;

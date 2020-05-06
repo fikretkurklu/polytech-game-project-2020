@@ -13,7 +13,7 @@ import player.Character;
 public abstract class Projectile extends Entity {
 
 	public enum proj {
-		ARROW, MAGIC_PROJECTILE
+		ARROW, MAGIC_PROJECTILE, LURE
 	};
 
 	protected enum State {

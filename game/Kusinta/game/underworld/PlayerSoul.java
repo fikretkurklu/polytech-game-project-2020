@@ -1,6 +1,7 @@
 package underworld;
 
 import java.io.IOException;
+import projectile.Projectile;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -18,12 +19,13 @@ public class PlayerSoul extends Character {
 
 	public static final int SIZE = (int) Element.SIZE;
 	public static final int REFRESH_TICK = 200;
-	public static final int MOVE_TICK = 4;
+	public static final int STEP_TICK = 4;
+	public static final int MAX_LURE = 2;
 
 	int m_width, m_height = SIZE;
-
+	int nbLure;
 	Image m_images[];
-	long m_imageElapsed, m_moveElapsed;
+	long m_imageElapsed, m_stepElapsed, m_lureGenerationElapsed;
 	long m_dashTimer;
 	long m_lureTimer;
 
@@ -37,7 +39,7 @@ public class PlayerSoul extends Character {
 	public static final int DAMAGE = 5;
 	public static final int DEAD = 6;
 	public static final int HIDDEN = 7;
-	
+
 	int animationMode;
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
@@ -50,6 +52,7 @@ public class PlayerSoul extends Character {
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
+		nbLure = 0;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
@@ -61,62 +64,14 @@ public class PlayerSoul extends Character {
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		m_image_index = UnderworldParam.sizePlayerAnimation;
 		m_imageElapsed = 0;
-		m_moveElapsed = 0;
+		m_stepElapsed = 0;
 		m_images = images;
 		m_model = model;
 	}
-
-//	public void setPressed(int keyCode, boolean pressed) {
-//		switch (keyCode) {
-//		case Controller.K_Z:
-//			zPressed = pressed;
-//			break;
-//		case Controller.K_Q:
-//			qPressed = pressed;
-//			if (m_model.qPressed)
-//				leftOrientation = true;
-//			break;
-//		case Controller.K_S:
-//			sPressed = pressed;
-//			break;
-//		case Controller.K_D:
-//			dPressed = pressed;
-//			if (m_model.dPressed)
-//				leftOrientation = false;
-//			break;
-//		case Controller.K_E:
-//			ePressed = pressed;
-//			break;
-//		case Controller.K_SPACE:
-//			spacePressed = pressed;
-//			break;
-//		case Controller.K_V:
-//			vPressed = pressed;
-//			break;
-//		}
-//	}
-
-//	@Override
-//	public boolean key(int keycode) {
-//		switch (keycode) {
-//		case Controller.K_Z:
-//			return zPressed;
-//		case Controller.K_Q:
-//			return qPressed;
-//		case Controller.K_S:
-//			return sPressed;
-//		case Controller.K_D:
-//			return dPressed;
-//		case Controller.K_SPACE:
-//			return spacePressed;
-//		case Controller.K_V:
-//			return vPressed;
-//		case Controller.K_E:
-//			return ePressed;
-//		default:
-//			return false;
-//		}
-//	}
+	
+	public boolean lureActive () {
+		return m_projectiles.size() > 0;
+	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
@@ -127,7 +82,7 @@ public class PlayerSoul extends Character {
 		}
 		if (cat == Category.O) {
 			for (int i = 0; i < m_model.m_underworld.m_clouds.length; i++) {
-				if ((m_model.m_underworld.m_clouds[i].contains(xCenter, yCenter))){
+				if ((m_model.m_underworld.m_clouds[i].contains(xCenter, yCenter))) {
 					setVisibility(true);
 					return true;
 				}
@@ -303,18 +258,24 @@ public class PlayerSoul extends Character {
 
 	@Override
 	public boolean egg(Direction dir) {
-		if (lureAvailable) {
-			int x = m_model.m_mouseCoord.X() - Lure.SIZE/2;
-			int y = m_model.m_mouseCoord.Y() - Lure.SIZE/2;
-			if (m_model.m_underworld.checkPosition(x, y, 0, Lure.SIZE))
-				return false;
-			lure = new Lure(m_model.lureAutomaton, new Coord(x,y) , 0, this, m_direction, m_model.m_underworld.lureImages, m_model);
-			lureAvailable = false;
-			return true;
+ 	  if ((lureAvailable) && (m_projectiles.size() < MAX_LURE)) {
+			try {
+				int x = m_model.m_mouseCoord.X() - Lure.SIZE / 2;
+				int y = m_model.m_mouseCoord.Y() - Lure.SIZE / 2;
+				if (m_model.m_underworld.checkPosition(x, y, 0, Lure.SIZE))
+					return false;
+				addProjectile(Projectile.proj.LURE, new Coord(x, y), 0, this, m_direction);
+				lureAvailable = false;
+				m_lureGenerationElapsed = 0;
+				return true;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}
-	
+
 	public void setVisibility(boolean bool) {
 		hidden = bool;
 	}
@@ -326,6 +287,11 @@ public class PlayerSoul extends Character {
 	public static final int HEALTHHEIGHT = SIZE / 8;
 
 	public void paint(Graphics g) {
+		if (m_projectiles.size() > 0) {
+			for (int i = 0; i < m_projectiles.size(); i++) {
+				m_projectiles.get(i).paint(g);
+			}
+		}
 		if (hidden)
 			return;
 		if (escapedOrDead)
@@ -337,8 +303,6 @@ public class PlayerSoul extends Character {
 				g.drawImage(m_images[m_image_index], x + SIZE, y, -SIZE, SIZE, null);
 			else
 				g.drawImage(m_images[m_image_index], x, y, SIZE, SIZE, null);
-			if (lure != null)
-				lure.paint(g);
 			g.setColor(Color.green);
 			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
 			g.setColor(Color.blue);
@@ -389,23 +353,9 @@ public class PlayerSoul extends Character {
 				break;
 			}
 		}
-		m_moveElapsed += elapsed;
-		if (m_moveElapsed > MOVE_TICK) {
-			m_moveElapsed -= MOVE_TICK;
-			if (!(lureAvailable)) {
-				lure.tick(elapsed);
-				m_lureTimer += elapsed;
-				if (!lure.isDestroying()) {
-					if (lure.isDestroyed()) {
-						m_lureTimer = 0;
-						lure = null;
-						lureAvailable = true;
-					} else if (m_lureTimer >= 5000) {
-						m_lureTimer = 0;
-						lure.elapsed();
-					}
-				}
-			}
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > STEP_TICK) {
+			m_stepElapsed -= STEP_TICK;
 			if (!dashAvailable) {
 				m_dashTimer += elapsed;
 				if (m_dashTimer > 5000) {
@@ -415,6 +365,15 @@ public class PlayerSoul extends Character {
 			}
 			m_automaton.step(this);
 		}
+		m_lureGenerationElapsed += elapsed;
+		if (m_lureGenerationElapsed > 1000) {
+			lureAvailable = true;
+			m_lureGenerationElapsed = 0;
+		}
+		if (m_projectiles.size() > 0) {
+			for (int i = 0; i < m_projectiles.size(); i++) {
+				m_projectiles.get(i).tick(elapsed);
+			}
+		}
 	}
-
 }
