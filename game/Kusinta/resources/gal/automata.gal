@@ -60,30 +60,32 @@ FlyingOpponents (East) {
   | Cell(E, O) ? Turn(W) : (West)
   | Closest(P, E) ? Egg(E) : (East)
   | Closest(P, W) ? Egg(W) : (East)
-  | True ? Move(E) : (East) 
+  | !Cell(E, O) ? Move(E) : (East) 
  *(West)
   | Cell(H, P) ? Power : (West)  
   | ! GotPower() ? Explode() : ()        
   | Cell(W, O) ? Turn(E) : (East)
   | Closest(P, E) ? Egg(E) : (West)
   | Closest(P, W) ? Egg(W) : (West)
-  | True ? Move(W) : (West) 
+  | !Cell(W, O)? Move(W) : (West) 
 }
 
 
 WalkingOpponents (East) {
 *(East)
+
   | Cell(H, P) ? Power : (East)
+    | Cell(E, P) ? Wizz() : (East)
   | ! GotPower() ? Explode() : ()
   | Cell(E, O) ? Turn(W) : (West)
-  | Cell(E, P) ? Wizz() : (East)
   | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
+
   | Cell(H, P) ? Power : (West)
+    | Cell(W, P) ? Wizz() : (West)
   | ! GotPower() ? Explode() : ()
   | Cell(W, O) ? Turn(E) : (East)
-  | Cell(W, P) ? Wizz() : (West)
   | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
 }
@@ -108,7 +110,7 @@ Boss (EW) {
   | ! GotPower() ? Explode() : ()   
   | Closest(P, E) ? Hit(E) : (NS)
   | Closest(P, W) ? Hit(W) : (NS)
-  | True ? Move() / : (NS) 
+  | True ? Move() : (NS) 
  *(EW)
   | MyDir(E) & Cell(E, O) ? Turn(N) / Turn(S) : (NS)
   | MyDir(W) & Cell(W, O) ? Turn(N) / Turn(S) : (NS)

@@ -24,7 +24,7 @@ public abstract class Entity {
 	protected int m_width, m_height;
 
 	protected int X_MOVE;
-	
+
 	protected Character collidingWith;
 
 	public Entity() {
@@ -125,10 +125,12 @@ public abstract class Entity {
 					int widthHB = hitBox.width;
 					int heightHB = hitBox.height;
 					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
-							|| playerHitBox.contains(xHB + widthHB, yHB) || playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
 							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
 							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
-							|| playerHitBox.contains(xHB, yHB + heightHB) || playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
 							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
 						return true;
 					}
@@ -150,7 +152,23 @@ public abstract class Entity {
 				}
 				return false;
 			case Direction.Es:
-				if (cat == Category.O) {
+				if (cat == Category.P) {
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					int xHB = hitBox.x + X_MOVE;
+					int yHB = hitBox.y + X_MOVE;
+					int widthHB = hitBox.width;
+					int heightHB = hitBox.height;
+					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
+						return true;
+					}
+				} else if (cat == Category.O) {
 					x = hitBox.x + hitBox.width + X_MOVE;
 					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
 							|| m_model.m_room.isBlocked(x, hitBox.y)
@@ -158,25 +176,41 @@ public abstract class Entity {
 				}
 				return false;
 			case Direction.Ws:
-				x = hitBox.x - X_MOVE;
-				if (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
-						|| m_model.m_room.isBlocked(x, hitBox.y)
-						|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height)) {
-					return true;
+				if (cat == Category.P) {
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					int xHB = hitBox.x  - X_MOVE;
+					int yHB = hitBox.y  - X_MOVE;
+					int widthHB = hitBox.width;
+					int heightHB = hitBox.height;
+					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
+						return true;
+					}
+				} else if (cat == Category.O) {
+					x = hitBox.x - X_MOVE;
+					if (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height)) {
+						return true;
+					}
 				}
 				return false;
 			case Direction.Ns:
 				y = hitBox.y - X_MOVE;
-				if (m_model.m_room.isBlocked(hitBox.x, y)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+				if (m_model.m_room.isBlocked(hitBox.x, y) || m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
 						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
 					return true;
 				}
 				return false;
 			case Direction.Ss:
 				y = hitBox.y + X_MOVE + hitBox.height;
-				if (m_model.m_room.isBlocked(hitBox.x, y)
-						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+				if (m_model.m_room.isBlocked(hitBox.x, y) || m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
 						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
 					return true;
 				}
@@ -208,7 +242,7 @@ public abstract class Entity {
 	public Automaton getAutomaton() {
 		return m_automaton;
 	}
-	
+
 	public void setCollidingWith(Character cha) {
 		if (collidingWith != cha) {
 			collidingWith = cha;

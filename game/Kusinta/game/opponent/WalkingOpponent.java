@@ -23,10 +23,11 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	int hHitBox, wHitBox;
+
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
-		
+
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
 		}
@@ -136,10 +137,11 @@ public class WalkingOpponent extends Opponent {
 				}
 				m_image_index = (m_image_index + 1) % 6;
 			}
-			if (shooting)
+			if (shooting) {
 				m_image_index = (m_image_index + 1) % 4;
-			else 
+			} else {
 				m_image_index = (m_image_index + 1) % 6;
+			}
 
 		}
 	}
@@ -164,10 +166,13 @@ public class WalkingOpponent extends Opponent {
 				}
 				break;
 			}
+			if (shooting)
+				shooting = !shooting;
 		} else {
 			if (dir == Direction.H) {
 				collidingWith = m_model.getPlayer();
 			}
+
 		}
 
 		return c;
@@ -223,7 +228,7 @@ public class WalkingOpponent extends Opponent {
 			m_image_index = 0;
 		}
 		shooting = true;
-		return false;
+		return true;
 	}
 
 	@Override
@@ -255,6 +260,7 @@ public class WalkingOpponent extends Opponent {
 			int newX = hitBox.x + hitBox.width - newW;
 			hitBox.setBounds(newX, hitBox.y, newW, hHitBox);
 		}
+		hitBox.height -= 1;
 	}
 
 	public void basicHitBox() {
@@ -264,6 +270,7 @@ public class WalkingOpponent extends Opponent {
 		} else {
 			hitBox.setBounds(hitBox.x, hitBox.y, wHitBox, hHitBox);
 		}
+		hitBox.height -= 1;
 	}
 
 }
