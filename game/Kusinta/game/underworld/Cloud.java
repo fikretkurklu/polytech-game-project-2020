@@ -1,14 +1,15 @@
 package underworld;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 import environnement.Element;
 
@@ -20,21 +21,18 @@ public class Cloud extends Element{
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
 	long timeElapsed = 0;
 	Rectangle hitBox;
+	
+	public static final int SIZE = 2 * Element.SIZE;
 
-	public Cloud(Automaton automaton, Coord coord, Model model) {
+	public Cloud(Automaton automaton, Coord coord, Model model, Image image) {
 		super(false, true, coord, automaton);
-		m_width = 2 * Element.SIZE;
-		m_height = 2 * Element.SIZE;
+		m_width = SIZE;
+		m_height = SIZE;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);
 		m_model = model;
 		outScreen = false;
 		move = false;
-		try {
-			__image = ImageLoader.loadImage(UnderworldParam.cloudImage[2], m_width, m_height);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		__image = image;
 	}
 	
 	@Override
@@ -57,9 +55,9 @@ public class Cloud extends Element{
 	
 
 	public void reactivate() {
-		m_coord.setX(4556);
-		hitBox.setLocation(4556, m_coord.Y());
-		setCurrentState(m_automaton.getInitialState());;
+		m_coord.setX(Underworld.BORDERX);
+		hitBox.setLocation(Underworld.BORDERX, m_coord.Y());
+		setCurrentState(m_automaton.getInitialState());
 		outScreen = false;
 		move = false;
 		timeElapsed = 0;
@@ -78,7 +76,7 @@ public class Cloud extends Element{
 	
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
+		g.drawImage(__image, m_coord.X(), m_coord.Y(), null);
 		g.setColor(Color.blue);
 		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}

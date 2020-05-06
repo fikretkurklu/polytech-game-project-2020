@@ -96,8 +96,4 @@ public class Lure extends Projectile {
 			m_automaton.step(this);
 		}
 	}
-
-	public Coord getCoord() {
-		return m_coord;
-	}
 }

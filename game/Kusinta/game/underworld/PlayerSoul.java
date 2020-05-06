@@ -23,7 +23,6 @@ public class PlayerSoul extends Character {
 	public static final int MAX_LURE = 2;
 
 	int m_width, m_height = SIZE;
-	int nbLure;
 	Image m_images[];
 	long m_imageElapsed, m_stepElapsed, m_lureGenerationElapsed;
 	long m_dashTimer;
@@ -52,7 +51,6 @@ public class PlayerSoul extends Character {
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
-		nbLure = 0;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
@@ -69,7 +67,7 @@ public class PlayerSoul extends Character {
 		m_model = model;
 	}
 	
-	public boolean lureActive () {
+	public boolean lureActive(){
 		return m_projectiles.size() > 0;
 	}
 

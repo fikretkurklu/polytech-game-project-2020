@@ -62,13 +62,10 @@ public class ImageLoader {
 	 * @return the method return an Image variable which contains the image loaded
 	 * @throws Exception when an error occur when trying to load the image
 	 */
-	public static Image loadImage(String path, int width, int height) throws Exception {
+	public static Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
-		
 		if (imageFile.exists()) {
-			Image img;
-			img = ImageIO.read(imageFile);
-			img = img.getScaledInstance(width, height, 0);
+			Image img = ImageIO.read(imageFile);
 			return img;
 		} else {
 			throw new Exception("Error while loading image: path = " + path);

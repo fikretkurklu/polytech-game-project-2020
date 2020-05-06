@@ -206,7 +206,6 @@ public class Model {
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
 			}
-
 			if (m_key != null) {
 				m_key.paint(gp);
 			}
