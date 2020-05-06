@@ -11,6 +11,7 @@ import automaton.Direction;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
+import projectile.Projectile;
 import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
@@ -146,7 +147,7 @@ public class FlyingOpponent extends Opponent {
 //		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
 //		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
-		for (int i = 0; i < m_projectiles.size(); i++) {
+		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
 		}
 	}
@@ -184,8 +185,8 @@ public class FlyingOpponent extends Opponent {
 			}
 		}
 
-		for (int i = 0; i < m_projectiles.size(); i++) {
-			(m_projectiles.get(i)).tick(elapsed);
+		for (int i = 0; i < m_projectiles.size(); i ++) {
+			m_projectiles.get(i).tick(elapsed);
 		}
 	}
 

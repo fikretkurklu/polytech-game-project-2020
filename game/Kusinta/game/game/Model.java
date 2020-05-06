@@ -41,6 +41,8 @@ public class Model {
 	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
+	public Automaton bossAutomaton;
+	public Automaton meteorAutomaton;
 
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
@@ -73,6 +75,8 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
+		bossAutomaton = m_AL.getAutomaton("Boss");
+		meteorAutomaton = m_AL.getAutomaton("Meteor");
 
 		start();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
@@ -82,9 +86,8 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(800, 1700), Direction.E, this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
+		
+		m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
@@ -93,11 +96,6 @@ public class Model {
 		m_key = null;
 		m_bossKey = null;
 
-		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
-		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
-
-		m_opponents.get(0).setKey(key);
-		m_opponents.get(1).setKey(bKey);
 	}
 
 	public void switchEnv(mode m) {

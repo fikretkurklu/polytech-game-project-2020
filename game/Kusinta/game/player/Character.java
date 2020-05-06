@@ -21,8 +21,10 @@ import game.Model;
 import opponent.Key;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
+import sun.net.www.MeteredStream;
 
 public abstract class Character extends Entity {
 
@@ -37,7 +39,7 @@ public abstract class Character extends Entity {
 
 	protected LinkedList<Projectile> m_projectiles;
 
-	BufferedImage[] bI;
+	protected BufferedImage[] bI;
 	protected int m_image_index;
 
 
@@ -417,6 +419,9 @@ public abstract class Character extends Entity {
 			break;
 		case MAGIC_PROJECTILE:
 			m_projectiles.add(new MagicProjectile(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			break;
+		case METEOR:
+			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
 			break;
 		default:
 			break;

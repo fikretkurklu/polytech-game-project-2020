@@ -90,7 +90,7 @@ public class MagicProjectile extends Projectile {
 		}
 
 	}
-
+	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);

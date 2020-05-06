@@ -33,6 +33,14 @@ Fleche (Init) {
   | True ? Move : (Init)
 }
 
+
+Meteor (Init) {
+  *(Init)
+  | Cell(H,A) ? Explode() : ()
+  | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
+}
+
 MagicProj (Init) {
   *(Init)
   | Cell(H,P) ? Explode() : ()
@@ -91,3 +99,21 @@ CoinDrop (Init) {
   | Cell(H, A) ? Wizz : ()
   | True ? : (Init)
 }
+
+Boss (East) {
+*(East)
+  | Cell(H, P) ? Power : (East)  
+  | ! GotPower() ? Explode() : ()        
+  | Cell(E, O) ? Turn(W) : (West)
+  | Closest(P, E) ? Hit(E) : (East)
+  | Closest(P, W) ? Hit(W) : (East)
+  | True ? Move(E) : (East) 
+ *(West)
+  | Cell(H, P) ? Power : (West)  
+  | ! GotPower() ? Explode() : ()        
+  | Cell(W, O) ? Turn(E) : (East)
+  | Closest(P, E) ? Hit(E) : (West)
+  | Closest(P, W) ? Hit(W) : (West)
+  | True ? Move(W) : (West) 
+}
+
