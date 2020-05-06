@@ -108,7 +108,7 @@ Boss (EW) {
   | ! GotPower() ? Explode() : ()   
   | Closest(P, E) ? Hit(E) : (NS)
   | Closest(P, W) ? Hit(W) : (NS)
-  | True ? Move() : (NS) 
+  | True ? Move() / : (NS) 
  *(EW)
   | MyDir(E) & Cell(E, O) ? Turn(N) / Turn(S) : (NS)
   | MyDir(W) & Cell(W, O) ? Turn(N) / Turn(S) : (NS)

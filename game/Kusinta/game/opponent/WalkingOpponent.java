@@ -39,7 +39,6 @@ public class WalkingOpponent extends Opponent {
 
 		m_imageElapsed = 0;
 		shooting = false;
-		moving = true;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 

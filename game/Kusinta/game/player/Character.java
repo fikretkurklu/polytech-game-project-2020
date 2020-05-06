@@ -89,11 +89,9 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-
 		if (dir == Direction.F) {
 			dir = m_direction;
 		}
-
 		if (dir == Direction.E) {
 			m_coord.translateX(X_MOVE);
 			hitBox.translate(X_MOVE, 0);
@@ -107,9 +105,7 @@ public abstract class Character extends Entity {
 			m_coord.translateY(X_MOVE);
 			hitBox.translate(0, X_MOVE);
 		}
-
 		return true;
-
 	}
 
 	public Rectangle getHitBox() {
@@ -134,6 +130,8 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
+		if (dir == Direction.F)
+			return false;
 		if (dir != m_direction)
 			m_direction = dir;
 		return true;

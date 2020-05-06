@@ -27,7 +27,7 @@ public class Boss extends Opponent {
 	long m_imageElapsedTick = 200;
 	long m_moveElapsed;
 	int SPEED_WALK_TICK = 8;
-	
+
 	int hitBoxPadding;
 
 	public Boss(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
@@ -39,7 +39,8 @@ public class Boss extends Opponent {
 		m_height = SIZE * 2;
 		hitBoxPadding = m_height / 10;
 		m_width = (int) (m_height * ratio);
-		hitBox = new Rectangle(C.X() - m_width / 2 + hitBoxPadding, C.Y() - m_height + hitBoxPadding, m_width - 2 * hitBoxPadding, m_height - 2 * hitBoxPadding);
+		hitBox = new Rectangle(C.X() - m_width / 2 + hitBoxPadding, C.Y() - m_height + hitBoxPadding,
+				m_width - 2 * hitBoxPadding, m_height - 2 * hitBoxPadding);
 		m_image_index = 45;
 
 		setImageIndex(44, 53);
@@ -58,7 +59,7 @@ public class Boss extends Opponent {
 			gp.drawImage(bI[m_image_index], m_coord.X() + m_width / 2, m_coord.Y() - m_height, -m_width, m_height,
 					null);
 		}
-		for (int i = 0; i < m_projectiles.size(); i ++) {
+		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(gp);
 		}
 		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
@@ -81,12 +82,12 @@ public class Boss extends Opponent {
 				m_image_index = min_image_index;
 			if (shooting && m_image_index == max_image_index) {
 				Coord playerCoord = m_model.getPlayer().getCoord();
-				super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
-						proj.METEOR);
+				super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2, proj.METEOR);
 			}
 		}
-		for (int i = 0; i < m_projectiles.size(); i ++) {
-			m_projectiles.get(i).tick(elapsed);;
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			m_projectiles.get(i).tick(elapsed);
+			;
 		}
 	}
 
@@ -99,17 +100,10 @@ public class Boss extends Opponent {
 	}
 
 	public boolean move(Direction dir) {
-		if (gotpower()) {
-			int m_x = m_coord.X();
-
-			setImageIndex(44, 53);
-			super.move(dir);
-
-			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_coord.X() - m_x, 0);
-			}
-		}
-		return true;
+		setImageIndex(44, 53);
+	
+		return super.move(dir);
+		
 	}
 
 	@Override
@@ -157,6 +151,7 @@ public class Boss extends Opponent {
 		}
 		return false;
 	}
+
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);

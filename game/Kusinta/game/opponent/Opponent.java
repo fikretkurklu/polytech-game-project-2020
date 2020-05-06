@@ -13,8 +13,6 @@ public abstract class Opponent extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	protected boolean moving;
-
 	protected Arrow collidedWith;
 
 	Key m_key;
@@ -28,7 +26,6 @@ public abstract class Opponent extends Character {
 
 		m_key = null;
 
-		moving = false;
 	}
 
 	@Override
@@ -68,14 +65,9 @@ public abstract class Opponent extends Character {
 	
 	public boolean move(Direction dir) {
 		if (gotpower()) {
+			
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
-
-			if (!moving) {
-				m_image_index = 0;
-			}
-			moving = true;
-
 			if (!shooting)
 				turn(dir);
 

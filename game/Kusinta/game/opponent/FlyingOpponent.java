@@ -27,7 +27,6 @@ public class FlyingOpponent extends Opponent {
 		m_imageElapsed = 0;
 
 		shooting = false;
-		moving = false;
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
