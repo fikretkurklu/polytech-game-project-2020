@@ -150,10 +150,9 @@ public class RoomGenerator {
 	/*
 	 * 
 	 * This method add a platform at the i, j position, with the size and the width
-	 * given. This width and the length must be at least bigger or equal to 2 (to
-	 * have sprites corresponding for the platform) The platform will be added at
-	 * this position without checking what is at this position Hard addition of a
-	 * platform won't merge it with nearby platforms
+	 * given. The platform will be added at this position without checking what is
+	 * at this position Hard addition of a platform won't merge it with nearby
+	 * platforms
 	 * 
 	 */
 
@@ -166,8 +165,76 @@ public class RoomGenerator {
 		int width = enterNb();
 		System.out.println("Enter length :");
 		int length = enterNb();
-		if (length < 2 || width < 2) {
-			System.out.println("The length or width is too small");
+		String orientation_NS = "";
+		String orientation_EW = "";
+		if (width == 1) {
+			System.out.println("Orientation choice : N/S ");
+			orientation_NS = enterTxt();
+		} else if (length == 1) {
+			System.out.println("Orientation choice : E/W ");
+			orientation_EW = enterTxt();
+		}
+
+		if (width == 1 && length == 1) {
+			if (orientation_NS.contentEquals("S")) {
+				if (orientation_EW.contentEquals("E")) {
+					m_elementTable[i][j] = "OW_SE";
+				} else if (orientation_EW.contentEquals("W")) {
+					m_elementTable[i][j] = "OW_SW";
+				}
+			} else if (orientation_NS.contentEquals("N")) {
+				if (orientation_EW.contentEquals("E")) {
+					m_elementTable[i][j] = "OW_NE";
+				} else if (orientation_EW.contentEquals("W")) {
+					m_elementTable[i][j] = "OW_NW";
+				}
+			}
+		} else if (width == 1) {
+			for (int k = j; k < j + length; k++) {
+				if (k == j) {
+					if (orientation_NS.contentEquals("N")) {
+						m_elementTable[i][k] = "OW_NW";
+					} else if (orientation_NS.contentEquals("S")) {
+						m_elementTable[i][k] = "OW_SW";
+					}
+				} else if (k == j + length - 1) {
+					if (orientation_NS.contentEquals("N")) {
+						m_elementTable[i][k] = "OW_NE";
+					} else if (orientation_NS.contentEquals("S")) {
+						m_elementTable[i][k] = "OW_SE";
+					}
+				} else {
+					if (orientation_NS.contentEquals("N")) {
+						m_elementTable[i][k] = "OW_N";
+					} else if (orientation_NS.contentEquals("S")) {
+						m_elementTable[i][k] = "OW_S";
+					}
+				}
+			}
+
+		} else if (length == 1) {
+			for (int k = i; k < i + width; k++) {
+				if (k == i) {
+					if (orientation_EW.contentEquals("E")) {
+						m_elementTable[k][j] = "OW_NE";
+					} else if (orientation_EW.contentEquals("W")) {
+						m_elementTable[k][j] = "OW_NW";
+					}
+				} else if (k == i + width - 1) {
+					if (orientation_EW.contentEquals("E")) {
+						m_elementTable[k][j] = "OW_SE";
+					} else if (orientation_EW.contentEquals("W")) {
+						m_elementTable[k][j] = "OW_SW";
+					}
+				} else {
+					if (orientation_EW.contentEquals("E")) {
+						m_elementTable[k][j] = "OW_E";
+					} else if (orientation_EW.contentEquals("W")) {
+						m_elementTable[k][j] = "OW_W";
+					}
+				}
+			}
+
 		} else {
 			for (int k = i; k < i + width; k++) {
 				for (int k2 = j; k2 < j + length; k2++) {
@@ -196,7 +263,6 @@ public class RoomGenerator {
 				}
 			}
 		}
-
 	}
 
 	/*

@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -75,7 +74,7 @@ public class Room {
 
 		BufferedReader f;
 
-		roomFile = RoomParam.roomFile[(int) (Math.random() * RoomParam.roomFile.length)];
+		roomFile = RoomParam.roomFile[0];
 		f = new BufferedReader(new FileReader(new File(roomFile)));
 		/*
 		 * Le fichier suis cette syntaxe: Row:Col CODE/CODE/CODE/...../ ... ... ...

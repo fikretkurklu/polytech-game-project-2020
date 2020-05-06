@@ -19,7 +19,7 @@ public class NormalKey extends Key {
 	
 	@Override
 	public boolean wizz(Direction dir) {
-		((Player)m_model.m_player).setKey(this);
+		((Player)m_model.m_player).setKey(true);
 		m_model.setKey(null);
 		m_model.m_room.getDoor().setVisible(true);
 

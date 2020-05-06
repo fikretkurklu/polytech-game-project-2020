@@ -46,6 +46,7 @@ public class Model {
 	public Automaton coinDropAutomaton;
 
 	public AutomaticRoomGenerator m_roomGenerator;
+	public int difficultyLevel;
 	
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
@@ -97,14 +98,14 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
-
-		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
-		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
-
-		m_opponents.get(0).setKey(key);
-		m_opponents.get(1).setKey(bKey);
 	}
 
+	public void switchToNextRoom() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_AL, m_width, m_height);
+		this.m_player.setCoord(m_room.getStartCoord());
+	}
+	
 	public void switchEnv(mode m) {
 		qPressed = false;
 		zPressed = false;
@@ -315,6 +316,13 @@ public class Model {
 		for (int i = 0; i < coordWO.length; i++) {
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coordWO[i], new Direction("E"), this));
 		}
+		int randomKey = (int) (Math.random()*m_opponents.size());
+		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		while (randomBossKey == randomKey) {
+			randomBossKey = (int) (Math.random()*m_opponents.size());
+		}
+		m_opponents.get(randomKey).setKey(true);
+		m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
