@@ -12,6 +12,7 @@ import environnement.Element;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
+import player.Character;
 
 public class WalkingOpponent extends Opponent {
 
@@ -302,10 +303,11 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean power() {
 		if (collidingWith != null) {
+			int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 			if (m_state.equals(CurrentState.isAttacking)) {
-				collidingWith.loseLife(AttackStrength);
+				collidingWith.loseLife(AttackStrength - tmpPlayerResistance);
 			} else {
-				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength));
+				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength) - tmpPlayerResistance);
 			}
 		}
 		return true;
