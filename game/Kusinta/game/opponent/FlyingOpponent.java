@@ -9,27 +9,20 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
-import projectile.MagicProjectile;
-import projectile.Projectile;
+import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
-
-	public static final int SPEED_FLY = 2;
-
-	protected boolean shooting;
 
 	Image[] death;
 	Image[] flight;
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
 
-	int SPEED_WALK_TICK = 4;
-	long m_moveElapsed;
-	
-	public FlyingOpponent(Automaton automaton, int x, int y, Direction dir, Model model) throws Exception {
+	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
-		super(automaton, x, y, dir, model, 100, 100, 1000, 100, 5);
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
 
 		m_imageElapsed = 0;
 
@@ -38,26 +31,28 @@ public class FlyingOpponent extends Opponent {
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
-			imageProjectiles[i] = loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png");
+			imageProjectiles[i] = ImageLoader.loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png", SIZE);
 		}
 		death = new Image[6];
 		for (int i = 0; i < 6; i++) {
-			death[i] = loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png");
+			death[i] = ImageLoader.loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png", SIZE);
 		}
 
 		flight = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			flight[i] = loadImage("resources/oppenent/jin/Flight" + (i + 1) + ".png");
+			flight[i] = ImageLoader.loadImage("resources/oppenent/jin/Flight" + (i + 1) + ".png", SIZE);
 		}
 
 		attack = new Image[4];
 		for (int i = 0; i < 4; i++) {
-			attack[i] = loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png");
+			attack[i] = ImageLoader.loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png", SIZE);
 		}
 
-		m_width = flight[0].getWidth(null);
-		m_height = flight[0].getHeight(null);
+		float ratio = (float) ((float) flight[0].getWidth(null)) / (float) (flight[0].getHeight(null));
 
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+		
 		int w = (int) (m_width / 1.7);
 		int h = (int) (m_height / 1.3);
 
@@ -68,6 +63,8 @@ public class FlyingOpponent extends Opponent {
 		m_money = 200;
 
 		m_moveElapsed = 0;
+
+		X_MOVE = 2;
 
 	}
 
@@ -80,20 +77,13 @@ public class FlyingOpponent extends Opponent {
 			}
 			moving = true;
 
-			if (m_direction.toString().equals("E")) {
-				m_x += SPEED_FLY;
-				hitBox.translate(m_x - m_coord.X(), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(m_x - m_coord.X(), 0);
-				}
-				m_coord.setX(m_x);
-			} else {
-				m_x -= SPEED_FLY;
-				hitBox.translate(-(m_coord.X() - m_x), 0);
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(-(m_coord.X() - m_x), 0);
-				}
-				m_coord.setX(m_x);
+			if (!shooting)
+				turn(dir);
+
+			super.move(dir);
+
+			if (collidedWith != null) {
+				collidedWith.getCoord().translate(m_coord.X() - m_x , 0);
 			}
 		}
 		return true;
@@ -115,9 +105,9 @@ public class FlyingOpponent extends Opponent {
 			int player_x = playerCoord.X();
 
 			if (player_x > m_coord.X()) {
-				turn(new Direction("E"));
+				turn(Direction.E);
 			} else {
-				turn(new Direction("W"));
+				turn(Direction.W);
 			}
 
 			return true;
@@ -127,8 +117,6 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-//		g.setColor(Color.blue);
-//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		Image image;
 		if (!gotpower()) {
 			image = death[m_image_index];
@@ -137,7 +125,7 @@ public class FlyingOpponent extends Opponent {
 		} else {
 			image = flight[m_image_index];
 		}
-		if (m_direction.toString().equals("E")) {
+		if (m_direction == Direction.E) {
 			g.drawImage(image, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
 			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
@@ -156,18 +144,18 @@ public class FlyingOpponent extends Opponent {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 
+		// paint hitBox
+//		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
+//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+
 		for (int i = 0; i < m_projectiles.size(); i++) {
-			((MagicProjectile) m_projectiles.get(i)).paint(g);
+			m_projectiles.get(i).paint(g);
 		}
 	}
 
 	@Override
 	public void tick(long elapsed) {
-		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
-			m_automaton.step(this);
-		}
+		super.tick(elapsed);
 
 		m_imageElapsed += elapsed;
 		float attackspeed = 200;
@@ -182,13 +170,8 @@ public class FlyingOpponent extends Opponent {
 				if (m_image_index == 5) {
 					m_model.getOpponent().remove(this);
 					dropKey();
-					try {
-						m_model.addCoin(
-								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+
 				}
 				m_image_index = (m_image_index + 1) % 6;
 			} else {
@@ -196,8 +179,9 @@ public class FlyingOpponent extends Opponent {
 			}
 			if (shooting) {
 				if (m_image_index == 3) {
-					shoot();
-					shooting = false;
+					Coord playerCoord = m_model.getPlayer().getCoord();
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
+							proj.MAGIC_PROJECTILE);
 				}
 			}
 		}
@@ -209,7 +193,7 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.mode == m_model.ROOM) {
+		if (m_model.actualMode == Model.mode.ROOM) {
 			boolean d = m_model.getPlayer().gotpower();
 			if (d) {
 
@@ -256,94 +240,20 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
+		boolean b = super.cell(dir, cat);
+		if (b) {
+			switch (dir.toString()) {
+			case Direction.Hs:
+				if (cat == Category.P) {
+					collidingWith = m_model.getPlayer();
 
-		if (dir.toString().equals("H") && m_model.mode == m_model.ROOM) {
-			int xHB = m_model.getPlayer().getHitBox().x;
-			int yHB = m_model.getPlayer().getHitBox().y;
-			int widthHB = m_model.getPlayer().getHitBox().width;
-			int heightHB = m_model.getPlayer().getHitBox().height;
-			if (hitBox.contains(xHB, yHB) || hitBox.contains(xHB + widthHB / 2, yHB)
-					|| hitBox.contains(xHB + widthHB, yHB) || hitBox.contains(xHB + widthHB, yHB + heightHB / 2)
-					|| hitBox.contains(xHB + widthHB, yHB + heightHB)
-					|| hitBox.contains(xHB + widthHB / 2, yHB + heightHB) || hitBox.contains(xHB, yHB + heightHB)
-					|| hitBox.contains(xHB, yHB + heightHB / 2) || hitBox.contains(xHB + widthHB / 2, yHB)) {
-				collidingWith = m_model.getPlayer();
-				return true;
-			}
-			return false;
-		}
-
-		if (m_direction.toString().equals(dir.toString())) {
-			if (dir.toString().equals("E")) {
-
-				int x = hitBox.x + hitBox.width + 1;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
 					return true;
-				} else {
-					return false;
-				}
-			} else if (dir.toString().equals("W")) {
-				int x = hitBox.x;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
-					return true;
-				} else {
-					return false;
 				}
 			}
+
 		}
-		return false;
+		return b;
+
+
 	}
-
-	public void shoot() {
-		if (shooting) {
-			int m_x = m_coord.X();
-			int m_y = m_coord.Y() - m_height / 2;
-
-			Direction direc;
-			float angle;
-			double r;
-			Coord playerCoord = m_model.getPlayer().getCoord();
-			int player_x = playerCoord.X();
-			int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
-
-			int x = player_x - m_x;
-			int y = m_y - player_y;
-
-			if (player_x > m_x) {
-				direc = new Direction("E");
-			} else {
-				direc = new Direction("W");
-			}
-
-			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
-
-			if (player_y > m_y) {
-				angle = -angle;
-			}
-			try {
-				if (direc.toString().equals("E")) {
-					addProjectile(m_x + hitBox.width / 2, m_y, angle, this, direc);
-				} else {
-					addProjectile(m_x - hitBox.width / 2, m_y, angle, this, direc);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void addProjectile(int x, int y, double angle, FlyingOpponent opponent, Direction direction)
-			throws Exception {
-		m_projectiles.add(new MagicProjectile(m_model.arrowAutomaton, x, y, angle, opponent, direction));
-	}
-
-	public void removeProjectile(Projectile projectile) {
-		m_projectiles.remove(projectile);
-	}
-
 }

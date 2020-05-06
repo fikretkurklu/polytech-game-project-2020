@@ -3,17 +3,14 @@ package underworld;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
-import game.Model;
+import game.ImageLoader;
 import player.Character;
 import projectile.Projectile;
 
@@ -36,56 +33,33 @@ public class Lure extends Projectile {
 
 	Rectangle hitBox;
 
-	public Lure(Automaton projectileAutomaton, int x, int y, double angle, Character shooter, Model model) {
-		super(projectileAutomaton, x, y, angle, shooter, model, null);
+	public Lure(Automaton projectileAutomaton, Coord c, double angle, Character shooter) throws IOException {
+		super(projectileAutomaton, c, angle, shooter, null);
 		appearing = true;
 		normal = false;
 		disapearing = false;
 		disapered = false;
 		setPosition();
-		loadImage();
+		m_images = ImageLoader.loadImageLure(m_apparitionImages, m_disaparitionImages, sizeApearingAnimation, sizeAnimation, m_imageIndex, m_imageElapsed);
 	}
 
 	private void setPosition() {
-		hitBox = new Rectangle(getCoord().X(), getCoord().Y(), SIZE, SIZE);
+		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		int xUp = hitBox.x + (SIZE / 2);
 		int xDown = hitBox.x + (SIZE / 2);
 		int yRight = hitBox.y + (SIZE / 2);
 		int yLeft = hitBox.y + (SIZE / 2);
 
 		if (checkBlock(xUp, hitBox.y))
-			getCoord().setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+			m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
 		if (checkBlock(xDown, hitBox.y + SIZE))
-			getCoord().setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+			m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
 		if (checkBlock(hitBox.x + SIZE, yRight))
-			getCoord().setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+			m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
 		if (checkBlock(hitBox.x, yLeft))
-			getCoord().setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
 		
-		hitBox.setLocation(getCoord().X(), getCoord().Y());
-	}
-
-	private void loadImage() {
-		m_apparitionImages = new Image[sizeApearingAnimation];
-		m_disaparitionImages = new Image[sizeApearingAnimation];
-		m_images = new Image[sizeAnimation];
-		File imageFile;
-		m_imageIndex = 0;
-		m_imageElapsed = 0;
-		try {
-			for (int i = 0; i < sizeApearingAnimation; i++) {
-				imageFile = new File(UnderworldParam.lureApparitionImage[i]);
-				m_apparitionImages[i] = ImageIO.read(imageFile);
-				m_disaparitionImages[6 - i] = ImageIO.read(imageFile);
-			}
-			for (int j = 0; j < sizeAnimation; j++) {
-				imageFile = new File(UnderworldParam.lureImage[j]);
-				m_images[j] = ImageIO.read(imageFile);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		hitBox.setLocation(m_coord.X(), m_coord.Y());
 	}
 
 	public void paint(Graphics g) {

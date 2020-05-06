@@ -3,9 +3,6 @@ package opponent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -64,7 +61,7 @@ public abstract class Key extends Entity {
 		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, -w, h, null);
 	}
 
-	public Image loadImage(String path) throws Exception {
+	/*public Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		Image image;
 		if (imageFile.exists()) {
@@ -74,7 +71,7 @@ public abstract class Key extends Entity {
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
-	}
+	}*/
 
 	public void tick(long elapsed) {
 		m_automaton.step(this);

@@ -1,10 +1,11 @@
 package underworld;
 
 import java.awt.Graphics;
-
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -15,9 +16,14 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 7;
-	public final static int MAX_GHOSTS = 3;
+	public final static int MAX_GHOSTS = 10;
 	public final int MAX_FRAGMENTS = 4;
+	
+	boolean gateCreated = false;
+	boolean playerCreated = false;
+	public boolean gameOver = false;
 
+	public PlayerSoul m_player;
 	AutomatonLibrary m_al;
 	String mapFile;
 	int m_width, m_height;
@@ -29,12 +35,16 @@ public class Underworld {
 	Cloud[] m_clouds;
 	Ghost[] m_ghosts;
 	Fragment[] m_fragments;
+	Gate m_gate;
 	UnderworldEmptySpaceImageManager ESIM;
 	UndInnerWallManager UIWM;
-	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton;
+	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton, gateAutomaton;
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
+	private long m_BlockAElapsed;
+	private int m_RealWidth;
+	private int m_RealHeight;
 
 	public Underworld(AutomatonLibrary AL, int width, int height, Model model) {
 		m_model = model;
@@ -56,6 +66,7 @@ public class Underworld {
 			cloudAutomaton = m_AL.getAutomaton("Cloud");
 			ghostAutomaton = m_AL.getAutomaton("Ghost");
 			fragmentAutomaton = m_AL.getAutomaton("Fragment");
+			gateAutomaton = m_AL.getAutomaton("Gate");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -69,6 +80,8 @@ public class Underworld {
 			String[] firstLine = f.readLine().split(":");
 			nbRow = Integer.parseInt(firstLine[0]);
 			nbCol = Integer.parseInt(firstLine[1]);
+			m_RealWidth = nbCol * Element.SIZE;
+			m_RealHeight = nbRow * Element.SIZE;
 			m_elements = new Element[nbRow * nbCol];
 			for (int i = 0; i < nbRow; i++) {
 				String[] actualLigne = f.readLine().split("/");
@@ -81,6 +94,7 @@ public class Underworld {
 			generateClouds(m_clouds);
 			generateGhosts(m_ghosts);
 			generateFragments(m_fragments);
+			generateGate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,10 +105,15 @@ public class Underworld {
 	public static final int XMIN = 1290;
 	public static final int YMAX = 3784;
 	public static final int YMIN = 172;
+	
+	public void setPlayer(PlayerSoul player) {
+		m_player = player;
+		playerCreated = true;
+	}
 
-	private void generateGhosts(Ghost[] ghosts) {
-		String[] dirs = { "N", "E", "W", "S" };
-		Direction dir = new Direction(dirs[(int) (Math.random() * dirs.length)]);
+	private void generateGhosts(Ghost[] ghosts) throws IOException {
+//		String[] dirs = { "N", "E", "W", "S" };
+//		Direction dir = new Direction(dirs[(int) (Math.random()*3)]);
 		int x, y;
 		for (int i = 0; i < ghosts.length; i++) {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
@@ -104,9 +123,7 @@ public class Underworld {
 				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
-			ghosts[i] = new Ghost(dir, new Coord(x, y), ghostAutomaton, m_model);
-			if (dir.toString().equals("W"))
-				ghosts[i].leftOrientation = true;
+			ghosts[i] = new Ghost(Direction.E, new Coord(x, y), ghostAutomaton, m_model);
 		}
 	}
 
@@ -128,8 +145,23 @@ public class Underworld {
 				x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 				y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			}
-			fragments[i] = new Fragment(fragmentAutomaton, new Coord(x, y), m_model);
+			HITBOXDIM = - (int)(Element.SIZE/1.5);
+			HITBOXSIZE = 2 * Element.SIZE;
+			fragments[i] = new Fragment(fragmentAutomaton, setPosition(x, y), m_model);
 		}
+	}
+	
+	private void generateGate() {
+		int x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+		int y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		while (isBlocked(x, y) || isBlocked(x, y - Element.SIZE) || isBlocked(x, y + Element.SIZE)
+				|| isBlocked(x - Element.SIZE, y) || isBlocked(x + Element.SIZE, y)) {
+			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
+			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
+		}
+		HITBOXDIM = Element.SIZE;
+		HITBOXSIZE = 2 * Element.SIZE;
+		m_gate = new Gate(gateAutomaton, setPosition(x,y), m_model);
 	}
 
 	public Element CodeElement(String code, int x, int y) throws Exception {
@@ -165,20 +197,26 @@ public class Underworld {
 		throw new Exception("Code room err: " + code);
 	}
 
-	public void paint(Graphics g, int width, int height) {
-		for (int i = 0; i < m_elements.length; i++) {
+	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
+		m_width = width;
+		m_height = height;
+		int start = (- y_decalage / Element.SIZE) * nbCol;
+		int end = Math.min((start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+		for (int i = start; i < end; i++) {
 			m_elements[i].paint(g);
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
 		}
-		m_model.getPlayerSoul().paint(g);
+		m_player.paint(g);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].paint(g);
 		}
+		if (gateCreated)
+			m_gate.paint(g);
 	}
 
 	public Coord getStartCoord() {
@@ -186,22 +224,53 @@ public class Underworld {
 	}
 
 	public void tick(long elapsed) {
+		m_BlockAElapsed += elapsed;
+		if (m_BlockAElapsed > 10000) {
+			m_BlockAElapsed = 0;
+			for (int i = 0; i < m_elements.length; i ++) {
+				if (m_elements[i].getAutomaton() != null) {
+					m_elements[i].getAutomaton().step(m_elements[i]);
+				}
+			}
+		}
 		for (int i = 0; i < m_clouds.length; i++) {
-			if (m_clouds[i].getAutomaton() != null) {
 				if (m_clouds[i].outScreen) {
 					m_clouds[i].reactivate();
 				}
 				m_clouds[i].tick(elapsed);
-				m_clouds[i].getAutomaton().step(m_clouds[i]);
-			}
 		}
+		m_player.tick(elapsed);
 		for (int i = 0; i < m_ghosts.length; i++) {
 			m_ghosts[i].tick(elapsed);
 		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].tick(elapsed);
 		}
+		if (gateCreated)
+			m_gate.tick(elapsed);
 	}
+	
+	public static int HITBOXDIM;
+	public static int HITBOXSIZE;
+	
+	private Coord setPosition(int x, int y) {
+		Rectangle hitBox = new Rectangle(x + HITBOXDIM, y + HITBOXDIM, HITBOXSIZE, HITBOXSIZE);
+		int xUp = hitBox.x + HITBOXSIZE/2;
+		int xDown = hitBox.x + HITBOXSIZE/2;
+		int yRight = hitBox.y + HITBOXSIZE/2;
+		int yLeft = hitBox.y + HITBOXSIZE/2;
+
+		if (isBlocked(xUp, hitBox.y))
+			y = blockCoord(xUp, hitBox.y).Y() + Element.SIZE;
+		if (isBlocked(xDown, hitBox.y + HITBOXSIZE))
+			y = blockCoord(xDown, hitBox.y + HITBOXSIZE).Y() - Element.SIZE;
+		if (isBlocked(hitBox.x + HITBOXSIZE, yRight))
+			x = blockCoord(hitBox.x + HITBOXSIZE, yRight).X() - Element.SIZE;
+		if (isBlocked(hitBox.x, yLeft))
+			x = blockCoord(hitBox.x, yLeft).X() + Element.SIZE;
+		return new Coord(x,y);
+	}
+	
 
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
@@ -237,5 +306,15 @@ public class Underworld {
 			return null;
 		}
 	}
+	
+	public void activateGate() {
+		gateCreated = true;
+	}
 
+	public int getWitdh() {
+		return m_RealWidth;
+	}
+	public int getHeight() {
+		return m_RealHeight;
+	}
 }

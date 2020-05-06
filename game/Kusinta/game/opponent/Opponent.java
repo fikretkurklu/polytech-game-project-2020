@@ -1,54 +1,45 @@
 package opponent;
-
-import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Direction;
 import environnement.Element;
+import game.Coord;
 import game.Model;
 import player.Character;
 import projectile.Arrow;
 
 public abstract class Opponent extends Character {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	protected static final int SIZE = (int) (1.5 * Element.SIZE);
+
+	protected boolean moving;
 
 	protected Arrow collidedWith;
 
 	Key m_key;
+	
+	int SPEED_WALK_TICK = 4;
+	long m_moveElapsed;
 
-	int m_width, m_height;
-
-	public Opponent(Automaton automaton, int x, int y, Direction dir, Model model, int maxLife, int life,
+	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
-		super(automaton, x, y, dir, model, maxLife, life, attackSpeed, resistance, strength);
+		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
 		m_key = null;
+
+		moving = false;
 	}
 
 	@Override
 	public void tick(long elapsed) {
-		m_automaton.step(this);
-	}
-
-	@Override
-	public void setPressed(int keyChar, boolean b) {
-		// TODO Auto-generated method stub
-	}
-
-	public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK) {
+			m_moveElapsed -= SPEED_WALK_TICK;
+			m_automaton.step(this);
+		}
+		if (this instanceof WalkingOpponent) {
+			super.tick(elapsed);
 		}
 	}
 

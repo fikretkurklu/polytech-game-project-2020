@@ -3,18 +3,15 @@ package opponent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
+import game.ImageLoader;
 import game.Model;
-import hud.HUD;
 import environnement.Element;
 
 public class Coin extends Entity {
@@ -42,7 +39,7 @@ public class Coin extends Entity {
 
 	int m_width, m_height;
 
-	public Coin(Automaton automaton, int x, int y, int value, Model model) throws Exception {
+	public Coin(Automaton automaton, int x, int y, int value, Model model) {
 		super(automaton);
 
 		m_coord = new Coord();
@@ -59,17 +56,11 @@ public class Coin extends Entity {
 		aller = -1;
 
 		try {
-			m_images = HUD.loadSprite(COIN_ICO_SPRITE, 1, 6);
+			m_images = ImageLoader.loadBufferedSprite(COIN_ICO_SPRITE, 1, 6);
 			m_image = m_images[0];
 
 			m_width = m_image.getWidth(null);
 			m_height = m_image.getHeight(null);
-
-			/*
-			 * int size = m_width / 4; for (int i = 0; i< m_images.length; i++) {
-			 * m_images[i] = m_images[i].getScaledInstance(size, size,
-			 * java.awt.Image.SCALE_SMOOTH); }
-			 */
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,7 +82,7 @@ public class Coin extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		m_model.m_player.setMoney(m_model.m_player.getMoney() + m_value);
+		m_model.m_player.setMoney(m_value);
 		m_model.removeCoin(this);
 
 		return false;
@@ -147,18 +138,6 @@ public class Coin extends Entity {
 
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
 		m_coord.setY(newY);
-	}
-
-	public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
 	}
 
 }

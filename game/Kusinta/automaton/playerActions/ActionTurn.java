@@ -8,7 +8,7 @@ public class ActionTurn extends Action {
 	
 	public ActionTurn(int percentage) {
 		super(percentage);
-		m_dir = new Direction("R");
+		m_dir = Direction.R;
 	}
 	
 	public ActionTurn(Direction direction, int percentage) {

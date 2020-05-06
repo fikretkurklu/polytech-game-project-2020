@@ -7,15 +7,18 @@ Player_donjon(Init){
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
   | Key(v) ? Pop() : (Init)    
+  | Key(a) ? Pick() : (Init)
   
   * (Doing)       
   | ! GotPower() ? Explode () : ()  
   | Key(q) ? Move(W) : (Init)
   | Key(d) ? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
-  | Key(v) ? Pop() : (Init)  
+  | Key(v) ? Pop() : (Init) 
+  | Key(a) ? Pick() : (Init) 
   | Key(z) ? Jump: (Doing)
   | Key(SPACE) ? Egg() : (Doing)
+  
 }
 
 Block (Inactif) {                
@@ -25,8 +28,16 @@ Block (Inactif) {
 
 Fleche (Init) {
   *(Init)
-  | Cell(H,_) ? Explode() : ()
-  | Cell(H,V) ? Move : (Init)
+  | Cell(H,A) ? Explode() : ()
+  | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
+}
+
+MagicProj (Init) {
+  *(Init)
+  | Cell(H,P) ? Explode() : ()
+  | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
 }
 
 Decor (Inactif) {                
@@ -34,31 +45,38 @@ Decor (Inactif) {
   | True ? : (Inactif)
 }
 
-FlyingOpponents (Init) {
-*(Init)
-  | Cell(H, A) ? Power : (Init)  
+FlyingOpponents (East) {
+*(East)
+  | Cell(H, P) ? Power : (East)  
   | ! GotPower() ? Explode() : ()        
-  | Cell(E, O) ? Turn(W) : (Init)
-  | Cell(W, O) ? Turn(E) : (Init)
-  | Closest(A, E) ? Egg(E) : (Init)
-  | Closest(A, W) ? Egg(W) : (Init)
-  | True ? Move(E) : (Init) 
+  | Cell(E, O) ? Turn(W) : (West)
+  | Closest(P, E) ? Egg(E) : (East)
+  | Closest(P, W) ? Egg(W) : (East)
+  | True ? Move(E) : (East) 
+ *(West)
+  | Cell(H, P) ? Power : (West)  
+  | ! GotPower() ? Explode() : ()        
+  | Cell(W, O) ? Turn(E) : (East)
+  | Closest(P, E) ? Egg(E) : (West)
+  | Closest(P, W) ? Egg(W) : (West)
+  | True ? Move(W) : (West) 
 }
+
 
 WalkingOpponents (East) {
 *(East)
-  | Cell(H, A) ? Power : (East)
+  | Cell(H, P) ? Power : (East)
   | ! GotPower() ? Explode() : ()
-  | Cell(E, A) ? Wizz() : (East)
   | Cell(E, O) ? Turn(W) : (West)
-  | Closest(A, E) ? Pop(E) : (East)
+  | Cell(E, P) ? Wizz() : (East)
+  | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
-  | Cell(H, A) ? Power : (West)
+  | Cell(H, P) ? Power : (West)
   | ! GotPower() ? Explode() : ()
-  | Cell(W, A) ? Wizz() : (West)
   | Cell(W, O) ? Turn(E) : (East)
-  | Closest(A, W) ? Pop(W) : (West)
+  | Cell(W, P) ? Wizz() : (West)
+  | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
 }
 

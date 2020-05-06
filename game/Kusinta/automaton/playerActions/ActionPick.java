@@ -9,7 +9,7 @@ public class ActionPick extends Action{
 	
 	public ActionPick(int percentage) {
 		super(percentage);
-		m_dir = new Direction("F");
+		m_dir = Direction.F;
 	}
 	
 	public ActionPick(Direction direction, int percentage) {

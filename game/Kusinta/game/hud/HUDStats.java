@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
+import game.ImageLoader;
 import player.Player;
 import player.Character.CurrentStat;
 
@@ -20,13 +21,13 @@ public class HUDStats {
 	String[] statsDrawned;
 	long statsElapsed;
 
-	public HUDStats(int x, int y, int w, int h, Player p) {
+	public HUDStats(int x, int y, int w, int h, Player p) throws Exception {
 		m_x = x;
 		m_y = y;
 		m_width = w;
 		m_height = h;
 		m_player = p;
-		bg = HUD.loadImage(BG, w, h);
+		bg = ImageLoader.loadImage(BG, w, h);
 		font = new Font("Georgia", Font.PLAIN, 11);
 		statsDrawned = new String[CurrentStat.values().length - 1];
 		updateStats();
