@@ -317,12 +317,12 @@ public class Model {
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coordWO[i], new Direction("E"), this));
 		}
 		int randomKey = (int) (Math.random()*m_opponents.size());
-		int randomBossKey = (int) (Math.random()*m_opponents.size());
-		while (randomBossKey == randomKey) {
-			randomBossKey = (int) (Math.random()*m_opponents.size());
-		}
-		m_opponents.get(randomKey).setKey(true);
-		m_opponents.get(randomBossKey).setBossKey(true);
+		//int randomBossKey = (int) (Math.random()*m_opponents.size());
+		//while (randomBossKey == randomKey) {
+		//	randomBossKey = (int) (Math.random()*m_opponents.size());
+		//}
+		//m_opponents.get(randomKey).setKey(true);
+		//m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {

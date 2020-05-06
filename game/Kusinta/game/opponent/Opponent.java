@@ -24,7 +24,7 @@ public abstract class Opponent extends Character {
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
-		m_key = false;
+		m_key = true;
 
 		moving = false;
 	}
@@ -53,9 +53,9 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					m_model.setKey(new NormalKey(m_model.keyDropAutomaton, m_coord.X(), m_coord.Y(), m_model));
+					getM_model().setKey(new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
 				} else if (m_bossKey == true) {
-					m_model.setBossKey(new BossKey(m_model.keyDropAutomaton, m_coord.X(), m_coord.Y(), m_model));
+					getM_model().setBossKey(new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

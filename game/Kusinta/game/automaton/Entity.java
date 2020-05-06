@@ -15,7 +15,7 @@ public abstract class Entity {
 	private State m_state;
 	protected Automaton m_automaton;
 
-	protected Model m_model;
+	private Model m_model;
 	protected Direction m_direction;
 
 	protected Coord m_coord;
@@ -111,12 +111,12 @@ public abstract class Entity {
 	}
 
 	public boolean cell(Direction dir, Category cat) {
-		if (m_model.actualMode == Model.mode.ROOM) {
+		if (getM_model().actualMode == Model.mode.ROOM) {
 			int x;
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					Rectangle playerHitBox = getM_model().getPlayer().getHitBox();
 					int xHB = hitBox.x;
 					int yHB = hitBox.y;
 					int widthHB = hitBox.width;
@@ -131,11 +131,11 @@ public abstract class Entity {
 					}
 				} else if (cat == Category.O) {
 					x = hitBox.x + hitBox.width + X_MOVE;
-					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+					return (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+							|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
+							|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1));
 				} else if (cat == Category.A) {
-					LinkedList<Opponent> opponents = m_model.getOpponent();
+					LinkedList<Opponent> opponents = getM_model().getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
 								|| op.getHitBox().contains(m_coord.X(), m_coord.Y())) {
@@ -149,16 +149,16 @@ public abstract class Entity {
 			case Direction.Es:
 				if (cat == Category.O) {
 					x = hitBox.x + hitBox.width + 1 + X_MOVE;
-					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+					return (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+							|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
+							|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1));
 				}
 				return false;
 			case Direction.Ws:
 				x = hitBox.x - X_MOVE;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+				if (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
+						|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
+						|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
 					return true;
 				}
 
@@ -195,6 +195,14 @@ public abstract class Entity {
 		if (collidingWith != cha) {
 			collidingWith = cha;
 		}
+	}
+
+	public Model getM_model() {
+		return m_model;
+	}
+
+	public void setM_model(Model m_model) {
+		this.m_model = m_model;
 	}
 
 }

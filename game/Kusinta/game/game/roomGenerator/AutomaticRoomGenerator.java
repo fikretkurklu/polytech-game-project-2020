@@ -646,56 +646,6 @@ public class AutomaticRoomGenerator {
 
 	}
 
-	public void type1Generator(int row, int col) {
-		AddPlatformHard(8 + row, 5 + col, 2, 2);
-		AddPlatformHard(7 + row, 0 + col, 3, 2);
-		AddPlatformHard(5 + row, 8 + col, 2, 2);
-		AddPlatformHard(3 + row, 5 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 4);
-	}
-
-	public void type2Generator(int row, int col) {
-		AddPlatformHard(8 + row, 4 + col, 2, 2);
-		AddPlatformHard(6 + row, 0 + col, 2, 3);
-		AddPlatformHard(6 + row, 7 + col, 2, 3);
-		AddPlatformHard(3 + row, 4 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 2);
-		AddPlatformHard(2 + row, 8 + col, 2, 2);
-	}
-
-	public void type3Generator(int row, int col) {
-		AddPlatformHard(8 + row, 0 + col, 2, 10);
-		AddPlatformHard(5 + row, 0 + col, 3, 2);
-		AddPlatformHard(3 + row, 3 + col, 2, 2);
-		AddPlatformHard(2 + row, 6 + col, 2, 2);
-		AddPlatformHard(0 + row, 8 + col, 2, 2);
-	}
-
-	public void type4Generator(int row, int col) {
-		AddPlatformHard(8 + row, 5 + col, 2, 4);
-		AddPlatformHard(5 + row, 1 + col, 2, 3);
-		AddPlatformHard(2 + row, 6 + col, 2, 3);
-		AddPlatformHard(2 + row, 1 + col, 3, 2);
-	}
-
-	public void type5Generator(int row, int col) {
-		AddPlatformHard(8 + row, 0 + col, 2, 10);
-		AddPlatformHard(6 + row, 0 + col, 2, 6);
-		AddPlatformHard(4 + row, 0 + col, 2, 4);
-		AddPlatformHard(2 + row, 0 + col, 2, 2);
-		AddPlatformHard(2 + row, 6 + col, 2, 2);
-	}
-
-	public void type6Generator(int row, int col) {
-		AddPlatformHard(8 + row, 0 + col, 2, 2);
-		AddPlatformHard(8 + row, 5 + col, 2, 3);
-		AddPlatformHard(6 + row, 2 + col, 2, 2);
-		AddPlatformHard(3 + row, 5 + col, 2, 2);
-		AddPlatformHard(2 + row, 0 + col, 2, 3);
-		AddPlatformHard(2 + row, 6 + col, 2, 4);
-		AddPlatformHard(0 + row, 6 + col, 2, 2);
-	}
-
 	public void leftElevator1(int row, int col) {
 		AddPlatformHard(9 + row, 3 + col, 2, 4);
 		AddPlatformHard(7 + row, 8 + col, 2, 2);
@@ -704,6 +654,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 1 + col, 2, 2);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+		changeBlock(8 + row, 5 + col, "ES_WO");
 	}
 
 	public void leftElevator2(int row, int col) {
@@ -714,6 +665,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 0 + col, 2, 4);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+		changeBlock(8 + row, 4 + col, "ES_WO");
 	}
 
 	public void leftElevator3(int row, int col) {
@@ -722,10 +674,9 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(7 + row, 7 + col, 2, 2);
 		AddPlatformHard(5 + row, 3 + col, 2, 2);
 		AddPlatformHard(3 + row, 1 + col, 3, 2);
-		AddPlatformHard(2 + row, 6 + col, 2, 4);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
-		AddPlatformHard(0 + row, 5 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
+		changeBlock(8 + row, 3 + col, "ES_WO");
 	}
 
 	public void rightElevator1(int row, int col) {
@@ -756,6 +707,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 1 + col, 2, 2);
 		AddPlatformHard(1 + row, 4 + col, 2, 6);
 		AddPlatformHard(-1 + row, 6 + col, 2, 4);
+		changeBlock(4 + row, 2 + col, "ES_WO");
 	}
 
 	public void midPlatform1(int row, int col) {
@@ -781,9 +733,11 @@ public class AutomaticRoomGenerator {
 		switch (rand) {
 		case (1):
 			changeBlock(5 + row, 2 + col, "ES_FO");
+			changeBlock(7 + row, 7 + col, "ES_WO");
 			break;
 		case (2):
 			changeBlock(5 + row, 6 + col, "ES_FO");
+			changeBlock(7 + row, 7 + col, "ES_WO");
 			break;
 		default:
 			changeBlock(5 + row, 2 + col, "ES_FO");
@@ -796,7 +750,8 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 3 + col, 3, 4);
 		AddPlatformHard(3 + row, 0 + col, 2, 2);
 		AddPlatformHard(3 + row, 8 + col, 2, 2);
-		changeBlock(4 + row, 4 + col, "ES_FO");
+		changeBlock(3 + row, 4 + col, "ES_FO");
+		changeBlock(5 + row, 3 + col, "ES_WO");
 	}
 
 	public void midPlatform4(int row, int col) {
@@ -807,15 +762,15 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 2 + col, 2, 2);
 		AddPlatformHard(6 + row, 6 + col, 2, 2);
 		AddPlatformHard(5 + row, 3 + col, 2, 4);
-		int rand = (int) (Math.random() * 3) + 1;
+		int rand = (int) (Math.random() * 2) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(4 + row, 2 + col, "ES_FO");
+			changeBlock(2 + row, 2 + col, "ES_FO");
+			changeBlock(4 + row, 5 + col, "ES_WO");
 			break;
 		case (2):
-			changeBlock(4 + row, 7 + col, "ES_FO");
-			break;
-		case (3):
+			changeBlock(2 + row, 7 + col, "ES_FO");
+			changeBlock(4 + row, 5 + col, "ES_WO");
 			break;
 		default:
 			changeBlock(4 + row, 2 + col, "ES_FO");
@@ -823,22 +778,21 @@ public class AutomaticRoomGenerator {
 	}
 
 	public void midPlatform5(int row, int col) {
-		AddPlatformHard(8 + row, 3 + col, 2, 4);
-		AddPlatformHard(7 + row, 2 + col, 2, 2);
-		AddPlatformHard(7 + row, 6 + col, 2, 2);
-		AddPlatformHard(6 + row, 1 + col, 2, 2);
-		AddPlatformHard(6 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 8 + col, 2, 2);
-		int rand = (int) (Math.random() * 3) + 1;
+		AddPlatformHard(8 + row, 2 + col, 2, 6);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		int rand = (int) (Math.random() * 2) + 1;
 		switch (rand) {
 		case (1):
-			changeBlock(2 + row, 3 + col, "ES_FO");
+			changeBlock(3 + row, 4 + col, "ES_FO");
+			changeBlock(7 + row, 5 + col, "ES_WO");
 			break;
 		case (2):
-			changeBlock(3 + row, 5 + col, "ES_FO");
-			break;
-		case (3):
+			changeBlock(2 + row, 5 + col, "ES_FO");
+			changeBlock(7 + row, 5 + col, "ES_WO");
 			break;
 		default:
 			changeBlock(2 + row, 3 + col, "ES_FO");
@@ -849,15 +803,13 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(8 + row, 0 + col, 2, 10);
 		AddPlatformHard(6 + row, 6 + col, 2, 2);
 		AddPlatformHard(4 + row, 0 + col, 2, 5);
-		int rand = (int) (Math.random() * 3) + 1;
+		int rand = (int) (Math.random() * 2) + 1;
 		switch (rand) {
 		case (1):
 			changeBlock(7 + row, 2 + col, "ES_WO");
 			break;
 		case (2):
 			changeBlock(3 + row, 3 + col, "ES_WO");
-			break;
-		case (3):
 			break;
 		default:
 			changeBlock(7 + row, 2 + col, "ES_WO");
@@ -1071,15 +1023,12 @@ public class AutomaticRoomGenerator {
 						break;
 					}
 				} else if (j == rightElevatorCol) {
-					int randomElevator = (int) (Math.random() * 3) + 1;
+					int randomElevator = (int) (Math.random() * 2) + 1;
 					switch (randomElevator) {
 					case (1):
 						this.rightElevator1(i*10+3, j*10+3);
 						break;
 					case (2):
-						this.rightElevator2(i*10+3, j*10+3);
-						break;
-					case (3):
 						this.rightElevator3(i*10+3, j*10+3);
 						break;
 					}

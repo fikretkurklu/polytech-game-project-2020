@@ -72,7 +72,7 @@ public abstract class Character extends Entity {
 
 		m_projectiles = new LinkedList<Projectile>();
 
-		m_model = model;
+		setM_model(model);
 
 		m_key = false;
 
@@ -132,7 +132,7 @@ public abstract class Character extends Entity {
 	}
 
 	public Model getModel() {
-		return m_model;
+		return getM_model();
 	}
 
 	public LinkedList<Projectile> getProjectiles() {
@@ -214,15 +214,15 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			int topBlock = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
 		}
 		if (!falling) {
-			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
-				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			if (getM_model().m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+				int blockTop = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
 				hitBox.translate(0, -(m_coord.Y() - blockTop));
 				m_coord.setY(blockTop);
 			}
@@ -233,7 +233,7 @@ public abstract class Character extends Entity {
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
-				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				int botBlock = getM_model().m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
@@ -343,7 +343,7 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean isMoving() {
-		boolean moving = m_model.qPressed || m_model.dPressed;
+		boolean moving = getM_model().qPressed || getM_model().dPressed;
 		return moving;
 	}
 
@@ -366,24 +366,24 @@ public abstract class Character extends Entity {
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
-			return m_model.qPressed;
+			return getM_model().qPressed;
 		} else if (keyCode == Controller.K_Z) {
-			return m_model.zPressed;
+			return getM_model().zPressed;
 		} else if (keyCode == Controller.K_D) {
-			return m_model.dPressed;
+			return getM_model().dPressed;
 		} else if (keyCode == Controller.K_SPACE) {
-			return m_model.espPressed;
+			return getM_model().espPressed;
 		} else if (keyCode == Controller.K_A) {
-			return m_model.aPressed;
+			return getM_model().aPressed;
 		} else if (keyCode == Controller.K_E) {
-			return m_model.ePressed;
+			return getM_model().ePressed;
 		} else if (keyCode == Controller.K_V)
-			return m_model.vPressed;
+			return getM_model().vPressed;
 		return false;
 	}
 
 	public boolean checkBlock(int x, int y) {
-		return m_model.m_room.isBlocked(x, y);
+		return getM_model().m_room.isBlocked(x, y);
 	}
 
 	public void shoot(int baseX, int baseY, proj type) {
@@ -427,10 +427,10 @@ public abstract class Character extends Entity {
 			throws Exception {
 		switch (type) {
 		case ARROW:
-			m_projectiles.add(new Arrow(m_model.arrowAutomaton, c, angle, shooter, direction));
+			m_projectiles.add(new Arrow(getM_model().arrowAutomaton, c, angle, shooter, direction));
 			break;
 		case MAGIC_PROJECTILE:
-			m_projectiles.add(new MagicProjectile(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			m_projectiles.add(new MagicProjectile(getM_model().magicProjAutomaton, c, angle, shooter, direction));
 			break;
 		default:
 			break;
