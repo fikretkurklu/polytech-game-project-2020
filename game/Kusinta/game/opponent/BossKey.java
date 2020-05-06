@@ -19,7 +19,7 @@ public class BossKey extends Key{
 	
 	@Override
 	public boolean wizz(Direction dir) {
-		((Player)m_model.m_player).setBossKey(this);
+		m_model.m_player.setBossKey(true);
 		m_model.setBossKey(null);
 
 		return false;

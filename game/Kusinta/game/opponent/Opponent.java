@@ -11,13 +11,11 @@ import projectile.Arrow;
 
 public abstract class Opponent extends Character {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	protected static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	protected boolean moving;
 
 	protected Arrow collidedWith;
-
-	Key m_key;
 	
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
@@ -26,7 +24,7 @@ public abstract class Opponent extends Character {
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
-		m_key = null;
+		m_key = false;
 
 		moving = false;
 	}
@@ -47,22 +45,22 @@ public abstract class Opponent extends Character {
 		collidedWith = a;
 	}
 
-	public void setKey(Key k) {
+	public void setKey(boolean k) {
 		m_key = k;
 	}
 
 	public void dropKey() {
-		if (m_key != null) {
+		if (m_key != false) {
 			try {
-				if (m_key instanceof NormalKey) {
+				if (m_key == true) {
 					m_model.setKey(new NormalKey(m_model.keyDropAutomaton, m_coord.X(), m_coord.Y(), m_model));
-				} else {
+				} else if (m_bossKey == true) {
 					m_model.setBossKey(new BossKey(m_model.keyDropAutomaton, m_coord.X(), m_coord.Y(), m_model));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			setKey(null);
+			setKey(false);
 		}
 	}
 

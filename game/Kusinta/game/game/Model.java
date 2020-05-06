@@ -5,11 +5,14 @@ import java.awt.Graphics;
 
 import java.io.IOException;
 import java.util.LinkedList;
+
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import game.graphics.View;
+import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
+
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -42,6 +45,9 @@ public class Model {
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
 
+	public AutomaticRoomGenerator m_roomGenerator;
+	public int difficultyLevel;
+	
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
@@ -73,7 +79,8 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
-
+		
+		setRoom();
 		start();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
@@ -82,9 +89,8 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(800, 1700), Direction.E, this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
+		
+		opponentCreator();
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
@@ -92,14 +98,14 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
-
-		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
-		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
-
-		m_opponents.get(0).setKey(key);
-		m_opponents.get(1).setKey(bKey);
 	}
 
+	public void switchToNextRoom() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_AL, m_width, m_height);
+		this.m_player.setCoord(m_room.getStartCoord());
+	}
+	
 	public void switchEnv(mode m) {
 		qPressed = false;
 		zPressed = false;
@@ -134,6 +140,12 @@ public class Model {
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height, this);
+		
+	}
+	
+	public void setRoom() throws IOException {
+		m_roomGenerator = new AutomaticRoomGenerator();
+		m_roomGenerator.AutomaticGeneration();
 	}
 
 	public void setCenterScreenPlayer() {
@@ -292,6 +304,25 @@ public class Model {
 
 	public void setBossKey(BossKey key) {
 		m_bossKey = key;
+	}
+
+
+	public void opponentCreator() throws Exception {
+		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
+		for (int i = 0; i < coordFO.length; i++) {
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i], new Direction("E"), this));
+		}
+		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+		for (int i = 0; i < coordWO.length; i++) {
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coordWO[i], new Direction("E"), this));
+		}
+		int randomKey = (int) (Math.random()*m_opponents.size());
+		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		while (randomBossKey == randomKey) {
+			randomBossKey = (int) (Math.random()*m_opponents.size());
+		}
+		m_opponents.get(randomKey).setKey(true);
+		m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
