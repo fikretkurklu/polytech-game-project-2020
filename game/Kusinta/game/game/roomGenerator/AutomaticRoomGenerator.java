@@ -654,7 +654,14 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 1 + col, 2, 2);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
-		changeBlock(8 + row, 5 + col, "ES_WO");
+		int rand = (int) (Math.random() * 2) + 1;
+		switch (rand) {
+		case (1):
+			changeBlock(8 + row, 5 + col, "ES_WO");
+			break;
+		case (2):
+			break;
+		}
 	}
 
 	public void leftElevator2(int row, int col) {
@@ -665,7 +672,14 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 0 + col, 2, 4);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
-		changeBlock(8 + row, 4 + col, "ES_WO");
+		int rand = (int) (Math.random() * 2) + 1;
+		switch (rand) {
+		case (1):
+			changeBlock(8 + row, 4 + col, "ES_WO");
+			break;
+		case (2):
+			break;
+		}
 	}
 
 	public void leftElevator3(int row, int col) {
@@ -676,7 +690,6 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 1 + col, 3, 2);
 		AddPlatformHard(2 + row, 0 + col, 2, 2);
 		AddPlatformHard(-1 + row, 3 + col, 2, 4);
-		changeBlock(8 + row, 3 + col, "ES_WO");
 	}
 
 	public void rightElevator1(int row, int col) {
@@ -702,12 +715,12 @@ public class AutomaticRoomGenerator {
 
 	public void rightElevator3(int row, int col) {
 		AddPlatformHard(9 + row, 6 + col, 2, 4);
-		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 3);
 		AddPlatformHard(5 + row, 0 + col, 2, 6);
-		AddPlatformHard(3 + row, 1 + col, 2, 2);
 		AddPlatformHard(1 + row, 4 + col, 2, 6);
 		AddPlatformHard(-1 + row, 6 + col, 2, 4);
-		changeBlock(4 + row, 2 + col, "ES_WO");
+		changeBlock(4 + row, 3 + col, "ES_WO");
+		AddPlatformHard(3 + row, 0 + col, 2, 2);
 	}
 
 	public void midPlatform1(int row, int col) {
@@ -849,13 +862,12 @@ public class AutomaticRoomGenerator {
 	}
 
 	public void initial5(int row, int col) {
-		AddPlatformHard(8 + row, 3 + col, 2, 4);
-		AddPlatformHard(7 + row, 2 + col, 2, 2);
-		AddPlatformHard(7 + row, 6 + col, 2, 2);
-		AddPlatformHard(6 + row, 1 + col, 2, 2);
-		AddPlatformHard(6 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 8 + col, 2, 2);
+		AddPlatformHard(8 + row, 2 + col, 2, 6);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
 		AddInitialpoint(7 + row, 4 + col);
 	}
 
@@ -877,8 +889,8 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(8 + row, 0 + col, 2, 2);
 		AddPlatformHard(7 + row, 3 + col, 2, 2);
 		AddPlatformHard(8 + row, 6 + col, 2, 4);
-		changeBlock(5 + row, 2 + col, "ES_FO");
 		changeBlock(5 + row, 6 + col, "ES_FO");
+		changeBlock(7 + row, 7 + col, "ES_WO");
 		AddDoor(6 + row, 3 + col);
 	}
 
@@ -889,6 +901,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + row, 0 + col, 2, 2);
 		AddPlatformHard(3 + row, 8 + col, 2, 2);
 		changeBlock(4 + row, 4 + col, "ES_FO");
+		changeBlock(4 + row, 5 + col, "ES_WO");
 		AddDoor(5 + row, 5 + col);
 	}
 
@@ -900,21 +913,20 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(6 + row, 2 + col, 2, 2);
 		AddPlatformHard(6 + row, 6 + col, 2, 2);
 		AddPlatformHard(5 + row, 3 + col, 2, 4);
-		changeBlock(4 + row, 2 + col, "ES_FO");
-		changeBlock(4 + row, 7 + col, "ES_FO");
+		changeBlock(2 + row, 7 + col, "ES_FO");
+		changeBlock(4 + row, 5 + col, "ES_WO");
 		AddDoor(4 + row, 4 + col);
 	}
 
 	public void door5(int row, int col) {
-		AddPlatformHard(8 + row, 3 + col, 2, 4);
-		AddPlatformHard(7 + row, 2 + col, 2, 2);
-		AddPlatformHard(7 + row, 6 + col, 2, 2);
-		AddPlatformHard(6 + row, 1 + col, 2, 2);
-		AddPlatformHard(6 + row, 7 + col, 2, 2);
-		AddPlatformHard(5 + row, 0 + col, 2, 2);
-		AddPlatformHard(5 + row, 8 + col, 2, 2);
-		changeBlock(2 + row, 3 + col, "ES_FO");
-		changeBlock(3 + row, 5 + col, "ES_FO");
+		AddPlatformHard(8 + row, 2 + col, 2, 6);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(6 + row, 0 + col, 2, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		changeBlock(2 + row, 4 + col, "ES_FO");
+		changeBlock(7 + row, 5 + col, "ES_WO");
 		AddDoor(7 + row, 4 + col);
 	}
 

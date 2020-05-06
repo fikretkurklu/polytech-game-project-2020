@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
+import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
@@ -310,13 +311,15 @@ public class Model {
 	public void opponentCreator() throws Exception {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
+			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE/2);
 			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i], new Direction("E"), this));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coordWO[i], new Direction("E"), this));
+			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE/2);
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
 		}
-		int randomKey = (int) (Math.random()*m_opponents.size());
+		//int randomKey = (int) (Math.random()*m_opponents.size());
 		//int randomBossKey = (int) (Math.random()*m_opponents.size());
 		//while (randomBossKey == randomKey) {
 		//	randomBossKey = (int) (Math.random()*m_opponents.size());
