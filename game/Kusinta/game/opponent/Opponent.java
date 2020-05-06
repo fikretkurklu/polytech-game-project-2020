@@ -13,8 +13,6 @@ public abstract class Opponent extends Character {
 
 	protected static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	protected boolean moving;
-
 	protected Arrow collidedWith;
 	
 	int SPEED_WALK_TICK = 4;
@@ -26,7 +24,6 @@ public abstract class Opponent extends Character {
 
 		m_key = true;
 
-		moving = false;
 	}
 
 	@Override
@@ -62,6 +59,23 @@ public abstract class Opponent extends Character {
 			}
 			setKey(false);
 		}
+	}
+	
+	public boolean move(Direction dir) {
+		if (gotpower()) {
+			
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y();
+			if (!shooting)
+				turn(dir);
+
+			super.move(dir);
+
+			if (collidedWith != null) {
+				collidedWith.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+			}
+		}
+		return true;
 	}
 
 }

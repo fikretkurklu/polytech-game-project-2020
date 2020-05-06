@@ -13,7 +13,7 @@ import player.Character;
 public abstract class Projectile extends Entity {
 
 	public enum proj {
-		ARROW, MAGIC_PROJECTILE
+		ARROW, MAGIC_PROJECTILE, METEOR
 	};
 
 	protected enum State {
@@ -74,11 +74,9 @@ public abstract class Projectile extends Entity {
 
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
-				m_coord.setX((int) (m_coord.X() + X_MOVE * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
+				m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));
 			} else {
-				m_coord.setX((int) (m_coord.X() - X_MOVE * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
+				m_coord.translate((int) (- X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));
 			}
 			hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
 		}

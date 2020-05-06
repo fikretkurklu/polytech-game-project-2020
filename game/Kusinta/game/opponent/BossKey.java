@@ -4,7 +4,6 @@ import automaton.Automaton;
 import automaton.Direction;
 import game.ImageLoader;
 import game.Model;
-import player.Player;
 
 public class BossKey extends Key{
 

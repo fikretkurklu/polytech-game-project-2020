@@ -27,7 +27,6 @@ public class FlyingOpponent extends Opponent {
 		m_imageElapsed = 0;
 
 		shooting = false;
-		moving = false;
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
@@ -66,27 +65,6 @@ public class FlyingOpponent extends Opponent {
 
 		X_MOVE = 2;
 
-	}
-
-	public boolean move(Direction dir) {
-		if (gotpower()) {
-			int m_x = m_coord.X();
-
-			if (!moving) {
-				m_image_index = 0;
-			}
-			moving = true;
-
-			if (!shooting)
-				turn(dir);
-
-			super.move(dir);
-
-			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_coord.X() - m_x , 0);
-			}
-		}
-		return true;
 	}
 
 	public boolean explode() {
@@ -143,12 +121,8 @@ public class FlyingOpponent extends Opponent {
 		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-
-		// paint hitBox
-//		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
-//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-
-		for (int i = 0; i < m_projectiles.size(); i++) {
+		
+		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
 		}
 	}
@@ -186,8 +160,8 @@ public class FlyingOpponent extends Opponent {
 			}
 		}
 
-		for (int i = 0; i < m_projectiles.size(); i++) {
-			(m_projectiles.get(i)).tick(elapsed);
+		for (int i = 0; i < m_projectiles.size(); i ++) {
+			m_projectiles.get(i).tick(elapsed);
 		}
 	}
 
@@ -245,12 +219,10 @@ public class FlyingOpponent extends Opponent {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					collidingWith = getM_model().getPlayer();
-
+					collidingWith = m_model.getPlayer();
 					return true;
 				}
 			}
-
 		}
 		return b;
 

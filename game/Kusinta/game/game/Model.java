@@ -45,6 +45,8 @@ public class Model {
 	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
+	public Automaton bossAutomaton;
+	public Automaton meteorAutomaton;
 
 	public AutomaticRoomGenerator m_roomGenerator;
 	public int difficultyLevel;
@@ -80,6 +82,8 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
+		bossAutomaton = m_AL.getAutomaton("Boss");
+		meteorAutomaton = m_AL.getAutomaton("Meteor");
 		
 		setRoom();
 		start();
@@ -92,6 +96,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 		
 		opponentCreator();
+		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
 
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
@@ -188,7 +193,7 @@ public class Model {
 	public void tick(long elapsed) {
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
-		
+		/*
 		if (m_key != null) {
 			m_key.tick(elapsed);
 		}
@@ -204,6 +209,7 @@ public class Model {
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
+	*/
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -311,12 +317,12 @@ public class Model {
 	public void opponentCreator() throws Exception {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
-			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE/2);
+			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
 			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i], new Direction("E"), this));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE/2);
+			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE);
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
 		}
 		//int randomKey = (int) (Math.random()*m_opponents.size());

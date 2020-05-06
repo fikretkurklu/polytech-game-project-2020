@@ -15,7 +15,7 @@ public abstract class Entity {
 	private State m_state;
 	protected Automaton m_automaton;
 
-	private Model m_model;
+	protected Model m_model;
 	protected Direction m_direction;
 
 	protected Coord m_coord;
@@ -24,7 +24,7 @@ public abstract class Entity {
 	protected int m_width, m_height;
 
 	protected int X_MOVE;
-	
+
 	protected Character collidingWith;
 
 	public Entity() {
@@ -107,12 +107,15 @@ public abstract class Entity {
 	// Conditions
 
 	public boolean mydir(Direction dir) {
-		return false;
+		return m_direction == dir;
 	}
 
 	public boolean cell(Direction dir, Category cat) {
-		if (getM_model().actualMode == Model.mode.ROOM) {
-			int x;
+		if (m_model.actualMode == Model.mode.ROOM) {
+			if (dir == Direction.F) {
+				dir = m_direction;
+			}
+			int x, y;
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
@@ -122,23 +125,25 @@ public abstract class Entity {
 					int widthHB = hitBox.width;
 					int heightHB = hitBox.height;
 					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
-							|| playerHitBox.contains(xHB + widthHB, yHB) || playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
 							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
 							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
-							|| playerHitBox.contains(xHB, yHB + heightHB) || playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
 							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
 						return true;
 					}
 				} else if (cat == Category.O) {
 					x = hitBox.x + hitBox.width + X_MOVE;
-					return (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
-							|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				} else if (cat == Category.A) {
 					LinkedList<Opponent> opponents = getM_model().getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
-								|| op.getHitBox().contains(m_coord.X(), m_coord.Y())) {
+								|| op.getHitBox().contains(hitBox.x, hitBox.y)) {
 							this.setCollidingWith(op);
 							return true;
 						}
@@ -146,22 +151,69 @@ public abstract class Entity {
 					return false;
 				}
 				return false;
-			case Direction.Es:
-				if (cat == Category.O) {
-					x = hitBox.x + hitBox.width + 1 + X_MOVE;
-					return (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
-							|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+			case Direction.Es :
+				if (cat == Category.P) {
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					int xHB = hitBox.x + X_MOVE;
+					int yHB = hitBox.y + X_MOVE;
+					int widthHB = hitBox.width;
+					int heightHB = hitBox.height;
+					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
+						return true;
+					}
+				} else if (cat == Category.O) {
+					x = hitBox.x + hitBox.width + X_MOVE;
+					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				}
 				return false;
 			case Direction.Ws:
-				x = hitBox.x - X_MOVE;
-				if (getM_model().m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| getM_model().m_room.isBlocked(x, m_coord.Y() - 1)
-						|| getM_model().m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+				if (cat == Category.P) {
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
+					int xHB = hitBox.x  - X_MOVE;
+					int yHB = hitBox.y  - X_MOVE;
+					int widthHB = hitBox.width;
+					int heightHB = hitBox.height;
+					if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB)
+							|| playerHitBox.contains(xHB, yHB + heightHB / 2)
+							|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
+						return true;
+					}
+				} else if (cat == Category.O) {
+					x = hitBox.x - X_MOVE;
+					if (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height)) {
+						return true;
+					}
+				}
+				return false;
+			case Direction.Ns:
+				y = hitBox.y - X_MOVE;
+				if (m_model.m_room.isBlocked(hitBox.x, y) || m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
 					return true;
 				}
-
+				return false;
+			case Direction.Ss:
+				y = hitBox.y + X_MOVE + hitBox.height;
+				if (m_model.m_room.isBlocked(hitBox.x, y) || m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
+					return true;
+				}
 				return false;
 			default:
 				return false;
@@ -190,7 +242,7 @@ public abstract class Entity {
 	public Automaton getAutomaton() {
 		return m_automaton;
 	}
-	
+
 	public void setCollidingWith(Character cha) {
 		if (collidingWith != cha) {
 			collidingWith = cha;

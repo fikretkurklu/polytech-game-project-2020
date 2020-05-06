@@ -42,7 +42,7 @@ public class Player extends Character {
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
-		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 15);
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 16);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -241,7 +241,7 @@ public class Player extends Character {
 			}
 			paintInvincible = !paintInvincible;
 		}
-
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
