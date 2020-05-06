@@ -54,6 +54,20 @@ public class ImageLoader {
 		return img;
 	}
 	
+	public static Image loadImage(String path, int width, int height) throws Exception {
+		File imageFile = new File(path);
+		if (imageFile.exists()) {
+			Image img;
+			img = ImageIO.read(imageFile);
+			img = img.getScaledInstance(width, height, 0);
+			return img;
+		} else {
+			throw new Exception("Error while loading image: path = " + path);
+		}
+		
+		
+	}
+	
 	/**
 	 * Method for loading basic image
 	 * @param path path to the image to laod
@@ -65,8 +79,7 @@ public class ImageLoader {
 	public static Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
 		if (imageFile.exists()) {
-			Image img = ImageIO.read(imageFile);
-			return img;
+			return ImageIO.read(imageFile);
 		} else {
 			throw new Exception("Error while loading image: path = " + path);
 		}
@@ -123,6 +136,27 @@ public class ImageLoader {
 					int x = j * width;
 					int y = i * height;
 					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
+				}
+			}
+			return images;
+		}
+		return null;
+	}
+	
+	public static Image[] loadImageSprite(String filename, int nrows, int ncols, int finalWidth, int finalHeight) throws IOException {
+		File imageFile = new File(filename);
+		if (imageFile.exists()) {
+			BufferedImage image = ImageIO.read(imageFile);
+			int width = image.getWidth(null) / ncols;
+			int height = image.getHeight(null) / nrows;
+
+			Image[] images = new Image[nrows * ncols];
+			for (int i = 0; i < nrows; i++) {
+				for (int j = 0; j < ncols; j++) {
+					int x = j * width;
+					int y = i * height;
+					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
+					images[(i * ncols) + j] = images[(i * ncols) + j].getScaledInstance(finalWidth, finalHeight, 0);
 				}
 			}
 			return images;

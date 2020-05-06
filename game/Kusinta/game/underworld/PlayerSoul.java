@@ -13,6 +13,7 @@ import environnement.Element;
 import game.Coord;
 import game.Game;
 import game.Model;
+import game.Model.mode;
 import player.Character;
 
 public class PlayerSoul extends Character {
@@ -324,8 +325,10 @@ public class PlayerSoul extends Character {
 				}
 				return;
 			case ESCAPED:
-				if (m_image_index >= UnderworldParam.sizePlayerDashAnimation)
+				if (m_image_index >= UnderworldParam.sizePlayerDashAnimation) {
 					escapedOrDead = true;
+					m_model.switchEnv(mode.VILLAGE);
+				}
 				return;
 			case NORMAL:
 				if (m_image_index >= UnderworldParam.sizePlayerAnimation) {
