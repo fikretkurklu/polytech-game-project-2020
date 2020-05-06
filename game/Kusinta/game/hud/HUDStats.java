@@ -27,7 +27,7 @@ public class HUDStats {
 		m_width = w;
 		m_height = h;
 		m_player = p;
-		bg = ImageLoader.loadImage(BG, w, h);
+		bg = ImageLoader.loadImage(BG);
 		font = new Font("Georgia", Font.PLAIN, 11);
 		statsDrawned = new String[CurrentStat.values().length - 1];
 		updateStats();

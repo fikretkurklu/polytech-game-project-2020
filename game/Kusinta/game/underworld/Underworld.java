@@ -1,6 +1,7 @@
 package underworld;
 
 import java.awt.Graphics;
+
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
@@ -8,7 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -19,10 +19,10 @@ import game.Model;
 import environnement.Element;
 
 public class Underworld {
-	public final static int MAX_CLOUDS = 7; 
+	public final static int MAX_CLOUDS = 6;
 	public final static int MAX_GHOSTS = 10;// Nombre de ghosts max
 	public final int MAX_FRAGMENTS = 4;
-	
+
 	boolean gateCreated = false;
 	boolean playerCreated = false;
 	public boolean gameOver = false;
@@ -47,7 +47,7 @@ public class Underworld {
 	UndWallImageManager UWIM;
 	AutomatonLibrary m_AL;
 	Model m_model;
-	Image background;
+	Image backgroundImage, cloudImage, cloudLeftUpImage, cloudRightUpImage, cloudLeftDownImage, cloudRightDownImage;
 	public Image[] ghostImages, playerImages, lureImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
@@ -58,7 +58,7 @@ public class Underworld {
 		m_al = AL;
 		m_width = width;
 		m_height = height;
-		startCoord = new Coord(1000, 1000);
+		startCoord = new Coord(500, 500);
 		ambiance = (int) (Math.random() * UnderworldParam.nbAmbiance) + 1;
 		BufferedReader f;
 		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
@@ -79,7 +79,6 @@ public class Underworld {
 			e1.printStackTrace();
 		}
 		try {
-			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
@@ -99,11 +98,16 @@ public class Underworld {
 				}
 			}
 			f.close();
-			generateClouds(m_clouds);
-			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
+			backgroundImage = ImageLoader.loadImage(UnderworldParam.backgroundFile);
+			cloudImage = ImageLoader.loadImage(UnderworldParam.cloudImage[0], Cloud.SIZE);
+			cloudLeftUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[1], 860);
+			cloudRightUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[2], 860);
+			cloudLeftDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[3], 860);
+			cloudRightDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[4], 860);
 			ghostImages = ImageLoader.loadGhostImage();
 			playerImages = ImageLoader.loadPlayerImage();
 			lureImages = ImageLoader.loadLureImage();
+			generateClouds(m_clouds);
 			generateGhosts();
 			generateFragments(m_fragments);
 			generateGate();
@@ -113,44 +117,47 @@ public class Underworld {
 		}
 	}
 
-	public static final int XMAX = 3784;
-	public static final int XMIN = 1290;
-	public static final int YMAX = 3784;
-	public static final int YMIN = 172;
+	public static final int BORDERX = 2580;
+	public static final int BORDERY = 2580;
+
+	public static final int XMAX = 2150;
+	public static final int XMIN = 430;
+	public static final int YMAX = 2150;
+	public static final int YMIN = 430;
 
 	private void generateGhosts() {
 		for (int i = 0; i < 5; i++) {
 			addGhost();
 		}
 	}
-	
+
 	private void generateClouds(Cloud[] clouds) {
 		int randomX;
 		for (int i = 0; i < clouds.length; i++) {
-			randomX = (int) (Math.random() * (4558));
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 500), m_model);
+			randomX = (int) (Math.random() * (XMAX));
+			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 430), m_model, cloudImage);
 		}
 	}
 
 	private void generateFragments(Fragment[] fragments) {
 		for (int i = 0; i < fragments.length; i++) {
-			fragments[i] = new Fragment(fragmentAutomaton, generatePosition(- (int)(Element.SIZE/1.5), 2 * Element.SIZE), m_model);
+			fragments[i] = new Fragment(fragmentAutomaton,
+					generatePosition(-(int) (Element.SIZE / 1.5), 2 * Element.SIZE), m_model);
 		}
 	}
-	
+
 	private void generateGate() {
 		m_gate = new Gate(gateAutomaton, generatePosition(Element.SIZE, 2 * Element.SIZE), m_model);
 	}
-	
+
 	public void setPlayer(PlayerSoul player) {
 		m_player = player;
 		playerCreated = true;
 	}
 
-
 	public void CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
-		if (code.equals("")) {
+		if (code.equals(".")) {
 			Grow(false, new UnderworldEmptySpace(coord));
 		} else if (code.equals("IW")) {
 			Grow(false, new UndInnerWall(coord, UIWM));
@@ -167,7 +174,7 @@ public class Underworld {
 		}
 //		throw new Exception("Code room err: " + code);
 	}
-	
+
 	public void Grow(boolean isElement, Element add) {
 		if (isElement) {
 			Element[] tmp_elements = new Element[m_borders.length + 1];
@@ -184,24 +191,28 @@ public class Underworld {
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-//		g.drawImage(background, - x_decalage, - y_decalage, width, height, null);
-		int y_start = (-y_decalage / Element.SIZE) * nbCol;
-		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
-		int x_start = (-x_decalage / Element.SIZE);
-		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
-		for (int i = y_start; i < y_end; i += nbCol) {
-			for (int j = i + x_start; j < i + x_end; j++) {
-				m_elements[j].paint(g);
-			}
-		}
+		g.drawImage(backgroundImage, -x_decalage, -y_decalage, width, height, null);
+//		int y_start = (-y_decalage / Element.SIZE) * nbCol;
+//		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
+//		int x_start = (-x_decalage / Element.SIZE);
+//		int x_end = Math.min((x_start + width / Element.SIZE + 2), nbCol);
+//		for (int i = y_start; i < y_end; i += nbCol) {
+//			for (int j = i + x_start; j < i + x_end; j++) {
+//				m_elements[j].paint(g);
+//			}
+//		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
 		}
 		m_player.paint(g);
+		g.drawImage(cloudLeftUpImage, 0, 0, null);
+		g.drawImage(cloudRightUpImage, 1720, 0, null);
+		g.drawImage(cloudLeftDownImage, 0, 1720, null);
+		g.drawImage(cloudRightDownImage, 1720, 1720, null);
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
-		it = m_ghosts.iterator(); 
+		it = m_ghosts.iterator();
 		while (it.hasNext()) {
 			it.next().paint(g);
 		}
@@ -217,20 +228,20 @@ public class Underworld {
 		m_BlockAElapsed += elapsed;
 		if (m_BlockAElapsed > 1000) {
 			m_BlockAElapsed = 0;
-			for (int i = 0; i < m_borders.length; i ++) {
+			for (int i = 0; i < m_borders.length; i++) {
 				if (m_borders[i].getAutomaton() != null) {
 					m_borders[i].getAutomaton().step(m_borders[i]);
 				}
 			}
 		}
 		for (int i = 0; i < m_clouds.length; i++) {
-				if (m_clouds[i].outScreen) {
-					m_clouds[i].reactivate();
-				}
-				m_clouds[i].tick(elapsed);
+			if (m_clouds[i].outScreen) {
+				m_clouds[i].reactivate();
+			}
+			m_clouds[i].tick(elapsed);
 		}
 		m_player.tick(elapsed);
-		it = m_ghosts.iterator(); 
+		it = m_ghosts.iterator();
 		while (it.hasNext()) {
 			it.next().tick(elapsed);
 		}
@@ -240,16 +251,15 @@ public class Underworld {
 		if (gateCreated)
 			m_gate.tick(elapsed);
 	}
-	
+
 	private Coord generatePosition(int hitboxDim, int hitboxSize) {
 		int x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 		int y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 		Rectangle hitBox = new Rectangle(x + hitboxDim, y + hitboxDim, hitboxSize, hitboxSize);
 		int xRight = hitBox.x + hitboxSize;
 		int yRight = hitBox.y + hitboxSize;
-		while (isBlocked(xRight, hitBox.y) || isBlocked(xRight, yRight) 
-				|| isBlocked(hitBox.x, yRight) || isBlocked(hitBox.x, hitBox.y)
-				|| isBlocked(x, y)) {
+		while (isBlocked(xRight, hitBox.y) || isBlocked(xRight, yRight) || isBlocked(hitBox.x, yRight)
+				|| isBlocked(hitBox.x, hitBox.y) || isBlocked(x, y)) {
 			x = XMIN + (int) (Math.random() * (XMAX - XMIN));
 			y = YMIN + (int) (Math.random() * (YMAX - YMIN));
 			hitBox.setLocation(x + hitboxDim, y + hitboxDim);
@@ -258,7 +268,6 @@ public class Underworld {
 		}
 		return new Coord(x, y);
 	}
-	
 
 	public boolean isBlocked(int x, int y) {
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
@@ -267,14 +276,13 @@ public class Underworld {
 		}
 		return true;
 	}
-	
+
 	public boolean checkPosition(int x, int y, int hitboxDim, int hitboxSize) {
 		int xRight = x + hitboxSize;
 		int yRight = y + hitboxSize;
 		Rectangle hitBox = new Rectangle(x + hitboxDim, y + hitboxDim, hitboxSize, hitboxSize);
-		 return (isBlocked(xRight, hitBox.y) || isBlocked(xRight, yRight) 
-				|| isBlocked(hitBox.x, yRight) || isBlocked(hitBox.x, hitBox.y)
-				|| isBlocked(x, y));
+		return (isBlocked(xRight, hitBox.y) || isBlocked(xRight, yRight) || isBlocked(hitBox.x, yRight)
+				|| isBlocked(hitBox.x, hitBox.y) || isBlocked(x, y));
 	}
 
 	public Coord blockCoord(int x, int y) {
@@ -285,7 +293,7 @@ public class Underworld {
 			return null;
 		}
 	}
-	
+
 	public void activateGate() {
 		gateCreated = true;
 	}
@@ -293,12 +301,13 @@ public class Underworld {
 	public int getWitdh() {
 		return m_RealWidth;
 	}
+
 	public int getHeight() {
 		return m_RealHeight;
 	}
-	
+
 	public void addGhost() {
-		m_ghosts.add(new Ghost(Direction.E, generatePosition(0 , Ghost.SIZE), ghostAutomaton, m_model, ghostImages));
+		m_ghosts.add(new Ghost(Direction.E, generatePosition(0, Ghost.SIZE), ghostAutomaton, m_model, ghostImages));
 	}
 
 }

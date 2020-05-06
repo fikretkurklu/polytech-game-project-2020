@@ -58,7 +58,5 @@ public class Coord {
 		y += dy;
 	}
 	
-	
-	
 }
 
