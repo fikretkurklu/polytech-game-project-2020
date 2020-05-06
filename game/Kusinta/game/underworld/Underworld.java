@@ -50,7 +50,7 @@ public class Underworld {
 	AutomatonLibrary m_AL;
 	Model m_model;
 	Image backgroundImage, cloudImage, cloudLeftUpImage, cloudRightUpImage, cloudLeftDownImage, cloudRightDownImage;
-	public Image[] ghostImages, playerImages, lureImages;
+	public Image[] ghostImages, playerImages, lureImages, fragmentImages, gateImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
@@ -100,7 +100,7 @@ public class Underworld {
 				}
 			}
 			f.close();
-			backgroundImage = ImageLoader.loadImage(UnderworldParam.backgroundFile);
+			backgroundImage = ImageLoader.loadImage(UnderworldParam.backgroundFile, width, height);
 			cloudImage = ImageLoader.loadImage(UnderworldParam.cloudImage[0], Cloud.SIZE);
 			cloudLeftUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[1], 860);
 			cloudRightUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[2], 860);
@@ -109,6 +109,8 @@ public class Underworld {
 			ghostImages = ImageLoader.loadGhostImage();
 			playerImages = ImageLoader.loadPlayerImage();
 			lureImages = ImageLoader.loadLureImage();
+			fragmentImages = ImageLoader.loadImageSprite(UnderworldParam.fragmentSprite, 3, 3, Fragment.FragmentSIZE, Fragment.FragmentSIZE);
+			gateImages = ImageLoader.loadImageSprite(UnderworldParam.gateSprite, 6, 6, Gate.GateSIZE, Gate.GateSIZE);
 			generateClouds(m_clouds);
 			generateGhosts();
 			generateFragments(m_fragments);
@@ -144,12 +146,12 @@ public class Underworld {
 	private void generateFragments(Fragment[] fragments) {
 		for (int i = 0; i < fragments.length; i++) {
 			fragments[i] = new Fragment(fragmentAutomaton,
-					generatePosition(-(int) (Element.SIZE / 1.5), 2 * Element.SIZE), m_model);
+					generatePosition(-(int) (Element.SIZE / 1.5), 2 * Element.SIZE), m_model, fragmentImages);
 		}
 	}
 
 	private void generateGate() {
-		m_gate = new Gate(gateAutomaton, generatePosition(Element.SIZE, 2 * Element.SIZE), m_model);
+		m_gate = new Gate(gateAutomaton, generatePosition(Element.SIZE, 2 * Element.SIZE), m_model, gateImages);
 	}
 
 	public void setPlayer(PlayerSoul player) {
@@ -194,7 +196,7 @@ public class Underworld {
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
-		g.drawImage(backgroundImage, -x_decalage, -y_decalage, width, height, null);
+		g.drawImage(backgroundImage, -x_decalage, -y_decalage, null);
 //		int y_start = (-y_decalage / Element.SIZE) * nbCol;
 //		int y_end = Math.min((y_start + (m_height / Element.SIZE + 2) * nbCol), m_elements.length);
 //		int x_start = (-x_decalage / Element.SIZE);
@@ -208,10 +210,14 @@ public class Underworld {
 			m_fragments[i].paint(g);
 		}
 		m_player.paint(g);
-		g.drawImage(cloudLeftUpImage, 0, 0, null);
-		g.drawImage(cloudRightUpImage, 1720, 0, null);
-		g.drawImage(cloudLeftDownImage, 0, 1720, null);
-		g.drawImage(cloudRightDownImage, 1720, 1720, null);
+		if (m_player.getCoord().Y() - (height/2) <= 860) {
+			g.drawImage(cloudLeftUpImage, 0, 0, null);
+			g.drawImage(cloudRightUpImage, 1720, 0, null);
+		}
+		if (m_player.getCoord().Y() + (height/2) >= 1720) {
+			g.drawImage(cloudLeftDownImage, 0, 1720, null);
+			g.drawImage(cloudRightDownImage, 1720, 1720, null);
+		}
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
