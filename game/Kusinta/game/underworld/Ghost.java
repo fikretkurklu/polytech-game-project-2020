@@ -113,7 +113,19 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		Coord lureCoord = getPlayer().lure.getCoord();
+		Coord lureCoord, tmpCoord;
+		int d;
+		lureCoord = getPlayer().getProjectiles().get(0).getCoord();
+		int min = distance(m_coord, lureCoord);
+		Iterator<Projectile> it = getPlayer().getProjectiles().iterator();
+		while (it.hasNext()) {
+			tmpCoord = it.next().getCoord();
+			d = distance(m_coord, tmpCoord);
+			if (d <= min) {
+				min = d;
+				lureCoord = tmpCoord;
+			}
+		}
 		return PopOrWizz(dir, lureCoord);
 	}
 
@@ -231,6 +243,7 @@ public class Ghost extends Entity {
 			isLure = false;
 		} else if (cat == Category.C) {
 			if (getPlayer().lureActive()) {
+				isLure = true;
 				coord = getPlayer().getProjectiles().get(0).getCoord();
 				int min = distance(m_coord, coord);
 				Iterator<Projectile> it = getPlayer().getProjectiles().iterator();
@@ -242,9 +255,7 @@ public class Ghost extends Entity {
 						min = d;
 						coord = tmpCoord;
 					}
-
 				}
-				isLure = true;
 			} else
 				return false;
 		}

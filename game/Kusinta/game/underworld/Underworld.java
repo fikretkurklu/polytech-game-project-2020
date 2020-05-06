@@ -81,7 +81,6 @@ public class Underworld {
 			e1.printStackTrace();
 		}
 		try {
-			background = ImageIO.read(new File(UnderworldParam.backgroundFile));
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
