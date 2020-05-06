@@ -20,7 +20,7 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 7; 
-	public final static int MAX_GHOSTS = 10;// Nombre de ghosts max
+	public final static int MAX_GHOSTS = 30;// Nombre de ghosts max
 	public final int MAX_FRAGMENTS = 4;
 	
 	boolean gateCreated = false;
@@ -39,6 +39,7 @@ public class Underworld {
 	Cloud[] m_clouds;
 	Iterator<Ghost> it;
 	LinkedList<Ghost> m_ghosts;
+	int nbGhosts;
 	Fragment[] m_fragments;
 	Gate m_gate;
 	UnderworldEmptySpaceImageManager ESIM;
@@ -119,7 +120,7 @@ public class Underworld {
 	public static final int YMIN = 172;
 
 	private void generateGhosts() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 40; i++) {
 			addGhost();
 		}
 	}
@@ -293,12 +294,24 @@ public class Underworld {
 	public int getWitdh() {
 		return m_RealWidth;
 	}
+	
 	public int getHeight() {
 		return m_RealHeight;
 	}
 	
 	public void addGhost() {
+		if (nbGhosts == MAX_GHOSTS) {
+			for (int i = 0; i < 20; i++) { // Remove 20 Ghosts 
+				m_ghosts.removeLast();
+				nbGhosts--;
+			}
+			it = m_ghosts.iterator();
+			while (it.hasNext()) {
+				it.next().buff();
+			}
+		}
 		m_ghosts.add(new Ghost(Direction.E, generatePosition(0 , Ghost.SIZE), ghostAutomaton, m_model, ghostImages));
+		nbGhosts++;
 	}
 
 }
