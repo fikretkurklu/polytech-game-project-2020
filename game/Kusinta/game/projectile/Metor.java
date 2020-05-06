@@ -1,20 +1,15 @@
 package projectile;
 
-import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
-import opponent.Opponent;
-import player.Player;
-import projectile.Projectile.State;
 import player.Character;
 
 public class Metor extends Projectile {
@@ -25,7 +20,7 @@ public class Metor extends Projectile {
 	int m_width;
 	int m_imageElapsed, m_image_index;
 
-	int ANIMATION_SPEED = 20;
+	int ANIMATION_SPEED = 120;
 
 	Image[] images;
 
@@ -99,6 +94,7 @@ public class Metor extends Projectile {
 	@Override
 	public boolean explode() {
 		m_State = State.HIT_STATE;
+		m_image_index = 43;
 		return true;
 	}
 

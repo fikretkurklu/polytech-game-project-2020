@@ -65,5 +65,27 @@ public abstract class Opponent extends Character {
 			setKey(null);
 		}
 	}
+	
+	public boolean move(Direction dir) {
+		if (gotpower()) {
+			int m_x = m_coord.X();
+			int m_y = m_coord.Y();
+
+			if (!moving) {
+				m_image_index = 0;
+			}
+			moving = true;
+
+			if (!shooting)
+				turn(dir);
+
+			super.move(dir);
+
+			if (collidedWith != null) {
+				collidedWith.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+			}
+		}
+		return true;
+	}
 
 }

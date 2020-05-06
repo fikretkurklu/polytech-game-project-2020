@@ -17,7 +17,7 @@ public class Boss extends Opponent {
 	private static String SPRITES = "resources/oppenent/boss/animation.png";
 	private static String PATH_SHOT = "resources/oppenent/boss/attack/";
 	public static int MAX_LIFE = 5000;
-	public static int AS = 4000;
+	public static int AS = 3000;
 	public static int RESISTANCE = 50;
 	public static int STRENGH = 40;
 
@@ -27,6 +27,8 @@ public class Boss extends Opponent {
 	long m_imageElapsedTick = 200;
 	long m_moveElapsed;
 	int SPEED_WALK_TICK = 8;
+	
+	int hitBoxPadding;
 
 	public Boss(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 		super(automaton, C, dir, model, MAX_LIFE, MAX_LIFE, AS, RESISTANCE, STRENGH);
@@ -34,9 +36,10 @@ public class Boss extends Opponent {
 
 		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
 
-		m_height = SIZE;
+		m_height = SIZE * 2;
+		hitBoxPadding = m_height / 10;
 		m_width = (int) (m_height * ratio);
-		hitBox = new Rectangle(C.X() - m_width / 2, C.Y() - m_height, m_width, m_height);
+		hitBox = new Rectangle(C.X() - m_width / 2 + hitBoxPadding, C.Y() - m_height + hitBoxPadding, m_width - 2 * hitBoxPadding, m_height - 2 * hitBoxPadding);
 		m_image_index = 45;
 
 		setImageIndex(44, 53);
@@ -58,6 +61,7 @@ public class Boss extends Opponent {
 		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(gp);
 		}
+		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 	}
 
@@ -99,10 +103,6 @@ public class Boss extends Opponent {
 			int m_x = m_coord.X();
 
 			setImageIndex(44, 53);
-
-			if (!shooting)
-				turn(dir);
-
 			super.move(dir);
 
 			if (collidedWith != null) {
@@ -174,19 +174,8 @@ public class Boss extends Opponent {
 
 	public boolean hit(Direction dir) {
 		if (gotpower() && !shooting) {
-
 			setImageIndex(0, 8);
-
 			shooting = true;
-
-			Coord playerCoord = m_model.getPlayer().getCoord();
-			int player_x = playerCoord.X();
-
-			if (player_x > m_coord.X()) {
-				turn(Direction.E);
-			} else {
-				turn(Direction.W);
-			}
 			return true;
 		}
 		return false;

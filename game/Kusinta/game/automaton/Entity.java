@@ -107,12 +107,15 @@ public abstract class Entity {
 	// Conditions
 
 	public boolean mydir(Direction dir) {
-		return false;
+		return m_direction == dir;
 	}
 
 	public boolean cell(Direction dir, Category cat) {
 		if (m_model.actualMode == Model.mode.ROOM) {
-			int x;
+			if (dir == Direction.F) {
+				dir = m_direction;
+			}
+			int x, y;
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
@@ -131,14 +134,14 @@ public abstract class Entity {
 					}
 				} else if (cat == Category.O) {
 					x = hitBox.x + hitBox.width + X_MOVE;
-					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				} else if (cat == Category.A) {
 					LinkedList<Opponent> opponents = m_model.getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
-								|| op.getHitBox().contains(m_coord.X(), m_coord.Y())) {
+								|| op.getHitBox().contains(hitBox.x, hitBox.y)) {
 							this.setCollidingWith(op);
 							return true;
 						}
@@ -148,20 +151,35 @@ public abstract class Entity {
 				return false;
 			case Direction.Es:
 				if (cat == Category.O) {
-					x = hitBox.x + hitBox.width + 1 + X_MOVE;
-					return (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-							|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1));
+					x = hitBox.x + hitBox.width + X_MOVE;
+					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+							|| m_model.m_room.isBlocked(x, hitBox.y)
+							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				}
 				return false;
 			case Direction.Ws:
 				x = hitBox.x - X_MOVE;
-				if (m_model.m_room.isBlocked(x, m_coord.Y() - m_height / 2)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - 1)
-						|| m_model.m_room.isBlocked(x, m_coord.Y() - m_height + 1)) {
+				if (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
+						|| m_model.m_room.isBlocked(x, hitBox.y)
+						|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height)) {
 					return true;
 				}
-
+				return false;
+			case Direction.Ns:
+				y = hitBox.y - X_MOVE;
+				if (m_model.m_room.isBlocked(hitBox.x, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
+					return true;
+				}
+				return false;
+			case Direction.Ss:
+				y = hitBox.y + X_MOVE + hitBox.height;
+				if (m_model.m_room.isBlocked(hitBox.x, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width / 2, y)
+						|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, y)) {
+					return true;
+				}
 				return false;
 			default:
 				return false;
@@ -196,5 +214,4 @@ public abstract class Entity {
 			collidingWith = cha;
 		}
 	}
-
 }

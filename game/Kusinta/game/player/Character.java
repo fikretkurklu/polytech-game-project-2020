@@ -24,7 +24,6 @@ import projectile.MagicProjectile;
 import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
-import sun.net.www.MeteredStream;
 
 public abstract class Character extends Entity {
 
@@ -41,7 +40,6 @@ public abstract class Character extends Entity {
 
 	protected BufferedImage[] bI;
 	protected int m_image_index;
-
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -92,27 +90,26 @@ public abstract class Character extends Entity {
 	@Override
 	public boolean move(Direction dir) { // bouger
 
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
+		if (dir == Direction.F) {
+			dir = m_direction;
+		}
 
 		if (dir == Direction.E) {
-			if (!checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - 1)
-					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height)
-					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height / 2)) {
-				m_x += X_MOVE;
-				m_coord.setX(m_x);
-				hitBox.translate(X_MOVE, 0);
-			}
+			m_coord.translateX(X_MOVE);
+			hitBox.translate(X_MOVE, 0);
 		} else if (dir == Direction.W) {
-			if (!checkBlock(hitBox.x - X_MOVE, m_y - 1) && !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height)
-					&& !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height / 2)) {
-				m_x -= X_MOVE;
-				m_coord.setX(m_x);
-				hitBox.translate(-X_MOVE, 0);
-			}
+			m_coord.translateX(-X_MOVE);
+			hitBox.translate(-X_MOVE, 0);
+		} else if (dir == Direction.N) {
+			m_coord.translateY(-X_MOVE);
+			hitBox.translate(0, -X_MOVE);
+		} else if (dir == Direction.S) {
+			m_coord.translateY(X_MOVE);
+			hitBox.translate(0, X_MOVE);
 		}
 
 		return true;
+
 	}
 
 	public Rectangle getHitBox() {
@@ -324,7 +321,6 @@ public abstract class Character extends Entity {
 	public void setMoney(int money) {
 		m_money += money;
 	}
-
 
 	public Image getProjectileImage() {
 		return imageProjectile;
