@@ -112,6 +112,10 @@ public abstract class Projectile extends Entity {
 	public void setSpeed(int speed) {
 		X_MOVE = speed;
 	}
+	
+	public Coord getCoord() {
+		return m_coord;
+	}
 
 	public abstract void paint(Graphics g);
 }
