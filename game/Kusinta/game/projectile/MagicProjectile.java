@@ -101,7 +101,7 @@ public class MagicProjectile extends Projectile {
 			}
 			if (cat == Category.P) {
 				m_State = State.HIT_STATE;
-				int tmpPlayerResistance = m_shooter.m_currentStatMap.get(Character.CurrentStat.Resistance);
+				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
 				collidingWith.loseLife(m_strength - tmpPlayerResistance);
 				return true;
