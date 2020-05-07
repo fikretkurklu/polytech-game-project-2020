@@ -13,9 +13,12 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
+import entityFactory.Factory;
+import entityFactory.Factory.Type;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
+import player.Player;
 import environnement.Element;
 
 public class Underworld {
@@ -69,16 +72,16 @@ public class Underworld {
 		m_ghosts = new LinkedList<Ghost>();
 		m_fragments = new Fragment[MAX_FRAGMENTS];
 		m_AL = AL;
-		try {
-			wallAutomaton = m_AL.getAutomaton("Block");
-			cloudAutomaton = m_AL.getAutomaton("Cloud");
-			ghostAutomaton = m_AL.getAutomaton("Ghost");
-			fragmentAutomaton = m_AL.getAutomaton("Fragment");
-			gateAutomaton = m_AL.getAutomaton("Gate");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		try {
+//			wallAutomaton = m_AL.getAutomaton("Block");
+//			cloudAutomaton = m_AL.getAutomaton("Cloud");
+//			ghostAutomaton = m_AL.getAutomaton("Ghost");
+//			fragmentAutomaton = m_AL.getAutomaton("Fragment");
+//			gateAutomaton = m_AL.getAutomaton("Gate");
+//		} catch (Exception e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		try {
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
@@ -141,7 +144,7 @@ public class Underworld {
 		int randomX;
 		for (int i = 0; i < clouds.length; i++) {
 			randomX = (int) (Math.random() * (XMAX));
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 430), m_model, cloudImage);
+			clouds[i] = (Cloud) Factory.newEntity(Type.Cloud, Direction.E, new Coord(randomX, (i + 1) * 430), m_model, 0, null);
 		}
 	}
 

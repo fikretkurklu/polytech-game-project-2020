@@ -17,7 +17,9 @@ import opponent.WalkingOpponent;
 import player.Player;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+import underworld.Cloud;
 import underworld.Fragment;
+import underworld.Gate;
 import underworld.Ghost;
 import underworld.Lure;
 import underworld.PlayerSoul;
@@ -30,11 +32,11 @@ public class Factory {
 
 	public static enum Type {
 		Player, PlayerSoul, Lure, NormalKey, BossKey, Coin, Fragment, WalkingOpponent, FlyingOpponent, Arrow,
-		MagicProjectile, Meteor, Ghost
+		MagicProjectile, Meteor, Ghost, Gate, Cloud
 	};
 
 	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul", "Ghost", "Lure",
-			"KeyBoss", "Coin", "KeyNormal" }; // Nom des fichiers
+			"KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" }; // Nom des fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
@@ -63,6 +65,9 @@ public class Factory {
 		actions.put(Type.BossKey, m_IL.getActions(Avatars[8]));
 		actions.put(Type.Coin, m_IL.getActions(Avatars[9]));
 		actions.put(Type.NormalKey, m_IL.getActions(Avatars[10]));
+		actions.put(Type.Fragment, m_IL.getActions(Avatars[11]));
+		actions.put(Type.Gate, m_IL.getActions(Avatars[12]));
+		actions.put(Type.Cloud, m_IL.getActions(Avatars[13]));
 //		actions.put(Type.Meteor, m_IL.getActions("Meteor"));
 //		actions.put(Type.Fragment, m_IL.getActions("Fragment"));
 	}
@@ -78,6 +83,9 @@ public class Factory {
 		images.put(Type.Lure, m_IL.getImages(Avatars[7]));
 		images.put(Type.Coin, m_IL.getImages(Avatars[9]));
 		images.put(Type.NormalKey, m_IL.getImages(Avatars[10]));
+		images.put(Type.Fragment, m_IL.getImages(Avatars[11]));
+		images.put(Type.Gate, m_IL.getImages(Avatars[12]));
+		images.put(Type.Cloud, m_IL.getImages(Avatars[13]));
 //		images.put(Type.Meteor, m_IL.getImages("Meteor"));
 //		images.put(Type.Fragment, m_IL.getImages("Fragment"));
 	}
@@ -94,6 +102,9 @@ public class Factory {
 		automatons.put(Type.BossKey, m_AL.getAutomaton(Avatars[8]));
 		automatons.put(Type.Coin, m_AL.getAutomaton(Avatars[9]));
 		automatons.put(Type.NormalKey, m_AL.getAutomaton(Avatars[10]));
+		automatons.put(Type.Fragment, m_AL.getAutomaton(Avatars[11]));
+		automatons.put(Type.Gate, m_AL.getAutomaton(Avatars[12]));
+		automatons.put(Type.Cloud, m_AL.getAutomaton(Avatars[13]));
 		//automatons.put(Type.Meteor, m_AL.getAutomaton("Meteor"));
 		//automatons.put(Type.Fragment, m_AL.getAutomaton("Fragment"));
 	}
@@ -106,7 +117,7 @@ public class Factory {
 				return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
 						actions.get(Type.Player));
 			case PlayerSoul:
-				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, null, model);
+				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, images.get(Type.PlayerSoul), model);
 			case NormalKey:
 				return new NormalKey(automatons.get(Type.NormalKey), coord, model, images.get(Type.NormalKey),
 						actions.get(Type.NormalKey));
@@ -126,16 +137,20 @@ public class Factory {
 				return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
 						images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
 			case Ghost:
-				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, null);
+				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, images.get(Type.Ghost));
 			case Coin:
 				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin), actions.get(Type.Coin));
 			case Lure:
-				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, null, model);
+				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, images.get(Type.Lure), model);
 			case Meteor:
 				System.out.println("temporaire");
 				return null;
 			case Fragment:
-				return new Fragment(automatons.get(Type.Fragment), coord, model, null);
+				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment));
+			case Gate:
+				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate)); 
+			case Cloud:
+				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0]);
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());
