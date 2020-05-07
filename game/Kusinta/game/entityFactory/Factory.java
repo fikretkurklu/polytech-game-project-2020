@@ -26,7 +26,7 @@ import automaton.Entity.Action;
 
 public class Factory {
 
-	AutomatonLibrary m_AL;
+	public AutomatonLibrary m_AL;
 	ImageLibrary m_IL;
 
 	public static enum Type {
@@ -43,6 +43,7 @@ public class Factory {
 
 	public Factory() throws Exception {
 		m_AL = new AutomatonLibrary();
+		m_IL = new ImageLibrary();
 		fillAutomaton();
 		fillImages();
 		fillActions();
