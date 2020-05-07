@@ -26,7 +26,7 @@ import automaton.Entity.Action;
 
 public class Factory {
 
-	AutomatonLibrary m_AL;
+	public AutomatonLibrary m_AL;
 	ImageLibrary m_IL;
 
 	public static enum Type {
@@ -43,6 +43,7 @@ public class Factory {
 
 	public Factory() throws Exception {
 		m_AL = new AutomatonLibrary();
+		m_IL = new ImageLibrary();
 		fillAutomaton();
 		fillImages();
 		fillActions();
@@ -98,7 +99,8 @@ public class Factory {
 		automatons.put(Type.Fragment, m_AL.getAutomaton("Fragment"));
 	}
 
-	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, float angle, player.Character shooter){
+	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle,
+			player.Character shooter) {
 		try {
 			switch (type) {
 			case Player:
@@ -107,10 +109,11 @@ public class Factory {
 			case PlayerSoul:
 				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, null, model);
 			case NormalKey:
-				return new NormalKey(automatons.get(Type.NormalKey), coord.X(), coord.Y(), model,
-						images.get(Type.NormalKey), actions.get(Type.NormalKey));
+				return new NormalKey(automatons.get(Type.NormalKey), coord, model, images.get(Type.NormalKey),
+						actions.get(Type.NormalKey));
 			case BossKey:
-				return new BossKey(automatons.get(Type.BossKey), coord, model, images.get(Type.BossKey), actions.get(Type.BossKey));
+				return new BossKey(automatons.get(Type.BossKey), coord, model, images.get(Type.BossKey),
+						actions.get(Type.BossKey));
 			case WalkingOpponent:
 				return new WalkingOpponent(automatons.get(Type.WalkingOpponent), coord, dir, model,
 						images.get(Type.WalkingOpponent), actions.get(Type.WalkingOpponent));
@@ -126,8 +129,7 @@ public class Factory {
 			case Ghost:
 				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, null);
 			case Coin:
-				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin),
-						actions.get(Type.Coin));
+				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin), actions.get(Type.Coin));
 			case Lure:
 				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, null, model);
 			case Boss:
@@ -142,7 +144,7 @@ public class Factory {
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());
 		}
-		
+
 		return null;
 
 	}

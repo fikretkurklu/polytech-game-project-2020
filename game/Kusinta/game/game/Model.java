@@ -89,7 +89,7 @@ public class Model {
 
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
-		m_room = new Room(m_AL, m_width, m_height);
+		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
 		this.m_player.setCoord(m_room.getStartCoord());
 	}
 
@@ -123,8 +123,8 @@ public class Model {
 	}
 
 	public void start() throws Exception {
-		m_room = new Room(m_AL, m_width, m_height);
-		m_underworld = new Underworld(m_AL, m_width, m_height, this);
+		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
+		m_underworld = new Underworld(Game.m_factory.m_AL, m_width, m_height, this);
 
 	}
 

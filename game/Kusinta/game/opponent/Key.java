@@ -51,6 +51,8 @@ public abstract class Key extends Entity {
 	}
 
 	public void paint(Graphics g) {
+		Image image = null;
+		image = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 		int w = m_width / 4;
 		int h = m_height / 4;
 		
