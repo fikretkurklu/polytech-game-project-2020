@@ -1,0 +1,2 @@
+sprite_sheet = "resources/Player/spriteArrow.png"
+DEFAULT = 0

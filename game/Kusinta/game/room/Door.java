@@ -28,9 +28,13 @@ public class Door extends Decor {
 	@Override
 	public boolean activate() {
 		System.out.println("Activate");
-
-		m_room.isChanged = true;
-		return m_room.isChanged;
+		try {
+			getM_model().switchToNextRoom();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	@Override

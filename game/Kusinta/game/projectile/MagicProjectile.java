@@ -1,6 +1,5 @@
 package projectile;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -93,7 +92,7 @@ public class MagicProjectile extends Projectile {
 		}
 
 	}
-
+	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);

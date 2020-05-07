@@ -20,6 +20,7 @@ Fragment (Init){
 
 PlayerSoul (Init) {
   * (Init)
+  | Closest(C,H) ? Wizz : (Init)  
   | ! GotPower ? Pop(S) : ()
   | Closest(G,H) ? Pop(N) : ()
   | Closest(O,H) ? : (Mv)
@@ -31,7 +32,7 @@ PlayerSoul (Init) {
   | Key(d) & ! Cell(E,O) ? Move(E) : (Actions)
   | True ? : (Actions)
   * (Actions)
-  | GotStuff ? Wizz : (Init)
+  | GotStuff ? Hit : (Init)
   | Key(e) & Closest(P,H) ? Pick(H) : (Init)
   | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)
@@ -41,8 +42,10 @@ PlayerSoul (Init) {
 
 Lure (Init){
 	* (Init)
-	| True ? : (Init)
-	*()
+	| GotPower ? : (Init)
+	| True ? Explode : (Animation)
+	* (Animation)
+	| True ? : (Animation)
 }
 
 Ghost (State0){
@@ -52,6 +55,7 @@ Ghost (State0){
   |Cell(F, O) ? Turn : (ExtraMove0)     
   |True ? Move : (State0)
 	*(State1)
+  | !GotStuff ? : (State0) 
   | Cell(N, A) ? Hit(N): (State1)
   | Cell(S, A) ? Hit(S): (State1)
   | Cell(E, A) ? Hit(E): (State1)

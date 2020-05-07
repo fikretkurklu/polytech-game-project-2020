@@ -1,137 +1,99 @@
 package underworld;
 
+import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.IOException;
 
 import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import environnement.Element;
 import game.Coord;
-import game.ImageLoader;
+import game.Model;
 import player.Character;
 import projectile.Projectile;
 
 public class Lure extends Projectile {
 
-	public static final int SIZE = (int) Element.SIZE;
-
-	Image m_apparitionImages[];
-	Image m_disaparitionImages[];
+	public static final int SIZE = Element.SIZE;
+	public static final int STEP_TICK = 4;
+	public static final int MAX_DELAY = 2500;
+	public static final int REFRESH_TICK = 200;
+	public static final int PERIOD = 1;
+	
 	Image m_images[];
 
-	int sizeAnimation = UnderworldParam.lureImage.length;
-	int sizeApearingAnimation = UnderworldParam.lureApparitionImage.length;
-
-	boolean appearing, disapearing, disapered, normal;
-
-	int m_imageIndex = 0;
-
-	long m_imageElapsed;
+	int m_imageIndex = UnderworldParam.sizeLureAnimation;
+	int delay;
+	long m_imageElapsed, m_stepElapsed;
 
 	Rectangle hitBox;
+	
+	private static final int APPEARING = 1;
+	private static final int NORMAL = 2;
+	private static final int ELAPSED = 3;
 
-	public Lure(Automaton projectileAutomaton, Coord c, double angle, Character shooter) throws IOException {
-		super(projectileAutomaton, c, angle, shooter, null);
-		appearing = true;
-		normal = false;
-		disapearing = false;
-		disapered = false;
-		setPosition();
-		m_images = ImageLoader.loadImageLure(m_apparitionImages, m_disaparitionImages, sizeApearingAnimation, sizeAnimation, m_imageIndex, m_imageElapsed);
-	}
+	private int animationMode = APPEARING;
 
-	private void setPosition() {
+	public Lure(Automaton projectileAutomaton, Coord c, Character shooter, Direction dir, Image[] images, Model model) {
+		super(projectileAutomaton, c, 0, shooter, dir);
+		m_model = model;
+		delay = MAX_DELAY;
+		m_imageElapsed = 0;
+		m_images = images;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		int xUp = hitBox.x + (SIZE / 2);
-		int xDown = hitBox.x + (SIZE / 2);
-		int yRight = hitBox.y + (SIZE / 2);
-		int yLeft = hitBox.y + (SIZE / 2);
-
-		if (checkBlock(xUp, hitBox.y))
-			m_coord.setY(getBlockCoord(xUp, hitBox.y).Y() + Element.SIZE);
-		if (checkBlock(xDown, hitBox.y + SIZE))
-			m_coord.setY(getBlockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
-		if (checkBlock(hitBox.x + SIZE, yRight))
-			m_coord.setX(getBlockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
-		if (checkBlock(hitBox.x, yLeft))
-			m_coord.setX(getBlockCoord(hitBox.x, yLeft).X() + Element.SIZE);
-		
-		hitBox.setLocation(m_coord.X(), m_coord.Y());
+	}
+	
+	@Override
+	public boolean gotpower() {
+		return delay > 0;
 	}
 
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			if (disapered) {
-				return;
-			} else if (normal) {
-				g.drawImage(m_images[m_imageIndex], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
-			} else if (appearing) {
-				g.drawImage(m_apparitionImages[m_imageIndex], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
-			} else if (disapearing) {
-				g.drawImage(m_disaparitionImages[m_imageIndex], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
-			}
+			g.drawImage(m_images[m_imageIndex], m_coord.X(), m_coord.Y(), SIZE, SIZE, null);
+			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, SIZE, SIZE);
 		}
 	}
 
-	public void elapsed() {
-		normal = false;
-		disapearing = true;
-		m_imageIndex = 0;
-	}
-
-	public boolean isDestroying() {
-		return disapearing;
-	}
-
-	public boolean isDestroyed() {
-		return disapered;
+	@Override
+	public boolean explode() {
+		animationMode = ELAPSED;
+		m_imageIndex = UnderworldParam.sizeLureApearingAnimation;
+		return true;
 	}
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
+		if (m_imageElapsed > REFRESH_TICK) {
 			m_imageElapsed = 0;
 			m_imageIndex++;
-			if (normal) {
-				if (m_imageIndex >= sizeAnimation) {
+			switch(animationMode) {
+			case NORMAL:
+				if (m_imageIndex >= UnderworldParam.sizeLureAnimation) {
 					m_imageIndex = 0;
 				}
-			} else if (appearing) {
-				if (m_imageIndex >= sizeApearingAnimation) {
-					appearing = false;
-					normal = true;
+				break;
+			case APPEARING:
+				if (m_imageIndex >= UnderworldParam.sizeLureApearingAnimation) {
+					animationMode = NORMAL;
 					m_imageIndex = 0;
 				}
-			} else if (disapearing) {
-				if (m_imageIndex >= sizeApearingAnimation) {
-					disapearing = false;
-					disapered = true;
-					m_imageIndex = 0;
+				break;
+			case ELAPSED:
+				if (m_imageIndex >= UnderworldParam.sizeLureDisaparitionAnimation) {
+					m_shooter.removeProjectile(this);
 				}
+				break;
 			}
 		}
-		m_automaton.step(this);
-	}
-
-	public Coord getCoord() {
-		return m_coord;
-	}
-	
-	public boolean checkBlock(int x, int y) {
-		return m_model.m_underworld.isBlocked(x, y);
-	}
-	
-	public Coord getBlockCoord(int x, int y) {
-		return m_model.m_underworld.blockBot(x, y);
-	}
-
-	@Override
-	public boolean cell(Direction dir, Category cat) {
-		// TODO Auto-generated method stub
-		return false;
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > STEP_TICK) {
+			delay -= PERIOD;
+			m_stepElapsed -= STEP_TICK;
+			m_automaton.step(this);
+		}
 	}
 }

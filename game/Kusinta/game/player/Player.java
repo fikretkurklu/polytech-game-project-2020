@@ -1,4 +1,5 @@
 package player;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -41,7 +42,7 @@ public class Player extends Character {
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
-		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 15);
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 16);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
@@ -52,7 +53,6 @@ public class Player extends Character {
 		
 		X_MOVE = 2;
 
-		reset();
 		setMoney(10000);
 
 		m_bossKey = null;
@@ -102,7 +102,7 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		reset();
-		m_model.switchEnv(mode.VILLAGE);
+		getM_model().switchEnv(mode.VILLAGE);
 		return true;
 	}
 
@@ -129,13 +129,15 @@ public class Player extends Character {
 
 	private void checkDoor() {
 		boolean door;
-		Door d = m_model.m_room.getDoor();
+		System.out.println("deçu");
+		Door d = getM_model().m_room.getDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
 		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
 		if (door && m_key != false) {
+			d.setM_model(getM_model());
 			d.activate();
 		}
 	}
@@ -163,12 +165,12 @@ public class Player extends Character {
 
 			if (!gotpower()) {
 				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
-				if (m_image_index == 68 && m_model.getDiametre() == 0) {
-					m_model.setDiametre(1);
+				if (m_image_index == 68 && getM_model().getDiametre() == 0) {
+					getM_model().setDiametre(1);
 				}
 			} else {
 				if (shooting && (m_image_index == 117 || m_image_index == 123)) {
-					super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
+					super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
 				} else if (jumping && !shooting && m_image_index == 17) {
 					m_image_index = 22;
 				} else if (!shooting && ((falling && !jumping) || (jumping && m_image_index == 23))) {
@@ -191,7 +193,7 @@ public class Player extends Character {
 		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
 			if (shooting) {
-				if (m_model.m_mouseCoord.X() > m_coord.X()) {
+				if (getM_model().m_mouseCoord.X() > m_coord.X()) {
 					turn(Direction.E);
 				} else {
 					turn(Direction.W);
@@ -215,7 +217,7 @@ public class Player extends Character {
 
 		int w = m_width;
 		int h = m_height;
-
+		
 		int H;
 		if (shooting && !jumping) {
 			H = 17;
@@ -238,7 +240,7 @@ public class Player extends Character {
 			}
 			paintInvincible = !paintInvincible;
 		}
-
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

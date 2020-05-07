@@ -34,11 +34,11 @@ public class Arrow extends Projectile {
 		m_width = image.getWidth(null);
 
 		if (m_direction == Direction.E) {
-			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(m_angle) * 1.5),
-					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)));
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(-m_angle) * 1.5),
+					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)), 10, 10);
 		} else {
-			hitBox = new Rectangle((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1)),
-					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))));
+			hitBox = new Rectangle((int)((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1.3)),
+					(int)((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))), 10 , 10);
 		}
 
 	}

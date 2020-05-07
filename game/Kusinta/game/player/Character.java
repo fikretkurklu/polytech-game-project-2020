@@ -18,12 +18,12 @@ import equipment.Stat.Stats;
 import game.Controller;
 import game.Coord;
 import game.Model;
-import opponent.BossKey;
-import opponent.Key;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+//import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
+import underworld.Lure;
 
 public abstract class Character extends Entity {
 
@@ -38,7 +38,7 @@ public abstract class Character extends Entity {
 
 	protected LinkedList<Projectile> m_projectiles;
 
-	BufferedImage[] bI;
+	protected BufferedImage[] bI;
 	protected int m_image_index;
 
 
@@ -65,6 +65,7 @@ public abstract class Character extends Entity {
 
 		setStat(attackSpeed, maxLife, resistance, strength);
 		setCurrentStat(attackSpeed, life, resistance, strength);
+		
 
 		m_coord = new Coord(C);
 
@@ -72,7 +73,7 @@ public abstract class Character extends Entity {
 
 		m_projectiles = new LinkedList<Projectile>();
 
-		m_model = model;
+		setM_model(model);
 
 		m_key = false;
 
@@ -91,27 +92,22 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-
-		int m_x = m_coord.X();
-		int m_y = m_coord.Y();
-
-		if (dir == Direction.E) {
-			if (!checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - 1)
-					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height)
-					&& !checkBlock((hitBox.x + hitBox.width) + X_MOVE, m_y - hitBox.height / 2)) {
-				m_x += X_MOVE;
-				m_coord.setX(m_x);
-				hitBox.translate(X_MOVE, 0);
-			}
-		} else if (dir == Direction.W) {
-			if (!checkBlock(hitBox.x - X_MOVE, m_y - 1) && !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height)
-					&& !checkBlock(hitBox.x - X_MOVE, m_y - hitBox.height / 2)) {
-				m_x -= X_MOVE;
-				m_coord.setX(m_x);
-				hitBox.translate(-X_MOVE, 0);
-			}
+		if (dir == Direction.F) {
+			dir = m_direction;
 		}
-
+		if (dir == Direction.E) {
+			m_coord.translateX(X_MOVE);
+			hitBox.translate(X_MOVE, 0);
+		} else if (dir == Direction.W) {
+			m_coord.translateX(-X_MOVE);
+			hitBox.translate(-X_MOVE, 0);
+		} else if (dir == Direction.N) {
+			m_coord.translateY(-X_MOVE);
+			hitBox.translate(0, -X_MOVE);
+		} else if (dir == Direction.S) {
+			m_coord.translateY(X_MOVE);
+			hitBox.translate(0, X_MOVE);
+		}
 		return true;
 	}
 
@@ -132,7 +128,7 @@ public abstract class Character extends Entity {
 	}
 
 	public Model getModel() {
-		return m_model;
+		return getM_model();
 	}
 
 	public LinkedList<Projectile> getProjectiles() {
@@ -141,6 +137,8 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean turn(Direction dir) {
+		if (dir == Direction.F)
+			return false;
 		if (dir != m_direction)
 			m_direction = dir;
 		return true;
@@ -214,15 +212,15 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			int topBlock = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
 		}
 		if (!falling) {
-			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
-				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
+			if (getM_model().m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+				int blockTop = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
 				hitBox.translate(0, -(m_coord.Y() - blockTop));
 				m_coord.setY(blockTop);
 			}
@@ -233,7 +231,7 @@ public abstract class Character extends Entity {
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
-				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				int botBlock = getM_model().m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
@@ -329,7 +327,6 @@ public abstract class Character extends Entity {
 		m_money += money;
 	}
 
-
 	public Image getProjectileImage() {
 		return imageProjectile;
 	}
@@ -343,7 +340,7 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean isMoving() {
-		boolean moving = m_model.qPressed || m_model.dPressed;
+		boolean moving = getM_model().qPressed || getM_model().dPressed;
 		return moving;
 	}
 
@@ -362,28 +359,30 @@ public abstract class Character extends Entity {
 	public void setBossKey(boolean key) {
 		m_bossKey = key;
 	}
-
+	
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
-			return m_model.qPressed;
+			return getM_model().qPressed;
 		} else if (keyCode == Controller.K_Z) {
-			return m_model.zPressed;
+			return getM_model().zPressed;
 		} else if (keyCode == Controller.K_D) {
 			return m_model.dPressed;
+		} else if (keyCode == Controller.K_S) {
+			return getM_model().sPressed;
 		} else if (keyCode == Controller.K_SPACE) {
-			return m_model.espPressed;
+			return getM_model().espPressed;
 		} else if (keyCode == Controller.K_A) {
-			return m_model.aPressed;
+			return getM_model().aPressed;
 		} else if (keyCode == Controller.K_E) {
-			return m_model.ePressed;
+			return getM_model().ePressed;
 		} else if (keyCode == Controller.K_V)
-			return m_model.vPressed;
+			return getM_model().vPressed;
 		return false;
 	}
 
 	public boolean checkBlock(int x, int y) {
-		return m_model.m_room.isBlocked(x, y);
+		return getM_model().m_room.isBlocked(x, y);
 	}
 
 	public void shoot(int baseX, int baseY, proj type) {
@@ -427,10 +426,16 @@ public abstract class Character extends Entity {
 			throws Exception {
 		switch (type) {
 		case ARROW:
-			m_projectiles.add(new Arrow(m_model.arrowAutomaton, c, angle, shooter, direction));
+			m_projectiles.add(new Arrow(getM_model().arrowAutomaton, c, angle, shooter, direction));
 			break;
 		case MAGIC_PROJECTILE:
-			m_projectiles.add(new MagicProjectile(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			m_projectiles.add(new MagicProjectile(getM_model().magicProjAutomaton, c, angle, shooter, direction));
+			break;
+		case METEOR:
+//			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			break;
+		case LURE:
+			m_projectiles.add(new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
 			break;
 		default:
 			break;

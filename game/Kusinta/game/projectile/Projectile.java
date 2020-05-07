@@ -13,7 +13,7 @@ import player.Character;
 public abstract class Projectile extends Entity {
 
 	public enum proj {
-		ARROW, MAGIC_PROJECTILE
+		ARROW, MAGIC_PROJECTILE, METEOR, LURE
 	};
 
 	protected enum State {
@@ -50,7 +50,7 @@ public abstract class Projectile extends Entity {
 		m_direction = direction;
 
 		m_shooter = shooter;
-		m_model = shooter.getModel();
+		setM_model(shooter.getModel());
 
 		m_State = State.OK_STATE;
 
@@ -74,11 +74,9 @@ public abstract class Projectile extends Entity {
 
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
-				m_coord.setX((int) (m_coord.X() + X_MOVE * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
+				m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));
 			} else {
-				m_coord.setX((int) (m_coord.X() - X_MOVE * Math.cos(m_angle)));
-				m_coord.setY((int) (m_coord.Y() - X_MOVE * Math.sin(m_angle)));
+				m_coord.translate((int) (- X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));
 			}
 			hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
 		}
@@ -112,6 +110,10 @@ public abstract class Projectile extends Entity {
 	
 	public void setSpeed(int speed) {
 		X_MOVE = speed;
+	}
+	
+	public Coord getCoord() {
+		return m_coord;
 	}
 
 	public abstract void paint(Graphics g);
