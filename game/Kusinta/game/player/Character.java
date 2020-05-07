@@ -34,7 +34,7 @@ public abstract class Character extends Entity {
 		Resistance, Strength, Attackspeed, MaxLife, Life
 	};
 
-	protected HashMap<CurrentStat, Integer> m_currentStatMap;
+	public HashMap<CurrentStat, Integer> m_currentStatMap;
 
 	protected LinkedList<Projectile> m_projectiles;
 

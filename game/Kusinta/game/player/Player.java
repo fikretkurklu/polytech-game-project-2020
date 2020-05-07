@@ -41,7 +41,6 @@ public class Player extends Character {
 
 		X_MOVE = 2;
 
-		reset();
 
 		m_bossKey = null;
 	}
