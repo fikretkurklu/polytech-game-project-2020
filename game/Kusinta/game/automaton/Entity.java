@@ -1,5 +1,6 @@
 package automaton;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public abstract class Entity {
 
 	protected Character collidingWith;
 	
-	protected BufferedImage[] bImages;
+	protected Image[] bImages;
 	protected int m_imageIndex;
 	
 	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
@@ -48,10 +49,11 @@ public abstract class Entity {
 		
 	}
 
-	public Entity(Automaton automaton) {
+	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
+		bImages = img;
+		indiceAction = hmActions;
 		m_state = automaton.getInitialState();
 		m_automaton = automaton;
-		bImages = ImageLibrary.get(ani);
 		ratio = ((float) bImages[m_imageIndex].getWidth(null)) / (float) (bImages[m_imageIndex].getHeight(null));
 		resetAnim();
 	}

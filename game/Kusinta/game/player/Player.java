@@ -3,6 +3,7 @@ package player;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import com.sun.xml.internal.fastinfoset.algorithm.DoubleEncodingAlgorithm;
 
@@ -26,7 +27,7 @@ public class Player extends Character {
 
 	protected BossKey m_bossKey;
 
-	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
+	public Player(Automaton automaton, Coord C, Direction dir, Model model, BufferedImage imgs, HashMap<Action, int[]> hmActions) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
 
 		m_height = SIZE;
