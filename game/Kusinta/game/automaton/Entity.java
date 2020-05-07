@@ -37,14 +37,18 @@ public abstract class Entity {
 	protected int[] DeathAnim;
 	protected int[] DefaultAnim;
 	protected int[] ShotMoveAnim;
+	
+	protected long m_imageTick = 200;
+	protected long m_imageElapsed;
 
 	public Entity() {
+		
 	}
 
 	public Entity(Automaton automaton) {
 		m_state = automaton.getInitialState();
 		m_automaton = automaton;
-		m_imageIndex = 0;
+		resetAnim();
 	}
 
 	public State getCurrentState() {
@@ -267,5 +271,10 @@ public abstract class Entity {
 
 	public void setM_model(Model m_model) {
 		this.m_model = m_model;
+	}
+	
+	public void resetAnim() {
+		m_imageIndex = 0;
+		m_imageElapsed = m_imageTick;
 	}
 }
