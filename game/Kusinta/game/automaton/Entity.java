@@ -49,12 +49,18 @@ public abstract class Entity {
 	}
 
 	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
+		System.out.println("A");
 		bImages = img;
 		indiceAction = hmActions;
+		
 		m_state = automaton.getInitialState();
+		
 		m_automaton = automaton;
-		ratio = ((float) bImages[m_imageIndex].getWidth(null)) / (float) (bImages[m_imageIndex].getHeight(null));
 		resetAnim();
+		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
+		
+		
+		
 	}
 	
 	public Entity(Automaton automaton) {
