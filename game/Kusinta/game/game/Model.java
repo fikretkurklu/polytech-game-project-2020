@@ -210,6 +210,7 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
+		elapsed = Math.min(10, elapsed);
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
 		if (m_key != null) {		
