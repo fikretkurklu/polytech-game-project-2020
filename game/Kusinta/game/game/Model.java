@@ -65,9 +65,7 @@ public class Model {
 
 		setRoom();
 		start();
-		// m_player = (Player) m_factory.newEntity(F, dir, coord, model, angle, shooter)
-		// Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(),
-		// Direction.E, this);
+		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -76,10 +74,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		// m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E,
-		// this));
-
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -170,26 +165,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-//		elapsed = Math.min(10, elapsed);
-//		if (actualMode == mode.ROOM) {
-//			m_player.tick(elapsed);
-//			if (m_key != null) {
-//				m_key.tick(elapsed);
-//			}
-//			if (m_bossKey != null) {
-//				m_bossKey.tick(elapsed);
-//			}
-//			for (Opponent op : m_opponents) {
-//				op.tick(elapsed);
-//			}
-//			for (Coin coin : m_coins) {
-//				coin.tick(elapsed);
-//			}
-//			m_room.tick(elapsed);
-//		}
-//		m_hud.tick(elapsed);
+		elapsed = Math.min(10, elapsed);
+		if (actualMode == mode.ROOM) {
+			m_player.tick(elapsed);
+			if (m_key != null) {
+				m_key.tick(elapsed);
+			}
+			if (m_bossKey != null) {
+				m_bossKey.tick(elapsed);
+			}
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+			for (Coin coin : m_coins) {
+				coin.tick(elapsed);
+			}
+			m_room.tick(elapsed);
+		}
+		m_hud.tick(elapsed);
 
-		m_underworld.tick(elapsed);
+		//m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -297,13 +292,15 @@ public class Model {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
 			Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-			FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord, this, 0, null);
+			FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord, this,
+					0, null);
 			m_opponents.add(fo);
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
 			Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-			WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E, coord, this, 0, null);
+			WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E, coord,
+					this, 0, null);
 			m_opponents.add(wo);
 		}
 		// int randomKey = (int) (Math.random()*m_opponents.size());
