@@ -142,10 +142,9 @@ public class FlyingOpponent extends Opponent {
 
 			if (!gotpower()) {
 				if (m_image_index == 5) {
-					getM_model().getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 					dropKey();
 					getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, getM_model()));
-
 				}
 				m_image_index = (m_image_index + 1) % 6;
 			} else {

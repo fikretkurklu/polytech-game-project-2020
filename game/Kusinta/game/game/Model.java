@@ -2,9 +2,7 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -60,8 +58,9 @@ public class Model {
 	public Village m_village;
 
 	boolean set = false;
-	LinkedList<Opponent> m_opponents;
-	LinkedList<Coin> m_coins;
+	protected LinkedList<Opponent> m_opponents;
+	private LinkedList<Opponent> m_opponentsToDelete;
+	protected LinkedList<Coin> m_coins;
 
 	public HUD m_hud;
 
@@ -96,7 +95,7 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
+		m_opponentsToDelete = new LinkedList<Opponent>();
 		opponentCreator();
 		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
 
@@ -122,7 +121,7 @@ public class Model {
 	
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
+		m_opponents = new LinkedList<Opponent>();
 		opponentCreator();
 	}
 	
@@ -213,13 +212,16 @@ public class Model {
 			m_bossKey.tick(elapsed);
 		}
 		
-		for(Iterator<Opponent> iter = m_opponents.iterator(); iter.hasNext(); ) {
-		    Opponent opponent = iter.next();
-		    opponent.tick(elapsed);
-		}
-		
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
+		}
+		
+		if (m_opponentsToDelete != null) {
+			for(Opponent op : m_opponentsToDelete) {
+				if (op != null) {
+					m_opponents.remove(op);
+				}
+			}
 		}
 		
 		for (Coin coin : m_coins) {
@@ -337,20 +339,21 @@ public class Model {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
 			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i], new Direction("E"), this));
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, new Direction("E"), this));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
 			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE);
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
 		}
-		int randomKey = (int) (Math.random()*m_opponents.size());
+		/*int randomKey = (int) (Math.random()*m_opponents.size());
 		int randomBossKey = (int) (Math.random()*m_opponents.size());
 		while (randomBossKey == randomKey) {
 			randomBossKey = (int) (Math.random()*m_opponents.size());
 		}
 		m_opponents.get(randomKey).setKey(true);
 		m_opponents.get(randomBossKey).setBossKey(true);
+	*/
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
@@ -381,6 +384,14 @@ public class Model {
 			break;
 		}
 		
+	}
+
+	public LinkedList<Opponent> getM_opponentsToDelete() {
+		return m_opponentsToDelete;
+	}
+
+	public void setM_opponentsToDelete(LinkedList<Opponent> m_opponentsToDelete) {
+		this.m_opponentsToDelete = m_opponentsToDelete;
 	}
 
 }

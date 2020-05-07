@@ -1,6 +1,5 @@
 package opponent;
 import java.io.IOException;
-import java.util.Iterator;
 
 import automaton.Automaton;
 import automaton.Direction;
@@ -18,12 +17,12 @@ public abstract class Opponent extends Character {
 	
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
-
+	
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
-		m_key = false;
+		m_key = true;
 
 	}
 

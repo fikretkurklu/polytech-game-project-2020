@@ -125,16 +125,9 @@ public class WalkingOpponent extends Opponent {
 
 			if (!gotpower()) {
 				if (m_image_index >= 5) {
-					System.out.println("Mort ennemi");
-					getM_model().getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 					dropKey();
-					try {
-						getM_model().addCoin(
-								new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
 				}
 				m_image_index = (m_image_index + 1) % 6;
 			}
@@ -234,7 +227,6 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean explode() {
-		System.out.println("Explosion");
 		if (gotpower()) {
 			m_image_index = 0;
 		}
