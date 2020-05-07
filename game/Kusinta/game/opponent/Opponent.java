@@ -57,7 +57,7 @@ public abstract class Opponent extends Character {
 					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, getM_model(), 0	, null);
 					getM_model().setKey(k);
 				} else if (m_bossKey == true) {
-					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, getM_model(), 0, null)
+					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, getM_model(), 0, null);
 					getM_model().setBossKey(k);
 				}
 			} catch (Exception e) {

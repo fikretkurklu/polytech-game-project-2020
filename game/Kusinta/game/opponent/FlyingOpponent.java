@@ -11,7 +11,9 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity.Action;
+import entityFactory.Factory.Type;
 import game.Coord;
+import game.Game;
 import game.ImageLoader;
 import game.Model;
 import projectile.Projectile.proj;
@@ -115,7 +117,9 @@ public class FlyingOpponent extends Opponent {
 				if (m_imageIndex == indiceAction.get(currentAction).length) {
 					getM_model().getOpponent().remove(this);
 					dropKey();
-					getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, getM_model()));
+					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, getM_model(), 0, null);
+					c.setMoney(m_money);
+					getM_model().addCoin(c);
 
 				}
 			}
