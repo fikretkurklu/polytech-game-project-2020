@@ -7,13 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
-
 import javax.imageio.ImageIO;
-
-import automata.ast.AST;
-import automata.parser.AutomataParser;
-import automaton.Automaton;
 import automaton.Entity.Action;;
 
 public class ImageLibrary {
@@ -42,9 +36,14 @@ public class ImageLibrary {
 		BufferedReader f = new BufferedReader(new FileReader(file));
 		String fichierAni = f.readLine().split(" = ")[1];
 		String[] dim = f.readLine().split(";");
-		Image[] img = loadImageSprite(fichierAni, Integer.valueOf(dim[0]), Integer.valueOf(dim[1]),
-				Integer.valueOf(dim[2]), Integer.valueOf(dim[3]));
-		sprites.put(avatar, img);
+		Image[] images;
+		if (dim.length == 4) {
+			images = loadImageSprite(fichierAni, Integer.valueOf(dim[0]), Integer.valueOf(dim[1]),
+					Integer.valueOf(dim[2]), Integer.valueOf(dim[3]));
+		} else {
+			images = loadImageSprite(fichierAni, Integer.valueOf(dim[0]), Integer.valueOf(dim[1]));
+		}
+		sprites.put(avatar, images);
 		String line = f.readLine();
 		String[] splitedLines;
 		String[] splitedIndexAnimations;
@@ -106,6 +105,26 @@ public class ImageLibrary {
 		}
 		actionsIndex.put(avatar, hmActions);
 		f.close();
+	}
+	
+	public static Image[] loadImageSprite(String filename, int nrows, int ncols) throws IOException {
+		File imageFile = new File(filename);
+		if (imageFile.exists()) {
+			BufferedImage image = ImageIO.read(imageFile);
+			int width = image.getWidth(null) / ncols;
+			int height = image.getHeight(null) / nrows;
+
+			Image[] images = new Image[nrows * ncols];
+			for (int i = 0; i < nrows; i++) {
+				for (int j = 0; j < ncols; j++) {
+					int x = j * width;
+					int y = i * height;
+					images[(i * ncols) + j] = image.getSubimage(x, y, width, height);
+				}
+			}
+			return images;
+		}
+		return null;
 	}
 
 	public static Image[] loadImageSprite(String filename, int nrows, int ncols, int finalWidth, int finalHeight)
