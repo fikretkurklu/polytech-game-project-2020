@@ -18,6 +18,7 @@ import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 import game.Controller;
 import game.Coord;
+import game.Game;
 import game.Model;
 import projectile.Arrow;
 import projectile.MagicProjectile;
@@ -419,9 +420,6 @@ public abstract class Character extends Entity {
 			break;
 		case MAGIC_PROJECTILE:
 			m_projectiles.add(new MagicProjectile(getM_model().magicProjAutomaton, c, angle, shooter, direction));
-			break;
-		case METEOR:
-//			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
 			break;
 		case LURE:
 			m_projectiles.add(

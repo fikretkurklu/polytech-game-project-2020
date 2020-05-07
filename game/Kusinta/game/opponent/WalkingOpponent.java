@@ -54,7 +54,6 @@ public class WalkingOpponent extends Opponent {
 	public void paint(Graphics gp) {
 
 		Image image = null;
-
 		image = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 
 		double agr = 2;
