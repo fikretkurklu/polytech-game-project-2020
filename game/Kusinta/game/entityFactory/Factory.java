@@ -110,7 +110,7 @@ public class Factory {
 			return new NormalKey(automatons.get(Type.NormalKey), coord.X(), coord.Y(), model,
 					images.get(Type.NormalKey), actions.get(Type.NormalKey));
 		case BossKey:
-			return new BossKey(automatons.get(Type.BossKey), coord.X(), coord.Y(), model);
+			return new BossKey(automatons.get(Type.BossKey), coord.X(), coord.Y(), model, images.get(Type.BossKey), actions.get(Type.BossKey));
 		case WalkingOpponent:
 			return new WalkingOpponent(automatons.get(Type.WalkingOpponent), coord, dir, model,
 					images.get(Type.WalkingOpponent), actions.get(Type.WalkingOpponent));
