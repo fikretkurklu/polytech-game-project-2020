@@ -81,7 +81,8 @@ public class Arrow extends Projectile {
 		boolean b = super.cell(dir, cat);
 		if (b) {
 			if (cat == Category.A) {
-				collidingWith.loseLife(m_strength);
+				int tmpPlayerStrength = m_shooter.m_currentStatMap.get(Character.CurrentStat.Strength);
+				collidingWith.loseLife(m_strength + tmpPlayerStrength);
 				((Opponent) collidingWith).setCollidedWith(this);
 				m_State = State.HIT_STATE;
 			} else if (cat == Category.O) {

@@ -21,6 +21,7 @@ d * Copyright (C) 2020  Pr. Olivier Gruber
 package game;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

@@ -1,15 +1,13 @@
 package underworld;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
 import automaton.Automaton;
 import environnement.Element;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 
 public class Gate extends Element {
@@ -18,38 +16,35 @@ public class Gate extends Element {
 	int m_width, m_height;
 	int m_imageIndex = 0;
 	Rectangle hitBox;
-	BufferedImage[] m_images;
+	Image[] m_images;
 
 	long m_imageElapsed = 0;
 	boolean appearing, loopAnimation;
 
-	public Gate(Automaton automaton, Coord coord, Model model) {
+	public static final int GateSIZE = 4 * Element.SIZE;
+
+	public Gate(Automaton automaton, Coord coord, Model model, Image[] images) {
 		super(false, true, coord, automaton);
 		m_model = model;
-		m_width = (int) 4 * SIZE;
-		m_height = (int) 4 * SIZE;
+		m_width = GateSIZE;
+		m_height = GateSIZE;
 		appearing = false;
 		loopAnimation = false;
 		hitBox = new Rectangle(m_coord.X() + SIZE, m_coord.Y() + SIZE, SIZE * 2, SIZE * 2);
-		try {
-			m_images = ImageLoader.loadBufferedSprite(UnderworldParam.gateSprite, 6, 6);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		m_images = images;
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		if (m_images != null) {
-			g.drawImage(m_images[m_imageIndex], m_coord.X(), m_coord.Y(), m_width, m_height, null);
+			g.drawImage(m_images[m_imageIndex], m_coord.X(), m_coord.Y(), null);
 			g.setColor(Color.blue);
 			g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		}
 	}
-	
+
 	public boolean contains(Rectangle hitBox) {
-		return hitBox.contains(m_coord.X() + 2 * SIZE,m_coord.Y() + 2 * SIZE);
+		return hitBox.contains(m_coord.X() + 2 * SIZE, m_coord.Y() + 2 * SIZE);
 	}
 
 	public void tick(long elapsed) {

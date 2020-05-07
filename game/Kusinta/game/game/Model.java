@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.LinkedList;
-
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
@@ -12,7 +11,6 @@ import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
-
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -69,6 +67,7 @@ public class Model {
 	public Coin m_coin;
 	float diametre;
 
+
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
 		m_width = w;
@@ -98,14 +97,15 @@ public class Model {
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		opponentCreator();
 		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
-
-		switchEnv(mode.VILLAGE);
+		
+		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 		diametre = 0;
 
 		m_key = null;
 		m_bossKey = null;
 	}
+
 
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
@@ -124,7 +124,7 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		opponentCreator();
 	}
-	
+
 	public void switchEnv(mode m) {
 		qPressed = false;
 		zPressed = false;
@@ -141,7 +141,7 @@ public class Model {
 				break;
 			case UNDERWORLD:
 				m_underworld.setPlayer(
-						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, this));
+						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, m_underworld.playerImages, this));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -339,12 +339,12 @@ public class Model {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
 			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, new Direction("E"), this));
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE);
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
+			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this));
 		}
 		/*int randomKey = (int) (Math.random()*m_opponents.size());
 		int randomBossKey = (int) (Math.random()*m_opponents.size());
