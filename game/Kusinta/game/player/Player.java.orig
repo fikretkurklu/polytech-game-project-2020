@@ -41,6 +41,11 @@ public class Player extends Character {
 
 		X_MOVE = 2;
 
+<<<<<<< HEAD
+		reset();
+=======
+		setMoney(10000);
+>>>>>>> master
 
 		m_bossKey = null;
 	}

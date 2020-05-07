@@ -49,7 +49,7 @@ public class Underworld {
 	AutomatonLibrary m_AL;
 	Model m_model;
 	Image backgroundImage, cloudImage, cloudLeftUpImage, cloudRightUpImage, cloudLeftDownImage, cloudRightDownImage;
-	public Image[] ghostImages, playerImages, lureImages, fragmentImages, gateImages;
+//	public Image[] ghostImages, playerImages, lureImages, fragmentImages, gateImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
@@ -105,11 +105,11 @@ public class Underworld {
 			cloudRightUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[2], 860);
 			cloudLeftDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[3], 860);
 			cloudRightDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[4], 860);
-			ghostImages = ImageLoader.loadGhostImage();
-			playerImages = ImageLoader.loadPlayerImage();
-			lureImages = ImageLoader.loadLureImage();
-			fragmentImages = ImageLoader.loadImageSprite(UnderworldParam.fragmentSprite, 3, 3, Fragment.FragmentSIZE, Fragment.FragmentSIZE);
-			gateImages = ImageLoader.loadImageSprite(UnderworldParam.gateSprite, 6, 6, Gate.GateSIZE, Gate.GateSIZE);
+//			ghostImages = ImageLoader.loadGhostImage();
+//			playerImages = ImageLoader.loadPlayerImage();
+//			lureImages = ImageLoader.loadLureImage();
+//			fragmentImages = ImageLoader.loadImageSprite(UnderworldParam.fragmentSprite, 3, 3, Fragment.FragmentSIZE, Fragment.FragmentSIZE);
+//			gateImages = ImageLoader.loadImageSprite(UnderworldParam.gateSprite, 6, 6, Gate.GateSIZE, Gate.GateSIZE);
 			generateClouds(m_clouds);
 			generateGhosts();
 			generateFragments(m_fragments);
