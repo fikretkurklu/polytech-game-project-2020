@@ -27,7 +27,6 @@ public class FlyingOpponent extends Opponent {
 		m_imageElapsed = 0;
 
 		shooting = false;
-		moving = false;
 
 		imageProjectiles = new Image[13];
 		for (int i = 0; i < 13; i++) {
@@ -48,9 +47,11 @@ public class FlyingOpponent extends Opponent {
 			attack[i] = ImageLoader.loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png", SIZE);
 		}
 
-		m_width = flight[0].getWidth(null);
-		m_height = flight[0].getHeight(null);
+		float ratio = (float) ((float) flight[0].getWidth(null)) / (float) (flight[0].getHeight(null));
 
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+		
 		int w = (int) (m_width / 1.7);
 		int h = (int) (m_height / 1.3);
 
@@ -66,27 +67,6 @@ public class FlyingOpponent extends Opponent {
 
 	}
 
-	public boolean move(Direction dir) {
-		if (gotpower()) {
-			int m_x = m_coord.X();
-
-			if (!moving) {
-				m_image_index = 0;
-			}
-			moving = true;
-
-			if (!shooting)
-				turn(dir);
-
-			super.move(dir);
-
-			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_coord.X() - m_x , 0);
-			}
-		}
-		return true;
-	}
-
 	public boolean explode() {
 		return true;
 	}
@@ -99,7 +79,7 @@ public class FlyingOpponent extends Opponent {
 
 			shooting = true;
 
-			Coord playerCoord = m_model.getPlayer().getCoord();
+			Coord playerCoord = getM_model().getPlayer().getCoord();
 			int player_x = playerCoord.X();
 
 			if (player_x > m_coord.X()) {
@@ -141,12 +121,8 @@ public class FlyingOpponent extends Opponent {
 		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-
-		// paint hitBox
-//		g.drawRect(m_coord.X(), m_coord.Y(), m_width, m_height);
-//		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-
-		for (int i = 0; i < m_projectiles.size(); i++) {
+		
+		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
 		}
 	}
@@ -166,9 +142,9 @@ public class FlyingOpponent extends Opponent {
 
 			if (!gotpower()) {
 				if (m_image_index == 5) {
-					m_model.getOpponent().remove(this);
+					getM_model().getOpponent().remove(this);
 					dropKey();
-					m_model.addCoin(new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, m_model));
+					getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, getM_model()));
 
 				}
 				m_image_index = (m_image_index + 1) % 6;
@@ -177,27 +153,27 @@ public class FlyingOpponent extends Opponent {
 			}
 			if (shooting) {
 				if (m_image_index == 3) {
-					Coord playerCoord = m_model.getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
+					Coord playerCoord = getM_model().getPlayer().getCoord();
+					super.shoot(playerCoord.X(), playerCoord.Y() - getM_model().getPlayer().getHeight() / 2,
 							proj.MAGIC_PROJECTILE);
 				}
 			}
 		}
 
-		for (int i = 0; i < m_projectiles.size(); i++) {
-			(m_projectiles.get(i)).tick(elapsed);
+		for (int i = 0; i < m_projectiles.size(); i ++) {
+			m_projectiles.get(i).tick(elapsed);
 		}
 	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.actualMode == Model.mode.ROOM) {
-			boolean d = m_model.getPlayer().gotpower();
+		if (getM_model().actualMode == Model.mode.ROOM) {
+			boolean d = getM_model().getPlayer().gotpower();
 			if (d) {
 
-				Coord playerCoord = m_model.getPlayer().getCoord();
+				Coord playerCoord = getM_model().getPlayer().getCoord();
 				int player_x = playerCoord.X();
-				int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
+				int player_y = playerCoord.Y() - getM_model().getPlayer().getHeight() / 2;
 				int x = player_x - m_coord.X();
 				int y = (m_coord.Y() - m_height / 2) - player_y;
 
@@ -222,7 +198,7 @@ public class FlyingOpponent extends Opponent {
 						} else {
 							checkX = (int) (m_coord.X() - i * Math.cos(angle));
 						}
-						if (m_model.m_room.isBlocked(checkX, checkY)) {
+						if (getM_model().m_room.isBlocked(checkX, checkY)) {
 							return false;
 						}
 						i += 40;
@@ -244,11 +220,9 @@ public class FlyingOpponent extends Opponent {
 			case Direction.Hs:
 				if (cat == Category.P) {
 					collidingWith = m_model.getPlayer();
-
 					return true;
 				}
 			}
-
 		}
 		return b;
 

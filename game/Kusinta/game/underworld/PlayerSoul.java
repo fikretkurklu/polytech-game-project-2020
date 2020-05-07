@@ -49,7 +49,7 @@ public class PlayerSoul extends Character {
 	Lure lure;
 
 	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model) throws IOException {
-		super(automaton, c, dir, 100, 100, 0, 0, 0, model);
+		super(automaton, c, dir, model, 100, 100, 0, 0, 0);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;

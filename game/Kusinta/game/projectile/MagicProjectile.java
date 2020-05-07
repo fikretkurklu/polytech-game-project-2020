@@ -1,6 +1,5 @@
 package projectile;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -66,8 +65,11 @@ public class MagicProjectile extends Projectile {
 				bg.drawImage(img, m_width, 0, -w, h, null);
 			}
 		}
-		g.setColor(Color.blue);
-		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
+		//paint HitBox
+//		g.setColor(Color.blue);
+//		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
 		bg.dispose();
 
 	}
@@ -90,7 +92,7 @@ public class MagicProjectile extends Projectile {
 		}
 
 	}
-
+	
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);
@@ -101,7 +103,7 @@ public class MagicProjectile extends Projectile {
 			}
 			if (cat == Category.P) {
 				m_State = State.HIT_STATE;
-				this.setCollidingWith(m_model.getPlayer());
+				this.setCollidingWith(getM_model().getPlayer());
 				collidingWith.loseLife(m_strength);
 				return true;
 			}

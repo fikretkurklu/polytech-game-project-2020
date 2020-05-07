@@ -78,6 +78,7 @@ public class ImageLoader {
 	 */
 	public static Image loadImage(String path) throws Exception {
 		File imageFile = new File(path);
+		
 		if (imageFile.exists()) {
 			return ImageIO.read(imageFile);
 		} else {
@@ -269,6 +270,5 @@ public class ImageLoader {
 			}
 		}
 		return images;
-//				m_images[i] = image.getScaledInstance(SIZE, SIZE, 0);
 	}
 }

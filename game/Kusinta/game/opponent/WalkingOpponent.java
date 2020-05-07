@@ -16,39 +16,27 @@ import game.Model;
 public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-
-	protected enum CurrentState {
-		isAttacking, isMoving, isDead
-	};
-
-	CurrentState m_state;
-
 	int AttackStrength;
-
 	Image[] deathSprite;
 	Image[] walkingSprite;
 	Image[] attackingSprite;
 	int m_image_index, m_imageElapsed;
 
-	boolean alreadyMove;
+	int hHitBox, wHitBox;
 
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
-		while (m_model.m_room.isBlocked(m_coord)) {
-			int c = m_model.m_room.getWitdh();
-			int d = m_model.m_room.getWitdh();
-			m_coord.setCoord((int) (Math.random() * (c + 1)), (int) (Math.random() * (d + 1)));
-		}
+
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
 		}
-		m_coord.setY(m_model.m_room.blockTop(m_coord));
+		m_coord.setY(getM_model().m_room.blockTop(m_coord.X(), m_coord.Y()));
 
 		X_MOVE = 2;
 
 		m_imageElapsed = 0;
-		m_state = CurrentState.isMoving;
+		shooting = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
@@ -67,13 +55,15 @@ public class WalkingOpponent extends Opponent {
 			attackingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png", SIZE);
 		}
 
-		m_width = walkingSprite[0].getWidth(null) * 2;
-		m_height = walkingSprite[0].getHeight(null) * 2;
+		float ratio = (float) ((float) walkingSprite[0].getWidth(null)) / (float) (walkingSprite[0].getHeight(null));
 
-		int w = (int) (m_width / 1.5) - 75;
-		int h = (int) (m_height / 1.5) - 70;
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
 
-		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w, h);
+		wHitBox = (int) (m_width * 0.7);
+		hHitBox = (int) (m_height * 0.8);
+
+		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox);
 
 		m_image_index = 0;
 
@@ -85,39 +75,31 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics gp) {
-		// Draw hitbox
-//		gp.setColor(Color.blue);
-//		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 		Image image = null;
-		switch (m_state) {
-		case isDead:
+		if (!gotpower()) {
 			image = deathSprite[m_image_index];
 			basicHitBox();
-			break;
-		case isAttacking:
+		} else if (shooting) {
 			image = attackingSprite[m_image_index];
 			attackHitBox();
-			break;
-		case isMoving:
+		} else {
 			image = walkingSprite[m_image_index];
 			basicHitBox();
-			break;
-		default:
-			image = walkingSprite[m_image_index];
-			basicHitBox();
-			break;
 		}
 
+		double agr = 2;
+		int w = (int) (m_width * agr);
+		int h = (int) (m_height * agr);
+		int decalage = (int) (((float) 3 / (float) 4) * h);
+
 		if (m_direction == Direction.E) {
-			gp.drawImage(image, hitBox.x - image.getWidth(null) / 2, m_coord.Y() - m_height + 70, m_width, m_height,
-					null);
+			gp.drawImage(image, m_coord.X() - (2 * w) / 5, m_coord.Y() - (decalage), w, h, null);
 		} else {
-			gp.drawImage(image, hitBox.x + hitBox.width + image.getWidth(null) / 2, m_coord.Y() - m_height + 70,
-					-m_width, m_height, null);
+			gp.drawImage(image, m_coord.X() + (2 * w) / 5, m_coord.Y() - (decalage), -w, h, null);
 		}
 		gp.setColor(Color.DARK_GRAY);
-		gp.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
+		gp.fillRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
 		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
 			gp.setColor(Color.GREEN);
 		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
@@ -126,10 +108,10 @@ public class WalkingOpponent extends Opponent {
 			gp.setColor(Color.RED);
 		}
 
-		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
-		gp.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
+		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
+		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
-		gp.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
+		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
 
 	}
 
@@ -141,27 +123,24 @@ public class WalkingOpponent extends Opponent {
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 
-			switch (m_state) {
-			case isDead:
+			if (!gotpower()) {
 				if (m_image_index == 5) {
-					m_model.getOpponent().remove(this);
+					getM_model().getOpponent().remove(this);
 					dropKey();
 					try {
-						m_model.addCoin(
-								new Coin(m_model.coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, m_model));
+						getM_model().addCoin(
+								new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				m_image_index = (m_image_index + 1) % 6;
-				break;
-			case isAttacking:
+			}
+			if (shooting) {
 				m_image_index = (m_image_index + 1) % 4;
-				break;
-			case isMoving:
+			} else {
 				m_image_index = (m_image_index + 1) % 6;
-				break;
 			}
 
 		}
@@ -171,39 +150,29 @@ public class WalkingOpponent extends Opponent {
 	public boolean cell(Direction dir, Category cat) {
 		boolean c = super.cell(dir, cat);
 		if (!c) {
-			switch (dir.toString()){
-			case Direction.Es : 
+			switch (dir.toString()) {
+			case Direction.Es:
 				if (cat == Category.O) {
-					if (!m_model.m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
+					if (!getM_model().m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
 						return true;
-					}
-				} else if (cat == Category.P && m_model.actualMode == Model.mode.ROOM) {
-					if (m_model.getPlayer().gotpower()) {
-						if (m_model.getPlayer().getHitBox().contains(hitBox.width + hitBox.x + 5,
-								hitBox.y + hitBox.height / 2)) {
-							return true;
-						}
 					}
 				}
 				break;
-			case Direction.Ws : 
+			case Direction.Ws:
 				if (cat == Category.O) {
-					if (!m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
+					if (!getM_model().m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
 						return true;
-					}
-				} else if (cat == Category.P && m_model.actualMode == Model.mode.ROOM) {
-					if (m_model.getPlayer().gotpower()) {
-						if (m_model.getPlayer().getHitBox().contains(hitBox.x - 5, hitBox.y + hitBox.height / 2)) {
-							return true;
-						}
 					}
 				}
 				break;
 			}
+			if (shooting)
+				shooting = !shooting;
 		} else {
 			if (dir == Direction.H) {
-				collidingWith = m_model.getPlayer();
+				collidingWith = getM_model().getPlayer();
 			}
+
 		}
 
 		return c;
@@ -211,16 +180,16 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.actualMode == Model.mode.ROOM) {
-			if (m_model.getPlayer().gotpower()) {
-				int xPlayer = m_model.getPlayer().getCoord().X();
-				int yPlayer = m_model.getPlayer().getCoord().Y();
-				if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+		if (getM_model().actualMode == Model.mode.ROOM) {
+			if (getM_model().getPlayer().gotpower()) {
+				int xPlayer = getM_model().getPlayer().getCoord().X();
+				int yPlayer = getM_model().getPlayer().getCoord().Y();
+				if (yPlayer >= hitBox.y && yPlayer - getM_model().getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
 					if (dir == Direction.E) {
 						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
 							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
 							for (int i = 0; i < 10; i++) {
-								if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
+								if (!getM_model().m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
 									return false;
 								}
 							}
@@ -230,7 +199,7 @@ public class WalkingOpponent extends Opponent {
 						if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
 							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
 							for (int i = 0; i < 10; i++) {
-								if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
+								if (!getM_model().m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
 									return false;
 								}
 							}
@@ -244,36 +213,8 @@ public class WalkingOpponent extends Opponent {
 	}
 
 	@Override
-	public boolean move(Direction dir) {
-		if (!alreadyMove) {
-			if (!(m_state.equals(CurrentState.isDead))) {
-
-				if (dir != m_direction) {
-					turn(dir);
-				}
-
-				int m_x = m_coord.X();
-
-				if (!(m_state.equals(CurrentState.isMoving))) {
-					m_image_index = 0;
-				}
-				m_state = CurrentState.isMoving;
-
-				super.move(dir);
-
-				if (collidedWith != null) {
-					collidedWith.getCoord().translate(m_coord.X() - m_x, 0);
-				}
-			}
-		}
-
-		alreadyMove = !alreadyMove;
-		return true;
-	}
-
-	@Override
 	public boolean pop(Direction dir) {
-		if (!(m_state.equals(CurrentState.isDead))) {
+		if (gotpower()) {
 			X_MOVE *= 2;
 			move(dir);
 			X_MOVE /= 2;
@@ -283,26 +224,26 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		if (!m_state.equals(CurrentState.isAttacking)) {
+		if (!shooting) {
 			m_image_index = 0;
 		}
-		m_state = CurrentState.isAttacking;
-		return false;
+		shooting = true;
+		return true;
 	}
 
 	@Override
 	public boolean explode() {
-		if (!m_state.equals(CurrentState.isDead)) {
+		if (gotpower()) {
 			m_image_index = 0;
 		}
-		m_state = CurrentState.isDead;
+		setLife(0);
 		return true;
 	}
 
 	@Override
 	public boolean power() {
 		if (collidingWith != null) {
-			if (m_state.equals(CurrentState.isAttacking)) {
+			if (shooting) {
 				collidingWith.loseLife(AttackStrength);
 			} else {
 				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength));
@@ -312,20 +253,24 @@ public class WalkingOpponent extends Opponent {
 	}
 
 	public void attackHitBox() {
-		int w = (int) (m_width / 1.5) - 75;
-		int h = (int) (m_height / 1.5) - 70;
 		if (m_direction == Direction.E) {
-			hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w + 40, h);
+			hitBox.setBounds(hitBox.x, hitBox.y, (int) (1.3 * wHitBox), hHitBox);
 		} else {
-			hitBox = new Rectangle(m_coord.X() - w / 2 - 40, m_coord.Y() - h, w + 40, h);
+			int newW = (int) (1.3 * wHitBox);
+			int newX = hitBox.x + hitBox.width - newW;
+			hitBox.setBounds(newX, hitBox.y, newW, hHitBox);
 		}
+		hitBox.height -= 1;
 	}
 
 	public void basicHitBox() {
-		int w = (int) (m_width / 1.5) - 75;
-		int h = (int) (m_height / 1.5) - 70;
-
-		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h, w, h);
+		if (m_direction == Direction.W) {
+			int newX = hitBox.x + hitBox.width - wHitBox;
+			hitBox.setBounds(newX, hitBox.y, wHitBox, hHitBox);
+		} else {
+			hitBox.setBounds(hitBox.x, hitBox.y, wHitBox, hHitBox);
+		}
+		hitBox.height -= 1;
 	}
 
 }

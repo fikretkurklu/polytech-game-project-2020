@@ -8,7 +8,9 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
+import environnement.Element;
 import game.graphics.View;
+import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
 import hud.HUD;
 import player.Player;
@@ -41,7 +43,12 @@ public class Model {
 	public Automaton keyDropAutomaton;
 	public Automaton lureAutomaton;
 	public Automaton coinDropAutomaton;
+	public Automaton bossAutomaton;
+	public Automaton meteorAutomaton;
 
+	public AutomaticRoomGenerator m_roomGenerator;
+	public int difficultyLevel;
+	
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
@@ -59,6 +66,7 @@ public class Model {
 	public Coin m_coin;
 	float diametre;
 
+
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
 		m_width = w;
@@ -73,7 +81,10 @@ public class Model {
 		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
 		lureAutomaton = m_AL.getAutomaton("Lure");
 		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
-
+		bossAutomaton = m_AL.getAutomaton("Boss");
+		meteorAutomaton = m_AL.getAutomaton("Meteor");
+		
+		setRoom();
 		start();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
@@ -82,10 +93,9 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-
-		m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, new Coord(800, 1700), Direction.E, this));
-		m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, new Coord(0,0), Direction.E, this));
-
+		
+		opponentCreator();
+		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
 		
 		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
@@ -93,12 +103,13 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
+	}
 
-		NormalKey key = new NormalKey(keyDropAutomaton, 0, 0, this);
-		BossKey bKey = new BossKey(keyDropAutomaton, 0, 0, this);
 
-		m_opponents.get(0).setKey(key);
-		m_opponents.get(1).setKey(bKey);
+	public void switchToNextRoom() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_AL, m_width, m_height);
+		this.m_player.setCoord(m_room.getStartCoord());
 	}
 
 	public void switchEnv(mode m) {
@@ -135,6 +146,12 @@ public class Model {
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height, this);
+		
+	}
+	
+	public void setRoom() throws IOException {
+		m_roomGenerator = new AutomaticRoomGenerator();
+		m_roomGenerator.AutomaticGeneration();
 	}
 
 	public void setCenterScreenPlayer() {
@@ -174,24 +191,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-//		if (actualMode == mode.ROOM)
+//		elapsed = Math.min(10, elapsed);
+//		if (actualMode == mode.ROOM) {
 //			m_player.tick(elapsed);
-//		
-//		if (m_key != null) {
-//			m_key.tick(elapsed);
-//		}
-//		if (m_bossKey != null) {
-//			m_bossKey.tick(elapsed);
-//		}
-//		for (Opponent op : m_opponents) {
-//			op.tick(elapsed);
-//		}
-//		for (Coin coin : m_coins) {
-//			coin.tick(elapsed);
+//			if (m_key != null) {
+//				m_key.tick(elapsed);
+//			}
+//			if (m_bossKey != null) {
+//				m_bossKey.tick(elapsed);
+//			}
+//			for (Opponent op : m_opponents) {
+//				op.tick(elapsed);
+//			}
+//			for (Coin coin : m_coins) {
+//				coin.tick(elapsed);
+//			}
+//			m_room.tick(elapsed);
 //		}
 //		m_hud.tick(elapsed);
-//		m_room.tick(elapsed);
-		 m_underworld.tick(elapsed);
+	
+		m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -206,6 +225,7 @@ public class Model {
 			for (Opponent op : m_opponents) {
 				op.paint(gp);
 			}
+
 			if (m_key != null) {
 				m_key.paint(gp);
 			}
@@ -294,6 +314,27 @@ public class Model {
 		m_bossKey = key;
 	}
 
+
+	public void opponentCreator() throws Exception {
+		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
+		for (int i = 0; i < coordFO.length; i++) {
+			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this));
+		}
+		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+		for (int i = 0; i < coordWO.length; i++) {
+			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this));
+		}
+		//int randomKey = (int) (Math.random()*m_opponents.size());
+		//int randomBossKey = (int) (Math.random()*m_opponents.size());
+		//while (randomBossKey == randomKey) {
+		//	randomBossKey = (int) (Math.random()*m_opponents.size());
+		//}
+		//m_opponents.get(randomKey).setKey(true);
+		//m_opponents.get(randomBossKey).setBossKey(true);
+	}
+
 	public void setPressed(int keyCode, boolean pressed) {
 		switch (keyCode) {
 		case Controller.K_Q:
@@ -321,6 +362,7 @@ public class Model {
 			sPressed = pressed;
 			break;
 		}
+		
 	}
 
 }
