@@ -37,10 +37,6 @@ public abstract class Projectile extends Entity {
 	protected float m_alpha;
 
 
-	protected BufferedImage bImage;
-
-	protected Image image;
-
 	public Projectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
 			Direction direction) {
 		super(projectileAutomaton);

@@ -37,16 +37,10 @@ public abstract class Character extends Entity {
 
 	protected LinkedList<Projectile> m_projectiles;
 
-	protected BufferedImage[] bI;
-	protected int m_image_index;
-
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
 	public HashMap<Stats, Integer> m_defaultStatMap;
-
-	protected Image imageProjectile;
-	protected Image[] imageProjectiles;
 
 	protected boolean m_key;
 	protected boolean m_bossKey;
@@ -73,8 +67,6 @@ public abstract class Character extends Entity {
 		setM_model(model);
 
 		m_key = false;
-
-		m_image_index = 0;
 
 		collidingWith = null;
 
@@ -323,15 +315,7 @@ public abstract class Character extends Entity {
 	public void setMoney(int money) {
 		m_money += money;
 	}
-
-	public Image getProjectileImage() {
-		return imageProjectile;
-	}
-
-	public Image[] getProjectileImages() {
-		return imageProjectiles;
-	}
-
+	
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
 	}

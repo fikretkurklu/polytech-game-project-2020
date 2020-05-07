@@ -1,6 +1,7 @@
 package automaton;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -26,6 +27,16 @@ public abstract class Entity {
 	protected int X_MOVE;
 
 	protected Character collidingWith;
+	
+	protected BufferedImage[] bImages;
+	protected int m_imageIndex;
+	
+	protected int[] MoveAnim;
+	protected int[] JumpAnim;
+	protected int[] ShotAnim;
+	protected int[] DeathAnim;
+	protected int[] DefaultAnim;
+	protected int[] ShotMoveAnim;
 
 	public Entity() {
 	}
@@ -33,6 +44,7 @@ public abstract class Entity {
 	public Entity(Automaton automaton) {
 		m_state = automaton.getInitialState();
 		m_automaton = automaton;
+		m_imageIndex = 0;
 	}
 
 	public State getCurrentState() {
@@ -256,5 +268,4 @@ public abstract class Entity {
 	public void setM_model(Model m_model) {
 		this.m_model = m_model;
 	}
-
 }

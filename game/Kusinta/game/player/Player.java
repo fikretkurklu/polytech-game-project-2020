@@ -27,8 +27,6 @@ public class Player extends Character {
 	long m_imageElapsed;
 	long m_moveElapsed, m_invincibleElapsed;
 
-	int min_image_index, max_image_index;
-
 	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
@@ -115,13 +113,6 @@ public class Player extends Character {
 	@Override
 	public boolean egg(Direction dir) { // tir
 		if (!shooting) {
-			if (jumping || falling || isMoving()) {
-				m_image_index = 120;
-				setImageIndex(120, 123);
-			} else {
-				m_image_index = 114;
-				setImageIndex(114, 117);
-			}
 			shooting = true;
 			return true;
 		}
@@ -130,7 +121,6 @@ public class Player extends Character {
 
 	private void checkDoor() {
 		boolean door;
-		System.out.println("deçu");
 		Door d = getM_model().m_room.getDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
@@ -214,7 +204,21 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		img = bI[m_image_index];
+		if (shooting) {
+			if (isMoving() || jumping) {
+				img = bImages[ShotMoveAnim[m_imageIndex]];
+			} else {
+				img = bImages[ShotAnim[m_imageIndex]];
+			}
+		} else if (jumping) {
+			img = bImages[JumpAnim[m_imageIndex]];
+		} else if (isMoving()) {
+			img = bImages[MoveAnim[m_imageIndex]];
+		} else if (!gotpower()) {
+			img = bImages[DeathAnim[m_imageIndex]];
+		} else {
+			img = bImages[DefaultAnim[m_imageIndex]];
+		}
 
 		int w = m_width;
 		int h = m_height;
@@ -265,12 +269,5 @@ public class Player extends Character {
 		invincible = true;
 		paintInvincible = true;
 	}
-	
-	public void setImageIndex(int min, int max) {
-		if (min_image_index != min || max_image_index != max) {
-			m_imageElapsed = 200;
-		}
-		min_image_index = min;
-		max_image_index = max;
-	}
+
 }
