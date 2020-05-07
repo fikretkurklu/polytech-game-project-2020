@@ -13,7 +13,7 @@ import automaton.Entity.Action;;
 public class ImageLibrary {
 
 	public static String PATH = "resources/ani/";
-	String Avatars[] = { "automata.gal", "Underworld.gal" }; // Nom des fichiers
+	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player"}; // Nom des fichiers
 
 	HashMap<String, Image[]> sprites;
 	HashMap<String, HashMap<Action, int[]>> actionsIndex;
