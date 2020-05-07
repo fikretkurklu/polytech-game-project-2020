@@ -20,7 +20,7 @@ public abstract class Decor extends Element{
 	protected Rectangle m_hitBox;
 	
 	public Decor(boolean isSolid, boolean isVisible, boolean isAnimated, Coord coord, Room room, Automaton automaton) {
-		super(isSolid, isVisible, coord, automaton);
+		super(isSolid, isVisible, coord, automaton, m_images, indiceAction);
 		
 		this.isAnimated = isAnimated;
 		m_room = room;

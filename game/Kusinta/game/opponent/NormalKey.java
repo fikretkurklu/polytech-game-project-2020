@@ -1,15 +1,19 @@
 package opponent;
 
+import java.awt.Image;
+import java.util.HashMap;
+
 import automaton.Automaton;
 import automaton.Direction;
+import automaton.Entity.Action;
 import game.ImageLoader;
 import game.Model;
 import player.Player;
 
 public class NormalKey extends Key {
 
-	public NormalKey(Automaton automaton, int x, int y, Model model) throws Exception {
-		super(automaton, x, y, model);
+	public NormalKey(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, x, y, model, bImages, indiceAction);
 
 		m_image = ImageLoader.loadImage("resources/Room/dropable/Golden_Key.png", SIZE);
 
