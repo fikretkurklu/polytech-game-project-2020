@@ -203,9 +203,9 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
+		elapsed = Math.min(10, elapsed);
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
-		/*
 		if (m_key != null) {		
 			m_key.tick(elapsed);
 		}
@@ -232,7 +232,6 @@ public class Model {
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
-		 */
 	}
 
 	public void paint(Graphics g, int width, int height) {
