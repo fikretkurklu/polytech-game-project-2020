@@ -139,6 +139,33 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		opponentCreator();
 	}
+	
+	public void switchToDungeon() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_AL, m_width, m_height);
+		Player player = (Player) m_player;
+		int attackspeed = player.getStat(CurrentStat.Attackspeed);
+		int maxLife = player.getStat(CurrentStat.MaxLife);
+		int resistance = player.getStat(CurrentStat.Resistance);
+		int strength = player.getStat(CurrentStat.Strength);
+		int money = player.getMoney();
+		HashMap<Stuff, Equipment> equip = player.getEquipment();
+		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
+		m_player.setCurrentStat(attackspeed, maxLife, maxLife, resistance, strength);
+		m_player.setMoney(money);
+		m_player.setEquipment(equip);
+		
+		int HUD_w = m_width / 3;
+		int HUD_h = m_height / 8;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		
+		difficultyLevel = 1;
+		
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+		m_opponents = new LinkedList<Opponent>();
+		opponentCreator();
+	}
 
 	public void switchEnv(mode m) {
 		qPressed = false;
@@ -152,6 +179,16 @@ public class Model {
 		try {
 			switch (m) {
 			case ROOM:
+				if (this.actualMode.equals(mode.UNDERWORLD)) {
+					m_player.setCurrentStat(m_player.getStat(CurrentStat.Attackspeed), m_player.getStat(CurrentStat.MaxLife), m_player.getStat(CurrentStat.MaxLife), m_player.getStat(CurrentStat.Resistance), m_player.getStat(CurrentStat.Strength));
+				} else if (this.actualMode.equals(mode.VILLAGE)) {
+					try {
+						switchToDungeon();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				m_village = null;
 				break;
 			case UNDERWORLD:
