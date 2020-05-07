@@ -93,6 +93,7 @@ public class Room {
 		}
 		f.close();
 	}
+	
 
 	public void CodeElement(String code, int x, int y) throws Exception {
 
