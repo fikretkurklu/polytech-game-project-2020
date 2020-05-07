@@ -56,6 +56,10 @@ public abstract class Entity {
 		ratio = ((float) bImages[m_imageIndex].getWidth(null)) / (float) (bImages[m_imageIndex].getHeight(null));
 		resetAnim();
 	}
+	
+	public Entity(Automaton automaton) {
+		m_automaton = automaton;
+	}
 
 	public State getCurrentState() {
 		return m_state;
