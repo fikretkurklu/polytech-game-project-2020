@@ -244,14 +244,14 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean power() {
 		if (collidingWith != null) {
-			int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
-			if (m_state.equals(CurrentState.isAttacking)) {
-				collidingWith.loseLife(AttackStrength - tmpPlayerResistance);
+			if (shooting) {
+				collidingWith.loseLife(AttackStrength);
 			} else {
-				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength) - tmpPlayerResistance);
+				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength));
 			}
 		}
 		return true;
+
 	}
 
 	public void attackHitBox() {
