@@ -11,6 +11,7 @@ import automaton.Direction;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
+import player.Character.CurrentStat;
 import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
@@ -20,9 +21,9 @@ public class FlyingOpponent extends Opponent {
 	Image[] attack;
 	int m_image_index, m_imageElapsed;
 
-	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
+	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model, int diffLevel) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
+		super(automaton, C, dir, model, 100*diffLevel, 100*diffLevel, 1000, 100*diffLevel, 5*diffLevel);
 
 		m_imageElapsed = 0;
 
@@ -110,14 +111,14 @@ public class FlyingOpponent extends Opponent {
 		}
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
+		if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 50) {
 			g.setColor(Color.GREEN);
-		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
+		} else if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 25) {
 			g.setColor(Color.ORANGE);
 		} else {
 			g.setColor(Color.RED);
 		}
-		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
+		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / m_currentStatMap.get(CurrentStat.MaxLife));
 		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);

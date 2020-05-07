@@ -25,9 +25,9 @@ public class WalkingOpponent extends Opponent {
 
 	int hHitBox, wHitBox;
 
-	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
+	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, int diffLevel) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
+		super(automaton, C, dir, model, 100*diffLevel, 100*diffLevel, 1000, 100*diffLevel, 5*diffLevel);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -101,15 +101,15 @@ public class WalkingOpponent extends Opponent {
 		}
 		gp.setColor(Color.DARK_GRAY);
 		gp.fillRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
+		if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 50) {
 			gp.setColor(Color.GREEN);
-		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
+		} else if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 25) {
 			gp.setColor(Color.ORANGE);
 		} else {
 			gp.setColor(Color.RED);
 		}
 
-		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
+		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / (m_currentStatMap.get(CurrentStat.MaxLife)));
 		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);

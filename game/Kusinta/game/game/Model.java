@@ -92,6 +92,8 @@ public class Model {
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 
+		difficultyLevel = 1;
+		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		m_opponentsToDelete = new LinkedList<Opponent>();
@@ -119,6 +121,11 @@ public class Model {
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		m_player.setCurrentStat(attackspeed, maxLife, health, resistance, strength);
 	
+		int HUD_w = m_width / 3;
+		int HUD_h = m_height / 8;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		
+		difficultyLevel ++;
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		m_opponents = new LinkedList<Opponent>();
@@ -205,7 +212,6 @@ public class Model {
 	public void tick(long elapsed) {
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
-		/*
 		if (m_key != null) {		
 			m_key.tick(elapsed);
 		}
@@ -232,7 +238,6 @@ public class Model {
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
-		 */
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -341,12 +346,12 @@ public class Model {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
 			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this));
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this, difficultyLevel));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
 			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this));
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this, difficultyLevel));
 		}
 		/*int randomKey = (int) (Math.random()*m_opponents.size());
 		int randomBossKey = (int) (Math.random()*m_opponents.size());
