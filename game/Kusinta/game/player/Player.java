@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import com.sun.xml.internal.fastinfoset.algorithm.DoubleEncodingAlgorithm;
+
 import automaton.*;
 import game.Coord;
 import game.ImageLoader;
@@ -27,7 +29,7 @@ public class Player extends Character {
 	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
 
-		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
+		float ratio = (float) ((float) bImages[0].getWidth()) / (float) (bImages[0].getHeight());
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -58,7 +60,7 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping) {
-			setImageIndex(8, 13);
+			currentAction = Action.MOVE;
 		}
 		super.move(dir);
 		if (dir != m_direction && !shooting) {
@@ -72,15 +74,14 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
-				setImageIndex(120, 123);
 				if (isMoving())
-					setImageIndex(114, 117);
+					currentAction = Action.SHOTMOVE;
 				else
-					setImageIndex(120, 123);
+					currentAction = Action.SHOT;
 			} else {
-				setImageIndex(15, 23);
-				m_image_index = 16;
+				currentAction = Action.JUMP;
 			}
+			resetAnim();
 			super.jump(dir);
 		}
 
@@ -146,57 +147,42 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 			m_imageIndex += 1;
 			if (!gotpower()) {
-				if (m_imageIndex == DeathAnim.length && getM_model().getDiametre() == 0) {
+				if (m_imageIndex == indiceAction.get(Action.DEATH).length && getM_model().getDiametre() == 0) {
 					getM_model().setDiametre(1);
 				}
 			} else {
 				if (shooting) {
-					if (isMoving() || jumping) {
-						if (m_imageIndex == ShotMoveAnim.length) {
-							super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
-						}
-					} else {
-						if (m_imageIndex == ShotAnim.length) {
-							super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
-						}
-					}					
-				} else if (jumping && m_image_index == 17) {
-					m_image_index = 22;
-				} else if (!shooting && ((falling && !jumping) || (jumping && m_image_index == 23))) {
-					setImageIndex(23, 23);
-				} else {
-					m_image_index++;
+					if (m_imageIndex == indiceAction.get(currentAction).length) {
+						super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
+					}
 				}
-
 				if (!shooting && !falling && !isMoving()) {
-					setImageIndex(0, 3);
+					currentAction = Action.DEFAULT;
 				}
-
-				if (m_image_index < min_image_index || m_image_index > max_image_index) {
-					m_image_index = min_image_index;
-				}
+			}
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_imageIndex = 0;
 			}
 		}
 
-	m_moveElapsed+=elapsed;if(m_moveElapsed>SPEED_WALK_TICK)
+		m_moveElapsed += elapsed;
+		if (m_moveElapsed > SPEED_WALK_TICK)
 
-	{
-		m_moveElapsed -= SPEED_WALK_TICK;
-		if (shooting) {
-			if (getM_model().m_mouseCoord.X() > m_coord.X()) {
-				turn(Direction.E);
-			} else {
-				turn(Direction.W);
+		{
+			m_moveElapsed -= SPEED_WALK_TICK;
+			if (shooting) {
+				if (getM_model().m_mouseCoord.X() > m_coord.X()) {
+					turn(Direction.E);
+				} else {
+					turn(Direction.W);
+				}
 			}
+			m_automaton.step(this);
 		}
-		m_automaton.step(this);
-	}
 
-	for(
-	int i = 0;i<m_projectiles.size();i++)
-	{
-		m_projectiles.get(i).tick(elapsed);
-	}
+		for (int i = 0; i < m_projectiles.size(); i++) {
+			m_projectiles.get(i).tick(elapsed);
+		}
 	}
 
 	public void paint(Graphics g) {
@@ -205,25 +191,12 @@ public class Player extends Character {
 		int m_y = m_coord.Y();
 
 		BufferedImage img;
-		if (shooting) {
-			if (isMoving() || jumping) {
-				img = bImages[ShotMoveAnim[m_imageIndex]];
-			} else {
-				img = bImages[ShotAnim[m_imageIndex]];
-			}
-		} else if (jumping) {
-			img = bImages[JumpAnim[m_imageIndex]];
-		} else if (isMoving()) {
-			img = bImages[MoveAnim[m_imageIndex]];
-		} else if (!gotpower()) {
-			img = bImages[DeathAnim[m_imageIndex]];
-		} else {
-			img = bImages[DefaultAnim[m_imageIndex]];
-		}
+
+		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 
 		int w = m_width;
 		int h = m_height;
-		
+
 		int H;
 		if (shooting && !jumping) {
 			H = 17;

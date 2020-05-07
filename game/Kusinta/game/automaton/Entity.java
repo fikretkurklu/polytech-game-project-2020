@@ -2,6 +2,7 @@ package automaton;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -31,12 +32,10 @@ public abstract class Entity {
 	protected BufferedImage[] bImages;
 	protected int m_imageIndex;
 	
-	protected int[] MoveAnim;
-	protected int[] JumpAnim;
-	protected int[] ShotAnim;
-	protected int[] DeathAnim;
-	protected int[] DefaultAnim;
-	protected int[] ShotMoveAnim;
+	protected enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE}
+	protected Action currentAction = Action.DEFAULT; 
+	
+	protected HashMap<Action, int[]> indiceAction;
 	
 	protected long m_imageTick = 200;
 	protected long m_imageElapsed;
