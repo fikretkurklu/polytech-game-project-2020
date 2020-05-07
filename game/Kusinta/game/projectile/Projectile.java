@@ -13,7 +13,7 @@ import player.Character;
 public abstract class Projectile extends Entity {
 
 	public enum proj {
-		ARROW, MAGIC_PROJECTILE, METEOR
+		ARROW, MAGIC_PROJECTILE, METEOR, LURE
 	};
 
 	protected enum State {
@@ -106,6 +106,10 @@ public abstract class Projectile extends Entity {
 	
 	public void setSpeed(int speed) {
 		X_MOVE = speed;
+	}
+	
+	public Coord getCoord() {
+		return m_coord;
 	}
 
 	public abstract void paint(Graphics g);

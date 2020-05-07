@@ -58,14 +58,31 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (m_game.m_model.actualMode == Model.mode.ROOM) {
+		switch(m_game.m_model.actualMode) {
+		case ROOM:
 			m_game.m_model.setPressed((int) ' ', true);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.setPressed((int) 'v', true);
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		m_game.m_model.setPressed((int) ' ', false);
+		switch(m_game.m_model.actualMode) {
+		case ROOM:
+			m_game.m_model.setPressed((int) ' ', false);
+			break;
+		case UNDERWORLD:
+			m_game.m_model.setPressed((int) 'v', false);
+			break;
+		default:
+			break;
+		}
+		
 
 	}
 

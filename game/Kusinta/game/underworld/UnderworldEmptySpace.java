@@ -13,4 +13,9 @@ public class UnderworldEmptySpace extends Element {
 			__image = ImageLoader.loadImage(path, SIZE);
 		}
 	}
+	
+	public UnderworldEmptySpace(Coord coord) throws Exception {
+		super(false, false, coord);
+	}
+
 }
