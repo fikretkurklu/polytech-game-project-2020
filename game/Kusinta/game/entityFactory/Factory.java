@@ -1,5 +1,6 @@
 package entityFactory;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -8,6 +9,7 @@ import automaton.AutomatonLibrary;
 import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
+import game.ImageLibrary;
 import game.Model;
 import opponent.BossKey;
 import opponent.Coin;
@@ -26,16 +28,19 @@ import underworld.PlayerSoul;
 public class Factory {
 
 	AutomatonLibrary m_AL;
-//	ImageLibrary m_IL;
+	ImageLibrary m_IL;
 
 	enum Type {
 		Player, PlayerSoul, Lure, NormalKey, BossKey, Coin, Fragment, WalkingOpponent, FlyingOpponent, Boss, Arrow,
 		MagicProjectile, Meteor, Ghost
 	};
 
+	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player", "playerSoul", "ghost", "Lure", "Boss" }; // Nom
+	// des fichiers
+
 	HashMap<Type, Automaton> automatons;
-	HashMap<Type, BufferedImage> images;
-	HashMap<String, HashMap<Action, int[]>> actions;
+	HashMap<Type, Image> images;
+	HashMap<Type, HashMap<Action, int[]>> actions;
 
 	public Factory() throws Exception {
 		m_AL = new AutomatonLibrary();
@@ -44,23 +49,25 @@ public class Factory {
 		fillActions();
 	}
 
-	private void fillActions() { }
+	private void fillActions() {
+	}
 
-	private void fillImages() {	}
+	private void fillImages() {
+	}
 
 	private void fillAutomaton() throws Exception {
-		automatons.put(Type.Player, m_AL.getAutomaton("Player_donjon"));
-		automatons.put(Type.PlayerSoul, m_AL.getAutomaton("PlayerSoul"));
+		automatons.put(Type.Player, m_AL.getAutomaton(Avatars[4]));
+		automatons.put(Type.PlayerSoul, m_AL.getAutomaton(Avatars[5]));
 		automatons.put(Type.NormalKey, m_AL.getAutomaton("KeyDrop"));
 		automatons.put(Type.BossKey, m_AL.getAutomaton("keyDrop"));
-		automatons.put(Type.WalkingOpponent, m_AL.getAutomaton("WalkingOpponents"));
-		automatons.put(Type.FlyingOpponent, m_AL.getAutomaton("flyingOpponentAutomaton"));
-		automatons.put(Type.Arrow, m_AL.getAutomaton("arrowAutomaton"));
-		automatons.put(Type.MagicProjectile, m_AL.getAutomaton("MagicProj"));
-		automatons.put(Type.Ghost, m_AL.getAutomaton("Ghost"));
+		automatons.put(Type.WalkingOpponent, m_AL.getAutomaton(Avatars[1]));
+		automatons.put(Type.FlyingOpponent, m_AL.getAutomaton(Avatars[2]));
+		automatons.put(Type.Arrow, m_AL.getAutomaton(Avatars[0]));
+		automatons.put(Type.MagicProjectile, m_AL.getAutomaton(Avatars[3]));
+		automatons.put(Type.Ghost, m_AL.getAutomaton(Avatars[6]));
 		automatons.put(Type.Coin, m_AL.getAutomaton("CoinDrop"));
-		automatons.put(Type.Lure, m_AL.getAutomaton("Lure"));
-		automatons.put(Type.Boss, m_AL.getAutomaton("Boss"));
+		automatons.put(Type.Lure, m_AL.getAutomaton(Avatars[7]));
+		automatons.put(Type.Boss, m_AL.getAutomaton(Avatars[8]));
 		automatons.put(Type.Meteor, m_AL.getAutomaton("Meteor"));
 		automatons.put(Type.Fragment, m_AL.getAutomaton("Fragment"));
 	}
@@ -107,7 +114,7 @@ public class Factory {
 	}
 
 	public void changeAnimation(Type type, String string) {
-//		images.put(type, "temporaire"/*m_IL.getBImage(string)*/);
+		images.put(type, m_IL.getImages(string));
 	}
 
 }
