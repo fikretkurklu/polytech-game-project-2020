@@ -1,8 +1,6 @@
 package projectile;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 
 import automaton.Automaton;
 import automaton.Direction;

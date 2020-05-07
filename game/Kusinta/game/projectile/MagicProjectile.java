@@ -16,9 +16,6 @@ public class MagicProjectile extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	Image[] images;
-	int m_imageElapsed, m_image_index;
-
 	int moving;
 	int DIMENSION;
 
@@ -28,8 +25,6 @@ public class MagicProjectile extends Projectile {
 	public MagicProjectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
 			Direction direction) throws Exception {
 		super(projectileAutomaton, c, angle, shooter, direction);
-
-		images = m_shooter.getProjectileImages();
 
 		DIMENSION = SIZE / (images[0].getHeight(null));
 

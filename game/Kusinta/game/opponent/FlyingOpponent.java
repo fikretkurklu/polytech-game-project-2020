@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -15,39 +16,14 @@ import projectile.Projectile.proj;
 
 public class FlyingOpponent extends Opponent {
 
-	Image[] death;
-	Image[] flight;
-	Image[] attack;
-	int m_image_index, m_imageElapsed;
+	int m_imageElapsed;
 
 	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
 
 		m_imageElapsed = 0;
-
 		shooting = false;
-
-		imageProjectiles = new Image[13];
-		for (int i = 0; i < 13; i++) {
-			imageProjectiles[i] = ImageLoader.loadImage("resources/oppenent/jin/Magic_Attack" + (i + 1) + ".png", SIZE);
-		}
-		death = new Image[6];
-		for (int i = 0; i < 6; i++) {
-			death[i] = ImageLoader.loadImage("resources/oppenent/jin/Death" + (i + 1) + ".png", SIZE);
-		}
-
-		flight = new Image[4];
-		for (int i = 0; i < 4; i++) {
-			flight[i] = ImageLoader.loadImage("resources/oppenent/jin/Flight" + (i + 1) + ".png", SIZE);
-		}
-
-		attack = new Image[4];
-		for (int i = 0; i < 4; i++) {
-			attack[i] = ImageLoader.loadImage("resources/oppenent/jin/Attack" + (i + 1) + ".png", SIZE);
-		}
-
-		float ratio = (float) ((float) flight[0].getWidth(null)) / (float) (flight[0].getHeight(null));
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -56,11 +32,7 @@ public class FlyingOpponent extends Opponent {
 		int h = (int) (m_height / 1.3);
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
-
-		m_image_index = 0;
-
-		m_money = 200;
-
+		setMoney(200);
 		m_moveElapsed = 0;
 
 		X_MOVE = 2;
@@ -75,7 +47,8 @@ public class FlyingOpponent extends Opponent {
 	public boolean egg(Direction dir) {
 		if (gotpower() && !shooting) {
 
-			m_image_index = 0;
+			currentAction = Action.SHOT;
+			resetAnim();
 
 			shooting = true;
 
@@ -95,18 +68,14 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-		Image image;
-		if (!gotpower()) {
-			image = death[m_image_index];
-		} else if (shooting) {
-			image = attack[m_image_index];
-		} else {
-			image = flight[m_image_index];
-		}
+		BufferedImage img;
+
+		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		
 		if (m_direction == Direction.E) {
-			g.drawImage(image, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
+			g.drawImage(img, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
-			g.drawImage(image, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
+			g.drawImage(img, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
@@ -139,24 +108,24 @@ public class FlyingOpponent extends Opponent {
 		}
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-
+			m_imageIndex ++;
 			if (!gotpower()) {
-				if (m_image_index == 5) {
+				if (m_imageIndex == indiceAction.get(currentAction).length) {
 					getM_model().getOpponent().remove(this);
 					dropKey();
 					getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y(), m_money, getM_model()));
 
 				}
-				m_image_index = (m_image_index + 1) % 6;
-			} else {
-				m_image_index = (m_image_index + 1) % 4;
 			}
 			if (shooting) {
-				if (m_image_index == 3) {
+				if (m_imageIndex == indiceAction.get(currentAction).length) {
 					Coord playerCoord = getM_model().getPlayer().getCoord();
 					super.shoot(playerCoord.X(), playerCoord.Y() - getM_model().getPlayer().getHeight() / 2,
 							proj.MAGIC_PROJECTILE);
 				}
+			}
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_imageIndex = 0;
 			}
 		}
 

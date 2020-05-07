@@ -22,14 +22,12 @@ public class Player extends Character {
 	int SPEED_WALK_TICK = 4;
 
 	boolean invincible, paintInvincible;
-	long m_moveElapsed, m_invincibleElapsed;
+	long m_invincibleElapsed;
 
 	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
-
-		float ratio = (float) ((float) bImages[0].getWidth()) / (float) (bImages[0].getHeight());
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);

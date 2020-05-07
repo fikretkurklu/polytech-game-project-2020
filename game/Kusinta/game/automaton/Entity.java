@@ -39,6 +39,10 @@ public abstract class Entity {
 	
 	protected long m_imageTick = 200;
 	protected long m_imageElapsed;
+	
+	protected String gal = ".gal";
+	protected String ani = ".ani";
+	protected float ratio;
 
 	public Entity() {
 		
@@ -47,6 +51,8 @@ public abstract class Entity {
 	public Entity(Automaton automaton) {
 		m_state = automaton.getInitialState();
 		m_automaton = automaton;
+		bImages = ImageLibrary.get(ani);
+		ratio = ((float) bImages[m_imageIndex].getWidth(null)) / (float) (bImages[m_imageIndex].getHeight(null));
 		resetAnim();
 	}
 

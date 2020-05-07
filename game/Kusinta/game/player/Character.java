@@ -20,7 +20,6 @@ import game.Coord;
 import game.Model;
 import projectile.Arrow;
 import projectile.MagicProjectile;
-//import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
 import underworld.Lure;
@@ -29,6 +28,7 @@ public abstract class Character extends Entity {
 
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
+	protected long m_moveElapsed;
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
@@ -372,6 +372,11 @@ public abstract class Character extends Entity {
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
+			if (jumping)
+				currentAction = Action.JUMP;
+			else 
+				currentAction = Action.DEFAULT;
+			
 			int m_x = m_coord.X();
 			int m_y = hitBox.y + hitBox.height / 2;
 
