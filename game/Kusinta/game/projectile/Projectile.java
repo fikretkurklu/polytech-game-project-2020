@@ -61,7 +61,6 @@ public abstract class Projectile extends Entity {
 		
 		int tmpX = m_coord.X();
 		int tmpY = m_coord.Y();
-
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
 				m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));

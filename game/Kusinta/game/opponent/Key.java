@@ -58,18 +58,6 @@ public abstract class Key extends Entity {
 		g.drawImage(image, m_coord.X(), m_coord.Y() - h, -w, h, null);
 	}
 
-	/*public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}*/
-
 	public void tick(long elapsed) {
 		m_automaton.step(this);
 		

@@ -21,6 +21,8 @@ public class MagicProjectile extends Projectile {
 			Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(projectileAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
+		m_height = SIZE;
+		m_width =  (int)(m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
 		setSpeed(4);
@@ -30,7 +32,6 @@ public class MagicProjectile extends Projectile {
 	public void paint(Graphics g) {
 
 		Image img = getImage();
-
 		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 				m_height * 2);
 
@@ -53,11 +54,11 @@ public class MagicProjectile extends Projectile {
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_imageIndex ++;
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
-				m_shooter.removeProjectile(this);
-			}
+			
 			if (m_State == State.OK_STATE) {
 				m_imageIndex = 0;
+			} else if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_shooter.removeProjectile(this);
 			}
 			if (m_imageIndex >= indiceAction.get(currentAction).length) {
 				m_imageIndex = 0;

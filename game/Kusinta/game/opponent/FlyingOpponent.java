@@ -41,6 +41,8 @@ public class FlyingOpponent extends Opponent {
 	}
 
 	public boolean explode() {
+		currentAction = Action.DEATH;
+		resetAnim();
 		return true;
 	}
 

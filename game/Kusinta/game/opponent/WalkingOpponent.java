@@ -92,11 +92,11 @@ public class WalkingOpponent extends Opponent {
 			m_imageIndex++;
 			if (!gotpower()) {
 				if (m_imageIndex >= indiceAction.get(currentAction).length) {
-					getM_model().getOpponent().remove(this);
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, getM_model(), 0, null);
 					c.setMoney(m_money);
 					c.getM_model().addCoin(c);
+					getM_model().getOpponent().remove(this);
 				}
 			}
 			if (m_imageIndex >= indiceAction.get(currentAction).length) {
