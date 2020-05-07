@@ -29,6 +29,7 @@ public class PlayerSoul extends Character {
 	long m_dashTimer;
 	long m_lureTimer;
 
+	int nbLure = 0;
 	int fragmentsPicked = 0;
 	boolean leftOrientation;
 
@@ -43,7 +44,7 @@ public class PlayerSoul extends Character {
 	int animationMode;
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
-	boolean hidden, escape, escapedOrDead;
+	boolean hidden, escape, escapedOrDead, invicible, outScreen;
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
@@ -52,10 +53,12 @@ public class PlayerSoul extends Character {
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
+		outScreen = false;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
 		moveAvailable = true;
+		invicible = true;
 		hidden = false;
 		escape = false;
 		escapedOrDead = false;
@@ -69,16 +72,21 @@ public class PlayerSoul extends Character {
 	}
 	
 	public boolean lureActive(){
-		return m_projectiles.size() > 0;
+		return nbLure > 0;
 	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		int xCenter = m_coord.X() + (m_width / 2);
-		int yCenter = m_coord.Y() + (m_height / 2);
 		if ((escape) && (cat == Category.G)) {
 			return m_model.m_underworld.m_gate.contains(hitBox);
 		}
+		if (cat == Category.C) {
+			int x = m_coord.X();
+			int y = m_coord.Y();
+			return ((x + m_width < 0) || (y + m_height < 0) || (x > Underworld.BORDERX) || (y > Underworld.BORDERY));
+		}
+		int xCenter = m_coord.X() + (m_width / 2);
+		int yCenter = m_coord.Y() + (m_height / 2);
 		if (cat == Category.O) {
 			for (int i = 0; i < m_model.m_underworld.m_clouds.length; i++) {
 				if ((m_model.m_underworld.m_clouds[i].contains(xCenter, yCenter))) {
@@ -212,12 +220,28 @@ public class PlayerSoul extends Character {
 	}
 
 	@Override
-	public boolean wizz(Direction dir) {
+	public boolean hit(Direction dir) {
 		fragmentsPicked = -1;
 		escape = true;
 		m_model.m_underworld.activateGate();
 		animationMode = ESCAPE;
 		m_image_index = UnderworldParam.sizePlayerDashAnimation;
+		return true;
+	}
+	
+	@Override
+	public boolean wizz(Direction dir) {
+		int x = m_coord.X();
+		int y = m_coord.Y();
+		if (x < 0) {
+			m_coord.setX(Underworld.BORDERX);
+		} else if (y < 0) {
+			m_coord.setY(Underworld.BORDERY);
+		} else if (x > Underworld.BORDERX) {
+			m_coord.setX(0 - m_width);
+		} else {
+			m_coord.setY(0 - m_height);
+		}
 		return true;
 	}
 
@@ -257,13 +281,14 @@ public class PlayerSoul extends Character {
 
 	@Override
 	public boolean egg(Direction dir) {
- 	  if ((lureAvailable) && (m_projectiles.size() < MAX_LURE)) {
+ 	  if ((lureAvailable) && (nbLure < MAX_LURE)) {
 			try {
 				int x = m_model.m_mouseCoord.X() - Lure.SIZE / 2;
 				int y = m_model.m_mouseCoord.Y() - Lure.SIZE / 2;
 				if (m_model.m_underworld.checkPosition(x, y, 0, Lure.SIZE))
 					return false;
 				addProjectile(Projectile.proj.LURE, new Coord(x, y), 0, this, m_direction);
+				nbLure++;
 				lureAvailable = false;
 				m_lureGenerationElapsed = 0;
 				return true;
@@ -274,20 +299,27 @@ public class PlayerSoul extends Character {
 		}
 		return false;
 	}
+	
+	@Override
+	public void removeProjectile(Projectile projectile) {
+		super.removeProjectile(projectile);
+		nbLure--;
+	}
 
 	public void setVisibility(boolean bool) {
 		hidden = bool;
 	}
 
 	public void getDamage() {
-		loseLife(20);
+		if (!invicible)
+			loseLife(20);
 	}
 
 	public static final int HEALTHHEIGHT = SIZE / 8;
 
 	public void paint(Graphics g) {
-		if (m_projectiles.size() > 0) {
-			for (int i = 0; i < m_projectiles.size(); i++) {
+		if (nbLure > 0) {
+			for (int i = 0; i < nbLure; i++) {
 				m_projectiles.get(i).paint(g);
 			}
 		}
@@ -348,6 +380,8 @@ public class PlayerSoul extends Character {
 					} else {
 						animationMode = NORMAL;
 						m_image_index = 0;
+						if (invicible)
+							invicible = false;
 					}
 					DISTANCE = NORMALSPEED;
 				}
@@ -371,8 +405,8 @@ public class PlayerSoul extends Character {
 			lureAvailable = true;
 			m_lureGenerationElapsed = 0;
 		}
-		if (m_projectiles.size() > 0) {
-			for (int i = 0; i < m_projectiles.size(); i++) {
+		if (nbLure > 0) {
+			for (int i = 0; i < nbLure; i++) {
 				m_projectiles.get(i).tick(elapsed);
 			}
 		}

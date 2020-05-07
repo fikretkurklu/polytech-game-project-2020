@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.imageio.ImageIO;
 
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
@@ -120,7 +119,10 @@ public class Underworld {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public static final int BORDERXLEFT = 2494;
+	public static final int BORDERYLEFT = 2494;
+	
 	public static final int BORDERX = 2580;
 	public static final int BORDERY = 2580;
 
@@ -279,6 +281,8 @@ public class Underworld {
 	}
 
 	public boolean isBlocked(int x, int y) {
+		if ((x < 0) || (y < 0) || (x > BORDERXLEFT) || (y > BORDERYLEFT))
+				return false;
 		int n = (x / Element.SIZE) + (y / Element.SIZE * nbCol);
 		if (n >= 0 && n < nbRow * nbCol) {
 			return m_elements[n].isSolid();

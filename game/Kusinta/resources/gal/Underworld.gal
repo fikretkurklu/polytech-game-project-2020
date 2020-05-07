@@ -20,6 +20,7 @@ Fragment (Init){
 
 PlayerSoul (Init) {
   * (Init)
+  | Closest(C,H) ? Wizz : (Init)  
   | ! GotPower ? Pop(S) : ()
   | Closest(G,H) ? Pop(N) : ()
   | Closest(O,H) ? : (Mv)
@@ -31,7 +32,7 @@ PlayerSoul (Init) {
   | Key(d) & ! Cell(E,O) ? Move(E) : (Actions)
   | True ? : (Actions)
   * (Actions)
-  | GotStuff ? Wizz : (Init)
+  | GotStuff ? Hit : (Init)
   | Key(e) & Closest(P,H) ? Pick(H) : (Init)
   | Key(SPACE) ? Jump : (Init)
   | Key(v) ? Egg : (Init)

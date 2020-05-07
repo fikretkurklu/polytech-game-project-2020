@@ -223,20 +223,23 @@ public class Ghost extends Entity {
 		if (cat == Category.O) {
 			isFollowing = false;
 			if (dir == Direction.F) {
-				if (m_direction == Direction.N) {
+				switch (m_direction.toString()) {
+				case Direction.Ns:
 //					block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
-				} else if (m_direction == Direction.S) {
+				case Direction.Ss:
 //					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y() + m_size);
-				} else if (m_direction == Direction.W) {
+				case Direction.Ws:
 //					block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
-				} else if (m_direction == Direction.E) {
+				case Direction.Es:
 //					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
 					return m_model.m_underworld.isBlocked(m_coord.X() + m_size, m_coord.Y());
+				default:
+					return false;
 				}
-				return false;
+
 			}
 		} else if (cat == Category.A) {
 			coord = getPlayer().getCoord();
@@ -260,47 +263,47 @@ public class Ghost extends Entity {
 				return false;
 		}
 		// Modifier egalités de coord pour garder une distance
-		switch (dir.toString()) {
-		case Direction.Ns:
-			block = getBlockCoord(m_coord.X(), m_coord.Y() - m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.Ss:
-			block = getBlockCoord(m_coord.X(), m_coord.Y() + m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.Es:
-			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y());
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
-		case Direction.Ws:
-			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y());
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
-		case Direction.NEs:
-			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() - m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.NWs:
-			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() - m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.SEs:
-			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() + m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.SWs:
-			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() + m_size);
-			playerBlock = getBlockCoord(coord.X(), coord.Y());
-			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-		case Direction.Hs:
-			return Math.abs(m_coord.X() - coord.X()) <= 5 && Math.abs(m_coord.Y() - coord.Y()) <= 5;
-		// return coord.isEqual(m_coord);
-		}
+//		switch (dir.toString()) {
+//		case Direction.Ns:
+//			block = getBlockCoord(m_coord.X(), m_coord.Y() - m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.Ss:
+//			block = getBlockCoord(m_coord.X(), m_coord.Y() + m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.Es:
+//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y());
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
+//		case Direction.Ws:
+//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y());
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
+//		case Direction.NEs:
+//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() - m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
+//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.NWs:
+//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() - m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
+//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.SEs:
+//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() + m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
+//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.SWs:
+//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() + m_size);
+//			playerBlock = getBlockCoord(coord.X(), coord.Y());
+//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
+//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
+//		case Direction.Hs:
+//			return Math.abs(m_coord.X() - coord.X()) <= 5 && Math.abs(m_coord.Y() - coord.Y()) <= 5;
+//		// return coord.isEqual(m_coord);
+//		}
 		return false;
 	}
 
