@@ -83,6 +83,7 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
+		currentAction = Action.MOVE;
 		if (dir == Direction.F) {
 			dir = m_direction;
 		}

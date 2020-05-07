@@ -1,14 +1,18 @@
 package opponent;
 
+import java.awt.Image;
+import java.util.HashMap;
+
 import automaton.Automaton;
 import automaton.Direction;
+import automaton.Entity.Action;
 import game.ImageLoader;
 import game.Model;
 
 public class BossKey extends Key{
 
-	public BossKey(Automaton automaton, int x, int y, Model model) throws Exception {
-		super(automaton, x, y, model);
+	public BossKey(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, x, y, model, bImages, indiceAction);
 
 		m_image = ImageLoader.loadImage("resources/Room/dropable/boss_key.png", SIZE);
 
