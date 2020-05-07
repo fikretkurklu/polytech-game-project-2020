@@ -103,7 +103,7 @@ public class MagicProjectile extends Projectile {
 			}
 			if (cat == Category.P) {
 				m_State = State.HIT_STATE;
-				this.setCollidingWith(m_model.getPlayer());
+				this.setCollidingWith(getM_model().getPlayer());
 				collidingWith.loseLife(m_strength);
 				return true;
 			}

@@ -71,11 +71,11 @@ public class PlayerSoul extends Character {
 		int xCenter = m_coord.X() + (m_width / 2);
 		int yCenter = m_coord.Y() + (m_height / 2);
 		if ((escape) && (cat == Category.G)) {
-			return m_model.m_underworld.m_gate.contains(hitBox);
+			return getM_model().m_underworld.m_gate.contains(hitBox);
 		}
 		if (cat == Category.O) {
-			for (int i = 0; i < m_model.m_underworld.m_clouds.length; i++) {
-				if ((m_model.m_underworld.m_clouds[i].contains(xCenter, yCenter))){
+			for (int i = 0; i < getM_model().m_underworld.m_clouds.length; i++) {
+				if ((getM_model().m_underworld.m_clouds[i].contains(xCenter, yCenter))){
 					setVisibility(true);
 					return true;
 				}
@@ -84,10 +84,10 @@ public class PlayerSoul extends Character {
 			return false;
 		}
 		if (cat == Category.P) {
-			for (int i = 0; i < m_model.m_underworld.m_fragments.length; i++) {
-				if ((!m_model.m_underworld.m_fragments[i].picked)
-						&& (m_model.m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
-					m_model.m_underworld.m_fragments[i].setPicked();
+			for (int i = 0; i < getM_model().m_underworld.m_fragments.length; i++) {
+				if ((!getM_model().m_underworld.m_fragments[i].picked)
+						&& (getM_model().m_underworld.m_fragments[i].contains(xCenter, yCenter))) {
+					getM_model().m_underworld.m_fragments[i].setPicked();
 					return true;
 				}
 			}
@@ -97,7 +97,7 @@ public class PlayerSoul extends Character {
 
 	@Override
 	public boolean gotstuff() {
-		return (fragmentsPicked == m_model.m_underworld.MAX_FRAGMENTS);
+		return (fragmentsPicked == getM_model().m_underworld.MAX_FRAGMENTS);
 	}
 
 	public static int DISTANCE = 2;
@@ -149,44 +149,44 @@ public class PlayerSoul extends Character {
 		turn(dir);
 		switch (m_direction.toString()) {
 		case Direction.Ns:
-			if (m_model.qPressed) {
+			if (getM_model().qPressed) {
 				m_coord.translate(-DISTANCE, -DISTANCE);
 				break;
 			}
-			if (m_model.dPressed) {
+			if (getM_model().dPressed) {
 				m_coord.translate(DISTANCE, -DISTANCE);
 				break;
 			}
 			m_coord.translate(0, -DISTANCE);
 			break;
 		case Direction.Ss:
-			if (m_model.qPressed) {
+			if (getM_model().qPressed) {
 				m_coord.translate(-DISTANCE, DISTANCE);
 				break;
 			}
-			if (m_model.dPressed) {
+			if (getM_model().dPressed) {
 				m_coord.translate(DISTANCE, DISTANCE);
 				break;
 			}
 			m_coord.translate(0, DISTANCE);
 			break;
 		case Direction.Es:
-			if (m_model.zPressed) {
+			if (getM_model().zPressed) {
 				m_coord.translate(DISTANCE, -DISTANCE);
 				break;
 			}
-			if (m_model.sPressed) {
+			if (getM_model().sPressed) {
 				m_coord.translate(DISTANCE, DISTANCE);
 				break;
 			}
 			m_coord.translate(DISTANCE, 0);
 			break;
 		case Direction.Ws:
-			if (m_model.zPressed) {
+			if (getM_model().zPressed) {
 				m_coord.translate(-DISTANCE, -DISTANCE);
 				break;
 			}
-			if (m_model.sPressed) {
+			if (getM_model().sPressed) {
 				m_coord.translate(-DISTANCE, DISTANCE);
 				break;
 			}
@@ -203,7 +203,7 @@ public class PlayerSoul extends Character {
 	public boolean wizz(Direction dir) {
 		fragmentsPicked = -1;
 		escape = true;
-		m_model.m_underworld.activateGate();
+		getM_model().m_underworld.activateGate();
 		animationMode = ESCAPE;
 		m_image_index = sizeDashAnimation;
 		return true;
@@ -246,12 +246,12 @@ public class PlayerSoul extends Character {
 	@Override
 	public boolean egg(Direction dir) {
 		if (lureAvailable) {
-			int x = m_model.m_mouseCoord.X() - m_model.getXDecalage();
-			int y = m_model.m_mouseCoord.Y() - m_model.getYDecalage();
+			int x = getM_model().m_mouseCoord.X() - getM_model().getXDecalage();
+			int y = getM_model().m_mouseCoord.Y() - getM_model().getYDecalage();
 			if (checkBlock(x, y))
 				return false;
 			try {
-				lure = new Lure(m_model.lureAutomaton, new Coord(x, y), 0, this);
+				lure = new Lure(getM_model().lureAutomaton, new Coord(x, y), 0, this);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -267,11 +267,11 @@ public class PlayerSoul extends Character {
 	}
 
 	public boolean checkBlock(int x, int y) {
-		return m_model.m_underworld.isBlocked(x, y);
+		return getM_model().m_underworld.isBlocked(x, y);
 	}
 
 	public Coord getBlockCoord(int x, int y) {
-		return m_model.m_underworld.blockBot(x, y);
+		return getM_model().m_underworld.blockBot(x, y);
 	}
 
 	public void getDamage() {

@@ -50,7 +50,7 @@ public abstract class Projectile extends Entity {
 		m_direction = direction;
 
 		m_shooter = shooter;
-		m_model = shooter.getModel();
+		setM_model(shooter.getModel());
 
 		m_State = State.OK_STATE;
 

@@ -55,16 +55,16 @@ Decor (Inactif) {
 
 FlyingOpponents (East) {
 *(East)
-  | Cell(H, P) ? Power : (East)  
-  | ! GotPower() ? Explode() : ()        
   | Cell(E, O) ? Turn(W) : (West)
+  | ! GotPower() ? Explode() : ()        
+  | Cell(H, P) ? Power : (East)  
   | Closest(P, E) ? Egg(E) : (East)
   | Closest(P, W) ? Egg(W) : (East)
   | !Cell(E, O) ? Move(E) : (East) 
- *(West)
-  | Cell(H, P) ? Power : (West)  
-  | ! GotPower() ? Explode() : ()        
+ *(West)     
   | Cell(W, O) ? Turn(E) : (East)
+  | ! GotPower() ? Explode() : ()  
+  | Cell(H, P) ? Power : (West)  
   | Closest(P, E) ? Egg(E) : (West)
   | Closest(P, W) ? Egg(W) : (West)
   | !Cell(W, O)? Move(W) : (West) 
@@ -73,19 +73,17 @@ FlyingOpponents (East) {
 
 WalkingOpponents (East) {
 *(East)
-
-  | Cell(H, P) ? Power : (East)
-    | Cell(E, P) ? Wizz() : (East)
-  | ! GotPower() ? Explode() : ()
   | Cell(E, O) ? Turn(W) : (West)
+  | Cell(H, P) ? Power : (East)
+  | Cell(E, P) ? Wizz() : (East)
+  | ! GotPower() ? Explode() : ()
   | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
-
-  | Cell(H, P) ? Power : (West)
-    | Cell(W, P) ? Wizz() : (West)
-  | ! GotPower() ? Explode() : ()
   | Cell(W, O) ? Turn(E) : (East)
+  | Cell(H, P) ? Power : (West)
+  | Cell(W, P) ? Wizz() : (West)
+  | ! GotPower() ? Explode() : ()
   | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
 }
