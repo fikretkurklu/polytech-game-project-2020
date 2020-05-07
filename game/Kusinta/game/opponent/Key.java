@@ -9,7 +9,6 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import game.Coord;
 import game.Model;
 import environnement.Element;

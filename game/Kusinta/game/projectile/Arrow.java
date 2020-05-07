@@ -18,14 +18,14 @@ import player.Character;
 
 public class Arrow extends Projectile {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	public static final int SIZE = (int) ((float)Element.SIZE / (float)2);
 
 	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction, Image[] bImages, HashMap<Action, int[]> indiceAction)
 			throws Exception {
 		super(arrowAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
-		m_height = bImages[0].getHeight(null);
-		m_width = bImages[0].getWidth(null);
+		m_height = SIZE;
+		m_width = (int)(m_height * ratio);
 
 		if (m_direction == Direction.E) {
 			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(-m_angle) * 1.5),
@@ -42,8 +42,8 @@ public class Arrow extends Projectile {
 		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 				m_height * 2);
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
-		int w = (int) (m_width * 1.5);
-		int h = (int) (m_height / 1.5);
+		int w = m_width;
+		int h = m_height;
 		
 		Image image = getImage();
 	

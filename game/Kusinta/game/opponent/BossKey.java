@@ -5,9 +5,7 @@ import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Direction;
-import automaton.Entity.Action;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 
 public class BossKey extends Key{

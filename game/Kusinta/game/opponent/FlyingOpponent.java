@@ -4,17 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import game.Coord;
 import game.Game;
-import game.ImageLoader;
 import game.Model;
 import projectile.Projectile.proj;
 

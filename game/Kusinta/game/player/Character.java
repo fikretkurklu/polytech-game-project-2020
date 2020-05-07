@@ -3,7 +3,6 @@ package player;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,7 +10,6 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
@@ -85,7 +83,6 @@ public abstract class Character extends Entity {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		currentAction = Action.MOVE;
 		if (dir == Direction.F) {
 			dir = m_direction;
 		}
@@ -182,9 +179,7 @@ public abstract class Character extends Entity {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
-
 			m_time = m_ratio_y;
-
 			gravity(m_time);
 		}
 
@@ -374,10 +369,12 @@ public abstract class Character extends Entity {
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
-			if (jumping)
+			if (jumping) {
 				currentAction = Action.JUMP;
-			else
+			}else {
 				currentAction = Action.DEFAULT;
+			} 
+			resetAnim();
 
 			int m_x = m_coord.X();
 			int m_y = hitBox.y + hitBox.height / 2;
