@@ -3,11 +3,14 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import environnement.Element;
+import equipment.Equipment;
+import equipment.EquipmentManager.Stuff;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
@@ -118,14 +121,19 @@ public class Model {
 		int maxLife = player.getStat(CurrentStat.MaxLife);
 		int resistance = player.getStat(CurrentStat.Resistance);
 		int strength = player.getStat(CurrentStat.Strength);
+		int money = player.getMoney();
+		HashMap<Stuff, Equipment> equip = player.getEquipment();
 		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		m_player.setCurrentStat(attackspeed, maxLife, health, resistance, strength);
-	
+		m_player.setMoney(money);
+		m_player.setEquipment(equip);
+		
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 		
 		difficultyLevel ++;
+		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		m_opponents = new LinkedList<Opponent>();

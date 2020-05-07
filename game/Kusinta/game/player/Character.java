@@ -180,6 +180,10 @@ public abstract class Character extends Entity {
 	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment() {
 		return m_equipments;
 	}
+	
+	public void setEquipment(HashMap<EquipmentManager.Stuff, Equipment> equip) {
+		m_equipments = equip;
+	}
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
