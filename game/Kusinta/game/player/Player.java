@@ -1,6 +1,7 @@
 package player;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -27,8 +28,8 @@ public class Player extends Character {
 
 	protected BossKey m_bossKey;
 
-	public Player(Automaton automaton, Coord C, Direction dir, Model model, BufferedImage imgs, HashMap<Action, int[]> hmActions) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
+	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> hmActions) throws Exception {
+		super(automaton, C, dir, model, 100, 100, 1000, 0, 0, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -188,7 +189,7 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		BufferedImage img;
+		Image img;
 
 		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 

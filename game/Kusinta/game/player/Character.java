@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
@@ -38,7 +39,6 @@ public abstract class Character extends Entity {
 
 	protected LinkedList<Projectile> m_projectiles;
 
-
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
@@ -54,12 +54,11 @@ public abstract class Character extends Entity {
 	protected boolean shooting;
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength) throws IOException {
-		super(automaton);
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+		super(automaton, bImages, indiceAction);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
 		setCurrentStat(attackSpeed, life, resistance, strength);
-		
 
 		m_coord = new Coord(C);
 
@@ -110,7 +109,7 @@ public abstract class Character extends Entity {
 	public void setCoord(Coord coord) {
 		m_coord = coord;
 	}
-	
+
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -318,7 +317,7 @@ public abstract class Character extends Entity {
 	public void setMoney(int money) {
 		m_money += money;
 	}
-	
+
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
 	}
@@ -335,15 +334,15 @@ public abstract class Character extends Entity {
 	public void setKey(boolean key) {
 		m_key = key;
 	}
-	
+
 	public boolean getBossKey() {
 		return m_bossKey;
 	}
-	
+
 	public void setBossKey(boolean key) {
 		m_bossKey = key;
 	}
-	
+
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
@@ -374,9 +373,9 @@ public abstract class Character extends Entity {
 			shooting = false;
 			if (jumping)
 				currentAction = Action.JUMP;
-			else 
+			else
 				currentAction = Action.DEFAULT;
-			
+
 			int m_x = m_coord.X();
 			int m_y = hitBox.y + hitBox.height / 2;
 
@@ -424,7 +423,8 @@ public abstract class Character extends Entity {
 //			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
 			break;
 		case LURE:
-			m_projectiles.add(new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
+			m_projectiles.add(
+					new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
 			break;
 		default:
 			break;
