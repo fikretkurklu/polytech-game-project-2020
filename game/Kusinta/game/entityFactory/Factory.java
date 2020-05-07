@@ -43,6 +43,9 @@ public class Factory {
 	public Factory() throws Exception {
 		m_AL = new AutomatonLibrary();
 		m_IL = new ImageLibrary();
+		automatons = new HashMap<Factory.Type, Automaton>();
+		images = new HashMap<Factory.Type, Image[]>();
+		actions = new HashMap<Factory.Type, HashMap<Action,int[]>>();
 		fillAutomaton();
 		fillImages();
 		fillActions();

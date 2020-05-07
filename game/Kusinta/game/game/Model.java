@@ -42,7 +42,7 @@ public class Model {
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
-	public Underworld m_underworld;
+	//public Underworld m_underworld;
 	public Village m_village;
 
 	boolean set = false;
@@ -66,6 +66,7 @@ public class Model {
 		setRoom();
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
+		System.out.println(m_player == null);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -103,9 +104,9 @@ public class Model {
 			m_village = null;
 			break;
 		case UNDERWORLD:
-			PlayerSoul ps = (PlayerSoul) Game.m_factory.newEntity(Type.PlayerSoul, Direction.E,
-					m_underworld.getStartCoord(), this, 0, null);
-			m_underworld.setPlayer(ps);
+			//PlayerSoul ps = (PlayerSoul) Game.m_factory.newEntity(Type.PlayerSoul, Direction.E,
+				//	m_underworld.getStartCoord(), this, 0, null);
+			//m_underworld.setPlayer(ps);
 			break;
 		case VILLAGE:
 			m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -119,7 +120,7 @@ public class Model {
 
 	public void start() throws Exception {
 		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
-		m_underworld = new Underworld(Game.m_factory.m_AL, m_width, m_height, this);
+		//m_underworld = new Underworld(Game.m_factory.m_AL, m_width, m_height, this);
 
 	}
 
@@ -144,7 +145,7 @@ public class Model {
 				y_decalage = -(m_room.getHeight() - m_height);
 			}
 			break;
-		case UNDERWORLD:
+		/*case UNDERWORLD:
 			x_decalage = m_width / 2 - m_underworld.m_player.getCoord().X();
 			y_decalage = m_height / 2 - m_underworld.m_player.getCoord().Y();
 			if (m_x + x_decalage > 0) {
@@ -157,7 +158,7 @@ public class Model {
 			} else if (-y_decalage > m_underworld.getHeight() - m_height) {
 				y_decalage = -(m_underworld.getHeight() - m_height);
 			}
-			break;
+			break;*/
 		default:
 			x_decalage = 0;
 			y_decalage = 0;
@@ -226,7 +227,7 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		case UNDERWORLD:
-			m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
+			//m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			break;
 		case VILLAGE:
 			m_village.paint(g, width, height);
