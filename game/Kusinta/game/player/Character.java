@@ -23,6 +23,7 @@ import projectile.MagicProjectile;
 //import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
+import underworld.Lure;
 
 public abstract class Character extends Entity {
 
@@ -39,6 +40,7 @@ public abstract class Character extends Entity {
 
 	protected BufferedImage[] bI;
 	protected int m_image_index;
+
 
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
@@ -63,6 +65,7 @@ public abstract class Character extends Entity {
 
 		setStat(attackSpeed, maxLife, resistance, strength);
 		setCurrentStat(attackSpeed, life, resistance, strength);
+		
 
 		m_coord = new Coord(C);
 
@@ -356,7 +359,7 @@ public abstract class Character extends Entity {
 	public void setBossKey(boolean key) {
 		m_bossKey = key;
 	}
-
+	
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
@@ -364,7 +367,9 @@ public abstract class Character extends Entity {
 		} else if (keyCode == Controller.K_Z) {
 			return getM_model().zPressed;
 		} else if (keyCode == Controller.K_D) {
-			return getM_model().dPressed;
+			return m_model.dPressed;
+		} else if (keyCode == Controller.K_S) {
+			return getM_model().sPressed;
 		} else if (keyCode == Controller.K_SPACE) {
 			return getM_model().espPressed;
 		} else if (keyCode == Controller.K_A) {
@@ -429,9 +434,13 @@ public abstract class Character extends Entity {
 		case METEOR:
 //			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
 			break;
+		case LURE:
+			m_projectiles.add(new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
+			break;
 		default:
 			break;
 		}
 
 	}
+
 }

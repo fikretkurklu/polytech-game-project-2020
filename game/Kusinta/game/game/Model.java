@@ -5,7 +5,6 @@ import java.awt.Graphics;
 
 import java.io.IOException;
 import java.util.LinkedList;
-
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
@@ -13,7 +12,6 @@ import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
-
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -68,6 +66,7 @@ public class Model {
 	public Coin m_coin;
 	float diametre;
 
+
 	public Model(View view, int w, int h) throws Exception {
 		m_view = view;
 		m_width = w;
@@ -97,8 +96,8 @@ public class Model {
 		
 		opponentCreator();
 		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
-
-		switchEnv(mode.VILLAGE);
+		
+		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -106,12 +105,13 @@ public class Model {
 		m_bossKey = null;
 	}
 
+
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_AL, m_width, m_height);
 		this.m_player.setCoord(m_room.getStartCoord());
 	}
-	
+
 	public void switchEnv(mode m) {
 		qPressed = false;
 		zPressed = false;
@@ -128,7 +128,7 @@ public class Model {
 				break;
 			case UNDERWORLD:
 				m_underworld.setPlayer(
-						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, this));
+						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, m_underworld.playerImages, this));
 				break;
 			case VILLAGE:
 				m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -191,26 +191,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		elapsed = Math.min(10, elapsed);
-		if (actualMode == mode.ROOM) {
-			m_player.tick(elapsed);
-			if (m_key != null) {
-				m_key.tick(elapsed);
-			}
-			if (m_bossKey != null) {
-				m_bossKey.tick(elapsed);
-			}
-			for (Opponent op : m_opponents) {
-				op.tick(elapsed);
-			}
-			for (Coin coin : m_coins) {
-				coin.tick(elapsed);
-			}
-			m_room.tick(elapsed);
-		}
-		m_hud.tick(elapsed);
+//		elapsed = Math.min(10, elapsed);
+//		if (actualMode == mode.ROOM) {
+//			m_player.tick(elapsed);
+//			if (m_key != null) {
+//				m_key.tick(elapsed);
+//			}
+//			if (m_bossKey != null) {
+//				m_bossKey.tick(elapsed);
+//			}
+//			for (Opponent op : m_opponents) {
+//				op.tick(elapsed);
+//			}
+//			for (Coin coin : m_coins) {
+//				coin.tick(elapsed);
+//			}
+//			m_room.tick(elapsed);
+//		}
+//		m_hud.tick(elapsed);
 	
-		// m_underworld.tick(elapsed);
+		m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {

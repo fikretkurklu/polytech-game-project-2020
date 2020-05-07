@@ -27,7 +27,7 @@ public class HUDFont {
 		m_width = w;
 		m_height = h;
 		m_player = p;
-		bg = ImageLoader.loadImage(BG, w, h);
+		bg = ImageLoader.loadImage(BG);
 		hudCoin = new HUDCoin(w/5, h/2, w/2, h/2, p);
 		bgRect = new Rectangle(w/5, h /8, w/3*2, h/3);
 		updateBar();
