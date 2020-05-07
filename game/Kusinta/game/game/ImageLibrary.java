@@ -151,5 +151,8 @@ public class ImageLibrary {
 	public Image[] getImages(String avatar) {
 		return sprites.get(avatar);
 	}
-
+	
+	public HashMap<Action, int[]> getActions(String avatar) {
+		return actionsIndex.get(avatar);
+	}
 }
