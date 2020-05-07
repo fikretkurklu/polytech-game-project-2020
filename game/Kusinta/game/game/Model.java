@@ -109,7 +109,14 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_AL, m_width, m_height);
+
+		this.m_player.setM_model(this);
 		this.m_player.setCoord(m_room.getStartCoord());
+
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+		
+		opponentCreator();
 	}
 	
 	public void switchEnv(mode m) {
@@ -146,7 +153,6 @@ public class Model {
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height, this);
-		
 	}
 	
 	public void setRoom() throws IOException {
@@ -193,7 +199,6 @@ public class Model {
 	public void tick(long elapsed) {
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
-		/*
 		if (m_key != null) {
 			m_key.tick(elapsed);
 		}
@@ -209,7 +214,6 @@ public class Model {
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
-	*/
 	}
 
 	public void paint(Graphics g, int width, int height) {
