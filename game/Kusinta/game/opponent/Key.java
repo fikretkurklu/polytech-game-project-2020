@@ -56,7 +56,7 @@ public abstract class Key extends Entity {
 		int w = m_width / 4;
 		int h = m_height / 4;
 		
-		Image image = getImage();
+		image = getImage();
 
 		g.drawImage(image, m_coord.X(), m_coord.Y() - h, -w, h, null);
 	}
