@@ -57,15 +57,15 @@ public class Game {
 	public boolean gameOver;
 
 	Game() throws Exception {
+		m_factory = new Factory();
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         m_controller = new Controller(this);
         m_view = new View(m_controller);
-        m_model = new Model(m_view, d.width, d.height);
+        m_model = new Model(m_view, d.width, d.height, m_factory);
         // creating frame
         m_frame = m_view.createFrame(d);
         gameOver = false;
         setupFrame();
-        m_factory = new Factory();
         
         
     }

@@ -425,8 +425,8 @@ public abstract class Character extends Entity {
 			m_projectiles.add(proj);
 			break;
 		case LURE:
-			m_projectiles.add(
-					new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
+			Lure lure = (Lure) Game.m_factory.newEntity(Type.Lure, direction, c, m_model, 0, shooter);
+			m_projectiles.add(lure);
 			break;
 		default:
 			break;

@@ -9,6 +9,7 @@ import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
 import entityFactory.Factory;
+import entityFactory.Factory.Type;
 import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
@@ -37,7 +38,7 @@ public class Model {
 
 	public AutomaticRoomGenerator m_roomGenerator;
 	public int difficultyLevel;
-	
+
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
@@ -56,28 +57,28 @@ public class Model {
 	float diametre;
 	Factory m_factory;
 
-
 	public Model(View view, int w, int h, Factory factory) throws Exception {
 		m_view = view;
 		m_width = w;
 		m_height = h;
 		m_factory = factory;
 
-	
-		
 		setRoom();
 		start();
-		//m_player = (Player) m_factory.newEntity(F, dir, coord, model, angle, shooter) Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
+		// m_player = (Player) m_factory.newEntity(F, dir, coord, model, angle, shooter)
+		// Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(),
+		// Direction.E, this);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
+
 		opponentCreator();
-		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
-		
+		// m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E,
+		// this));
+
 		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 		diametre = 0;
@@ -85,7 +86,6 @@ public class Model {
 		m_key = null;
 		m_bossKey = null;
 	}
-
 
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
@@ -102,34 +102,32 @@ public class Model {
 		ePressed = false;
 		vPressed = false;
 		sPressed = false;
-		try {
-			switch (m) {
-			case ROOM:
-				m_village = null;
-				break;
-			case UNDERWORLD:
-				m_underworld.setPlayer(
-						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, m_underworld.playerImages, this));
-				break;
-			case VILLAGE:
-				m_village = new Village(m_width, m_height, this, (Player) m_player);
-				break;
-			case GAMEOVER:
-				break;
-			}
-			actualMode = m;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		switch (m) {
+		case ROOM:
+			m_village = null;
+			break;
+		case UNDERWORLD:
+			PlayerSoul ps = (PlayerSoul) Game.m_factory.newEntity(Type.PlayerSoul, Direction.E,
+					m_underworld.getStartCoord(), this, 0, null);
+			m_underworld.setPlayer(ps);
+			break;
+		case VILLAGE:
+			m_village = new Village(m_width, m_height, this, (Player) m_player);
+			break;
+		case GAMEOVER:
+			break;
 		}
+		actualMode = m;
+
 	}
 
 	public void start() throws Exception {
 		m_room = new Room(m_AL, m_width, m_height);
 		m_underworld = new Underworld(m_AL, m_width, m_height, this);
-		
+
 	}
-	
+
 	public void setRoom() throws IOException {
 		m_roomGenerator = new AutomaticRoomGenerator();
 		m_roomGenerator.AutomaticGeneration();
@@ -190,7 +188,7 @@ public class Model {
 //			m_room.tick(elapsed);
 //		}
 //		m_hud.tick(elapsed);
-	
+
 		m_underworld.tick(elapsed);
 	}
 
@@ -248,7 +246,7 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
-		m_mouseCoord.translate(-x_decalage,- y_decalage);
+		m_mouseCoord.translate(-x_decalage, -y_decalage);
 	}
 
 	public int getXDecalage() {
@@ -295,25 +293,26 @@ public class Model {
 		m_bossKey = key;
 	}
 
-
 	public void opponentCreator() throws Exception {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
-			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this));
+			Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
+			FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord, this, 0, null);
+			m_opponents.add(fo);
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this));
+			Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
+			WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E, coord, this, 0, null);
+			m_opponents.add(wo);
 		}
-		//int randomKey = (int) (Math.random()*m_opponents.size());
-		//int randomBossKey = (int) (Math.random()*m_opponents.size());
-		//while (randomBossKey == randomKey) {
-		//	randomBossKey = (int) (Math.random()*m_opponents.size());
-		//}
-		//m_opponents.get(randomKey).setKey(true);
-		//m_opponents.get(randomBossKey).setBossKey(true);
+		// int randomKey = (int) (Math.random()*m_opponents.size());
+		// int randomBossKey = (int) (Math.random()*m_opponents.size());
+		// while (randomBossKey == randomKey) {
+		// randomBossKey = (int) (Math.random()*m_opponents.size());
+		// }
+		// m_opponents.get(randomKey).setKey(true);
+		// m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
@@ -343,7 +342,7 @@ public class Model {
 			sPressed = pressed;
 			break;
 		}
-		
+
 	}
 
 }
