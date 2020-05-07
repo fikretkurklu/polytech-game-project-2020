@@ -6,14 +6,15 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity.Action;
+import game.Coord;
 import game.ImageLoader;
 import game.Model;
 import player.Player;
 
 public class NormalKey extends Key {
 
-	public NormalKey(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
-		super(automaton, x, y, model, bImages, indiceAction);
+	public NormalKey(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, c, model, bImages, indiceAction);
 	}
 	
 	@Override

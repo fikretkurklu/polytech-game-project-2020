@@ -28,8 +28,8 @@ public abstract class Element extends Entity{
 	protected boolean __isSolid;
 	
 	
-	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton, Image[] bImages, HashMap<Action, int[]> indiceAction) {
-		super(automaton, bImages, indiceAction);
+	public Element(boolean isSolid, boolean isVisible, Coord coord, Automaton automaton) {
+		super(automaton);
 		m_coord = coord;
 		__isVisible = isVisible;
 		__isSolid = isSolid;
