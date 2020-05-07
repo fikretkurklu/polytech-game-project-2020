@@ -3,11 +3,13 @@ package opponent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import game.Coord;
 import game.Model;
 import environnement.Element;
@@ -27,8 +29,8 @@ public abstract class Key extends Entity {
 	long m_time;
 	private int y_gravity;
 
-	public Key(Automaton automaton, int x, int y, Model model) throws Exception {
-		super(automaton);
+	public Key(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, bImages, indiceAction);
 
 		m_coord = new Coord();
 

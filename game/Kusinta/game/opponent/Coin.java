@@ -4,11 +4,13 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
@@ -19,10 +21,7 @@ public class Coin extends Entity {
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
 	private static final double G = 9.81;
-
-	protected int m_imageIndex;
 	protected long m_imageElapsed;
-	protected Image[] m_images;
 
 	public Model m_model;
 	int m_value;
@@ -33,14 +32,9 @@ public class Coin extends Entity {
 	long m_time;
 	private int y_gravity;
 
-	private String COIN_ICO_SPRITE = "resources/HUD/AnimatedCoin.png";
 
-	Image m_image;
-
-	int m_width, m_height;
-
-	public Coin(Automaton automaton, int x, int y, int value, Model model) {
-		super(automaton);
+	public Coin(Automaton automaton, int x, int y, int value, Model model, Image[] bImages, HashMap<Action, int[]> hmActions) {
+		super(automaton, bImages, hmActions);
 
 		m_coord = new Coord();
 
@@ -54,16 +48,6 @@ public class Coin extends Entity {
 
 		position = 10;
 		aller = -1;
-
-		try {
-			m_images = ImageLoader.loadBufferedSprite(COIN_ICO_SPRITE, 1, 6);
-			m_image = m_images[0];
-
-			m_width = m_image.getWidth(null);
-			m_height = m_image.getHeight(null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		m_model = model;
 	}
 
@@ -89,6 +73,7 @@ public class Coin extends Entity {
 	}
 
 	public void paint(Graphics g) {
+		Image img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 		int w = m_width / 4;
 		int h = m_height / 4;
 
@@ -101,15 +86,17 @@ public class Coin extends Entity {
 			position = (position + aller);
 		}
 		
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h + position, w, h, null);
+		g.drawImage(img, m_coord.X(), m_coord.Y() - h + position, w, h, null);
 	}
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-			m_imageIndex = (m_imageIndex + 1) % m_images.length;
-			m_image = m_images[m_imageIndex];
+			m_imageIndex ++;
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_imageIndex = 0;
+			}
 		}
 		m_automaton.step(this);
 
@@ -135,7 +122,6 @@ public class Coin extends Entity {
 	}
 
 	private void gravity(long t) {
-
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
 		m_coord.setY(newY);
 	}

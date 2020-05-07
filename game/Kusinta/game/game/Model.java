@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
+import entityFactory.Factory;
 import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
@@ -34,18 +35,6 @@ public class Model {
 
 	public mode actualMode;
 
-	private AutomatonLibrary m_AL;
-	public Automaton arrowAutomaton;
-	public Automaton magicProjAutomaton;
-	public Automaton playerSoulAutomaton;
-	public Automaton flyingOpponentAutomaton;
-	public Automaton walkingOpponentAutomaton;
-	public Automaton keyDropAutomaton;
-	public Automaton lureAutomaton;
-	public Automaton coinDropAutomaton;
-	public Automaton bossAutomaton;
-	public Automaton meteorAutomaton;
-
 	public AutomaticRoomGenerator m_roomGenerator;
 	public int difficultyLevel;
 	
@@ -65,28 +54,20 @@ public class Model {
 	public BossKey m_bossKey;
 	public Coin m_coin;
 	float diametre;
+	Factory m_factory;
 
 
-	public Model(View view, int w, int h) throws Exception {
+	public Model(View view, int w, int h, Factory factory) throws Exception {
 		m_view = view;
 		m_width = w;
 		m_height = h;
+		m_factory = factory;
 
-		m_AL = new AutomatonLibrary();
-		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
-		arrowAutomaton = m_AL.getAutomaton("Fleche");
-		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
-		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
-		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
-		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
-		lureAutomaton = m_AL.getAutomaton("Lure");
-		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
-		bossAutomaton = m_AL.getAutomaton("Boss");
-		meteorAutomaton = m_AL.getAutomaton("Meteor");
+	
 		
 		setRoom();
 		start();
-		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
+		//m_player = (Player) m_factory.newEntity(F, dir, coord, model, angle, shooter) Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);

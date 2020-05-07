@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.ImageLoader;
@@ -25,9 +27,10 @@ public class WalkingOpponent extends Opponent {
 
 	int hHitBox, wHitBox;
 
-	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
+	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, attackingSprite, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -129,8 +132,8 @@ public class WalkingOpponent extends Opponent {
 					getM_model().getOpponent().remove(this);
 					dropKey();
 					try {
-						getM_model().addCoin(
-								new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
+						getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5,
+								m_money, getM_model()));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -185,7 +188,8 @@ public class WalkingOpponent extends Opponent {
 			if (getM_model().getPlayer().gotpower()) {
 				int xPlayer = getM_model().getPlayer().getCoord().X();
 				int yPlayer = getM_model().getPlayer().getCoord().Y();
-				if (yPlayer >= hitBox.y && yPlayer - getM_model().getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+				if (yPlayer >= hitBox.y
+						&& yPlayer - getM_model().getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
 					if (dir == Direction.E) {
 						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
 							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);

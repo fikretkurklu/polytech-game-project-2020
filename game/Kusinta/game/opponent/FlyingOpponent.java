@@ -5,10 +5,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity.Action;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
@@ -18,9 +20,9 @@ public class FlyingOpponent extends Opponent {
 
 	int m_imageElapsed;
 
-	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
+	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5);
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
@@ -68,7 +70,7 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public void paint(Graphics g) {
-		BufferedImage img;
+		Image img;
 
 		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 		

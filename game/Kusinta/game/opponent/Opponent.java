@@ -1,8 +1,11 @@
 package opponent;
+import java.awt.Image;
 import java.io.IOException;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Direction;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -18,8 +21,8 @@ public abstract class Opponent extends Character {
 	int SPEED_WALK_TICK = 4;
 
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws IOException {
-		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
+			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
 		m_key = true;
 
