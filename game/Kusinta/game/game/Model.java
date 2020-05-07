@@ -191,25 +191,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		if (actualMode == mode.ROOM)
+		elapsed = Math.min(10, elapsed);
+		if (actualMode == mode.ROOM) {
 			m_player.tick(elapsed);
-		/*
-		if (m_key != null) {
-			m_key.tick(elapsed);
-		}
-		if (m_bossKey != null) {
-			m_bossKey.tick(elapsed);
-		}
-		for (Opponent op : m_opponents) {
-			op.tick(elapsed);
-		}
-		for (Coin coin : m_coins) {
-			coin.tick(elapsed);
+			if (m_key != null) {
+				m_key.tick(elapsed);
+			}
+			if (m_bossKey != null) {
+				m_bossKey.tick(elapsed);
+			}
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+			for (Coin coin : m_coins) {
+				coin.tick(elapsed);
+			}
+			m_room.tick(elapsed);
 		}
 		m_hud.tick(elapsed);
-		m_room.tick(elapsed);
+	
 		// m_underworld.tick(elapsed);
-	*/
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -318,12 +319,12 @@ public class Model {
 		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 		for (int i = 0; i < coordFO.length; i++) {
 			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coordFO[i], new Direction("E"), this));
+			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this));
 		}
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE);
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
+			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
+			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this));
 		}
 		//int randomKey = (int) (Math.random()*m_opponents.size());
 		//int randomBossKey = (int) (Math.random()*m_opponents.size());
