@@ -53,8 +53,10 @@ public abstract class Key extends Entity {
 	public void paint(Graphics g) {
 		int w = m_width / 4;
 		int h = m_height / 4;
+		
+		Image image = getImage();
 
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, -w, h, null);
+		g.drawImage(image, m_coord.X(), m_coord.Y() - h, -w, h, null);
 	}
 
 	/*public Image loadImage(String path) throws Exception {

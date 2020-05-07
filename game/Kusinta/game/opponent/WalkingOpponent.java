@@ -9,14 +9,11 @@ import java.util.HashMap;
 import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;
 import game.Game;
-import game.ImageLoader;
 import game.Model;
-import player.Character;
 
 public class WalkingOpponent extends Opponent {
 
@@ -54,8 +51,7 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 
-		Image image = null;
-		image = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		Image image = getImage();
 
 		double agr = 2;
 		int w = (int) (m_width * agr);

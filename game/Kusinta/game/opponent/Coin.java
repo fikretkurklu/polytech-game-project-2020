@@ -3,16 +3,13 @@ package opponent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.IOException;
 import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 import environnement.Element;
 
@@ -74,7 +71,8 @@ public class Coin extends Entity {
 	}
 
 	public void paint(Graphics g) {
-		Image img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		
+		Image img = getImage();
 		int w = m_width / 4;
 		int h = m_height / 4;
 

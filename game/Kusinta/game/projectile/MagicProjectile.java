@@ -9,7 +9,6 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import player.Character;
@@ -30,7 +29,7 @@ public class MagicProjectile extends Projectile {
 
 	public void paint(Graphics g) {
 
-		Image img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		Image img = getImage();
 
 		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 				m_height * 2);

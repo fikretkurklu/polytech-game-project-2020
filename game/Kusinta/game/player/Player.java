@@ -191,7 +191,7 @@ public class Player extends Character {
 
 		Image img;
 
-		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		img = getImage();
 
 		int w = m_width;
 		int h = m_height;

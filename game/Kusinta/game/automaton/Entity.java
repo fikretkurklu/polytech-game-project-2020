@@ -287,4 +287,14 @@ public abstract class Entity {
 		m_imageIndex = 0;
 		m_imageElapsed = m_imageTick;
 	}
+	
+	public Image getImage() {
+		int[] indicesAction = indiceAction.get(currentAction);
+		if(indicesAction == null) {
+			currentAction = currentAction.DEFAULT;
+			indicesAction = indiceAction.get(currentAction);
+			m_imageIndex = 0;
+		}
+		return bImages[indicesAction[m_imageIndex]];
+	}
 }

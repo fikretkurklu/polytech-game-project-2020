@@ -10,7 +10,6 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import opponent.Opponent;
@@ -45,12 +44,15 @@ public class Arrow extends Projectile {
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 		int w = (int) (m_width * 1.5);
 		int h = (int) (m_height / 1.5);
+		
+		Image image = getImage();
+	
 		if (m_direction == Direction.E) {
 			bg.rotate(-m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(bImages[m_imageIndex], -10, h / 4, w, h, null);
+			bg.drawImage(image, -10, h / 4, w, h, null);
 		} else {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(bImages[m_imageIndex], w, h / 4, -w, h, null);
+			bg.drawImage(image, w, h / 4, -w, h, null);
 		}
 		bg.dispose();
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {

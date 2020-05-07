@@ -72,7 +72,7 @@ public class FlyingOpponent extends Opponent {
 	public void paint(Graphics g) {
 		Image img;
 
-		img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
+		img = getImage();
 		
 		if (m_direction == Direction.E) {
 			g.drawImage(img, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);

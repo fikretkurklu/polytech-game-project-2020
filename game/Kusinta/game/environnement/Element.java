@@ -2,7 +2,6 @@ package environnement;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Entity;
