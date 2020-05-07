@@ -98,48 +98,52 @@ public class Factory {
 		automatons.put(Type.Fragment, m_AL.getAutomaton("Fragment"));
 	}
 
-	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, float angle, player.Character shooter)
-			throws Exception {
-		switch (type) {
-		case Player:
-			return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
-					actions.get(Type.Player));
-		case PlayerSoul:
-			return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, null, model);
-		case NormalKey:
-			return new NormalKey(automatons.get(Type.NormalKey), coord.X(), coord.Y(), model,
-					images.get(Type.NormalKey), actions.get(Type.NormalKey));
-		case BossKey:
-			return new BossKey(automatons.get(Type.BossKey), coord.X(), coord.Y(), model);
-		case WalkingOpponent:
-			return new WalkingOpponent(automatons.get(Type.WalkingOpponent), coord, dir, model,
-					images.get(Type.WalkingOpponent), actions.get(Type.WalkingOpponent));
-		case FlyingOpponent:
-			return new FlyingOpponent(automatons.get(Type.FlyingOpponent), coord, dir, model,
-					images.get(Type.FlyingOpponent), actions.get(Type.FlyingOpponent));
-		case Arrow:
-			return new Arrow(automatons.get(Type.Arrow), coord, angle, shooter, dir, images.get(Type.Arrow),
-					actions.get(Type.Arrow));
-		case MagicProjectile:
-			return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
-					images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
-		case Ghost:
-			return new Ghost(dir, coord, automatons.get(Type.Ghost), model, null);
-		case Coin:
-			return new Coin(automatons.get(Type.Coin), coord.X(), coord.Y(), 10, model, images.get(Type.Coin),
-					actions.get(Type.Coin));
-		case Lure:
-			return new Lure(automatons.get(Type.Lure), coord, shooter, dir, null, model);
-		case Boss:
-			System.out.println("temporaire");
-			return null;
-		case Meteor:
-			System.out.println("temporaire");
-			return null;
-		case Fragment:
-			return new Fragment(automatons.get(Type.Fragment), coord, model, null);
+	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle, player.Character shooter) {
+		try {
+			switch (type) {
+			case Player:
+				return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
+						actions.get(Type.Player));
+			case PlayerSoul:
+				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, null, model);
+			case NormalKey:
+				return new NormalKey(automatons.get(Type.NormalKey), coord.X(), coord.Y(), model,
+						images.get(Type.NormalKey), actions.get(Type.NormalKey));
+			case BossKey:
+				return new BossKey(automatons.get(Type.BossKey), coord.X(), coord.Y(), model);
+			case WalkingOpponent:
+				return new WalkingOpponent(automatons.get(Type.WalkingOpponent), coord, dir, model,
+						images.get(Type.WalkingOpponent), actions.get(Type.WalkingOpponent));
+			case FlyingOpponent:
+				return new FlyingOpponent(automatons.get(Type.FlyingOpponent), coord, dir, model,
+						images.get(Type.FlyingOpponent), actions.get(Type.FlyingOpponent));
+			case Arrow:
+				return new Arrow(automatons.get(Type.Arrow), coord, angle, shooter, dir, images.get(Type.Arrow),
+						actions.get(Type.Arrow));
+			case MagicProjectile:
+				return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
+						images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
+			case Ghost:
+				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, null);
+			case Coin:
+				return new Coin(automatons.get(Type.Coin), coord.X(), coord.Y(), 10, model, images.get(Type.Coin),
+						actions.get(Type.Coin));
+			case Lure:
+				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, null, model);
+			case Boss:
+				System.out.println("temporaire");
+				return null;
+			case Meteor:
+				System.out.println("temporaire");
+				return null;
+			case Fragment:
+				return new Fragment(automatons.get(Type.Fragment), coord, model, null);
+			}
+		} catch (Exception e) {
+			System.out.println("Error while creating : " + type.toString());
 		}
 		return null;
+		
 	}
 
 	public void changeAutomaton(Type type, String string) throws Exception {

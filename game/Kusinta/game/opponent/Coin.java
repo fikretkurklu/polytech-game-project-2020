@@ -33,15 +33,12 @@ public class Coin extends Entity {
 	private int y_gravity;
 
 
-	public Coin(Automaton automaton, int x, int y, int value, Model model, Image[] bImages, HashMap<Action, int[]> hmActions) {
+	public Coin(Automaton automaton, Coord c,  Model model, Image[] bImages, HashMap<Action, int[]> hmActions) {
 		super(automaton, bImages, hmActions);
 
-		m_coord = new Coord();
+		m_coord = new Coord(c);
 
-		m_coord.setX(x);
-		m_coord.setY(y);
-
-		m_value = value;
+		m_value = 0;
 
 		m_time = 0;
 		falling = false;
@@ -49,6 +46,10 @@ public class Coin extends Entity {
 		position = 10;
 		aller = -1;
 		m_model = model;
+	}
+	 
+	public void setMoney(int money) {
+		m_value = money;
 	}
 
 	@Override

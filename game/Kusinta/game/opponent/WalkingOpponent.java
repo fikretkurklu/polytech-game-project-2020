@@ -10,8 +10,10 @@ import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity.Action;
+import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;
+import game.Game;
 import game.ImageLoader;
 import game.Model;
 import player.Character;
@@ -39,7 +41,6 @@ public class WalkingOpponent extends Opponent {
 		shooting = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
-
 
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
@@ -90,20 +91,16 @@ public class WalkingOpponent extends Opponent {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-			m_imageIndex ++;
+			m_imageIndex++;
 			if (!gotpower()) {
 				if (m_imageIndex == indiceAction.get(currentAction).length) {
 					getM_model().getOpponent().remove(this);
 					dropKey();
-					try {
-						getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5,
-								m_money, getM_model()));
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, getM_model(), 0, null);
+					c.setMoney(m_money);
+					c.getM_model().addCoin(c);
 				}
-			
+
 			}
 			if (m_imageIndex >= indiceAction.get(currentAction).length) {
 				m_imageIndex = 0;
