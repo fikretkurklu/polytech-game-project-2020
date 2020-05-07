@@ -14,11 +14,6 @@ public class NormalKey extends Key {
 
 	public NormalKey(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(automaton, x, y, model, bImages, indiceAction);
-
-		m_image = ImageLoader.loadImage("resources/Room/dropable/Golden_Key.png", SIZE);
-
-		m_width = m_image.getWidth(null);
-		m_height = m_image.getHeight(null);
 	}
 	
 	@Override

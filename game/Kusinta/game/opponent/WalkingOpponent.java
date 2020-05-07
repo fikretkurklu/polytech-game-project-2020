@@ -20,17 +20,13 @@ public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	int AttackStrength;
-	Image[] deathSprite;
-	Image[] walkingSprite;
-	Image[] attackingSprite;
-	int m_image_index, m_imageElapsed;
 
 	int hHitBox, wHitBox;
 
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, attackingSprite, indiceAction);
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -44,35 +40,12 @@ public class WalkingOpponent extends Opponent {
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
-		deathSprite = new Image[6];
-		for (int i = 0; i < 6; i++) {
-			deathSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Death" + (i + 1) + ".png", SIZE);
-		}
-
-		walkingSprite = new Image[6];
-		for (int i = 0; i < 6; i++) {
-			walkingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Walk" + (i + 1) + ".png", SIZE);
-		}
-
-		attackingSprite = new Image[4];
-		for (int i = 0; i < 4; i++) {
-			attackingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png", SIZE);
-		}
-
-		float ratio = (float) ((float) walkingSprite[0].getWidth(null)) / (float) (walkingSprite[0].getHeight(null));
-
-		m_height = SIZE;
-		m_width = (int) (m_height * ratio);
 
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox);
-
-		m_image_index = 0;
-
-		m_money = 100;
-
+		setMoney(100);
 		m_moveElapsed = 0;
 
 	}
@@ -81,16 +54,7 @@ public class WalkingOpponent extends Opponent {
 	public void paint(Graphics gp) {
 
 		Image image = null;
-		if (!gotpower()) {
-			image = deathSprite[m_image_index];
-			basicHitBox();
-		} else if (shooting) {
-			image = attackingSprite[m_image_index];
-			attackHitBox();
-		} else {
-			image = walkingSprite[m_image_index];
-			basicHitBox();
-		}
+		image = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 
 		double agr = 2;
 		int w = (int) (m_width * agr);
@@ -126,9 +90,9 @@ public class WalkingOpponent extends Opponent {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-
+			m_imageIndex ++;
 			if (!gotpower()) {
-				if (m_image_index == 5) {
+				if (m_imageIndex == indiceAction.get(currentAction).length) {
 					getM_model().getOpponent().remove(this);
 					dropKey();
 					try {
@@ -139,14 +103,11 @@ public class WalkingOpponent extends Opponent {
 						e.printStackTrace();
 					}
 				}
-				m_image_index = (m_image_index + 1) % 6;
+			
 			}
-			if (shooting) {
-				m_image_index = (m_image_index + 1) % 4;
-			} else {
-				m_image_index = (m_image_index + 1) % 6;
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_imageIndex = 0;
 			}
-
 		}
 	}
 
@@ -170,8 +131,11 @@ public class WalkingOpponent extends Opponent {
 				}
 				break;
 			}
-			if (shooting)
+			if (shooting) {
 				shooting = !shooting;
+				currentAction = Action.MOVE;
+				resetAnim();
+			}
 		} else {
 			if (dir == Direction.H) {
 				collidingWith = getM_model().getPlayer();
@@ -230,17 +194,16 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean wizz(Direction dir) {
 		if (!shooting) {
-			m_image_index = 0;
+			resetAnim();
 		}
+		currentAction = Action.SHOT;
 		shooting = true;
 		return true;
 	}
 
 	@Override
 	public boolean explode() {
-		if (gotpower()) {
-			m_image_index = 0;
-		}
+		currentAction = Action.DEATH;
 		setLife(0);
 		return true;
 	}
