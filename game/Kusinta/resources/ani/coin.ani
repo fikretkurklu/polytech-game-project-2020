@@ -1,0 +1,2 @@
+sprite_sheet = "resources/Room/dropable/AnimatedCoin.png"
+DEFAULT = 0;1;2;3;4;5
