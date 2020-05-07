@@ -13,7 +13,8 @@ import automaton.Entity.Action;;
 public class ImageLibrary {
 
 	public static String PATH = "resources/ani/";
-	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player"}; // Nom des fichiers
+	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player", "playerSoul", "ghost", "lure", "boss",
+			"bossKey", "coin", "normalKey" }; // Nom des fichiers
 
 	HashMap<String, Image[]> sprites;
 	HashMap<String, HashMap<Action, int[]>> actionsIndex;
@@ -106,7 +107,7 @@ public class ImageLibrary {
 		actionsIndex.put(avatar, hmActions);
 		f.close();
 	}
-	
+
 	public static Image[] loadImageSprite(String filename, int nrows, int ncols) throws IOException {
 		File imageFile = new File(filename);
 		if (imageFile.exists()) {
@@ -147,11 +148,11 @@ public class ImageLibrary {
 		}
 		return null;
 	}
-	
+
 	public Image[] getImages(String avatar) {
 		return sprites.get(avatar);
 	}
-	
+
 	public HashMap<Action, int[]> getActions(String avatar) {
 		return actionsIndex.get(avatar);
 	}

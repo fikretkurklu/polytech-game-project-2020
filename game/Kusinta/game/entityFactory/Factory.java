@@ -1,7 +1,6 @@
 package entityFactory;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import automaton.Automaton;
@@ -35,8 +34,8 @@ public class Factory {
 		MagicProjectile, Meteor, Ghost
 	};
 
-	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player", "playerSoul", "ghost", "Lure", "Boss" }; // Nom
-	// des fichiers
+	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player", "playerSoul", "ghost", "lure", "boss",
+			"bossKey", "coin", "normalKey" }; // Nom des fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
@@ -52,14 +51,14 @@ public class Factory {
 	private void fillActions() {
 		actions.put(Type.Player, m_IL.getActions(Avatars[4]));
 		actions.put(Type.PlayerSoul, m_IL.getActions(Avatars[5]));
-//		actions.put(Type.NormalKey, m_IL.getActions("KeyDrop"));
-//		actions.put(Type.BossKey, m_IL.getActions("keyDrop"));
+		actions.put(Type.NormalKey, m_IL.getActions(Avatars[11]));
+		actions.put(Type.BossKey, m_IL.getActions(Avatars[9]));
 		actions.put(Type.WalkingOpponent, m_IL.getActions(Avatars[1]));
 		actions.put(Type.FlyingOpponent, m_IL.getActions(Avatars[2]));
 		actions.put(Type.Arrow, m_IL.getActions(Avatars[0]));
 		actions.put(Type.MagicProjectile, m_IL.getActions(Avatars[3]));
 		actions.put(Type.Ghost, m_IL.getActions(Avatars[6]));
-//		actions.put(Type.Coin, m_IL.getAction("CoinDrop"));
+		actions.put(Type.Coin, m_IL.getActions(Avatars[10]));
 		actions.put(Type.Lure, m_IL.getActions(Avatars[7]));
 		actions.put(Type.Boss, m_IL.getActions(Avatars[8]));
 //		actions.put(Type.Meteor, m_IL.getActions("Meteor"));
@@ -69,14 +68,13 @@ public class Factory {
 	private void fillImages() {
 		images.put(Type.Player, m_IL.getImages(Avatars[4]));
 		images.put(Type.PlayerSoul, m_IL.getImages(Avatars[5]));
-//		images.put(Type.NormalKey, m_IL.getImages("KeyDrop"));
-//		images.put(Type.BossKey, m_IL.getImages("keyDrop"));
+		images.put(Type.NormalKey, m_IL.getImages(Avatars[11]));
 		images.put(Type.WalkingOpponent, m_IL.getImages(Avatars[1]));
 		images.put(Type.FlyingOpponent, m_IL.getImages(Avatars[2]));
 		images.put(Type.Arrow, m_IL.getImages(Avatars[0]));
 		images.put(Type.MagicProjectile, m_IL.getImages(Avatars[3]));
 		images.put(Type.Ghost, m_IL.getImages(Avatars[6]));
-//		images.put(Type.Coin, m_IL.getImages("CoinDrop"));
+		images.put(Type.Coin, m_IL.getImages(Avatars[10]));
 		images.put(Type.Lure, m_IL.getImages(Avatars[7]));
 		images.put(Type.Boss, m_IL.getImages(Avatars[8]));
 //		images.put(Type.Meteor, m_IL.getImages("Meteor"));
@@ -86,14 +84,14 @@ public class Factory {
 	private void fillAutomaton() throws Exception {
 		automatons.put(Type.Player, m_AL.getAutomaton(Avatars[4]));
 		automatons.put(Type.PlayerSoul, m_AL.getAutomaton(Avatars[5]));
-		automatons.put(Type.NormalKey, m_AL.getAutomaton("KeyDrop"));
-		automatons.put(Type.BossKey, m_AL.getAutomaton("keyDrop"));
+		automatons.put(Type.NormalKey, m_AL.getAutomaton(Avatars[11]));
+		automatons.put(Type.BossKey, m_AL.getAutomaton(Avatars[9]));
 		automatons.put(Type.WalkingOpponent, m_AL.getAutomaton(Avatars[1]));
 		automatons.put(Type.FlyingOpponent, m_AL.getAutomaton(Avatars[2]));
 		automatons.put(Type.Arrow, m_AL.getAutomaton(Avatars[0]));
 		automatons.put(Type.MagicProjectile, m_AL.getAutomaton(Avatars[3]));
 		automatons.put(Type.Ghost, m_AL.getAutomaton(Avatars[6]));
-		automatons.put(Type.Coin, m_AL.getAutomaton("CoinDrop"));
+		automatons.put(Type.Coin, m_AL.getAutomaton(Avatars[10]));
 		automatons.put(Type.Lure, m_AL.getAutomaton(Avatars[7]));
 		automatons.put(Type.Boss, m_AL.getAutomaton(Avatars[8]));
 		automatons.put(Type.Meteor, m_AL.getAutomaton("Meteor"));
@@ -104,7 +102,8 @@ public class Factory {
 			throws Exception {
 		switch (type) {
 		case Player:
-			return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player), null);
+			return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
+					actions.get(Type.Player));
 		case PlayerSoul:
 			return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, null, model);
 		case NormalKey:
@@ -116,9 +115,11 @@ public class Factory {
 		case FlyingOpponent:
 			return new FlyingOpponent(automatons.get(Type.FlyingOpponent), coord, dir, model);
 		case Arrow:
-			return new Arrow(automatons.get(Type.Arrow), coord, angle, shooter, dir);
+			return new Arrow(automatons.get(Type.Arrow), coord, angle, shooter, dir, images.get(Type.Arrow),
+					actions.get(Type.Arrow));
 		case MagicProjectile:
-			return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir);
+			return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
+					images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
 		case Ghost:
 			return new Ghost(dir, coord, automatons.get(Type.Ghost), model, null);
 		case Coin:
