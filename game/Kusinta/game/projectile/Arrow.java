@@ -3,11 +3,14 @@ package projectile;
 import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import opponent.Opponent;
@@ -18,9 +21,9 @@ public class Arrow extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction)
+	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction, Image[] bImages, HashMap<Action, int[]> indiceAction)
 			throws Exception {
-		super(arrowAutomaton, c, angle, shooter, direction);
+		super(arrowAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
 		m_height = bImages[0].getHeight(null);
 		m_width = bImages[0].getWidth(null);

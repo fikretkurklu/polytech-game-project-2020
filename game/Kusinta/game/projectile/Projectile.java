@@ -1,10 +1,13 @@
 package projectile;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import game.Coord;
 import player.Character;
 
@@ -36,8 +39,8 @@ public abstract class Projectile extends Entity {
 
 
 	public Projectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
-			Direction direction) {
-		super(projectileAutomaton);
+			Direction direction, Image[] bImages, HashMap<Action, int[]> indiceAction) {
+		super(projectileAutomaton, bImages, indiceAction);
 
 		m_coord = new Coord(c);
 		m_angle = angle;

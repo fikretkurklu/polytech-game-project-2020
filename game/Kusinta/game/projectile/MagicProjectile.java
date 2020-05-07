@@ -4,10 +4,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import player.Character;
@@ -16,27 +18,11 @@ public class MagicProjectile extends Projectile {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	int moving;
-	int DIMENSION;
-
-	int m_height;
-	int m_width;
-
-	public MagicProjectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter,
-			Direction direction) throws Exception {
-		super(projectileAutomaton, c, angle, shooter, direction);
-
-		DIMENSION = SIZE / (images[0].getHeight(null));
-
-		float ratio = (float) (images[0].getWidth(null) * 4) / (float) (5 * images[0].getHeight(null));
-
-		m_height = DIMENSION * images[0].getHeight(null);
-		m_width = (int) (ratio * images[0].getWidth(null));
+	public MagicProjectile(Automaton projectileAutomaton, Coord c, double angle, Character shooter, Direction direction,
+			Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(projectileAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
-
-		m_imageElapsed = 0;
-		m_image_index = 0;
 
 		setSpeed(4);
 
@@ -44,27 +30,20 @@ public class MagicProjectile extends Projectile {
 
 	public void paint(Graphics g) {
 
-		Image img = images[m_image_index];
+		Image img = bImages[indiceAction.get(currentAction)[m_imageIndex]];
 
 		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 				m_height * 2);
 
-		if (images != null) {
-			int w = m_width;
-			int h = m_height;
-			if (m_direction == Direction.E) {
-				bg.rotate(-m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(img, 0, 0, w, h, null);
-			} else {
-				bg.rotate(m_angle, m_width / 2, m_height / 2);
-				bg.drawImage(img, m_width, 0, -w, h, null);
-			}
+		int w = m_width;
+		int h = m_height;
+		if (m_direction == Direction.E) {
+			bg.rotate(-m_angle, m_width / 2, m_height / 2);
+			bg.drawImage(img, 0, 0, w, h, null);
+		} else {
+			bg.rotate(m_angle, m_width / 2, m_height / 2);
+			bg.drawImage(img, m_width, 0, -w, h, null);
 		}
-		
-		//paint HitBox
-//		g.setColor(Color.blue);
-//		g.fillRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
-		
 		bg.dispose();
 
 	}
@@ -74,26 +53,27 @@ public class MagicProjectile extends Projectile {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-
-			if (m_image_index == 12) {
+			m_imageIndex ++;
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
 				m_shooter.removeProjectile(this);
 			}
-
 			if (m_State == State.OK_STATE) {
-				m_image_index = 0;
-			} else {
-				m_image_index++;
+				m_imageIndex = 0;
+			}
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				m_imageIndex = 0;
 			}
 		}
 
 	}
-	
+
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);
 		if (b) {
 			if (cat == Category.O) {
 				m_State = State.HIT_STATE;
+				currentAction = Action.DEATH;
 				return true;
 			}
 			if (cat == Category.P) {
@@ -101,8 +81,10 @@ public class MagicProjectile extends Projectile {
 				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
 				collidingWith.loseLife(m_strength - tmpPlayerResistance);
+				currentAction = Action.DEATH;
 				return true;
 			}
+			currentAction = Action.DEFAULT;
 			m_State = State.OK_STATE;
 		}
 		return b;
