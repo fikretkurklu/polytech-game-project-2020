@@ -1,3 +1,3 @@
-sprite_sheet = "resources/Room/dropable/AnimatedCoin.png"
+sprite_sheet = resources/Room/dropable/AnimatedCoin.png
 1;1
 DEFAULT = 0;1;2;3;4;5

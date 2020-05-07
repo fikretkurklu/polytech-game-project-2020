@@ -42,8 +42,6 @@ public class Player extends Character {
 		m_invincibleElapsed = 0;
 
 		X_MOVE = 2;
-
-
 		m_bossKey = null;
 	}
 

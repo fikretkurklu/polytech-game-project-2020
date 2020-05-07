@@ -26,7 +26,7 @@ public class ImageLibrary {
 				AnimationParser(file, avatar);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -122,6 +122,8 @@ public class ImageLibrary {
 				}
 			}
 			return images;
+		} else {
+			System.out.println(filename);
 		}
 		return null;
 	}
@@ -142,7 +144,10 @@ public class ImageLibrary {
 					images[(i * ncols) + j] = images[(i * ncols) + j].getScaledInstance(finalWidth, finalHeight, 0);
 				}
 			}
+			
 			return images;
+		} else {
+			
 		}
 		return null;
 	}
