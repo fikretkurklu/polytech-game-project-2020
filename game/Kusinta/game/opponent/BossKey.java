@@ -6,13 +6,14 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity.Action;
+import game.Coord;
 import game.ImageLoader;
 import game.Model;
 
 public class BossKey extends Key{
 
-	public BossKey(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
-		super(automaton, x, y, model, bImages, indiceAction);
+	public BossKey(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, c, model, bImages, indiceAction);
 
 	}
 	

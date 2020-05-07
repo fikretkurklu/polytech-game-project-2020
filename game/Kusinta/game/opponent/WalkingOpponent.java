@@ -100,7 +100,6 @@ public class WalkingOpponent extends Opponent {
 					c.setMoney(m_money);
 					c.getM_model().addCoin(c);
 				}
-
 			}
 			if (m_imageIndex >= indiceAction.get(currentAction).length) {
 				m_imageIndex = 0;
