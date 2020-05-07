@@ -27,14 +27,10 @@ public abstract class Key extends Entity {
 	long m_time;
 	private int y_gravity;
 
-	public Key(Automaton automaton, int x, int y, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+	public Key(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(automaton, bImages, indiceAction);
 
-		m_coord = new Coord();
-
-		m_coord.setX(x);
-		m_coord.setY(y);
-
+		m_coord = new Coord(c);
 		m_model = model;
 
 		m_time = 0;

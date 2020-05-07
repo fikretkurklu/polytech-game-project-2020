@@ -140,6 +140,7 @@ public class Factory {
 			return new Fragment(automatons.get(Type.Fragment), coord, model, null);
 		}
 		return null;
+
 	}
 
 	public void changeAutomaton(Type type, String string) throws Exception {

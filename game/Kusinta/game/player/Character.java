@@ -12,6 +12,7 @@ import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
 import automaton.Entity.Action;
+import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
@@ -416,10 +417,12 @@ public abstract class Character extends Entity {
 			throws Exception {
 		switch (type) {
 		case ARROW:
-			m_projectiles.add(new Arrow(getM_model().arrowAutomaton, c, angle, shooter, direction));
+			Arrow arrow = (Arrow) Game.m_factory.newEntity(Type.Arrow, direction, c, null, angle, shooter);
+			m_projectiles.add(arrow);
 			break;
 		case MAGIC_PROJECTILE:
-			m_projectiles.add(new MagicProjectile(getM_model().magicProjAutomaton, c, angle, shooter, direction));
+			MagicProjectile proj = (MagicProjectile) Game.m_factory.newEntity(Type.MagicProjectile, direction, c, null, angle, shooter);
+			m_projectiles.add(proj);
 			break;
 		case LURE:
 			m_projectiles.add(
