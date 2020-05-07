@@ -1,4 +1,4 @@
-package game;
+package entityFactory;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -8,13 +8,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
-import automaton.Entity.Action;;
+import automaton.Entity.Action;
 
 public class ImageLibrary {
 
 	public static String PATH = "resources/ani/";
-	String Avatars[] = { "arrow", "demon", "jin", "magicProjectile", "player", "playerSoul", "ghost", "lure", "boss",
-			"bossKey", "coin", "normalKey" }; // Nom des fichiers
 
 	HashMap<String, Image[]> sprites;
 	HashMap<String, HashMap<Action, int[]>> actionsIndex;
@@ -23,7 +21,7 @@ public class ImageLibrary {
 		sprites = new HashMap<String, Image[]>();
 		actionsIndex = new HashMap<String, HashMap<Action, int[]>>();
 		try {
-			for (String avatar : Avatars) {
+			for (String avatar : Factory.Avatars) {
 				File file = new File(PATH + avatar + ".ani");
 				AnimationParser(file, avatar);
 			}

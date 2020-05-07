@@ -1,4 +1,4 @@
-Player_donjon(Init){	
+Player_Donjon(Init){	
   * (Init)      
   | ! GotPower() ? Explode () : ()     
   | Key(SPACE) ? Egg() : (Doing)
@@ -26,7 +26,7 @@ Block (Inactif) {
   | True ? : (Inactif)
 }
 
-Fleche (Init) {
+Arrow (Init) {
   *(Init)
   | Cell(H,A) ? Explode() : ()
   | Cell(H,O) ? Explode () : ()
@@ -41,7 +41,7 @@ Meteor (Init) {
   | True ? Move : (Init)
 }
 
-MagicProj (Init) {
+MagicProjectile (Init) {
   *(Init)
   | Cell(H,P) ? Explode() : ()
   | Cell(H,O) ? Explode () : ()
@@ -53,7 +53,7 @@ Decor (Inactif) {
   | True ? : (Inactif)
 }
 
-FlyingOpponents (East) {
+Jin (East) {
 *(East)
   | Cell(E, O) ? Turn(W) : (West)
   | ! GotPower() ? Explode() : ()        
@@ -71,7 +71,7 @@ FlyingOpponents (East) {
 }
 
 
-WalkingOpponents (East) {
+Demon (East) {
 *(East)
   | Cell(E, O) ? Turn(W) : (West)
   | Cell(H, P) ? Power : (East)
@@ -88,13 +88,19 @@ WalkingOpponents (East) {
   | True ? Move(W) : (West)
 }
 
-KeyDrop (Init) {
+KeyBoss (Init) {
 *(Init)
   | Cell(H, A) ? Wizz : ()
   | True ? : (Init)
 }
 
-CoinDrop (Init) {
+KeyNormal (Init) {
+*(Init)
+  | Cell(H, A) ? Wizz : ()
+  | True ? : (Init)
+}
+
+Coin(Init) {
 *(Init)
   | Cell(H, A) ? Wizz : ()
   | True ? : (Init)
