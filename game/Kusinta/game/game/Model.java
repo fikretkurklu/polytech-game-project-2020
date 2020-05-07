@@ -98,7 +98,7 @@ public class Model {
 		opponentCreator();
 		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
 		
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -205,7 +205,8 @@ public class Model {
 	public void tick(long elapsed) {
 		if (actualMode == mode.ROOM)
 			m_player.tick(elapsed);
-		if (m_key != null) {
+		/*
+		if (m_key != null) {		
 			m_key.tick(elapsed);
 		}
 		if (m_bossKey != null) {
@@ -231,6 +232,7 @@ public class Model {
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
+		 */
 	}
 
 	public void paint(Graphics g, int width, int height) {
