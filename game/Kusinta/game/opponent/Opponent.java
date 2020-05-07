@@ -6,8 +6,10 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity.Action;
+import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;
+import game.Game;
 import game.Model;
 import player.Character;
 import projectile.Arrow;
@@ -52,9 +54,11 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					getM_model().setKey(new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
+					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, getM_model(), 0	, null);
+					getM_model().setKey(k);
 				} else if (m_bossKey == true) {
-					getM_model().setBossKey(new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
+					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, getM_model(), 0, null)
+					getM_model().setBossKey(k);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
