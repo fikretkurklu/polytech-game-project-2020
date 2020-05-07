@@ -2,8 +2,9 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
+import java.awt.Rectangle;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -21,6 +22,7 @@ import underworld.PlayerSoul;
 import underworld.Underworld;
 import village.Village;
 import player.Character;
+import player.Character.CurrentStat;
 
 public class Model {
 
@@ -109,10 +111,15 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_AL, m_width, m_height);
-
-		this.m_player.setM_model(this);
-		this.m_player.setCoord(m_room.getStartCoord());
-
+		Player player = (Player) m_player;
+		int attackspeed = player.getStat(CurrentStat.Attackspeed);
+		int health = player.getStat(CurrentStat.Life);
+		int maxLife = player.getStat(CurrentStat.MaxLife);
+		int resistance = player.getStat(CurrentStat.Resistance);
+		int strength = player.getStat(CurrentStat.Strength);
+		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
+		m_player.setCurrentStat(attackspeed, maxLife, health, resistance, strength);
+	
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 		
@@ -205,12 +212,20 @@ public class Model {
 		if (m_bossKey != null) {
 			m_bossKey.tick(elapsed);
 		}
+		
+		for(Iterator<Opponent> iter = m_opponents.iterator(); iter.hasNext(); ) {
+		    Opponent opponent = iter.next();
+		    opponent.tick(elapsed);
+		}
+		
 		for (Opponent op : m_opponents) {
 			op.tick(elapsed);
 		}
+		
 		for (Coin coin : m_coins) {
 			coin.tick(elapsed);
 		}
+		
 		m_hud.tick(elapsed);
 		m_room.tick(elapsed);
 		// m_underworld.tick(elapsed);
@@ -329,13 +344,13 @@ public class Model {
 			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y()+ Element.SIZE);
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, new Direction("E"), this));
 		}
-		//int randomKey = (int) (Math.random()*m_opponents.size());
-		//int randomBossKey = (int) (Math.random()*m_opponents.size());
-		//while (randomBossKey == randomKey) {
-		//	randomBossKey = (int) (Math.random()*m_opponents.size());
-		//}
-		//m_opponents.get(randomKey).setKey(true);
-		//m_opponents.get(randomBossKey).setBossKey(true);
+		int randomKey = (int) (Math.random()*m_opponents.size());
+		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		while (randomBossKey == randomKey) {
+			randomBossKey = (int) (Math.random()*m_opponents.size());
+		}
+		m_opponents.get(randomKey).setKey(true);
+		m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {

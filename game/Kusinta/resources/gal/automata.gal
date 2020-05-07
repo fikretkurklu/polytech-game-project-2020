@@ -75,16 +75,16 @@ WalkingOpponents (East) {
 *(East)
 
   | Cell(H, P) ? Power : (East)
-  | Cell(E, P) ? Wizz() : (East)
   | ! GotPower() ? Explode() : ()
+  | Cell(E, P) ? Wizz() : (East)
   | Cell(E, O) ? Turn(W) : (West)
   | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
 
   | Cell(H, P) ? Power : (West)
-  | Cell(W, P) ? Wizz() : (West)
   | ! GotPower() ? Explode() : ()
+  | Cell(W, P) ? Wizz() : (West)
   | Cell(W, O) ? Turn(E) : (East)
   | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)

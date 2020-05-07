@@ -62,7 +62,7 @@ public abstract class Character extends Entity {
 		super(automaton);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
-		setCurrentStat(attackSpeed, life, resistance, strength);
+		setCurrentStat(attackSpeed, maxLife, life, resistance, strength);
 
 		m_coord = new Coord(C);
 
@@ -310,10 +310,9 @@ public abstract class Character extends Entity {
 		m_defaultStatMap.put(Stats.Strengh, strength);
 	}
 
-	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
+	public void setCurrentStat(int attackspeed, int max_health, int life, int resistance, int strength) {
 		m_currentStatMap = new HashMap<>();
-		int life = health;
-		m_currentStatMap.put(CurrentStat.MaxLife, health);
+		m_currentStatMap.put(CurrentStat.MaxLife, max_health);
 		m_currentStatMap.put(CurrentStat.Life, life);
 		m_currentStatMap.put(CurrentStat.Resistance, resistance);
 		m_currentStatMap.put(CurrentStat.Strength, strength);

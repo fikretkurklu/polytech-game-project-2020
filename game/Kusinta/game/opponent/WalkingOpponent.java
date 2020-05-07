@@ -124,7 +124,8 @@ public class WalkingOpponent extends Opponent {
 			m_imageElapsed = 0;
 
 			if (!gotpower()) {
-				if (m_image_index == 5) {
+				if (m_image_index >= 5) {
+					System.out.println("Mort ennemi");
 					getM_model().getOpponent().remove(this);
 					dropKey();
 					try {
@@ -233,6 +234,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean explode() {
+		System.out.println("Explosion");
 		if (gotpower()) {
 			m_image_index = 0;
 		}
