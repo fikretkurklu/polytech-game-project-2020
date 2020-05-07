@@ -147,5 +147,9 @@ public class ImageLibrary {
 		}
 		return null;
 	}
+	
+	public Image[] getImages(String avatar) {
+		return sprites.get(avatar);
+	}
 
 }
