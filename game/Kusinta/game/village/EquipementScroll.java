@@ -18,7 +18,7 @@ public class EquipementScroll {
 	Image m_img;
 	Font font;
 	Equipment m_equipement;
-	private static final String IMG_PATH = "resources/Village/HUD/Scroll.png";
+	private static final String IMG_PATH = "resources/Village/Scroll.png";
 	
 	public EquipementScroll(int x, int y, int w, int h) {
 		m_x = x;

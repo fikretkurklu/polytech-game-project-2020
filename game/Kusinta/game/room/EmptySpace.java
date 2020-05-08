@@ -4,7 +4,6 @@ import java.awt.Image;
 
 import environnement.Element;
 import game.Coord;
-import game.ImageLoader;
 
 public class EmptySpace extends Element {
 

@@ -9,7 +9,7 @@ import game.Coord;
 import player.Player;
 
 public class InventoryPanel extends Panel {
-	private final String BG = "resources/Village/HUD/inventoryBG.jpg";
+	private final String BG = "resources/Village/inventoryBG.jpg";
 	private HashMap<Stuff, Equipment> equipements;
 
 	public InventoryPanel(int x, int y, int w, int h, Player p) {

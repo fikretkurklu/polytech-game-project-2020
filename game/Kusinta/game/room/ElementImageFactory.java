@@ -3,9 +3,7 @@ package room;
 import java.awt.Image;
 import java.util.HashMap;
 
-import automaton.Automaton;
 import environnement.Element;
-import game.Game;
 import game.ImageLoader;
 
 public class ElementImageFactory {
