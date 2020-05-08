@@ -24,6 +24,8 @@ public class WalkingOpponent extends Opponent {
 	int m_image_index, m_imageElapsed;
 
 	int hHitBox, wHitBox;
+	
+	boolean isDead;
 
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, int diffLevel) throws Exception {
 
@@ -38,6 +40,8 @@ public class WalkingOpponent extends Opponent {
 
 		m_imageElapsed = 0;
 		shooting = false;
+		
+		isDead = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
@@ -131,8 +135,8 @@ public class WalkingOpponent extends Opponent {
 						getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
 				}
 				m_image_index = (m_image_index + 1) % 6;
-			}
-			if (shooting) {
+				System.out.println(m_image_index);
+			} else if (shooting) {
 				m_image_index = (m_image_index + 1) % 4;
 			} else {
 				m_image_index = (m_image_index + 1) % 6;
@@ -228,8 +232,9 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean explode() {
-		if (gotpower()) {
+		if (!isDead) {
 			m_image_index = 0;
+			isDead = true;
 		}
 		setLife(0);
 		return true;

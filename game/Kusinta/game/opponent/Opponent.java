@@ -22,7 +22,7 @@ public abstract class Opponent extends Character {
 			int attackSpeed, int resistance, int strength) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
-		m_key = true;
+		m_key = false;
 
 	}
 
