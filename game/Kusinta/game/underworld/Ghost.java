@@ -219,8 +219,6 @@ public class Ghost extends Entity {
 	public boolean cell(Direction dir, Category cat) {
 		Coord tmpCoord;
 		Coord coord = null;
-		Rectangle playerHitBox = null;
-		int xHB, yHB, widthHB, heightHB;
 		if (cat == Category.O) {
 			isFollowing = false;
 			if (dir == Direction.F) {
@@ -239,14 +237,12 @@ public class Ghost extends Entity {
 
 			}
 		} else if (cat == Category.A) {
-			playerHitBox = getPlayer().getHitBox();
 			coord = getPlayer().getCoord();
 			isLure = false;
 		} else if (cat == Category.C) {
 			if (getPlayer().lureActive()) {
 				isLure = true;
 				coord = getPlayer().getProjectiles().get(0).getCoord();
-				playerHitBox = new Rectangle(coord.X(), coord.Y(), SIZE, SIZE);
 				int min = distance(m_coord, coord);
 				Iterator<Projectile> it = getPlayer().getProjectiles().iterator();
 				int d;
@@ -256,7 +252,6 @@ public class Ghost extends Entity {
 					if (d <= min) {
 						min = d;
 						coord = tmpCoord;
-						playerHitBox = new Rectangle(coord.X(), coord.Y(), SIZE, SIZE);
 					}
 				}
 			} else
@@ -265,21 +260,9 @@ public class Ghost extends Entity {
 		// Modifier egalités de coord pour garder une distance
 		switch (dir.toString()) {
 		case Direction.Hs:
-			xHB = hitBox.x;
-			yHB = hitBox.y;
-			widthHB = hitBox.width;
-			heightHB = hitBox.height;
-			if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
-					|| playerHitBox.contains(xHB + widthHB, yHB)
-					|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
-					|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
-					|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
-					|| playerHitBox.contains(xHB, yHB + heightHB)
-					|| playerHitBox.contains(xHB, yHB + heightHB / 2)
-					|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
-				return true;
+			return Math.abs(m_coord.X()-coord.X()) <= hitBox.width/3 
+				&& Math.abs(m_coord.Y()-coord.Y()) <= hitBox.height/3;
 			}
-		}
 		return false;
 	}
 	
@@ -357,7 +340,6 @@ public class Ghost extends Entity {
 	public boolean hit(Direction dir) {
 		if (!isLure)
 			getPlayer().getDamage();
-//		boolean flag = false;
 		isAttacking = true;
 		currentAction = Action.SHOT;
 		resetAnim();
@@ -379,8 +361,8 @@ public class Ghost extends Entity {
 			g.drawImage(getImage(), m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
 		else
 			g.drawImage(getImage(), m_coord.X(), m_coord.Y(), m_size, m_size, null);
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
+//		g.setColor(Color.blue);
+//		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 
 	}
 
