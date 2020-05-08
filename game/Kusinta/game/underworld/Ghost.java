@@ -11,6 +11,7 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -32,11 +33,8 @@ public class Ghost extends Entity {
 	Model m_model;
 	Direction m_direction;
 
-	Image m_images[];
-	long m_imageElapsed;
 	int m_width = SIZE, m_height = SIZE;
 	boolean leftOrientation, movingUp, movingDown, move;
-	int m_image_index;
 	boolean isAttacking = false, isFollowing = false, isLure, isBuffed;
 	int m_range = 200, m_size = SIZE;;
 	Rectangle m_hitbox;
@@ -48,7 +46,6 @@ public class Ghost extends Entity {
 		m_coord = coord;
 		m_direction = dir;
 		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		m_images = images;
 	}
 
 	public void buff() {
@@ -196,20 +193,19 @@ public class Ghost extends Entity {
 				d = m_coord.X() - playerCoord.X();
 				return (playerCoord.Y() == m_coord.Y()) && (d > 0 && d <= m_range);
 			case Direction.NEs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				d = distance(playerCoord, m_coord); 
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
 			case Direction.SEs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+//				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+//						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
 			case Direction.SWs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+//				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+//						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() < m_coord.X()) && (d <= m_range);
 			case Direction.NWs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+//				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
+//						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() < m_coord.X()) && (d <= m_range);
 			}
 		}
@@ -429,44 +425,41 @@ public class Ghost extends Entity {
 		if (isAttacking || isFollowing) {
 			isFollowing = false;
 			isAttacking = false;
-			m_image_index = 0;
+			resetAnim();
 			m_direction = dirs[(int) (Math.random() * 4)];
 		}
 	}
 
 	public void paint(Graphics g) {
-		if (m_images != null) {
-			if (leftOrientation)
-				g.drawImage(m_images[m_image_index], m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
-			else
-				g.drawImage(m_images[m_image_index], m_coord.X(), m_coord.Y(), m_size, m_size, null);
-			g.setColor(Color.blue);
-			g.drawRect(m_hitbox.x, m_hitbox.y, m_width, m_height);
-		}
+		Image img;
+		img = getImage();
+		if (leftOrientation)
+			g.drawImage(img, m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
+		else
+			g.drawImage(img, m_coord.X(), m_coord.Y(), m_size, m_size, null);
+		g.setColor(Color.blue);
+		g.drawRect(m_hitbox.x, m_hitbox.y, m_width, m_height);
+
 	}
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
+		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
-			m_image_index++;
+			m_imageIndex++;
 			if (isAttacking) {
-//				if (m_image_index == 4)
-//					if (!isLure)
-//						getPlayer().getDamage();
-				if (m_image_index > 8) {
-					isAttacking = false;
-					m_image_index = 3;
-				}
+				currentAction = Action.SHOT;
+
 			} else {
-				if (m_image_index >= 3) {
-					m_image_index = 0;
-				}
+				currentAction = Action.DEFAULT;
+			}
+			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+				resetAnim();
 			}
 		}
-		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > STEP_TICK) {
+			m_stepElapsed -= STEP_TICK;
 			if (!isAttacking)
 				m_automaton.step(this);
 		}
