@@ -30,6 +30,7 @@ public abstract class Character extends Entity {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 	protected long m_moveElapsed;
+	
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
@@ -119,7 +120,7 @@ public abstract class Character extends Entity {
 	}
 
 	public Model getModel() {
-		return getM_model();
+		return m_model;
 	}
 
 	public LinkedList<Projectile> getProjectiles() {
@@ -201,15 +202,15 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			int topBlock = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
 		}
 		if (!falling) {
-			if (getM_model().m_room.isBlocked(m_coord.X(), m_coord.Y())) {
-				int blockTop = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 				hitBox.translate(0, -(m_coord.Y() - blockTop));
 				m_coord.setY(blockTop);
 			}
@@ -220,7 +221,7 @@ public abstract class Character extends Entity {
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
-				int botBlock = getM_model().m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
@@ -321,7 +322,7 @@ public abstract class Character extends Entity {
 	}
 
 	public boolean isMoving() {
-		boolean moving = getM_model().qPressed || getM_model().dPressed;
+		boolean moving = m_model.qPressed || m_model.dPressed;
 		return moving;
 	}
 
@@ -344,26 +345,26 @@ public abstract class Character extends Entity {
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
-			return getM_model().qPressed;
+			return m_model.qPressed;
 		} else if (keyCode == Controller.K_Z) {
-			return getM_model().zPressed;
+			return m_model.zPressed;
 		} else if (keyCode == Controller.K_D) {
 			return m_model.dPressed;
 		} else if (keyCode == Controller.K_S) {
-			return getM_model().sPressed;
+			return m_model.sPressed;
 		} else if (keyCode == Controller.K_SPACE) {
-			return getM_model().espPressed;
+			return m_model.espPressed;
 		} else if (keyCode == Controller.K_A) {
-			return getM_model().aPressed;
+			return m_model.aPressed;
 		} else if (keyCode == Controller.K_E) {
-			return getM_model().ePressed;
+			return m_model.ePressed;
 		} else if (keyCode == Controller.K_V)
-			return getM_model().vPressed;
+			return m_model.vPressed;
 		return false;
 	}
 
 	public boolean checkBlock(int x, int y) {
-		return getM_model().m_room.isBlocked(x, y);
+		return m_model.m_room.isBlocked(x, y);
 	}
 
 	public void shoot(int baseX, int baseY, proj type) {

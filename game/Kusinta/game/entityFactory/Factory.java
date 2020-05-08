@@ -117,7 +117,8 @@ public class Factory {
 				return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
 						actions.get(Type.Player));
 			case PlayerSoul:
-				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, images.get(Type.PlayerSoul), model);
+				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, images.get(Type.PlayerSoul), model, 
+						actions.get(Type.PlayerSoul));
 			case NormalKey:
 				return new NormalKey(automatons.get(Type.NormalKey), coord, model, images.get(Type.NormalKey),
 						actions.get(Type.NormalKey));
@@ -141,16 +142,20 @@ public class Factory {
 			case Coin:
 				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin), actions.get(Type.Coin));
 			case Lure:
-				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, images.get(Type.Lure), model);
+				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, images.get(Type.Lure), model,
+						actions.get(Type.Lure));
 			case Meteor:
 				System.out.println("temporaire");
 				return null;
 			case Fragment:
-				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment));
+				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment),
+						actions.get(Type.Fragment));
 			case Gate:
-				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate)); 
+				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate),
+						actions.get(Type.Gate)); 
 			case Cloud:
-				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0]);
+				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
+						actions.get(Type.Cloud));
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());

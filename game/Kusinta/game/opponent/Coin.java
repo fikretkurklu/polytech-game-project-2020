@@ -93,7 +93,7 @@ public class Coin extends Entity {
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
 			m_imageIndex ++;
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			if (m_imageIndex >= currentIndex.length) {
 				m_imageIndex = 0;
 			}
 		}

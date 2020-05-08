@@ -19,8 +19,6 @@ public abstract class Opponent extends Character {
 
 	protected Arrow collidedWith;
 	
-	int SPEED_WALK_TICK = 4;
-
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
@@ -32,8 +30,8 @@ public abstract class Opponent extends Character {
 	@Override
 	public void tick(long elapsed) {
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		if (m_moveElapsed > m_stepTick) {
+			m_moveElapsed -= m_stepTick;
 			m_automaton.step(this);
 		}
 		if (this instanceof WalkingOpponent) {
@@ -53,11 +51,11 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, getM_model(), 0	, null);
-					getM_model().setKey(k);
+					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0	, null);
+					m_model.setKey(k);
 				} else if (m_bossKey == true) {
-					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, getM_model(), 0, null);
-					getM_model().setBossKey(k);
+					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, m_model, 0, null);
+					m_model.setBossKey(k);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

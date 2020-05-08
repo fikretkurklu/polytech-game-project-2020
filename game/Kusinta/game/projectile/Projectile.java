@@ -7,6 +7,7 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import game.Coord;
 import player.Character;
 
@@ -94,6 +95,8 @@ public abstract class Projectile extends Entity {
 		if (m_dead_time == 0) {
 			m_dead_time = System.currentTimeMillis();
 		}
+		currentAction = Action.DEATH;
+		resetAnim();
 		return true;
 	}
 	

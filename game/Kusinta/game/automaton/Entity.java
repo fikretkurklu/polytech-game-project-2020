@@ -36,13 +36,13 @@ public abstract class Entity {
 	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
 	protected Action currentAction = Action.DEFAULT; 
 	
-	protected HashMap<Action, int[]> indiceAction;
+	HashMap<Action, int[]> indiceAction;
 	
 	protected long m_imageTick = 200;
+	protected long m_stepTick = 4;
 	protected long m_imageElapsed;
+	protected long m_stepElapsed;
 	
-	protected String gal = ".gal";
-	protected String ani = ".ani";
 	protected float ratio;
 
 	public Entity() {
@@ -57,6 +57,7 @@ public abstract class Entity {
 		
 		m_automaton = automaton;
 		resetAnim();
+		m_stepElapsed = m_stepTick;
 		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
 	}
 	
@@ -149,7 +150,7 @@ public abstract class Entity {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					Rectangle playerHitBox = getM_model().getPlayer().getHitBox();
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
 					int xHB = hitBox.x;
 					int yHB = hitBox.y;
 					int widthHB = hitBox.width;
@@ -170,7 +171,7 @@ public abstract class Entity {
 							|| m_model.m_room.isBlocked(x, hitBox.y)
 							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				} else if (cat == Category.A) {
-					LinkedList<Opponent> opponents = getM_model().getOpponent();
+					LinkedList<Opponent> opponents = m_model.getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
 								|| op.getHitBox().contains(hitBox.x, hitBox.y)) {
@@ -279,35 +280,21 @@ public abstract class Entity {
 		}
 	}
 
-	public Model getM_model() {
-		return m_model;
-	}
-
 	public void setM_model(Model m_model) {
 		this.m_model = m_model;
 	}
 	
 	public void resetAnim() {
-		m_imageIndex = 0;
-		m_imageElapsed = m_imageTick;
-	}
-	
-	public Image getImage() {
-		int[] indicesAction = indiceAction.get(currentAction);
-		if(indicesAction == null) {
-			currentAction = Action.DEFAULT;
-			indicesAction = indiceAction.get(currentAction);
-			m_imageIndex = 0;
-		}
-		return bImages[indicesAction[m_imageIndex]];
-	}
-	
-	public void resetIndexAnimation() {
 		currentIndex = indiceAction.get(currentAction);
 		if(currentIndex == null) {
 			currentAction = Action.DEFAULT;
 			currentIndex = indiceAction.get(currentAction);
 		}
 		m_imageIndex = 0;
+		m_imageElapsed = m_imageTick;
+	}
+	
+	public Image getImage() {
+		return bImages[currentIndex[m_imageIndex]];
 	}
 }
