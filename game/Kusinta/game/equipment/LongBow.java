@@ -1,5 +1,7 @@
 package equipment;
 
+import java.awt.Image;
+
 import equipment.Stat.Stats;
 
 public class LongBow extends Bow {
@@ -9,9 +11,9 @@ public class LongBow extends Bow {
 	 * 
 	 */
 	
-	public LongBow() throws Exception {
+	public LongBow(Image img) throws Exception {
 		super();
-		setImagePath();
+		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 200+100*rarity);
 		statTable.put(Stats.Strengh, 20);
@@ -19,9 +21,5 @@ public class LongBow extends Bow {
 		
 	}
 
-	@Override
-	public void setImagePath() {
-		imagePath = "resources/Equipment/Stuff/Bow.png";
-	}
 
 }

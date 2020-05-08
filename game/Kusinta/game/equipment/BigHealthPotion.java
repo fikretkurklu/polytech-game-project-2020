@@ -12,7 +12,6 @@ public class BigHealthPotion extends Consumable {
 	
 	public BigHealthPotion() throws Exception {
 		super();
-		setImagePath();
 		statTable.put(Stats.Price, 100);
 	}
 
@@ -24,11 +23,6 @@ public class BigHealthPotion extends Consumable {
 	@Override
 	public void resetModification() {
 		statTable.put(Stats.Health, -50);
-	}
-
-	@Override
-	public void setImagePath() {
-		imagePath = "resources/Equipment/Potion/Red Potion 3.png";
 	}
 
 	@Override

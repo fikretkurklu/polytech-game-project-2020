@@ -10,37 +10,39 @@ public class EquipmentManager {
 		Armor, Belt, Gloves, Grieves, Helmet, Bow
 	};
 
+	EquipmentImageManager imgManager;
+	
 	public Equipment newEquipment() throws Exception {
 		Stuff[] equipmentTable = Stuff.values();
 		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
 		switch (equipment) {
 		case Armor:
-			Armor armor = new Armor();
+			Armor armor = new Armor(imgManager.StuffImage.get(Stuff.Armor));
 			armor.applyMultiplier();
 			return armor;
 		case Belt:
-			Belt belt = new Belt();
+			Belt belt = new Belt(imgManager.StuffImage.get(Stuff.Belt));
 			belt.applyMultiplier();
 			return belt;
 		case Gloves:
-			Gloves gloves = new Gloves();
+			Gloves gloves = new Gloves(imgManager.StuffImage.get(Stuff.Gloves));
 			gloves.applyMultiplier();
 			return gloves;
 		case Grieves:
-			Grieves grieves = new Grieves();
+			Grieves grieves = new Grieves(imgManager.StuffImage.get(Stuff.Grieves));
 			grieves.applyMultiplier();
 			return grieves;
 		case Helmet:
-			Helmet helmet = new Helmet();
+			Helmet helmet = new Helmet(imgManager.StuffImage.get(Stuff.Helmet));
 			helmet.applyMultiplier();
 			return helmet;
 		case Bow:
 			if ((int)(Math.random() * 2) == 0) {
-				LongBow bow = new LongBow();
+				LongBow bow = new LongBow(imgManager.StuffImage.get(Stuff.Bow));
 				bow.applyMultiplier();
 				return bow;
 			} else {
-				ShortBow bow = new ShortBow();
+				ShortBow bow = new ShortBow(imgManager.StuffImage.get(Stuff.Bow));
 				bow.applyMultiplier();
 				return bow;
 			}
