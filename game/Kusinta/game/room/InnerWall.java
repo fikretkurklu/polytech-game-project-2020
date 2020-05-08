@@ -4,8 +4,6 @@ import java.awt.Image;
 
 import environnement.Element;
 import game.Coord;
-import game.ImageLoader;
-
 /*
  * 
  * Dans le cas d'un InnerWall, les images sont dans un tableau de String

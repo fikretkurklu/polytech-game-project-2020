@@ -42,16 +42,16 @@ public abstract class Button {
 		}
 	}
 
-	public void setFgImage(String path) {
+	public void setFgImage(Image img) {
 		try {
-			File f = new File(path);
-			fgImg = ImageIO.read(f);
+			fgImg = img;
 			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			fgImgDrawned = null;
 			fgImg = null;
 		}
 	}
+	
 
 	public void resized(double ratio_w, double ratio_h) {
 		m_width *= ratio_w;

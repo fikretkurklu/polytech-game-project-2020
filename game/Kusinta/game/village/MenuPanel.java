@@ -1,5 +1,11 @@
 package village;
 
+import java.awt.Image;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
+import game.ImageLoader;
 import player.Player;
 import village.Village.ID_ENV;
 
@@ -23,31 +29,31 @@ public class MenuPanel extends Panel {
 		MenuButton b;
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.ADVENTURE);
-		b.setFgImage(ADVENTURE_ICO);
+		b.setFgImage(ImageLoader.loadImage(ADVENTURE_ICO));
 		b.setBgImage(BG);
 		add(b);
 
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 * 2 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.INVENTORY);
-		b.setFgImage(INVENTORY_ICO);
+		b.setFgImage(ImageLoader.loadImage(INVENTORY_ICO));
 		b.setBgImage(BG);
 		add(b);
 
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 * 3 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.WEAPON_SHOP);
-		b.setFgImage(WEAPON_SHOP_ICO);
+		b.setFgImage(ImageLoader.loadImage(WEAPON_SHOP_ICO));
 		b.setBgImage(BG);
 		add(b);
 
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 * 4 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.MAGIC_SHOP);
-		b.setFgImage(MAGIC_SHOP_ICO);
+		b.setFgImage(ImageLoader.loadImage(MAGIC_SHOP_ICO));
 		b.setBgImage(BG);
 		add(b);
 
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 * 5 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.INFIRMARY);
-		b.setFgImage(INFIRMARY_ICO);
+		b.setFgImage(ImageLoader.loadImage(INFIRMARY_ICO));
 		b.setBgImage(BG);
 		add(b);		
 	}

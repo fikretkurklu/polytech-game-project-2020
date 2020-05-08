@@ -8,8 +8,6 @@ import java.io.FileReader;
 import java.util.LinkedList;
 
 import automaton.Automaton;
-import automaton.AutomatonLibrary;
-import automaton.Direction;
 import environnement.Decor;
 import environnement.Element;
 import game.Coord;

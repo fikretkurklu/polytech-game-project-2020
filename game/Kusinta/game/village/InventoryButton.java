@@ -33,7 +33,7 @@ public class InventoryButton extends Button {
 	public void setEquipement(Equipment e) {
 		m_equipement = e;
 		if (e != null) {
-			setFgImage(m_equipement.getImagePath());
+			setFgImage(m_equipement.getImage());
 		} else {
 			setFgImage(null);
 		}

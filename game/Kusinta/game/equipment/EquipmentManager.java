@@ -12,8 +12,8 @@ public class EquipmentManager {
 
 	EquipmentImageManager imgManager;
 	
-	public EquipmentManager(EquipmentImageManager EqimgManager) {
-		imgManager = EqimgManager;
+	public EquipmentManager() {
+		imgManager = new EquipmentImageManager();
 	}
 	
 	public Equipment newEquipment() throws Exception {

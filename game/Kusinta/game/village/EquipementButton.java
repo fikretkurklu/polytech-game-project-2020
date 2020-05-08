@@ -22,7 +22,7 @@ public class EquipementButton extends Button {
 	
 	public void setEquipement(Equipment equipement) {
 		m_equipement = equipement;
-		setFgImage(equipement.getImagePath());
+		setFgImage(equipement.getImage());
 	}
 	
 	@Override
