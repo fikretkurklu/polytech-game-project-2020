@@ -61,5 +61,10 @@ public class Fragment extends Entity{
 	    	  m_imageIndex = 0;
 	      }
 	    }
+	    m_stepElapsed += elapsed;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed -= m_stepTick;
+			m_automaton.step(this);
+		}
 	}
 }

@@ -59,6 +59,7 @@ public abstract class Entity {
 		
 		m_automaton = automaton;
 		resetAnim();
+		m_stepElapsed = m_stepTick;
 		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
 	}
 	

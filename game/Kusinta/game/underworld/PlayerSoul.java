@@ -22,13 +22,10 @@ import player.Character;
 public class PlayerSoul extends Character {
 
 	public static final int SIZE = (int) Element.SIZE;
-	public static final int REFRESH_TICK = 200;
-	public static final int STEP_TICK = 4;
 	public static final int MAX_LURE = 2;
 
-	int m_width, m_height = SIZE;
-	Image m_images[];
-	long m_imageElapsed, m_stepElapsed, m_lureGenerationElapsed;
+
+	long m_lureGenerationElapsed;
 	long m_dashTimer;
 	long m_lureTimer;
 
@@ -47,12 +44,12 @@ public class PlayerSoul extends Character {
 	int animationMode;
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
-	boolean hidden, escape, escapedOrDead, invicible, outScreen;
+	boolean hidden, escape, escaped, escapedOrDead, invicible, outScreen;
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model, HashMap<Action, int[]> indiceAction) throws IOException {
-		super(automaton, c, dir,  model, 100, 100, 0, 0, 0, images, indiceAction);
+	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model, HashMap<Action, int[]> hmAction) throws IOException {
+		super(automaton, c, dir,  model, 100, 100, 0, 0, 0, images, hmAction);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
@@ -65,12 +62,9 @@ public class PlayerSoul extends Character {
 		hidden = false;
 		escape = false;
 		escapedOrDead = false;
-		animationMode = DASH;
+		currentAction = Action.JUMP;
+		resetIndexAnimation();
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
-		m_image_index = UnderworldParam.sizePlayerAnimation;
-		m_imageElapsed = 0;
-		m_stepElapsed = 0;
-		m_images = images;
 		m_model = model;
 	}
 	
@@ -227,8 +221,8 @@ public class PlayerSoul extends Character {
 		fragmentsPicked = -1;
 		escape = true;
 		m_model.m_underworld.activateGate();
-		animationMode = ESCAPE;
-		m_image_index = UnderworldParam.sizePlayerDashAnimation;
+		currentAction = Action.MOVE;
+		resetIndexAnimation();
 		return true;
 	}
 	
@@ -252,12 +246,14 @@ public class PlayerSoul extends Character {
 	public boolean pop(Direction dir) {
 		switch (dir.toString()) {
 		case Direction.Ns:
-			animationMode = ESCAPED;
-			m_image_index = UnderworldParam.sizePlayerAnimation;
+			currentAction = Action.JUMP;
+			resetIndexAnimation();
+			escaped = true;
+			m_imageIndex = currentIndex.length - 1;
 			return true;
 		case Direction.Ss:
-			animationMode = DEAD;
-			m_image_index = UnderworldParam.sizePlayerEscapeAnimation;
+			currentAction = Action.DEATH;
+			resetIndexAnimation();
 			return true;
 		default:
 			return false;
@@ -275,8 +271,8 @@ public class PlayerSoul extends Character {
 		if (dashAvailable) {
 			DISTANCE = DASHSPEED;
 			dashAvailable = false;
-			animationMode = DASH;
-			m_image_index = UnderworldParam.sizePlayerAnimation;
+			currentAction = Action.JUMP;
+			resetIndexAnimation();
 			return true;
 		}
 		return false;
@@ -328,41 +324,51 @@ public class PlayerSoul extends Character {
 		}
 		if (hidden)
 			return;
-		if (escapedOrDead)
-			return;
-		if (m_images != null) {
-			int x = m_coord.X();
-			int y = m_coord.Y();
-			if (leftOrientation)
-				g.drawImage(m_images[m_image_index], x + SIZE, y, -SIZE, SIZE, null);
-			else
-				g.drawImage(m_images[m_image_index], x, y, SIZE, SIZE, null);
-			g.setColor(Color.green);
-			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
-			g.setColor(Color.blue);
-			g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
-		}
+		int x = m_coord.X();
+		int y = m_coord.Y();
+		if (leftOrientation)
+			g.drawImage(bImages[currentIndex[m_imageIndex]], x + SIZE, y, -SIZE, SIZE, null);
+		else
+			g.drawImage(bImages[currentIndex[m_imageIndex]], x, y, null);
+		g.setColor(Color.green);
+		g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
+		g.setColor(Color.blue);
+		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}
 
 	public void tick(long elapsed) {
-		if (escapedOrDead)
-			return;
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > REFRESH_TICK) {
+		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
-			m_image_index++;
 			m_lifePaint = (int) ((m_width * getLife()) / 100);
-			switch (animationMode) {
-			case DEAD:
-				if (m_image_index >= UnderworldParam.sizePlayerDeathAnimation) {
+			switch (currentAction) {
+			case DEATH:
+				m_imageIndex++;
+				if (m_imageIndex >= currentIndex.length) {
 					escapedOrDead = true;
 					Game.game.gameOver = true;
 				}
 				return;
-			case ESCAPED:
-				if (m_image_index >= UnderworldParam.sizePlayerDashAnimation) {
-					escapedOrDead = true;
-					m_model.switchEnv(mode.VILLAGE);
+			case JUMP:
+				if (escaped) {
+					m_imageIndex--;
+					if (m_imageIndex <= 0) {
+						escapedOrDead = true;
+						m_model.switchEnv(mode.VILLAGE);
+				}else {
+					m_imageIndex++;
+					if (escape) {
+						if (m_imageIndex >= currentIndex.length) {
+							currentAction = Action.MOVE;
+							resetIndexAnimation();
+						}
+					}else {
+						if (m_imageIndex >= currentIndex.length) {
+							currentAction = Action.DEFAULT;
+							resetIndexAnimation();
+					}
+					
+				}
 				}
 				return;
 			case NORMAL:

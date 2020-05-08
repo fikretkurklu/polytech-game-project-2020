@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Color;
+
 import java.awt.Graphics;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
+import underworld.Underworld;
 import village.Village;
 import player.Character;
 
@@ -38,7 +40,7 @@ public class Model {
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
-	//public Underworld m_underworld;
+	public Underworld m_underworld;
 	public Village m_village;
 
 	boolean set = false;

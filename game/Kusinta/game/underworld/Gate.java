@@ -60,5 +60,10 @@ public class Gate extends Entity {
 					}
 			}
 		}
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed -= m_stepTick;
+			m_automaton.step(this);
+		}
 	}
 }

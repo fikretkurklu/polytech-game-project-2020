@@ -87,9 +87,9 @@ public class Lure extends Projectile {
 				break;
 			}
 			m_stepElapsed += elapsed;
-			if (m_stepElapsed > STEP_TICK) {
+			if (m_stepElapsed > m_stepTick) {
 				delay -= PERIOD;
-				m_stepElapsed -= STEP_TICK;
+				m_stepElapsed -= m_stepTick;
 				m_automaton.step(this);
 			}
 		}
