@@ -18,7 +18,7 @@ public class Scroll {
 	String m_label;
 	Font font;
 	Coord labelPos;
-	private static final String IMG_PATH = "resources/Village/HUD/Scroll.png";
+	private static final String IMG_PATH = "resources/Village/Scroll.png";
 	
 	public Scroll(int x, int y, int w, int h, String s) {
 		m_x = x;

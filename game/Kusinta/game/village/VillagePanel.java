@@ -3,7 +3,7 @@ package village;
 import player.Player;
 
 public class VillagePanel extends Panel{
-	private String IMAGE_VILLAGE = "resources/Village/HUD/villageBG.jpg";
+	private String IMAGE_VILLAGE = "resources/Village/villageBG.jpg";
 	
 	public VillagePanel(int x, int y, int w, int h, Player p) {
 		super(x, y, w, h, p);

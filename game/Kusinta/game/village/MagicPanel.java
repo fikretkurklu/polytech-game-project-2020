@@ -5,7 +5,7 @@ import player.Player;
 
 public class MagicPanel extends Panel {
 	
-	private String IMAGE_MAGIC_SHOP = "resources/Village/HUD/magicShopBG.jpg";
+	private String IMAGE_MAGIC_SHOP = "resources/Village/magicShopBG.jpg";
 	EquipmentManager EM;
 	private final int NB_MAX_CONSUMABLE = 14;
 	

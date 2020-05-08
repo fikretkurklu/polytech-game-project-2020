@@ -5,7 +5,7 @@ import player.Player;
 
 public class WeaponPanel extends Panel {
 
-	private String IMAGE_WEAPON_SHOP = "resources/Village/HUD/weaponShopBG.jpg";
+	private String IMAGE_WEAPON_SHOP = "resources/Village/weaponShopBG.jpg";
 	EquipmentManager EM;
 	private final int NB_MAX_EQUIPEMENT = 14;
 

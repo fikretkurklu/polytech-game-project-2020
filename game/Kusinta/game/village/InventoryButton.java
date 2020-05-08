@@ -6,7 +6,7 @@ import equipment.Stat.Stats;
 import player.Player;
 
 public class InventoryButton extends Button {
-	private final String EmptyImg = "resources/Village/HUD/EmptyCase.png";
+	private final String EmptyImg = "resources/Village/EmptyCase.png";
 	Equipment m_equipement;
 	EquipementScroll scroll;
 	Stuff ID;
