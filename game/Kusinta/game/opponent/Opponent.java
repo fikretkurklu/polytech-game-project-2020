@@ -53,11 +53,11 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, getM_model(), 0	, null);
-					getM_model().setKey(k);
+					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0	, null);
+					m_model.setKey(k);
 				} else if (m_bossKey == true) {
-					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, getM_model(), 0, null);
-					getM_model().setBossKey(k);
+					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, m_model, 0, null);
+					m_model.setBossKey(k);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
