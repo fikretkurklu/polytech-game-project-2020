@@ -65,6 +65,11 @@ public abstract class Entity {
 		m_state = automaton.getInitialState();
 	}
 
+	public void resized() {
+		for (int i = 0; i < bImages.length; i ++) {
+			bImages[i] = bImages[i].getScaledInstance(m_width, m_height, 0);
+		}
+	}
 	public State getCurrentState() {
 		return m_state;
 	}
