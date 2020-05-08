@@ -154,9 +154,8 @@ public class Factory {
 				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate),
 						actions.get(Type.Gate)); 
 			case Cloud:
-				//return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0],
-				//		actions.get(Type.Cloud));
-				return null;
+				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
+						actions.get(Type.Cloud));
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());
