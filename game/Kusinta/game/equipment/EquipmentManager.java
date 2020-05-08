@@ -12,6 +12,10 @@ public class EquipmentManager {
 
 	EquipmentImageManager imgManager;
 	
+	public EquipmentManager(EquipmentImageManager EqimgManager) {
+		imgManager = EqimgManager;
+	}
+	
 	public Equipment newEquipment() throws Exception {
 		Stuff[] equipmentTable = Stuff.values();
 		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
