@@ -15,12 +15,10 @@ import environnement.Element;
 
 public class Coin extends Entity {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	public static final int SIZE = (int) (1.5 * Element.SIZE / 2);
 
 	private static final double G = 9.81;
-	protected long m_imageElapsed;
 
-	public Model m_model;
 	int m_value;
 
 	int position, aller;
@@ -43,6 +41,9 @@ public class Coin extends Entity {
 		position = 10;
 		aller = -1;
 		m_model = model;
+		
+		m_height = SIZE;
+		m_width = (int) (ratio * m_height);
 		
 		hitBox = new Rectangle(m_coord.X() - 15, m_coord.Y() - 30, 30, 30);
 	}
@@ -75,8 +76,8 @@ public class Coin extends Entity {
 	public void paint(Graphics g) {
 		
 		Image img = getImage();
-		int w = m_width / 4;
-		int h = m_height / 4;
+		int w = m_width;
+		int h = m_height;
 
 		if (!falling) {
 			if (position >= 10) {
