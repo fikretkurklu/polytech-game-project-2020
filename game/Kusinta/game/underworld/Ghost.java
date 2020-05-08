@@ -11,7 +11,6 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -38,7 +37,6 @@ public class Ghost extends Entity {
 	boolean isAttacking = false, isFollowing = false, isLure, isBuffed;
 	int m_range = 200, m_size = SIZE;;
 	Rectangle m_hitbox;
-	private long m_moveElapsed = SPEED_WALK_TICK;
 
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images) {
 		super(automaton);
@@ -46,6 +44,7 @@ public class Ghost extends Entity {
 		m_coord = coord;
 		m_direction = dir;
 		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
+		resetAnim();
 	}
 
 	public void buff() {
@@ -453,13 +452,13 @@ public class Ghost extends Entity {
 			} else {
 				currentAction = Action.DEFAULT;
 			}
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			if (m_imageIndex >= currentIndex.length) {
 				resetAnim();
 			}
 		}
 		m_stepElapsed += elapsed;
-		if (m_stepElapsed > STEP_TICK) {
-			m_stepElapsed -= STEP_TICK;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed -= m_stepTick;
 			if (!isAttacking)
 				m_automaton.step(this);
 		}
