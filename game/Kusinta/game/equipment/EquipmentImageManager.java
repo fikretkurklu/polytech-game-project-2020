@@ -19,11 +19,11 @@ public class EquipmentImageManager {
 		Image imgBow = ImageLoader.loadImage("resources/Equipment/Stuff/Bow.png");
 		Image imgBelt = ImageLoader.loadImage("resources/Equipment/Stuff/Belt.png");
 		StuffImage.put(Stuff.Armor, imgArmor);
-		StuffImage.put(Stuff.Armor, imgGloves);
-		StuffImage.put(Stuff.Armor, imgHelmet);
-		StuffImage.put(Stuff.Armor, imgGrieves);
-		StuffImage.put(Stuff.Armor, imgBow);
-		StuffImage.put(Stuff.Armor, imgBelt);
+		StuffImage.put(Stuff.Gloves, imgGloves);
+		StuffImage.put(Stuff.Helmet, imgHelmet);
+		StuffImage.put(Stuff.Grieves, imgGrieves);
+		StuffImage.put(Stuff.Bow, imgBow);
+		StuffImage.put(Stuff.Belt, imgBelt);
 	}
 	
 }
