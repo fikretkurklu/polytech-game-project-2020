@@ -399,14 +399,13 @@ public class Model {
 			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
 			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this, difficultyLevel));
 		}
-		/*int randomKey = (int) (Math.random()*m_opponents.size());
+		int randomKey = (int) (Math.random()*m_opponents.size());
 		int randomBossKey = (int) (Math.random()*m_opponents.size());
 		while (randomBossKey == randomKey) {
 			randomBossKey = (int) (Math.random()*m_opponents.size());
 		}
 		m_opponents.get(randomKey).setKey(true);
 		m_opponents.get(randomBossKey).setBossKey(true);
-	*/
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
