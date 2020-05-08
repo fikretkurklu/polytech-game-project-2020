@@ -37,6 +37,7 @@ public class HUDFont {
 	public void updateBar() {
 		fgRect = new Rectangle(bgRect.x, bgRect.y, (int)((float)m_player.getStat(CurrentStat.Life) / m_player.getStat(CurrentStat.MaxLife) * bgRect.width), bgRect.height);
 	}
+	
 	public void tick(long elapsed) {
 		hudCoin.tick(elapsed);
 		updateElpased += elapsed;
@@ -47,7 +48,7 @@ public class HUDFont {
 	}
 	
 	public void paint(Graphics g) {
-		g.drawImage(bg, m_x, m_y, null);
+		g.drawImage(bg, m_x, m_y, m_width, m_height, null);
 		g.setColor(BG_COLOR);
 		g.fillRect(bgRect.x, bgRect.y, bgRect.width, bgRect.height);
 		g.setColor(FG_COLOR);
