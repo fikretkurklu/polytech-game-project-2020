@@ -30,6 +30,7 @@ public abstract class Character extends Entity {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 	protected long m_moveElapsed;
+	
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life

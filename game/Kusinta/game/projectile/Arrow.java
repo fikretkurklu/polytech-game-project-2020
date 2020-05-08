@@ -49,7 +49,7 @@ public class Arrow extends Projectile {
 	
 		if (m_direction == Direction.E) {
 			bg.rotate(-m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, -10, h / 4, w, h, null);
+			bg.drawImage(image, w/3, h / 4, w, h, null);
 		} else {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
 			bg.drawImage(image, w, h / 4, -w, h, null);
@@ -78,12 +78,8 @@ public class Arrow extends Projectile {
 				int tmpPlayerStrength = m_shooter.m_currentStatMap.get(Character.CurrentStat.Strength);
 				collidingWith.loseLife(m_strength + tmpPlayerStrength);
 				((Opponent) collidingWith).setCollidedWith(this);
-				m_State = State.HIT_STATE;
-			} else if (cat == Category.O) {
-				m_State = State.HIT_STATE;
-			}
+			} 
 		}
-
 		return b;
 	}
 

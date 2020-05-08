@@ -19,8 +19,6 @@ public abstract class Opponent extends Character {
 
 	protected Arrow collidedWith;
 	
-	int SPEED_WALK_TICK = 4;
-
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);

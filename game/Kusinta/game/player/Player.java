@@ -17,7 +17,6 @@ import environnement.Element;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	int SPEED_WALK_TICK = 4;
 
 	boolean invincible, paintInvincible;
 	long m_invincibleElapsed;
@@ -54,7 +53,10 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping) {
-			currentAction = Action.MOVE;
+			if (currentAction != Action.MOVE) {
+				currentAction = Action.MOVE;
+				resetAnim();
+			}
 		}
 		super.move(dir);
 		if (dir != m_direction && !shooting) {
@@ -143,26 +145,28 @@ public class Player extends Character {
 
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-			m_imageIndex += 1;
+			m_imageIndex ++;
 			if (!gotpower()) {
-				if (m_imageIndex == indiceAction.get(Action.DEATH).length && m_model.getDiametre() == 0) {
+				if (m_imageIndex >= currentIndex.length && m_model.getDiametre() == 0) {
 					m_model.setDiametre(1);
 				}
 			} else {
 				if (shooting) {
-					if (m_imageIndex >= indiceAction.get(currentAction).length - 1) {
+					if (m_imageIndex >= currentIndex.length) {
 						super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
 					}
 				}
 				if (!shooting && !falling && !isMoving()) {
-					currentAction = Action.DEFAULT;
+					if (currentAction != Action.DEFAULT) {
+						currentAction = Action.DEFAULT;
+						resetAnim();
+					}
 				}
 			}
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			if (m_imageIndex >= currentIndex.length) {
 				m_imageIndex = 0;
 			}
 		}
-
 		m_moveElapsed += elapsed;
 		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
@@ -175,7 +179,6 @@ public class Player extends Character {
 			}
 			m_automaton.step(this);
 		}
-
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
 		}

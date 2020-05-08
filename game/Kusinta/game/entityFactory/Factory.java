@@ -58,7 +58,7 @@ public class Factory {
 		actions.put(Type.WalkingOpponent, m_IL.getActions(Avatars[1]));
 		actions.put(Type.FlyingOpponent, m_IL.getActions(Avatars[2]));
 		actions.put(Type.MagicProjectile, m_IL.getActions(Avatars[3]));
-		actions.put(Type.Player, m_IL.getActions(Avatars[2]));
+		actions.put(Type.Player, m_IL.getActions(Avatars[4]));
 		actions.put(Type.PlayerSoul, m_IL.getActions(Avatars[5]));
 		actions.put(Type.Ghost, m_IL.getActions(Avatars[6]));
 		actions.put(Type.Lure, m_IL.getActions(Avatars[7]));
@@ -77,7 +77,7 @@ public class Factory {
 		images.put(Type.WalkingOpponent, m_IL.getImages(Avatars[1]));
 		images.put(Type.FlyingOpponent, m_IL.getImages(Avatars[2]));
 		images.put(Type.MagicProjectile, m_IL.getImages(Avatars[3]));
-		images.put(Type.Player, m_IL.getImages(Avatars[2]));
+		images.put(Type.Player, m_IL.getImages(Avatars[4]));
 		images.put(Type.PlayerSoul, m_IL.getImages(Avatars[5]));
 		images.put(Type.Ghost, m_IL.getImages(Avatars[6]));
 		images.put(Type.Lure, m_IL.getImages(Avatars[7]));
@@ -138,8 +138,7 @@ public class Factory {
 				return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
 						images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
 			case Ghost:
-				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, images.get(Type.Ghost),
-						actions.get(Type.Ghost));
+				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, images.get(Type.Ghost));
 			case Coin:
 				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin), actions.get(Type.Coin));
 			case Lure:
@@ -150,13 +149,14 @@ public class Factory {
 				return null;
 			case Fragment:
 				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment),
-						actions.get(Type.Fragment);
+						actions.get(Type.Fragment));
 			case Gate:
 				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate),
 						actions.get(Type.Gate)); 
 			case Cloud:
-				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0],
-						actions.get(Type.Cloud));
+				//return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0],
+				//		actions.get(Type.Cloud));
+				return null;
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());
