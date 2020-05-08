@@ -2,6 +2,7 @@ package underworld;
 
 import java.io.IOException;
 
+
 import java.util.HashMap;
 
 import projectile.Projectile;
@@ -33,7 +34,7 @@ public class PlayerSoul extends Character {
 
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
-	boolean hidden, escape, escaped, invicible;
+	boolean hidden, escape, escaped, invicible, dead;
 	boolean dashAvailable, lureAvailable;
 
 	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model,
@@ -48,10 +49,14 @@ public class PlayerSoul extends Character {
 		invicible = true;
 		hidden = false;
 		escape = false;
+		dead = false;
 		currentAction = Action.JUMP;
 		resetAnim();
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		m_model = model;
+		m_dashPaint = m_width;
+		m_lifePaint = m_width;
+		m_lurePaint = m_width;
 	}
 
 	public boolean lureActive() {
@@ -240,6 +245,7 @@ public class PlayerSoul extends Character {
 		case Direction.Ss:
 			currentAction = Action.DEATH;
 			resetAnim();
+			dead = true;
 			return true;
 		default:
 			return false;
@@ -256,6 +262,7 @@ public class PlayerSoul extends Character {
 	public boolean jump(Direction dir) {
 		if (dashAvailable) {
 			DISTANCE = DASHSPEED;
+			m_dashPaint = 0;
 			dashAvailable = false;
 			currentAction = Action.JUMP;
 			resetAnim();
@@ -275,6 +282,7 @@ public class PlayerSoul extends Character {
 				addProjectile(Projectile.proj.LURE, new Coord(x, y), 0, this, m_direction);
 				nbLure++;
 				lureAvailable = false;
+				m_lurePaint = 0;
 				m_lureGenerationElapsed = 0;
 				return true;
 			} catch (Exception e) {
@@ -298,6 +306,7 @@ public class PlayerSoul extends Character {
 	public void getDamage() {
 		if (!invicible)
 			loseLife(20);
+			m_lifePaint = (int) ((m_width * getLife()) / 100);
 	}
 
 	public static final int HEALTHHEIGHT = SIZE / 8;
@@ -314,17 +323,21 @@ public class PlayerSoul extends Character {
 			g.drawImage(bImages[currentIndex[m_imageIndex]], x + SIZE, y, -SIZE, SIZE, null);
 		else
 			g.drawImage(bImages[currentIndex[m_imageIndex]], x, y, null);
-		g.setColor(Color.green);
-		g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
-		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
+		if (!dead) {
+			g.setColor(Color.green);
+			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
+			g.setColor(Color.cyan);
+			g.fillRect(m_coord.X(), m_coord.Y() - (int) (3.5 * HEALTHHEIGHT), m_lurePaint, HEALTHHEIGHT);
+			g.setColor(Color.blue);
+			g.fillRect(m_coord.X(), m_coord.Y() - 5 * HEALTHHEIGHT, m_dashPaint, HEALTHHEIGHT);
+			g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
+		}
 	}
 
 	public void tick(long elapsed) {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
-			m_lifePaint = (int) ((m_width * getLife()) / 100);
 			switch (currentAction) {
 			case DEATH:
 				m_imageIndex++;
@@ -336,7 +349,7 @@ public class PlayerSoul extends Character {
 				if (escaped) {
 					m_imageIndex--;
 					if (m_imageIndex <= 0) {
-						m_model.switchEnv(mode.VILLAGE);
+						m_model.switchEnv(mode.ROOM);
 					}
 				} else {
 					m_imageIndex++;
@@ -374,17 +387,24 @@ public class PlayerSoul extends Character {
 			m_stepElapsed -= m_stepTick;
 			if (!dashAvailable) {
 				m_dashTimer += elapsed;
-				if (m_dashTimer > 5000) {
+				m_dashPaint = (int) ((m_width * m_dashTimer) / 3000);
+				if (m_dashTimer > 3000) {
 					dashAvailable = true;
 					m_dashTimer = 0;
+					m_dashPaint = m_width;
+				}
+				
+			}
+			if (!lureAvailable) {
+				m_lureGenerationElapsed += elapsed;
+				m_lurePaint = (int) ((m_width * m_lureGenerationElapsed) / 1000);
+				if (m_lureGenerationElapsed > 1000) {
+					lureAvailable = true;
+					m_lureGenerationElapsed = 0;
+					m_lurePaint = m_width;
 				}
 			}
 			m_automaton.step(this);
-		}
-		m_lureGenerationElapsed += elapsed;
-		if (m_lureGenerationElapsed > 1000) {
-			lureAvailable = true;
-			m_lureGenerationElapsed = 0;
 		}
 		if (nbLure > 0) {
 			for (int i = 0; i < nbLure; i++) {

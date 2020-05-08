@@ -24,6 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,6 +52,7 @@ public class Game {
 	Controller m_controller;
 	Model m_model;
 	Sound m_music;
+	Image gameOverImage;
 	public boolean gameOver;
 
 	Game() throws Exception {
@@ -62,6 +64,7 @@ public class Game {
         // creating frame
         m_frame = m_view.createFrame(d);
         gameOver = false;
+        gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
         setupFrame();
         
         
@@ -153,17 +156,17 @@ public class Game {
 	 * called from the GameCanvasListener, called from the GameCanvas.
 	 */
 	void paint(Graphics g) {
+		int width = m_view.getWidth();
+		int height = m_view.getHeight();
 		if (!gameOver) {
 			// get the size of the canvas
-			int width = m_view.getWidth();
-			int height = m_view.getHeight();
-	
 			// erase background
 			g.setColor(Color.gray);
 			g.fillRect(0, 0, width, height);
-	
 			// paint
 			m_model.paint(g, width, height);
+		}else {
+			g.drawImage(gameOverImage, 0, 0, width, height,null);
 		}
 	}
 

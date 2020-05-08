@@ -3,6 +3,7 @@ package underworld;
 import java.awt.Graphics;
 
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
 import java.util.LinkedList;
+
 import automaton.Automaton;
 import automaton.Direction;
 import entityFactory.Factory;
@@ -160,6 +162,12 @@ public class Underworld {
 	public void paint(Graphics g, int width, int height, int x_decalage, int y_decalage) {
 		m_width = width;
 		m_height = height;
+		if (m_player.dead) {
+			g.setColor(Color.black);
+			g.fillRect(-x_decalage, -y_decalage, width, height);
+			m_player.paint(g);
+			return;
+		}
 		g.drawImage(backgroundImage, -x_decalage, -y_decalage, null);
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);

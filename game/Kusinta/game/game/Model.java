@@ -73,7 +73,7 @@ public class Model {
 
 		opponentCreator();
 
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
 
