@@ -31,6 +31,7 @@ public abstract class Entity {
 	
 	protected Image[] bImages;
 	protected int m_imageIndex;
+	protected int[] currentIndex;
 	
 	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
 	protected Action currentAction = Action.DEFAULT; 
@@ -49,7 +50,6 @@ public abstract class Entity {
 	}
 
 	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
-		System.out.println("A");
 		bImages = img;
 		indiceAction = hmActions;
 		
@@ -58,13 +58,11 @@ public abstract class Entity {
 		m_automaton = automaton;
 		resetAnim();
 		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
-		
-		
-		
 	}
 	
 	public Entity(Automaton automaton) {
 		m_automaton = automaton;
+		m_state = automaton.getInitialState();
 	}
 
 	public State getCurrentState() {
@@ -297,10 +295,19 @@ public abstract class Entity {
 	public Image getImage() {
 		int[] indicesAction = indiceAction.get(currentAction);
 		if(indicesAction == null) {
-			currentAction = currentAction.DEFAULT;
+			currentAction = Action.DEFAULT;
 			indicesAction = indiceAction.get(currentAction);
 			m_imageIndex = 0;
 		}
 		return bImages[indicesAction[m_imageIndex]];
+	}
+	
+	public void resetIndexAnimation() {
+		currentIndex = indiceAction.get(currentAction);
+		if(currentIndex == null) {
+			currentAction = Action.DEFAULT;
+			currentIndex = indiceAction.get(currentAction);
+		}
+		m_imageIndex = 0;
 	}
 }

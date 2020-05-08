@@ -7,7 +7,6 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import game.Coord;
 import player.Character;
 
@@ -48,17 +47,11 @@ public abstract class Projectile extends Entity {
 
 		m_shooter = shooter;
 		setM_model(shooter.getModel());
-
 		m_State = State.OK_STATE;
-
 		m_alpha = 1f;
-
 		m_dead_time = 0;
-
 		moving = 0;
-
 		m_strength = 15;
-		
 		X_MOVE = 9;
 
 	}
@@ -68,7 +61,6 @@ public abstract class Projectile extends Entity {
 		
 		int tmpX = m_coord.X();
 		int tmpY = m_coord.Y();
-
 		if (moving == 0) {
 			if (m_direction == Direction.E) {
 				m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int)( - X_MOVE * Math.sin(m_angle)));

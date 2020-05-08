@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Direction;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;

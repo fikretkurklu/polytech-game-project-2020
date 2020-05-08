@@ -5,8 +5,6 @@ import java.awt.Graphics;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import automaton.Automaton;
-import automaton.AutomatonLibrary;
 import automaton.Direction;
 import entityFactory.Factory;
 import entityFactory.Factory.Type;
@@ -17,8 +15,6 @@ import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
-import underworld.PlayerSoul;
-import underworld.Underworld;
 import village.Village;
 import player.Character;
 
@@ -289,21 +285,26 @@ public class Model {
 		m_bossKey = key;
 	}
 
-	public void opponentCreator() throws Exception {
-		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
-		for (int i = 0; i < coordFO.length; i++) {
-			Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-			FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord, this,
-					0, null);
-			m_opponents.add(fo);
+	public void opponentCreator(){
+		try {
+			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
+			for (int i = 0; i < coordFO.length; i++) {
+				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
+				FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord, this,
+						0, null);
+				m_opponents.add(fo);
+			}
+			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+			for (int i = 0; i < coordWO.length; i++) {
+				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
+				WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E, coord,
+						this, 0, null);
+				m_opponents.add(wo);
+			}
+		} catch (Exception e) {
+			System.out.println("Error while creating oppenant");
 		}
-		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
-		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-			WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E, coord,
-					this, 0, null);
-			m_opponents.add(wo);
-		}
+		
 		// int randomKey = (int) (Math.random()*m_opponents.size());
 		// int randomBossKey = (int) (Math.random()*m_opponents.size());
 		// while (randomBossKey == randomKey) {

@@ -1,6 +1,8 @@
 package underworld;
 
 import java.io.IOException;
+import java.util.HashMap;
+
 import projectile.Projectile;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,6 +11,7 @@ import java.awt.Rectangle;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Game;
@@ -48,8 +51,8 @@ public class PlayerSoul extends Character {
 	boolean dashAvailable, lureAvailable, moveAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model) throws IOException {
-		super(automaton, c, dir, model, 100, 100, 0, 0, 0);
+	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model, HashMap<Action, int[]> indiceAction) throws IOException {
+		super(automaton, c, dir,  model, 100, 100, 0, 0, 0, images, indiceAction);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;

@@ -3,14 +3,10 @@ package player;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
-
-import com.sun.xml.internal.fastinfoset.algorithm.DoubleEncodingAlgorithm;
 
 import automaton.*;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 import game.Model.mode;
 import opponent.BossKey;
@@ -28,7 +24,8 @@ public class Player extends Character {
 
 	protected BossKey m_bossKey;
 
-	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> hmActions) throws Exception {
+	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+			HashMap<Action, int[]> hmActions) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 0, 0, bImages, hmActions);
 
 		m_height = SIZE;
@@ -101,8 +98,12 @@ public class Player extends Character {
 	public boolean egg(Direction dir) { // tir
 		if (!shooting) {
 			shooting = true;
-			m_imageElapsed = m_imageTick;
-			m_imageIndex = 0;
+			if (isMoving()) {
+				currentAction = Action.SHOTMOVE;
+			} else {
+				currentAction = Action.SHOT;
+			}
+			resetAnim();
 			return true;
 		}
 		return false;
@@ -149,7 +150,7 @@ public class Player extends Character {
 				}
 			} else {
 				if (shooting) {
-					if (m_imageIndex == indiceAction.get(currentAction).length) {
+					if (m_imageIndex >= indiceAction.get(currentAction).length - 1) {
 						super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
 					}
 				}
@@ -163,9 +164,7 @@ public class Player extends Character {
 		}
 
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK)
-
-		{
+		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
 			if (shooting) {
 				if (getM_model().m_mouseCoord.X() > m_coord.X()) {

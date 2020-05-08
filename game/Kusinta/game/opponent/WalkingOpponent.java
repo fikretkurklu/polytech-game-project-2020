@@ -33,8 +33,9 @@ public class WalkingOpponent extends Opponent {
 		m_coord.setY(getM_model().m_room.blockTop(m_coord.X(), m_coord.Y()));
 
 		X_MOVE = 2;
-
-		m_imageElapsed = 0;
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+		
 		shooting = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
@@ -42,20 +43,19 @@ public class WalkingOpponent extends Opponent {
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
 
-		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox);
+		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
 		setMoney(100);
 		m_moveElapsed = 0;
+		currentAction = Action.MOVE;
+		
 
 	}
 
 	@Override
 	public void paint(Graphics gp) {
-
 		Image image = getImage();
-
-		double agr = 2;
-		int w = (int) (m_width * agr);
-		int h = (int) (m_height * agr);
+		int w = m_width * 2;
+		int h = m_height * 2;
 		int decalage = (int) (((float) 3 / (float) 4) * h);
 
 		if (m_direction == Direction.E) {
@@ -77,6 +77,8 @@ public class WalkingOpponent extends Opponent {
 		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
+		
+		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 	}
 
@@ -89,12 +91,12 @@ public class WalkingOpponent extends Opponent {
 			m_imageElapsed = 0;
 			m_imageIndex++;
 			if (!gotpower()) {
-				if (m_imageIndex == indiceAction.get(currentAction).length) {
-					getM_model().getOpponent().remove(this);
+				if (m_imageIndex >= indiceAction.get(currentAction).length) {
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, getM_model(), 0, null);
 					c.setMoney(m_money);
 					c.getM_model().addCoin(c);
+					getM_model().getOpponent().remove(this);
 				}
 			}
 			if (m_imageIndex >= indiceAction.get(currentAction).length) {

@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.AutomatonLibrary;
 import automaton.Direction;
+import entityFactory.Factory;
+import entityFactory.Factory.Type;
 import game.Coord;
 import game.ImageLoader;
 import game.Model;
@@ -28,7 +30,8 @@ public class Underworld {
 	public boolean gameOver = false;
 
 	public PlayerSoul m_player;
-	AutomatonLibrary m_al;
+	Factory m_factory;
+	AutomatonLibrary m_AL;
 	String mapFile;
 	int m_width, m_height;
 	Element[] m_elements, m_borders;
@@ -44,19 +47,18 @@ public class Underworld {
 	Gate m_gate;
 	UnderworldEmptySpaceImageManager ESIM;
 	UndInnerWallManager UIWM;
-	Automaton cloudAutomaton, wallAutomaton, ghostAutomaton, fragmentAutomaton, gateAutomaton;
 	UndWallImageManager UWIM;
-	AutomatonLibrary m_AL;
 	Model m_model;
+	Automaton wallAutomaton;
 	Image backgroundImage, cloudImage, cloudLeftUpImage, cloudRightUpImage, cloudLeftDownImage, cloudRightDownImage;
-//	public Image[] ghostImages, playerImages, lureImages, fragmentImages, gateImages;
 	private long m_BlockAElapsed;
 	private int m_RealWidth;
 	private int m_RealHeight;
 
-	public Underworld(AutomatonLibrary AL, int width, int height, Model model) {
+	public Underworld(Factory factory, AutomatonLibrary AL, int width, int height, Model model) {
+		m_AL = AL;
+		m_factory = factory;
 		m_model = model;
-		m_al = AL;
 		m_width = width;
 		m_height = height;
 		startCoord = new Coord(500, 500);
@@ -68,18 +70,8 @@ public class Underworld {
 		m_clouds = new Cloud[MAX_CLOUDS];
 		m_ghosts = new LinkedList<Ghost>();
 		m_fragments = new Fragment[MAX_FRAGMENTS];
-		m_AL = AL;
 		try {
 			wallAutomaton = m_AL.getAutomaton("Block");
-			cloudAutomaton = m_AL.getAutomaton("Cloud");
-			ghostAutomaton = m_AL.getAutomaton("Ghost");
-			fragmentAutomaton = m_AL.getAutomaton("Fragment");
-			gateAutomaton = m_AL.getAutomaton("Gate");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
 			mapFile = UnderworldParam.mapFile;
 			f = new BufferedReader(new FileReader(new File(mapFile)));
 			/*
@@ -141,19 +133,18 @@ public class Underworld {
 		int randomX;
 		for (int i = 0; i < clouds.length; i++) {
 			randomX = (int) (Math.random() * (XMAX));
-			clouds[i] = new Cloud(cloudAutomaton, new Coord(randomX, (i + 1) * 430), m_model, cloudImage);
+			clouds[i] = (Cloud) m_factory.newEntity(Type.Cloud, Direction.E, new Coord(randomX, (i + 1) * 430), m_model, 0, null);
 		}
 	}
 
 	private void generateFragments(Fragment[] fragments) {
 		for (int i = 0; i < fragments.length; i++) {
-			fragments[i] = new Fragment(fragmentAutomaton,
-					generatePosition(-(int) (Element.SIZE / 1.5), 2 * Element.SIZE), m_model, fragmentImages);
+			fragments[i] = (Fragment) m_factory.newEntity(Type.Fragment, Direction.E, generatePosition(-(int) (Element.SIZE / 1.5), 2 * Element.SIZE), m_model, 0, null);
 		}
 	}
 
 	private void generateGate() {
-		m_gate = new Gate(gateAutomaton, generatePosition(Element.SIZE, 2 * Element.SIZE), m_model, gateImages);
+		m_gate = (Gate) m_factory.newEntity(Type.Gate, Direction.E, generatePosition(Element.SIZE, 2 * Element.SIZE), m_model, 0, null);
 	}
 
 	public void setPlayer(PlayerSoul player) {
@@ -330,7 +321,7 @@ public class Underworld {
 				it.next().buff();
 			}
 		}
-		m_ghosts.add(new Ghost(Direction.E, generatePosition(0 , Ghost.SIZE), ghostAutomaton, m_model, ghostImages));
+		m_ghosts.add((Ghost)m_factory.newEntity(Type.Ghost, Direction.E, generatePosition(0 , Ghost.SIZE), m_model, 0, null));
 		nbGhosts++;
 	}
 
