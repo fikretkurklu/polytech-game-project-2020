@@ -26,6 +26,7 @@ public class Cloud extends Entity{
 
 	public Cloud(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
 		super(automaton, images, hmActions);
+		m_coord = new Coord(coord);
 		currentAction = Action.DEFAULT;
 		resetAnim();
 		m_width = SIZE;

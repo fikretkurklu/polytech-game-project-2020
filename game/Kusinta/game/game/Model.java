@@ -16,6 +16,7 @@ import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
+import underworld.PlayerSoul;
 import underworld.Underworld;
 import village.Village;
 import player.Character;
@@ -72,7 +73,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		switchEnv(mode.VILLAGE);
+		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -101,9 +102,8 @@ public class Model {
 			m_village = null;
 			break;
 		case UNDERWORLD:
-			//PlayerSoul ps = (PlayerSoul) Game.m_factory.newEntity(Type.PlayerSoul, Direction.E,
-				//	m_underworld.getStartCoord(), this, 0, null);
-			//m_underworld.setPlayer(ps);
+			m_underworld.setPlayer((PlayerSoul) m_factory.newEntity(Type.PlayerSoul, Direction.E,
+					m_underworld.getStartCoord(), this, 0, null));
 			break;
 		case VILLAGE:
 			m_village = new Village(m_width, m_height, this, (Player) m_player);
@@ -117,7 +117,7 @@ public class Model {
 
 	public void start() throws Exception {
 		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
-		//m_underworld = new Underworld(Game.m_factory.m_AL, m_width, m_height, this);
+		m_underworld = new Underworld(m_factory, m_width, m_height, this);
 
 	}
 
@@ -142,7 +142,7 @@ public class Model {
 				y_decalage = -(m_room.getHeight() - m_height);
 			}
 			break;
-		/*case UNDERWORLD:
+		case UNDERWORLD:
 			x_decalage = m_width / 2 - m_underworld.m_player.getCoord().X();
 			y_decalage = m_height / 2 - m_underworld.m_player.getCoord().Y();
 			if (m_x + x_decalage > 0) {
@@ -155,7 +155,7 @@ public class Model {
 			} else if (-y_decalage > m_underworld.getHeight() - m_height) {
 				y_decalage = -(m_underworld.getHeight() - m_height);
 			}
-			break;*/
+			break;
 		default:
 			x_decalage = 0;
 			y_decalage = 0;
@@ -163,26 +163,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-		elapsed = Math.min(10, elapsed);
-		if (actualMode == mode.ROOM) {
-			m_player.tick(elapsed);
-			if (m_key != null) {
-				m_key.tick(elapsed);
-			}
-			if (m_bossKey != null) {
-				m_bossKey.tick(elapsed);
-			}
-			for (Opponent op : m_opponents) {
-				op.tick(elapsed);
-			}
-			for (Coin coin : m_coins) {
-				coin.tick(elapsed);
-			}
-			m_room.tick(elapsed);
-		}
-		m_hud.tick(elapsed);
+//		elapsed = Math.min(10, elapsed);
+//		if (actualMode == mode.ROOM) {
+//			m_player.tick(elapsed);
+//			if (m_key != null) {
+//				m_key.tick(elapsed);
+//			}
+//			if (m_bossKey != null) {
+//				m_bossKey.tick(elapsed);
+//			}
+//			for (Opponent op : m_opponents) {
+//				op.tick(elapsed);
+//			}
+//			for (Coin coin : m_coins) {
+//				coin.tick(elapsed);
+//			}
+//			m_room.tick(elapsed);
+//		}
+//		m_hud.tick(elapsed);
 
-		//m_underworld.tick(elapsed);
+		m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -224,7 +224,7 @@ public class Model {
 			m_hud.paint(g);
 			break;
 		case UNDERWORLD:
-			//m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
+			m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			break;
 		case VILLAGE:
 			m_village.paint(g, width, height);

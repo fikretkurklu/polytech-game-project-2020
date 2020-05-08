@@ -27,6 +27,7 @@ public class Fragment extends Entity{
 		m_model = model;
 		m_width = FragmentSIZE;
 		m_height = FragmentSIZE;
+		m_coord = new Coord(coord);
 		hitBox = new Rectangle(m_coord.X() - (int)(Element.SIZE/1.5), m_coord.Y() - (int)(Element.SIZE/1.5), Element.SIZE * 2, Element.SIZE * 2);
 	}
 	

@@ -30,6 +30,7 @@ public class Gate extends Entity {
 		m_height = GateSIZE;
 		appearing = false;
 		loopAnimation = false;
+		m_coord = new Coord(coord);
 		hitBox = new Rectangle(m_coord.X() + Element.SIZE, m_coord.Y() + Element.SIZE, Element.SIZE * 2,
 				Element.SIZE * 2);
 	}
