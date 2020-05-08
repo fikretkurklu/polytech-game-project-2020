@@ -27,7 +27,7 @@ public class Cloud extends Entity{
 	public Cloud(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
 		super(automaton, images, hmActions);
 		currentAction = Action.DEFAULT;
-		resetIndexAnimation();
+		resetAnim();
 		m_width = SIZE;
 		m_height = SIZE;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);

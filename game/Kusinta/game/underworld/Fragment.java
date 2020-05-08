@@ -22,6 +22,8 @@ public class Fragment extends Entity{
 	
 	public Fragment(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
 		super(automaton, images, hmActions);
+		currentAction = Action.DEFAULT;
+		resetAnim();
 		m_model = model;
 		m_width = FragmentSIZE;
 		m_height = FragmentSIZE;

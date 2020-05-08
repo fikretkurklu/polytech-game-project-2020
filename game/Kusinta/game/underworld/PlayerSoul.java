@@ -1,6 +1,7 @@
 package underworld;
 
 import java.io.IOException;
+
 import java.util.HashMap;
 
 import projectile.Projectile;
@@ -11,7 +12,6 @@ import java.awt.Rectangle;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Game;
@@ -23,7 +23,6 @@ public class PlayerSoul extends Character {
 
 	public static final int SIZE = (int) Element.SIZE;
 	public static final int MAX_LURE = 2;
-
 
 	long m_lureGenerationElapsed;
 	long m_dashTimer;
@@ -45,11 +44,12 @@ public class PlayerSoul extends Character {
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
 	boolean hidden, escape, escaped, escapedOrDead, invicible, outScreen;
-	boolean dashAvailable, lureAvailable, moveAvailable;
+	boolean dashAvailable, lureAvailable;
 	Lure lure;
 
-	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model, HashMap<Action, int[]> hmAction) throws IOException {
-		super(automaton, c, dir,  model, 100, 100, 0, 0, 0, images, hmAction);
+	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model,
+			HashMap<Action, int[]> hmAction) throws IOException {
+		super(automaton, c, dir, model, 100, 100, 0, 0, 0, images, hmAction);
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
@@ -57,18 +57,17 @@ public class PlayerSoul extends Character {
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
-		moveAvailable = true;
 		invicible = true;
 		hidden = false;
 		escape = false;
 		escapedOrDead = false;
 		currentAction = Action.JUMP;
-		resetIndexAnimation();
+		resetAnim();
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		m_model = model;
 	}
-	
-	public boolean lureActive(){
+
+	public boolean lureActive() {
 		return nbLure > 0;
 	}
 
@@ -222,10 +221,10 @@ public class PlayerSoul extends Character {
 		escape = true;
 		m_model.m_underworld.activateGate();
 		currentAction = Action.MOVE;
-		resetIndexAnimation();
+		resetAnim();
 		return true;
 	}
-	
+
 	@Override
 	public boolean wizz(Direction dir) {
 		int x = m_coord.X();
@@ -247,13 +246,13 @@ public class PlayerSoul extends Character {
 		switch (dir.toString()) {
 		case Direction.Ns:
 			currentAction = Action.JUMP;
-			resetIndexAnimation();
+			resetAnim();
 			escaped = true;
 			m_imageIndex = currentIndex.length - 1;
 			return true;
 		case Direction.Ss:
 			currentAction = Action.DEATH;
-			resetIndexAnimation();
+			resetAnim();
 			return true;
 		default:
 			return false;
@@ -272,7 +271,7 @@ public class PlayerSoul extends Character {
 			DISTANCE = DASHSPEED;
 			dashAvailable = false;
 			currentAction = Action.JUMP;
-			resetIndexAnimation();
+			resetAnim();
 			return true;
 		}
 		return false;
@@ -280,7 +279,7 @@ public class PlayerSoul extends Character {
 
 	@Override
 	public boolean egg(Direction dir) {
- 	  if ((lureAvailable) && (nbLure < MAX_LURE)) {
+		if ((lureAvailable) && (nbLure < MAX_LURE)) {
 			try {
 				int x = m_model.m_mouseCoord.X() - Lure.SIZE / 2;
 				int y = m_model.m_mouseCoord.Y() - Lure.SIZE / 2;
@@ -298,7 +297,7 @@ public class PlayerSoul extends Character {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void removeProjectile(Projectile projectile) {
 		super.removeProjectile(projectile);
@@ -355,51 +354,39 @@ public class PlayerSoul extends Character {
 					if (m_imageIndex <= 0) {
 						escapedOrDead = true;
 						m_model.switchEnv(mode.VILLAGE);
-				}else {
+					}
+				} else {
 					m_imageIndex++;
 					if (escape) {
 						if (m_imageIndex >= currentIndex.length) {
 							currentAction = Action.MOVE;
-							resetIndexAnimation();
+							resetAnim();
+							DISTANCE = NORMALSPEED;
 						}
-					}else {
+					} else {
 						if (m_imageIndex >= currentIndex.length) {
 							currentAction = Action.DEFAULT;
-							resetIndexAnimation();
+							resetAnim();
+							DISTANCE = NORMALSPEED;
+							if (invicible) {
+								invicible = false;
+							}
+						}
 					}
-					
-				}
-				}
-				return;
-			case NORMAL:
-				if (m_image_index >= UnderworldParam.sizePlayerAnimation) {
-					m_image_index = 0;
 				}
 				break;
-			case ESCAPE:
-				if (m_image_index >= UnderworldParam.sizePlayerEscapeAnimation) {
-					m_image_index = UnderworldParam.sizePlayerDashAnimation;
+			case DEFAULT:
+				if (m_imageIndex >= currentIndex.length) {
+					m_imageIndex = 0;
 				}
 				break;
-			case DASH:
-				if (m_image_index >= UnderworldParam.sizePlayerDashAnimation) {
-					if (escape) {
-						animationMode = ESCAPE;
-						m_image_index = UnderworldParam.sizePlayerDashAnimation;
-					} else {
-						animationMode = NORMAL;
-						m_image_index = 0;
-						if (invicible)
-							invicible = false;
-					}
-					DISTANCE = NORMALSPEED;
-				}
+			default:
 				break;
 			}
 		}
 		m_stepElapsed += elapsed;
-		if (m_stepElapsed > STEP_TICK) {
-			m_stepElapsed -= STEP_TICK;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed -= m_stepTick;
 			if (!dashAvailable) {
 				m_dashTimer += elapsed;
 				if (m_dashTimer > 5000) {

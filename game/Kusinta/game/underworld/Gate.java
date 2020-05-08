@@ -23,7 +23,7 @@ public class Gate extends Entity {
 	public Gate(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
 		super(automaton, images, hmActions);
 		currentAction = Action.MOVE;
-		resetIndexAnimation();
+		resetAnim();
 		m_coord = coord;
 		m_model = model;
 		m_width = GateSIZE;
@@ -52,7 +52,7 @@ public class Gate extends Entity {
 			if (currentAction == Action.MOVE) {
 				if (m_imageIndex >= currentIndex.length) {
 					currentAction = Action.DEFAULT;
-					resetIndexAnimation();
+					resetAnim();
 				}
 			} else if (currentAction == Action.DEFAULT) {
 					if (m_imageIndex >= currentIndex.length) {
