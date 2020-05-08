@@ -30,7 +30,6 @@ public abstract class Character extends Entity {
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
 	protected long m_moveElapsed;
-	
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
@@ -372,14 +371,12 @@ public abstract class Character extends Entity {
 			shooting = false;
 			if (jumping) {
 				currentAction = Action.JUMP;
-			}else {
+			} else {
 				currentAction = Action.DEFAULT;
-			} 
+			}
 			resetAnim();
-
 			int m_x = m_coord.X();
 			int m_y = hitBox.y + hitBox.height / 2;
-
 			Direction direc;
 			float angle;
 			double r;
@@ -419,7 +416,8 @@ public abstract class Character extends Entity {
 			m_projectiles.add(arrow);
 			break;
 		case MAGIC_PROJECTILE:
-			MagicProjectile proj = (MagicProjectile) Game.m_factory.newEntity(Type.MagicProjectile, direction, c, null, angle, shooter);
+			MagicProjectile proj = (MagicProjectile) Game.m_factory.newEntity(Type.MagicProjectile, direction, c, null,
+					angle, shooter);
 			m_projectiles.add(proj);
 			break;
 		case LURE:

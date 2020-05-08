@@ -18,15 +18,14 @@ import player.Character;
 
 public class Arrow extends Projectile {
 
-	public static final int SIZE = (int) ((float)Element.SIZE / (float)2);
+	public static final int SIZE = (int) ((float) Element.SIZE / (float) 2);
 
-	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction, Image[] bImages, HashMap<Action, int[]> indiceAction)
-			throws Exception {
+	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction,
+			Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(arrowAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
 		m_height = SIZE;
-		m_width = (int)(m_height * ratio);
-
+		m_width = (int) (m_height * ratio);
 		if (m_direction == Direction.E) {
 			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(-m_angle) * 1.5),
 					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)), 10, 10);
@@ -38,26 +37,29 @@ public class Arrow extends Projectile {
 	}
 
 	public void paint(Graphics g) {
+
 		long now = System.currentTimeMillis();
 		Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 				m_height * 2);
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
-		int w = m_width;
-		int h = m_height;
-		
 		Image image = getImage();
-	
+		
+		int w = (int) (m_width * 1.5);
+		int h = (int) (m_height / 1.5);
 		if (m_direction == Direction.E) {
 			bg.rotate(-m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, w/3, h / 4, w, h, null);
+			bg.drawImage(image, -10, h / 4, w, h, null);
 		} else {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
 			bg.drawImage(image, w, h / 4, -w, h, null);
 		}
+
 		bg.dispose();
+
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 	}
 
 	public float getAlpha() {
@@ -78,7 +80,7 @@ public class Arrow extends Projectile {
 				int tmpPlayerStrength = m_shooter.m_currentStatMap.get(Character.CurrentStat.Strength);
 				collidingWith.loseLife(m_strength + tmpPlayerStrength);
 				((Opponent) collidingWith).setCollidedWith(this);
-			} 
+			}
 		}
 		return b;
 	}
