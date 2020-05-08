@@ -1,13 +1,10 @@
 package underworld;
 
-import java.awt.Color;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Iterator;
-
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
@@ -23,7 +20,7 @@ public class Ghost extends Entity {
 	public static final int SPEED = 1;
 	public static final int MAX_RANGE = 450;
 
-	public static int SIZE = (int) (Element.SIZE);
+	public static final int SIZE = (int) (Element.SIZE);
 
 	public static final Direction[] dirs = { Direction.N, Direction.E, Direction.W, Direction.S };
 

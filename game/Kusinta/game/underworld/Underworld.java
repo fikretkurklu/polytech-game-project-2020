@@ -43,9 +43,6 @@ public class Underworld {
 	int nbGhosts;
 	Fragment[] m_fragments;
 	Gate m_gate;
-	UnderworldEmptySpaceImageManager ESIM;
-	UndInnerWallManager UIWM;
-	UndWallImageManager UWIM;
 	Model m_model;
 	Automaton wallAutomaton;
 	Image backgroundImage, cloudImage, cloudLeftUpImage, cloudRightUpImage, cloudLeftDownImage, cloudRightDownImage;
@@ -61,9 +58,6 @@ public class Underworld {
 		startCoord = new Coord(500, 500);
 		ambiance = (int) (Math.random() * UnderworldParam.nbAmbiance) + 1;
 		BufferedReader f;
-		ESIM = new UnderworldEmptySpaceImageManager(ambiance);
-		UWIM = new UndWallImageManager(ambiance);
-		UIWM = new UndInnerWallManager(ambiance);
 		m_clouds = new Cloud[MAX_CLOUDS];
 		m_ghosts = new LinkedList<Ghost>();
 		m_fragments = new Fragment[MAX_FRAGMENTS];
@@ -94,10 +88,6 @@ public class Underworld {
 			cloudRightUpImage = ImageLoader.loadImage(UnderworldParam.cloudImage[2], 860);
 			cloudLeftDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[3], 860);
 			cloudRightDownImage = ImageLoader.loadImage(UnderworldParam.cloudImage[4], 860);
-//			generateClouds(m_clouds);
-//			generateGhosts(40);
-//			generateFragments(m_fragments);
-//			generateGate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,22 +137,11 @@ public class Underworld {
 
 	public void CodeElement(String code, int x, int y) throws Exception {
 		Coord coord = new Coord(x * Element.SIZE, y * Element.SIZE);
-		if (code.equals(".")) {
+		 if (code.equals("IW")) {
+			Grow(false, new UndInnerWall(coord));
+		} else if (code.equals(".")) {
 			Grow(false, new UnderworldEmptySpace(coord));
-		} else if (code.equals("IW")) {
-			Grow(false, new UndInnerWall(coord, UIWM));
-		} else if (code.contentEquals("OW_E")) {
-			Grow(true, new UndWall(coord, UWIM, "E", wallAutomaton));
-		} else if (code.contentEquals("OW_S")) {
-			Grow(true, new UndWall(coord, UWIM, "S", wallAutomaton));
-		} else if (code.contentEquals("OW_N")) {
-			Grow(true, new UndWall(coord, UWIM, "N", wallAutomaton));
-		} else if (code.contentEquals("OW_W")) {
-			Grow(true, new UndWall(coord, UWIM, "W", wallAutomaton));
-		} else if (code.equals("ES")) {
-			Grow(false, new UnderworldEmptySpace(coord, ESIM));
 		}
-//		throw new Exception("Code room err: " + code);
 	}
 
 	public void Grow(boolean isElement, Element add) {
