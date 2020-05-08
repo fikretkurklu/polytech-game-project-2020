@@ -27,16 +27,12 @@ public class Ghost extends Entity {
 
 	public static final Direction[] dirs = { Direction.N, Direction.E, Direction.W, Direction.S };
 
-	int SPEED_WALK_TICK = 4;
-
-	Model m_model;
 	Direction m_direction;
 
 	
-	boolean leftOrientation, movingUp, movingDown, move;
+	boolean leftOrientation;
 	boolean isAttacking = false, isFollowing = false, isLure, isBuffed;
 	int m_range = 200, m_size = SIZE;;
-	Rectangle hitBox;
 
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images,
 			HashMap<Action, int[]> hmAction) {
@@ -366,58 +362,7 @@ public class Ghost extends Entity {
 		currentAction = Action.SHOT;
 		resetAnim();
 //		isFollowing = false;
-		switch (dir.toString()) {
-		case Direction.Ws:
-			leftOrientation = true;
-			movingUp = false;
-			movingDown = false;
-			flag = true;
-			break;
-		case Direction.Es:
-			leftOrientation = false;
-			movingUp = false;
-			movingDown = false;
-			flag = true;
-			break;
-		case Direction.Ns:
-			movingUp = true;
-			movingDown = false;
-			flag = true;
-			break;
-		case Direction.Ss:
-			movingUp = false;
-			movingDown = true;
-			flag = true;
-			break;
-		case Direction.NEs:
-			leftOrientation = false;
-			movingUp = true;
-			movingDown = false;
-			flag = true;
-			break;
-		case Direction.NWs:
-			leftOrientation = true;
-			movingUp = true;
-			movingDown = false;
-			flag = true;
-			break;
-		case Direction.SWs:
-			leftOrientation = true;
-			movingUp = false;
-			movingDown = true;
-			flag = true;
-			break;
-		case Direction.SEs:
-			leftOrientation = false;
-			movingUp = false;
-			movingDown = true;
-			flag = true;
-			break;
-		case Direction.Hs:
-			flag = true;
-			break;
-		}
-		return flag;
+		return true;
 	}
 
 	public void quitAttackMode() {
@@ -470,7 +415,7 @@ public class Ghost extends Entity {
 	}
 
 	public boolean gotstuff() {
-		boolean res = m_model.m_underworld.playerCreated && !getPlayer().escapedOrDead && !getPlayer().hidden;
+		boolean res = !getPlayer().invicible && !getPlayer().hidden;
 		if (!res) {
 			quitAttackMode();
 		}
