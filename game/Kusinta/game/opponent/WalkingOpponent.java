@@ -14,7 +14,6 @@ import environnement.Element;
 import game.Coord;
 import game.Game;
 import game.Model;
-import player.Character;
 
 public class WalkingOpponent extends Opponent {
 
