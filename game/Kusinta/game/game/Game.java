@@ -36,6 +36,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import entityFactory.Factory;
 import game.graphics.View;
@@ -60,6 +62,10 @@ public class Game implements ActionListener{
 	Model m_model;
 	Sound m_music;
 	public boolean gameOver;
+	
+	JList typeList;
+	JList automatonList;
+	JList animationList;
 
 	Game() throws Exception {
 		m_factory = new Factory();
@@ -87,15 +93,18 @@ public class Game implements ActionListener{
 		//m_frame.add(m_view, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel(new BorderLayout(2,2));
-		panel.add(new JList(Factory.Type.values()));
+		typeList = new JList(Factory.Type.values());
+		panel.add(typeList);
 		m_frame.add(panel, BorderLayout.LINE_START);
 
 		JPanel panel2 = new JPanel(new BorderLayout(2,2));
-		panel2.add(new JList(Factory.Avatars));
+		automatonList = new JList(Factory.Avatars);
+		panel2.add(automatonList);
 		m_frame.add(panel2, BorderLayout.LINE_END);
 		
 		JPanel panel3 = new JPanel(new BorderLayout(2,2));
-		panel3.add(new JList(Factory.Avatars));
+		animationList = new JList(Factory.Avatars);
+		panel3.add(animationList);
 		m_frame.add(panel3, BorderLayout.CENTER);
 		
 		JButton btn = new JButton("Valider");
@@ -195,7 +204,18 @@ public class Game implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("Ici !");
+		System.out.println("Type: " + typeList.getSelectedValue());
+		System.out.println("Automaton: " + automatonList.getSelectedValue());
+		System.out.println("Animation: " + animationList.getSelectedValue());
+		
+		m_factory.changeAnimation(Factory.Type.valueOf(typeList.getSelectedValue().toString()), animationList.getSelectedValue().toString());
+		try {
+			m_factory.changeAutomaton(Factory.Type.valueOf(typeList.getSelectedValue().toString()), automatonList.getSelectedValue().toString());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		m_frame.getContentPane().removeAll();
 		m_frame.getContentPane().repaint();
 		
