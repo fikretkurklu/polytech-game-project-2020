@@ -23,19 +23,25 @@ package game;
 import java.awt.BorderLayout;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 import entityFactory.Factory;
 import game.graphics.View;
 
-public class Game {
+public class Game implements ActionListener{
 
 	public static Game game;
 	public static Factory m_factory;
@@ -79,8 +85,25 @@ public class Game {
 		m_frame.setTitle("Game");
 		m_frame.setLayout(new BorderLayout());
 
-		m_frame.add(m_view, BorderLayout.CENTER);
+		//m_frame.add(m_view, BorderLayout.CENTER);
 
+		JPanel panel = new JPanel(new BorderLayout(2,2));
+		panel.add(new JList(Factory.Type.values()));
+		m_frame.add(panel, BorderLayout.LINE_START);
+
+		JPanel panel2 = new JPanel(new BorderLayout(2,2));
+		panel2.add(new JList(Factory.Avatars));
+		m_frame.add(panel2, BorderLayout.LINE_END);
+		
+		JPanel panel3 = new JPanel(new BorderLayout(2,2));
+		panel3.add(new JList(Factory.Avatars));
+		m_frame.add(panel3, BorderLayout.CENTER);
+		
+		JButton btn = new JButton("Valider");
+		btn.addActionListener(this);
+		m_frame.add(btn, BorderLayout.PAGE_END);
+		
+		
 		m_text = new JLabel();
 		m_text.setText("Tick: 0ms FPS=0");
 		m_frame.add(m_text, BorderLayout.NORTH);
@@ -168,6 +191,23 @@ public class Game {
 			// paint
 			m_model.paint(g, width, height);
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("Ici !");
+		m_frame.getContentPane().removeAll();
+		m_frame.getContentPane().repaint();
+		
+		m_frame.setLayout(new BorderLayout());
+		m_frame.add(m_view, BorderLayout.CENTER);
+		
+		m_text = new JLabel();
+		m_text.setText("Tick: 0ms FPS=0");
+		m_frame.add(m_text, BorderLayout.NORTH);
+		
+		m_frame.setVisible(true);
 	}
 
 }
