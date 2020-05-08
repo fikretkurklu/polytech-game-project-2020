@@ -151,7 +151,6 @@ public class ImageLibrary {
 						images[(i * ncols) + j] = images[(i * ncols) + j].getScaledInstance(finalWidth, finalHeight, 0);
 					}
 				}
-
 				return images;
 			}
 		} catch (IOException e) {

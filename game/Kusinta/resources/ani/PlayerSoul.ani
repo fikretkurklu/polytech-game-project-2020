@@ -1,4 +1,4 @@
-sprite_sheet = "resources/Underworld/PlayerSoul.png"
+sprite_sheet = resources/Underworld/PlayerSoul.png
 8;8;86;86
 MOVE = 11;12;13;14
 JUMP = 4;5;6;7;8;9;10

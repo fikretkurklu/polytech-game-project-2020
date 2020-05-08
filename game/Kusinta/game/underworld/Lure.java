@@ -19,8 +19,7 @@ import projectile.Projectile;
 public class Lure extends Projectile {
 
 	public static final int SIZE = Element.SIZE;
-	public static final int STEP_TICK = 4;
-	public static final int MAX_DELAY = 2500;
+	public static final int MAX_DELAY = 1000;
 	public static final int PERIOD = 1;
 
 	int delay;
@@ -86,12 +85,12 @@ public class Lure extends Projectile {
 			default:
 				break;
 			}
-			m_stepElapsed += elapsed;
-			if (m_stepElapsed > m_stepTick) {
-				delay -= PERIOD;
-				m_stepElapsed -= m_stepTick;
-				m_automaton.step(this);
-			}
+		}
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > m_stepTick) {
+			delay -= PERIOD;
+			m_stepElapsed -= m_stepTick;
+			m_automaton.step(this);
 		}
 	}
 }

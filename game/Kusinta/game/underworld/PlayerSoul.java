@@ -376,6 +376,8 @@ public class PlayerSoul extends Character {
 				}
 				break;
 			case DEFAULT:
+			case MOVE:
+				m_imageIndex++;
 				if (m_imageIndex >= currentIndex.length) {
 					m_imageIndex = 0;
 				}

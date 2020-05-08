@@ -60,7 +60,7 @@ public class Fragment extends Entity{
 	    if (m_imageElapsed > m_imageTick) {
 	      m_imageElapsed = 0;
 	      m_imageIndex++;
-	      if (m_imageIndex >= currentIndex.length) {
+	      if (m_imageIndex == currentIndex.length) {
 	    	  m_imageIndex = 0;
 	      }
 	    }

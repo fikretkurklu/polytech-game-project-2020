@@ -100,7 +100,7 @@ public class Underworld {
 //			fragmentImages = ImageLoader.loadImageSprite(UnderworldParam.fragmentSprite, 3, 3, Fragment.FragmentSIZE, Fragment.FragmentSIZE);
 //			gateImages = ImageLoader.loadImageSprite(UnderworldParam.gateSprite, 6, 6, Gate.GateSIZE, Gate.GateSIZE);
 			generateClouds(m_clouds);
-//			generateGhosts();
+			generateGhosts();
 			generateFragments(m_fragments);
 			generateGate();
 		} catch (Exception e) {
@@ -211,10 +211,10 @@ public class Underworld {
 		for (int i = 0; i < m_clouds.length; i++) {
 			m_clouds[i].paint(g);
 		}
-//		it = m_ghosts.iterator();
-//		while (it.hasNext()) {
-//			it.next().paint(g);
-//		}
+		it = m_ghosts.iterator();
+		while (it.hasNext()) {
+			it.next().paint(g);
+		}
 		if (gateCreated)
 			m_gate.paint(g);
 	}
@@ -240,10 +240,10 @@ public class Underworld {
 			m_clouds[i].tick(elapsed);
 		}
 		m_player.tick(elapsed);
-//		it = m_ghosts.iterator();
-//		while (it.hasNext()) {
-//			it.next().tick(elapsed);
-//		}
+		it = m_ghosts.iterator();
+		while (it.hasNext()) {
+			it.next().tick(elapsed);
+		}
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].tick(elapsed);
 		}
