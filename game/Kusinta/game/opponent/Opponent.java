@@ -1,13 +1,15 @@
 package opponent;
-
+import java.awt.Image;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Direction;
+import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;
+import game.Game;
 import game.Model;
 import player.Character;
 import projectile.Arrow;
@@ -18,25 +20,19 @@ public abstract class Opponent extends Character {
 
 	protected LinkedList<Arrow> collidedWith;
 
-	int SPEED_WALK_TICK = 4;
-	long m_moveElapsed;
-
-
-	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength) throws IOException {
-		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
+	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
+			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
 		m_key = false;
-		
 		collidedWith = new LinkedList<Arrow>();
-
 	}
 
 	@Override
 	public void tick(long elapsed) {
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		if (m_moveElapsed > m_stepTick) {
+			m_moveElapsed -= m_stepTick;
 			m_automaton.step(this);
 		}
 		if (this instanceof WalkingOpponent) {
@@ -56,11 +52,11 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					getM_model().setKey(
-							new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
+					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0	, null);
+					m_model.setKey(k);
 				} else if (m_bossKey == true) {
-					getM_model().setBossKey(
-							new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
+					BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, m_model, 0, null);
+					m_model.setBossKey(k);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -68,10 +64,10 @@ public abstract class Opponent extends Character {
 			setKey(false);
 		}
 	}
-
+	
 	public boolean move(Direction dir) {
 		if (gotpower()) {
-
+			
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 			if (!shooting)

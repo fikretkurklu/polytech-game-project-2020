@@ -2,37 +2,39 @@ package underworld;
 
 import java.awt.Color;
 
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
+import automaton.Entity;
 import game.Coord;
 import game.Model;
 import environnement.Element;
 
-public class Cloud extends Element{
+public class Cloud extends Entity{
 	
-	int m_width, m_height;
-	Model m_model;
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
 	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
-	long timeElapsed = 0;
-	Rectangle hitBox;
+	long m_timeElapsed = 0;
 	
 	public static final int SIZE = 2 * Element.SIZE;
 
-	public Cloud(Automaton automaton, Coord coord, Model model, Image image) {
-		super(false, true, coord, automaton);
+	public Cloud(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
+		super(automaton, images, hmActions);
+		m_coord = new Coord(coord);
+		currentAction = Action.DEFAULT;
+		resetAnim();
 		m_width = SIZE;
 		m_height = SIZE;
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);
 		m_model = model;
 		outScreen = false;
 		move = false;
-		__image = image;
 	}
 	
 	@Override
@@ -60,7 +62,8 @@ public class Cloud extends Element{
 		setCurrentState(m_automaton.getInitialState());
 		outScreen = false;
 		move = false;
-		timeElapsed = 0;
+		m_stepElapsed = 0;
+		m_timeElapsed = 0;
 	}
 	
 	@Override
@@ -73,20 +76,24 @@ public class Cloud extends Element{
 		}
 		return false;
 	}
+
 	
-	@Override
 	public void paint(Graphics g) {
-		g.drawImage(__image, m_coord.X(), m_coord.Y(), null);
+		g.drawImage(bImages[0], m_coord.X(), m_coord.Y(), null);
 		g.setColor(Color.blue);
 		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}
 	
 	public void tick(long elapsed) {
-			timeElapsed += elapsed;
-		    if (timeElapsed > 10) {
-		      timeElapsed = 0;
+			m_timeElapsed += elapsed;
+		    if (m_timeElapsed > 10) {
+		      m_timeElapsed = 0;
 		      move = true;
 		    }
-		    m_automaton.step(this);
+		    m_stepElapsed += elapsed;
+			if (m_stepElapsed > m_stepTick) {
+				m_stepElapsed -= m_stepTick;
+				m_automaton.step(this);
+			}
 	}
 }

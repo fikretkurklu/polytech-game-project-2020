@@ -1,7 +1,0 @@
-sprite_sheet = "resources/Player/spritePlayer.png"
-MOVE = 8;9;10;11;12;13;8
-JUMP = 15;16;17;22;23;23
-SHOOT = 114;115;116;117;114
-DEATH = 66;67;68;69
-SHOOTM = 120;121;122;123;120
-DEFAULT = 0;1;2;3;0

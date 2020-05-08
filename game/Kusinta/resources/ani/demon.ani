@@ -1,4 +1,0 @@
-sprite_sheet = "resources/oppenent/demon.png"
-DEATH = 4;5;6;7;8;9;4
-SHOOT = 0;1;2;3;0
-DEFAULT = 15;16;17;18;19;20;15

@@ -1,0 +1,6 @@
+sprite_sheet = resources/oppenent/demon/demon.png
+4;6
+DEATH = 4;5;6;7;8;9
+SHOT = 0;1;2;3
+MOVE = 15;16;17;18;19;20
+DEFAULT = 12;13;14

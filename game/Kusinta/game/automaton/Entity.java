@@ -1,6 +1,8 @@
 package automaton;
 
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import automaton.Automaton;
@@ -26,15 +28,49 @@ public abstract class Entity {
 	protected int X_MOVE;
 
 	protected Character collidingWith;
+	
+	protected Image[] bImages;
+	protected int m_imageIndex;
+	protected int[] currentIndex;
+	
+	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
+	protected Action currentAction = Action.DEFAULT; 
+	
+	HashMap<Action, int[]> indiceAction;
+	
+	protected long m_imageTick = 200;
+	protected long m_stepTick = 4;
+	protected long m_imageElapsed;
+	protected long m_stepElapsed;
+	
+	protected float ratio;
 
 	public Entity() {
+		
 	}
 
-	public Entity(Automaton automaton) {
+	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
+		bImages = img;
+		indiceAction = hmActions;
+		
 		m_state = automaton.getInitialState();
+		
 		m_automaton = automaton;
+		resetAnim();
+		m_stepElapsed = m_stepTick;
+		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
+	}
+	
+	public Entity(Automaton automaton) {
+		m_automaton = automaton;
+		m_state = automaton.getInitialState();
 	}
 
+	public void resized() {
+		for (int i = 0; i < bImages.length; i ++) {
+			bImages[i] = bImages[i].getScaledInstance(m_width, m_height, 0);
+		}
+	}
 	public State getCurrentState() {
 		return m_state;
 	}
@@ -119,7 +155,7 @@ public abstract class Entity {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					Rectangle playerHitBox = getM_model().getPlayer().getHitBox();
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
 					int xHB = hitBox.x;
 					int yHB = hitBox.y;
 					int widthHB = hitBox.width;
@@ -140,7 +176,7 @@ public abstract class Entity {
 							|| m_model.m_room.isBlocked(x, hitBox.y)
 							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				} else if (cat == Category.A) {
-					LinkedList<Opponent> opponents = getM_model().getOpponent();
+					LinkedList<Opponent> opponents = m_model.getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
 								|| op.getHitBox().contains(hitBox.x, hitBox.y)) {
@@ -249,12 +285,21 @@ public abstract class Entity {
 		}
 	}
 
-	public Model getM_model() {
-		return m_model;
-	}
-
 	public void setM_model(Model m_model) {
 		this.m_model = m_model;
 	}
-
+	
+	public void resetAnim() {
+		currentIndex = indiceAction.get(currentAction);
+		if(currentIndex == null) {
+			currentAction = Action.DEFAULT;
+			currentIndex = indiceAction.get(currentAction);
+		}
+		m_imageIndex = 0;
+		m_imageElapsed = m_imageTick;
+	}
+	
+	public Image getImage() {
+		return bImages[currentIndex[m_imageIndex]];
+	}
 }

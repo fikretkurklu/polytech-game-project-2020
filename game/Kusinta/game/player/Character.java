@@ -3,7 +3,6 @@ package player;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,16 +10,17 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 import game.Controller;
 import game.Coord;
+import game.Game;
 import game.Model;
 import projectile.Arrow;
 import projectile.MagicProjectile;
-//import projectile.Metor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
 import underworld.Lure;
@@ -29,6 +29,7 @@ public abstract class Character extends Entity {
 
 	double G = 9.81;
 	double ACCELERATION_JUMP = 1.8;
+	protected long m_moveElapsed;
 
 	public static enum CurrentStat {
 		Resistance, Strength, Attackspeed, MaxLife, Life
@@ -38,17 +39,10 @@ public abstract class Character extends Entity {
 
 	protected LinkedList<Projectile> m_projectiles;
 
-	protected BufferedImage[] bI;
-	protected int m_image_index;
-
-
 	protected int m_money;
 	HashMap<EquipmentManager.Stuff, Equipment> m_equipments;
 
 	public HashMap<Stats, Integer> m_defaultStatMap;
-
-	protected Image imageProjectile;
-	protected Image[] imageProjectiles;
 
 	protected boolean m_key;
 	protected boolean m_bossKey;
@@ -60,11 +54,11 @@ public abstract class Character extends Entity {
 	protected boolean shooting;
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength) throws IOException {
-		super(automaton);
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+		super(automaton, bImages, indiceAction);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
-		setCurrentStat(attackSpeed, maxLife, life, resistance, strength);
+		setCurrentStat(attackSpeed, life, resistance, strength);
 
 		m_coord = new Coord(C);
 
@@ -76,7 +70,6 @@ public abstract class Character extends Entity {
 
 		m_key = false;
 
-		m_image_index = 0;
 
 		collidingWith = null;
 
@@ -117,7 +110,7 @@ public abstract class Character extends Entity {
 	public void setCoord(Coord coord) {
 		m_coord = coord;
 	}
-	
+
 	public Coord getCoord() {
 		return m_coord;
 	}
@@ -127,7 +120,7 @@ public abstract class Character extends Entity {
 	}
 
 	public Model getModel() {
-		return getM_model();
+		return m_model;
 	}
 
 	public LinkedList<Projectile> getProjectiles() {
@@ -180,10 +173,6 @@ public abstract class Character extends Entity {
 	public HashMap<EquipmentManager.Stuff, Equipment> getEquipment() {
 		return m_equipments;
 	}
-	
-	public void setEquipment(HashMap<EquipmentManager.Stuff, Equipment> equip) {
-		m_equipments = equip;
-	}
 
 	@Override
 	public boolean jump(Direction dir) { // sauter
@@ -191,9 +180,7 @@ public abstract class Character extends Entity {
 			y_gravity = m_coord.Y();
 			jumping = true;
 			falling = true;
-
 			m_time = m_ratio_y;
-
 			gravity(m_time);
 		}
 
@@ -215,15 +202,15 @@ public abstract class Character extends Entity {
 			if (m_time >= 10)
 				gravity(m_time);
 		} else if (falling) {
-			int topBlock = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
+			int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 			hitBox.translate(0, -(m_coord.Y() - topBlock));
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
 		}
 		if (!falling) {
-			if (getM_model().m_room.isBlocked(m_coord.X(), m_coord.Y())) {
-				int blockTop = getM_model().m_room.blockTop(m_coord.X(), m_coord.Y());
+			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+				int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y());
 				hitBox.translate(0, -(m_coord.Y() - blockTop));
 				m_coord.setY(blockTop);
 			}
@@ -234,7 +221,7 @@ public abstract class Character extends Entity {
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
-				int botBlock = getM_model().m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
+				int botBlock = m_model.m_room.blockBot(m_coord.X(), m_coord.Y() - m_height) + m_height;
 				hitBox.translate(0, -(m_coord.Y() - botBlock));
 				m_coord.setY(botBlock);
 				y_gravity = m_coord.Y();
@@ -316,9 +303,10 @@ public abstract class Character extends Entity {
 		m_defaultStatMap.put(Stats.Strengh, strength);
 	}
 
-	public void setCurrentStat(int attackspeed, int max_health, int life, int resistance, int strength) {
+	public void setCurrentStat(int attackspeed, int health, int resistance, int strength) {
 		m_currentStatMap = new HashMap<>();
-		m_currentStatMap.put(CurrentStat.MaxLife, max_health);
+		int life = health;
+		m_currentStatMap.put(CurrentStat.MaxLife, health);
 		m_currentStatMap.put(CurrentStat.Life, life);
 		m_currentStatMap.put(CurrentStat.Resistance, resistance);
 		m_currentStatMap.put(CurrentStat.Strength, strength);
@@ -329,20 +317,12 @@ public abstract class Character extends Entity {
 		m_money += money;
 	}
 
-	public Image getProjectileImage() {
-		return imageProjectile;
-	}
-
-	public Image[] getProjectileImages() {
-		return imageProjectiles;
-	}
-
 	public void removeProjectile(Projectile projectile) {
 		m_projectiles.remove(projectile);
 	}
 
 	public boolean isMoving() {
-		boolean moving = getM_model().qPressed || getM_model().dPressed;
+		boolean moving = m_model.qPressed || m_model.dPressed;
 		return moving;
 	}
 
@@ -353,46 +333,51 @@ public abstract class Character extends Entity {
 	public void setKey(boolean key) {
 		m_key = key;
 	}
-	
+
 	public boolean getBossKey() {
 		return m_bossKey;
 	}
-	
+
 	public void setBossKey(boolean key) {
 		m_bossKey = key;
 	}
-	
+
 	@Override
 	public boolean key(int keyCode) {
 		if (keyCode == Controller.K_Q) {
-			return getM_model().qPressed;
+			return m_model.qPressed;
 		} else if (keyCode == Controller.K_Z) {
-			return getM_model().zPressed;
+			return m_model.zPressed;
 		} else if (keyCode == Controller.K_D) {
 			return m_model.dPressed;
 		} else if (keyCode == Controller.K_S) {
-			return getM_model().sPressed;
+			return m_model.sPressed;
 		} else if (keyCode == Controller.K_SPACE) {
-			return getM_model().espPressed;
+			return m_model.espPressed;
 		} else if (keyCode == Controller.K_A) {
-			return getM_model().aPressed;
+			return m_model.aPressed;
 		} else if (keyCode == Controller.K_E) {
-			return getM_model().ePressed;
+			return m_model.ePressed;
 		} else if (keyCode == Controller.K_V)
-			return getM_model().vPressed;
+			return m_model.vPressed;
 		return false;
 	}
 
 	public boolean checkBlock(int x, int y) {
-		return getM_model().m_room.isBlocked(x, y);
+		return m_model.m_room.isBlocked(x, y);
 	}
 
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
+			if (jumping) {
+				currentAction = Action.JUMP;
+			} else {
+				currentAction = Action.DEFAULT;
+			}
+			resetAnim();
 			int m_x = m_coord.X();
 			int m_y = hitBox.y + hitBox.height / 2;
-
 			Direction direc;
 			float angle;
 			double r;
@@ -428,16 +413,17 @@ public abstract class Character extends Entity {
 			throws Exception {
 		switch (type) {
 		case ARROW:
-			m_projectiles.add(new Arrow(getM_model().arrowAutomaton, c, angle, shooter, direction));
+			Arrow arrow = (Arrow) Game.m_factory.newEntity(Type.Arrow, direction, c, null, angle, shooter);
+			m_projectiles.add(arrow);
 			break;
 		case MAGIC_PROJECTILE:
-			m_projectiles.add(new MagicProjectile(getM_model().magicProjAutomaton, c, angle, shooter, direction));
-			break;
-		case METEOR:
-//			m_projectiles.add(new Metor(m_model.magicProjAutomaton, c, angle, shooter, direction));
+			MagicProjectile proj = (MagicProjectile) Game.m_factory.newEntity(Type.MagicProjectile, direction, c, null,
+					angle, shooter);
+			m_projectiles.add(proj);
 			break;
 		case LURE:
-			m_projectiles.add(new Lure(m_model.lureAutomaton, c, shooter, direction, m_model.m_underworld.lureImages, m_model));
+			Lure lure = (Lure) Game.m_factory.newEntity(Type.Lure, direction, c, m_model, 0, shooter);
+			m_projectiles.add(lure);
 			break;
 		default:
 			break;

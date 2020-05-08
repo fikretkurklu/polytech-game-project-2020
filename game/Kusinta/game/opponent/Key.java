@@ -3,6 +3,7 @@ package opponent;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Automaton;
 import automaton.Category;
@@ -23,20 +24,15 @@ public abstract class Key extends Entity {
 
 	int m_width, m_height;
 
-	int position, aller;
-
 	protected boolean falling;
 	long m_time;
 	private int y_gravity;
+	int position, aller;
 
-	public Key(Automaton automaton, int x, int y, Model model) throws Exception {
-		super(automaton);
+	public Key(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, bImages, indiceAction);
 
-		m_coord = new Coord();
-
-		m_coord.setX(x);
-		m_coord.setY(y);
-
+		m_coord = new Coord(c);
 		m_model = model;
 
 		m_time = 0;
@@ -64,6 +60,8 @@ public abstract class Key extends Entity {
 	public void paint(Graphics g) {
 		int w = m_width / 4;
 		int h = m_height / 4;
+		Image image;
+		image = getImage();
 
 		if (!falling) {
 			if (position >= 10) {
@@ -74,20 +72,13 @@ public abstract class Key extends Entity {
 			position = (position + aller);
 		}
 
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h + position, -w, h, null);
+		g.drawImage(image, m_coord.X(), m_coord.Y() - h + position, -w, h, null);
 	}
 
-	/*
-	 * public Image loadImage(String path) throws Exception { File imageFile = new
-	 * File(path); Image image; if (imageFile.exists()) { image =
-	 * ImageIO.read(imageFile); image = image.getScaledInstance(SIZE, SIZE, 0);
-	 * return image; } else { throw new
-	 * Exception("Error while loading image: path = " + path); } }
-	 */
 
 	public void tick(long elapsed) {
 		m_automaton.step(this);
-
+		
 		if (elapsed < 10) {
 			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5) || m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
 

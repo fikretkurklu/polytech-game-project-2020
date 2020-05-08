@@ -4,13 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import automaton.Category;
 import automaton.Automaton;
 import automaton.Direction;
+import entityFactory.Factory.Type;
 import environnement.Element;
 import game.Coord;
-import game.ImageLoader;
+import game.Game;
 import game.Model;
 import player.Character;
 
@@ -18,84 +20,48 @@ public class WalkingOpponent extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	int AttackStrength;
-	Image[] deathSprite;
-	Image[] walkingSprite;
-	Image[] attackingSprite;
-	int m_image_index, m_imageElapsed;
 
 	int hHitBox, wHitBox;
 	
 	boolean isDead;
 
-	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, int diffLevel) throws Exception {
+	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*diffLevel, 100*diffLevel, 1000, 100*diffLevel, 5*diffLevel);
+		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
 		}
-		m_coord.setY(getM_model().m_room.blockTop(m_coord.X(), m_coord.Y()));
+		m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 
 		X_MOVE = 2;
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
 
-		m_imageElapsed = 0;
 		shooting = false;
 		
 		isDead = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
-		deathSprite = new Image[6];
-		for (int i = 0; i < 6; i++) {
-			deathSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Death" + (i + 1) + ".png", SIZE);
-		}
-
-		walkingSprite = new Image[6];
-		for (int i = 0; i < 6; i++) {
-			walkingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Walk" + (i + 1) + ".png", SIZE);
-		}
-
-		attackingSprite = new Image[4];
-		for (int i = 0; i < 4; i++) {
-			attackingSprite[i] = ImageLoader.loadImage("resources/oppenent/demon/Attack" + (i + 1) + ".png", SIZE);
-		}
-
-		float ratio = (float) ((float) walkingSprite[0].getWidth(null)) / (float) (walkingSprite[0].getHeight(null));
-
-		m_height = SIZE;
-		m_width = (int) (m_height * ratio);
 
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
 
-		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox);
-
-		m_image_index = 0;
-
-		m_money = 100;
-
+		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
+		setMoney(100);
 		m_moveElapsed = 0;
+		currentAction = Action.MOVE;
+		resetAnim();
 
 	}
 
 	@Override
 	public void paint(Graphics gp) {
-
-		Image image = null;
-		if (!gotpower()) {
-			image = deathSprite[m_image_index];
-			basicHitBox();
-		} else if (shooting) {
-			image = attackingSprite[m_image_index];
-			attackHitBox();
-		} else {
-			image = walkingSprite[m_image_index];
-			basicHitBox();
-		}
-
-		double agr = 2;
-		int w = (int) (m_width * agr);
-		int h = (int) (m_height * agr);
+		Image image = getImage();
+		int w = m_width * 2;
+		int h = m_height * 2;
 		int decalage = (int) (((float) 3 / (float) 4) * h);
 
 		if (m_direction == Direction.E) {
@@ -105,18 +71,20 @@ public class WalkingOpponent extends Opponent {
 		}
 		gp.setColor(Color.DARK_GRAY);
 		gp.fillRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-		if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 50) {
+		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
 			gp.setColor(Color.GREEN);
-		} else if (((float)(m_currentStatMap.get(CurrentStat.Life))/(m_currentStatMap.get(CurrentStat.MaxLife)))*100 > 25) {
+		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
 			gp.setColor(Color.ORANGE);
 		} else {
 			gp.setColor(Color.RED);
 		}
 
-		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / (m_currentStatMap.get(CurrentStat.MaxLife)));
+		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
 		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
+
+		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 	}
 
@@ -125,21 +93,20 @@ public class WalkingOpponent extends Opponent {
 		super.tick(elapsed);
 
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
+		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
-
+			m_imageIndex++;
 			if (!gotpower()) {
-				if (m_image_index >= 5) {
-					m_model.getM_opponentsToDelete().add(this);
+				if (m_imageIndex >= currentIndex.length) {
 					dropKey();
-						getM_model().addCoin(new Coin(getM_model().coinDropAutomaton, m_coord.X(), m_coord.Y() - 5, m_money, getM_model()));
+					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
+					c.setMoney(m_money);
+					m_model.addCoin(c);
+					m_model.getM_opponentsToDelete().add(this);
 				}
-				m_image_index = (m_image_index + 1) % 6;
-				System.out.println(m_image_index);
-			} else if (shooting) {
-				m_image_index = (m_image_index + 1) % 4;
-			} else {
-				m_image_index = (m_image_index + 1) % 6;
+			}
+			if (m_imageIndex >= currentIndex.length) {
+				m_imageIndex = 0;
 			}
 
 		}
@@ -152,24 +119,27 @@ public class WalkingOpponent extends Opponent {
 			switch (dir.toString()) {
 			case Direction.Es:
 				if (cat == Category.O) {
-					if (!getM_model().m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
+					if (!m_model.m_room.isBlocked(hitBox.x + hitBox.width + 1, hitBox.y + hitBox.height + 1)) {
 						return true;
 					}
 				}
 				break;
 			case Direction.Ws:
 				if (cat == Category.O) {
-					if (!getM_model().m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
+					if (!m_model.m_room.isBlocked(hitBox.x, hitBox.y + hitBox.height + 1)) {
 						return true;
 					}
 				}
 				break;
 			}
-			if (shooting)
+			if (shooting) {
 				shooting = !shooting;
+				currentAction = Action.MOVE;
+				resetAnim();
+			}
 		} else {
 			if (dir == Direction.H) {
-				collidingWith = getM_model().getPlayer();
+				collidingWith = m_model.getPlayer();
 			}
 
 		}
@@ -179,31 +149,31 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (getM_model().actualMode == Model.mode.ROOM) {
-			if (getM_model().getPlayer().gotpower()) {
-				int xPlayer = getM_model().getPlayer().getCoord().X();
-				int yPlayer = getM_model().getPlayer().getCoord().Y();
-				if (yPlayer >= hitBox.y && yPlayer - getM_model().getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
-					if (dir == Direction.E) {
-						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
-							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-							for (int i = 0; i < 10; i++) {
-								if (!getM_model().m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
-									return false;
-								}
+		if (m_model.getPlayer().gotpower()) {
+			int xPlayer = m_model.getPlayer().getCoord().X();
+			int yPlayer = m_model.getPlayer().getCoord().Y();
+			if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+				if (dir == Direction.E) {
+					if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
+								return false;
 							}
-							return true;
+	
 						}
-					} else if (dir == Direction.W) {
-						if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
-							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-							for (int i = 0; i < 10; i++) {
-								if (!getM_model().m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
-									return false;
-								}
+						return true;
+					}
+				} else if (dir == Direction.W) {
+					if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
+								return false;
 							}
-							return true;
+					
 						}
+						return true;
 					}
 				}
 			}
@@ -224,7 +194,9 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean wizz(Direction dir) {
 		if (!shooting) {
-			m_image_index = 0;
+			currentAction = Action.SHOT;
+			shooting = true;
+			resetAnim();
 		}
 		shooting = true;
 		return true;
@@ -233,7 +205,8 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean explode() {
 		if (!isDead) {
-			m_image_index = 0;
+			currentAction = Action.DEATH;
+			resetAnim();
 			isDead = true;
 		}
 		setLife(0);

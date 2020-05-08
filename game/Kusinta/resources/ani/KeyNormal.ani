@@ -1,0 +1,3 @@
+sprite_sheet = resources/Room/dropable/Golden_Key.png
+1;1
+DEFAULT = 0

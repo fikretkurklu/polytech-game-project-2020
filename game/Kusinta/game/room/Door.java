@@ -29,7 +29,7 @@ public class Door extends Decor {
 	public boolean activate() {
 		System.out.println("Activate");
 		try {
-			getM_model().switchToNextRoom();
+			m_model.switchToNextRoom();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

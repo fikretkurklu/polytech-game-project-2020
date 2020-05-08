@@ -3,25 +3,20 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import automaton.Automaton;
-import automaton.AutomatonLibrary;
 import automaton.Direction;
+import entityFactory.Factory;
+import entityFactory.Factory.Type;
 import environnement.Element;
-import equipment.Equipment;
-import equipment.EquipmentManager.Stuff;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
-import underworld.PlayerSoul;
 import underworld.Underworld;
 import village.Village;
 import player.Character;
-import player.Character.CurrentStat;
 
 public class Model {
 
@@ -37,21 +32,9 @@ public class Model {
 
 	public mode actualMode;
 
-	private AutomatonLibrary m_AL;
-	public Automaton arrowAutomaton;
-	public Automaton magicProjAutomaton;
-	public Automaton playerSoulAutomaton;
-	public Automaton flyingOpponentAutomaton;
-	public Automaton walkingOpponentAutomaton;
-	public Automaton keyDropAutomaton;
-	public Automaton lureAutomaton;
-	public Automaton coinDropAutomaton;
-	public Automaton bossAutomaton;
-	public Automaton meteorAutomaton;
-
 	public AutomaticRoomGenerator m_roomGenerator;
 	public int difficultyLevel;
-	
+
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
 	public Room m_room;
@@ -59,9 +42,9 @@ public class Model {
 	public Village m_village;
 
 	boolean set = false;
-	protected LinkedList<Opponent> m_opponents;
+	LinkedList<Opponent> m_opponents;
 	private LinkedList<Opponent> m_opponentsToDelete;
-	protected LinkedList<Coin> m_coins;
+	LinkedList<Coin> m_coins;
 
 	public HUD m_hud;
 
@@ -69,40 +52,27 @@ public class Model {
 	public BossKey m_bossKey;
 	public Coin m_coin;
 	float diametre;
+	Factory m_factory;
 
-
-	public Model(View view, int w, int h) throws Exception {
+	public Model(View view, int w, int h, Factory factory) throws Exception {
 		m_view = view;
 		m_width = w;
 		m_height = h;
+		m_factory = factory;
+		m_opponentsToDelete = new LinkedList<Opponent>();
 
-		m_AL = new AutomatonLibrary();
-		playerSoulAutomaton = m_AL.getAutomaton("PlayerSoul");
-		arrowAutomaton = m_AL.getAutomaton("Fleche");
-		flyingOpponentAutomaton = m_AL.getAutomaton("FlyingOpponents");
-		walkingOpponentAutomaton = m_AL.getAutomaton("WalkingOpponents");
-		keyDropAutomaton = m_AL.getAutomaton("KeyDrop");
-		coinDropAutomaton = m_AL.getAutomaton("CoinDrop");
-		lureAutomaton = m_AL.getAutomaton("Lure");
-		magicProjAutomaton = m_AL.getAutomaton("MagicProj");
-		bossAutomaton = m_AL.getAutomaton("Boss");
-		meteorAutomaton = m_AL.getAutomaton("Meteor");
-		
 		setRoom();
 		start();
-		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
+		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 		int HUD_w = m_width / 3;
 		int HUD_h = m_height / 8;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 
-		difficultyLevel = 1;
-		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		m_opponentsToDelete = new LinkedList<Opponent>();
+
 		opponentCreator();
-		//m_opponents.add(new Boss(bossAutomaton, new Coord(800, 1700), Direction.E, this));
-		
+
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
@@ -111,60 +81,10 @@ public class Model {
 		m_bossKey = null;
 	}
 
-
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
-		m_room = new Room(m_AL, m_width, m_height);
-		Player player = (Player) m_player;
-		int attackspeed = player.getStat(CurrentStat.Attackspeed);
-		int health = player.getStat(CurrentStat.Life);
-		int maxLife = player.getStat(CurrentStat.MaxLife);
-		int resistance = player.getStat(CurrentStat.Resistance);
-		int strength = player.getStat(CurrentStat.Strength);
-		int money = player.getMoney();
-		HashMap<Stuff, Equipment> equip = player.getEquipment();
-		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
-		m_player.setCurrentStat(attackspeed, maxLife, health, resistance, strength);
-		m_player.setMoney(money);
-		m_player.setEquipment(equip);
-		
-		int HUD_w = m_width / 3;
-		int HUD_h = m_height / 8;
-		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
-		
-		difficultyLevel ++;
-		
-		m_opponents = new LinkedList<Opponent>();
-		m_coins = new LinkedList<Coin>();
-		m_opponents = new LinkedList<Opponent>();
-		opponentCreator();
-	}
-	
-	public void switchToDungeon() throws Exception {
-		this.m_roomGenerator.AutomaticGeneration();
-		m_room = new Room(m_AL, m_width, m_height);
-		Player player = (Player) m_player;
-		int attackspeed = player.getStat(CurrentStat.Attackspeed);
-		int maxLife = player.getStat(CurrentStat.MaxLife);
-		int resistance = player.getStat(CurrentStat.Resistance);
-		int strength = player.getStat(CurrentStat.Strength);
-		int money = player.getMoney();
-		HashMap<Stuff, Equipment> equip = player.getEquipment();
-		m_player = new Player( m_AL.getAutomaton("Player_donjon"), m_room.getStartCoord(), Direction.E, this);
-		m_player.setCurrentStat(attackspeed, maxLife, maxLife, resistance, strength);
-		m_player.setMoney(money);
-		m_player.setEquipment(equip);
-		
-		int HUD_w = m_width / 3;
-		int HUD_h = m_height / 8;
-		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
-		
-		difficultyLevel = 1;
-		
-		m_opponents = new LinkedList<Opponent>();
-		m_coins = new LinkedList<Coin>();
-		m_opponents = new LinkedList<Opponent>();
-		opponentCreator();
+		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
+		this.m_player.setCoord(m_room.getStartCoord());
 	}
 
 	public void switchEnv(mode m) {
@@ -176,43 +96,30 @@ public class Model {
 		ePressed = false;
 		vPressed = false;
 		sPressed = false;
-		try {
-			switch (m) {
-			case ROOM:
-				if (this.actualMode.equals(mode.UNDERWORLD)) {
-					m_player.setCurrentStat(m_player.getStat(CurrentStat.Attackspeed), m_player.getStat(CurrentStat.MaxLife), m_player.getStat(CurrentStat.MaxLife), m_player.getStat(CurrentStat.Resistance), m_player.getStat(CurrentStat.Strength));
-				} else if (this.actualMode.equals(mode.VILLAGE)) {
-					try {
-						switchToDungeon();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				m_village = null;
-				break;
-			case UNDERWORLD:
-				m_underworld.setPlayer(
-						new PlayerSoul(playerSoulAutomaton, m_underworld.getStartCoord(), Direction.E, m_underworld.playerImages, this));
-				break;
-			case VILLAGE:
-				m_village = new Village(m_width, m_height, this, (Player) m_player);
-				break;
-			case GAMEOVER:
-				break;
-			}
-			actualMode = m;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		switch (m) {
+		case ROOM:
+			m_village = null;
+			break;
+		case UNDERWORLD:
+			m_underworld.reset(40); // Nombre de Ghosts à préciser
+			break;
+		case VILLAGE:
+			m_village = new Village(m_width, m_height, this, (Player) m_player);
+			break;
+		case GAMEOVER:
+			break;
 		}
+		actualMode = m;
+
 	}
 
 	public void start() throws Exception {
-		m_room = new Room(m_AL, m_width, m_height);
-		m_underworld = new Underworld(m_AL, m_width, m_height, this);
+		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
+		m_underworld = new Underworld(m_factory, m_width, m_height, this);
+
 	}
-	
+
 	public void setRoom() throws IOException {
 		m_roomGenerator = new AutomaticRoomGenerator();
 		m_roomGenerator.AutomaticGeneration();
@@ -256,34 +163,39 @@ public class Model {
 
 	public void tick(long elapsed) {
 		elapsed = Math.min(10, elapsed);
-		if (actualMode == mode.ROOM)
+		switch(actualMode) {
+		case ROOM:
 			m_player.tick(elapsed);
-		if (m_key != null) {		
-			m_key.tick(elapsed);
-		}
-		if (m_bossKey != null) {
-			m_bossKey.tick(elapsed);
-		}
-		
-		for (Opponent op : m_opponents) {
-			op.tick(elapsed);
-		}
-		
-		if (m_opponentsToDelete != null) {
-			for(Opponent op : m_opponentsToDelete) {
-				if (op != null) {
-					m_opponents.remove(op);
+			if (m_key != null) {
+				m_key.tick(elapsed);
+			}
+			if (m_bossKey != null) {
+				m_bossKey.tick(elapsed);
+			}
+			
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+			if (m_opponentsToDelete != null) {
+				for(Opponent op : m_opponentsToDelete) {
+					if (op != null) {
+						m_opponents.remove(op);
+					}
 				}
 			}
+			for (Coin coin : m_coins) {
+				coin.tick(elapsed);
+			}
+			m_room.tick(elapsed);
+			m_hud.tick(elapsed);
+			break;
+		case UNDERWORLD:
+			m_underworld.tick(elapsed);
+			break;
+		default:
+			m_hud.tick(elapsed);
+			break;
 		}
-		
-		for (Coin coin : m_coins) {
-			coin.tick(elapsed);
-		}
-		
-		m_hud.tick(elapsed);
-		m_room.tick(elapsed);
-		// m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
@@ -340,7 +252,7 @@ public class Model {
 
 	public void setMouseCoord(Coord mouseCoord) {
 		m_mouseCoord = mouseCoord;
-		m_mouseCoord.translate(-x_decalage,- y_decalage);
+		m_mouseCoord.translate(-x_decalage, -y_decalage);
 	}
 
 	public int getXDecalage() {
@@ -387,25 +299,33 @@ public class Model {
 		m_bossKey = key;
 	}
 
+	public void opponentCreator() {
+		try {
+			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
+			for (int i = 0; i < coordFO.length; i++) {
+				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
+				FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord,
+						this, 0, null);
+				m_opponents.add(fo);
+			}
+			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+			for (int i = 0; i < coordWO.length; i++) {
+				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
+				WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E,
+						coord, this, 0, null);
+				m_opponents.add(wo);
+			}
+		} catch (Exception e) {
+			System.out.println("Error while creating oppenant");
+		}
 
-	public void opponentCreator() throws Exception {
-		Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
-		for (int i = 0; i < coordFO.length; i++) {
-			Coord coord = new Coord(coordFO[i].X()+ Element.SIZE/2, coordFO[i].Y()+ Element.SIZE);
-			m_opponents.add(new FlyingOpponent(flyingOpponentAutomaton, coord, Direction.E, this, difficultyLevel));
-		}
-		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
-		for (int i = 0; i < coordWO.length; i++) {
-			Coord coord = new Coord(coordWO[i].X()+ Element.SIZE/2, coordWO[i].Y());
-			m_opponents.add(new WalkingOpponent(walkingOpponentAutomaton, coord, Direction.E, this, difficultyLevel));
-		}
-		int randomKey = (int) (Math.random()*m_opponents.size());
-		int randomBossKey = (int) (Math.random()*m_opponents.size());
-		while (randomBossKey == randomKey) {
-			randomBossKey = (int) (Math.random()*m_opponents.size());
-		}
-		m_opponents.get(randomKey).setKey(true);
-		m_opponents.get(randomBossKey).setBossKey(true);
+		// int randomKey = (int) (Math.random()*m_opponents.size());
+		// int randomBossKey = (int) (Math.random()*m_opponents.size());
+		// while (randomBossKey == randomKey) {
+		// randomBossKey = (int) (Math.random()*m_opponents.size());
+		// }
+		// m_opponents.get(randomKey).setKey(true);
+		// m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
@@ -435,7 +355,7 @@ public class Model {
 			sPressed = pressed;
 			break;
 		}
-		
+
 	}
 
 	public LinkedList<Opponent> getM_opponentsToDelete() {
@@ -445,5 +365,4 @@ public class Model {
 	public void setM_opponentsToDelete(LinkedList<Opponent> m_opponentsToDelete) {
 		this.m_opponentsToDelete = m_opponentsToDelete;
 	}
-
 }

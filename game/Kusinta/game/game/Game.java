@@ -21,22 +21,21 @@ d * Copyright (C) 2020  Pr. Olivier Gruber
 package game;
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
+import entityFactory.Factory;
 import game.graphics.View;
 
 public class Game {
 
 	public static Game game;
+	public static Factory m_factory;
 
 	public static void main(String args[]) throws Exception {
 		try {
@@ -55,10 +54,11 @@ public class Game {
 	public boolean gameOver;
 
 	Game() throws Exception {
+		m_factory = new Factory();
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         m_controller = new Controller(this);
         m_view = new View(m_controller);
-        m_model = new Model(m_view, d.width, d.height);
+        m_model = new Model(m_view, d.width, d.height, m_factory);
         // creating frame
         m_frame = m_view.createFrame(d);
         gameOver = false;

@@ -1,11 +1,11 @@
 package player;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import automaton.*;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 import game.Model.mode;
 import opponent.BossKey;
@@ -16,39 +16,27 @@ import environnement.Element;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-	private final String PATH_ARROW = "resources/Player/spriteArrow.png";
-	private final String PATH_SPRITE_PLAYER = "resources/Player/spritePlayer.png";
 
-	int SPEED_WALK_TICK = 4;
 
 	boolean invincible, paintInvincible;
-
-	long m_imageElapsed;
-	long m_moveElapsed, m_invincibleElapsed;
-
-	int min_image_index, max_image_index;
+	long m_invincibleElapsed;
 
 	protected BossKey m_bossKey;
 
-	public Player(Automaton automaton, Coord C, Direction dir, Model model) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 0, 0);
-		bI = ImageLoader.loadBufferedSprite(PATH_SPRITE_PLAYER, 18, 7);
-
-		imageProjectile = ImageLoader.loadImageProjectile(PATH_ARROW);
-
-		float ratio = (float) ((float) bI[0].getWidth()) / (float) (bI[0].getHeight());
+	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+			HashMap<Action, int[]> hmActions) throws Exception {
+		super(automaton, C, dir, model, 100, 100, 1000, 0, 0, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
-		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10, m_height - 16);
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10,
+				m_height - 16);
 
 		m_imageElapsed = 0;
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
 
-		min_image_index = 0;
-		max_image_index = 3;
 		
 		X_MOVE = 2;
 
@@ -70,10 +58,13 @@ public class Player extends Character {
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping) {
-			setImageIndex(8, 13);
+			if (currentAction != Action.MOVE) {
+				currentAction = Action.MOVE;
+				resetAnim();
+			}
 		}
 		super.move(dir);
-		if (dir !=  m_direction && !shooting) {
+		if (dir != m_direction && !shooting) {
 			turn(dir);
 		}
 
@@ -84,15 +75,14 @@ public class Player extends Character {
 	public boolean jump(Direction dir) { // sauter
 		if (!checkBlock(m_coord.X(), m_coord.Y() - m_height) && !falling) {
 			if (shooting) {
-				setImageIndex(120, 123);
 				if (isMoving())
-					setImageIndex(114, 117);
+					currentAction = Action.SHOTMOVE;
 				else
-					setImageIndex(120, 123);
+					currentAction = Action.SHOT;
 			} else {
-				setImageIndex(15, 23);
-				m_image_index = 16;
+				currentAction = Action.JUMP;
 			}
+			resetAnim();
 			super.jump(dir);
 		}
 
@@ -102,7 +92,7 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		reset();
-		getM_model().switchEnv(mode.VILLAGE);
+		m_model.switchEnv(mode.VILLAGE);
 		return true;
 	}
 
@@ -114,14 +104,13 @@ public class Player extends Character {
 	@Override
 	public boolean egg(Direction dir) { // tir
 		if (!shooting) {
-			if (jumping || falling || isMoving()) {
-				m_image_index = 120;
-				setImageIndex(120, 123);
-			} else {
-				m_image_index = 114;
-				setImageIndex(114, 117);
-			}
 			shooting = true;
+			if (isMoving()) {
+				currentAction = Action.SHOTMOVE;
+			} else {
+				currentAction = Action.SHOT;
+			}
+			resetAnim();
 			return true;
 		}
 		return false;
@@ -129,15 +118,14 @@ public class Player extends Character {
 
 	private void checkDoor() {
 		boolean door;
-		System.out.println("deçu");
-		Door d = getM_model().m_room.getDoor();
+		Door d = m_model.m_room.getDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
 		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
 		if (door && m_key != false) {
-			d.setM_model(getM_model());
+			d.setM_model(m_model);
 			d.activate();
 		}
 	}
@@ -162,38 +150,33 @@ public class Player extends Character {
 
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-
+			m_imageIndex ++;
 			if (!gotpower()) {
-				m_image_index = (m_image_index - 66 + 1) % 3 + 66;
-				if (m_image_index == 68 && getM_model().getDiametre() == 0) {
-					getM_model().setDiametre(1);
+				if (m_imageIndex >= currentIndex.length && m_model.getDiametre() == 0) {
+					m_model.setDiametre(1);
 				}
 			} else {
-				if (shooting && (m_image_index == 117 || m_image_index == 123)) {
-					super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
-				} else if (jumping && !shooting && m_image_index == 17) {
-					m_image_index = 22;
-				} else if (!shooting && ((falling && !jumping) || (jumping && m_image_index == 23))) {
-					setImageIndex(23, 23);
-				} else {
-					m_image_index++;
+				if (shooting) {
+					if (m_imageIndex >= currentIndex.length) {
+						super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
+					}
 				}
-
 				if (!shooting && !falling && !isMoving()) {
-					setImageIndex(0, 3);
-				}
-
-				if (m_image_index < min_image_index || m_image_index > max_image_index) {
-					m_image_index = min_image_index;
+					if (currentAction != Action.DEFAULT) {
+						currentAction = Action.DEFAULT;
+						resetAnim();
+					}
 				}
 			}
+			if (m_imageIndex >= currentIndex.length) {
+				m_imageIndex = 0;
+			}
 		}
-
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		if (m_moveElapsed > m_stepTick) {
+			m_moveElapsed -= m_stepTick;
 			if (shooting) {
-				if (getM_model().m_mouseCoord.X() > m_coord.X()) {
+				if (m_model.m_mouseCoord.X() > m_coord.X()) {
 					turn(Direction.E);
 				} else {
 					turn(Direction.W);
@@ -201,7 +184,6 @@ public class Player extends Character {
 			}
 			m_automaton.step(this);
 		}
-
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
 		}
@@ -212,12 +194,13 @@ public class Player extends Character {
 		int m_x = m_coord.X();
 		int m_y = m_coord.Y();
 
-		BufferedImage img;
-		img = bI[m_image_index];
+		Image img;
+
+		img = getImage();
 
 		int w = m_width;
 		int h = m_height;
-		
+
 		int H;
 		if (shooting && !jumping) {
 			H = 17;
@@ -245,10 +228,12 @@ public class Player extends Character {
 			m_projectiles.get(i).paint(g);
 		}
 	}
+
 	@Override
 	public boolean explode() {
-		if (!gotpower())
-			m_image_index = 66;
+		if (!gotpower()) {
+			resetAnim();
+		}
 		return true;
 	}
 
@@ -259,17 +244,10 @@ public class Player extends Character {
 			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
 		}
 	}
-	
+
 	public void setInvincibility() {
 		invincible = true;
 		paintInvincible = true;
 	}
-	
-	public void setImageIndex(int min, int max) {
-		if (min_image_index != min || max_image_index != max) {
-			m_imageElapsed = 200;
-		}
-		min_image_index = min;
-		max_image_index = max;
-	}
+
 }
