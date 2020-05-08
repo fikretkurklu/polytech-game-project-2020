@@ -75,18 +75,26 @@ Demon (East) {
 *(East)
   | ! GotPower() ? Explode() : ()
   | Cell(E, O) ? Turn(W) : (West)
-  | Cell(H, P) ? Power : (East)
+  | Cell(H, P) ? Power : (ME)
   | Cell(E, P) ? Wizz() : (East)
   | Closest(P, E) ? Pop(E) : (East)
   | True ? Move(E) : (East)
 *(West)
   | ! GotPower() ? Explode() : ()
   | Cell(W, O) ? Turn(E) : (East)
-  | Cell(H, P) ? Power : (West)
+  | Cell(H, P) ? Power : (MW)
   | Cell(W, P) ? Wizz() : (West)
   | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
-}
+
+*(ME)
+ | Cell(E, O) ? Turn(W) : (West)
+ | True ? Move(E) : (East)
+
+ *(MW)
+ | Cell(W, O) ? Turn(E) : (ES)
+ | True ? Move(W) : (West)
+ }
 
 KeyBoss (Init) {
 *(Init)

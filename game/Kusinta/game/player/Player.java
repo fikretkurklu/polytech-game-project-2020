@@ -223,7 +223,7 @@ public class Player extends Character {
 			}
 			paintInvincible = !paintInvincible;
 		}
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		//g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

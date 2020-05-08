@@ -21,7 +21,7 @@ public class WalkingOpponent extends Opponent {
 	int AttackStrength;
 
 	int hHitBox, wHitBox;
-	
+
 	boolean isDead;
 
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
@@ -39,11 +39,10 @@ public class WalkingOpponent extends Opponent {
 		m_width = (int) (m_height * ratio);
 
 		shooting = false;
-		
+
 		isDead = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
-
 
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
@@ -83,7 +82,7 @@ public class WalkingOpponent extends Opponent {
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
 
-		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		// gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 	}
 
@@ -105,6 +104,11 @@ public class WalkingOpponent extends Opponent {
 				}
 			}
 			if (m_imageIndex >= currentIndex.length) {
+				if (shooting) {
+					shooting = !shooting;
+					currentAction = Action.MOVE;
+					resetAnim();
+				}
 				m_imageIndex = 0;
 			}
 
@@ -131,16 +135,6 @@ public class WalkingOpponent extends Opponent {
 				}
 				break;
 			}
-			if (shooting) {
-				shooting = !shooting;
-				currentAction = Action.MOVE;
-				resetAnim();
-			}
-		} else {
-			if (dir == Direction.H) {
-				collidingWith = m_model.getPlayer();
-			}
-
 		}
 
 		return c;
@@ -159,7 +153,7 @@ public class WalkingOpponent extends Opponent {
 							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
 								return false;
 							}
-	
+
 						}
 						return true;
 					}
@@ -170,7 +164,7 @@ public class WalkingOpponent extends Opponent {
 							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
 								return false;
 							}
-					
+
 						}
 						return true;
 					}
@@ -192,10 +186,10 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean wizz(Direction dir) {
-		if (!shooting) {
+		if (currentAction != Action.SHOT) {
 			currentAction = Action.SHOT;
-			shooting = true;
 			resetAnim();
+			m_model.getPlayer().loseLife(AttackStrength);
 		}
 		shooting = true;
 		return true;
@@ -214,13 +208,7 @@ public class WalkingOpponent extends Opponent {
 
 	@Override
 	public boolean power() {
-		if (collidingWith != null) {
-			if (shooting) {
-				collidingWith.loseLife(AttackStrength);
-			} else {
-				collidingWith.loseLife(m_currentStatMap.get(CurrentStat.Strength));
-			}
-		}
+		m_model.getPlayer().loseLife(m_currentStatMap.get(CurrentStat.Strength));
 		return true;
 
 	}
