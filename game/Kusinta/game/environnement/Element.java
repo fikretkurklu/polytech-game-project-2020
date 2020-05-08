@@ -18,7 +18,7 @@ import game.Coord;
  * 
  */
 
-public abstract class Element extends Entity{
+public abstract class Element extends Entity {
 
 	public static final int SIZE = 86;
 
