@@ -49,15 +49,11 @@ public class FlyingOpponent extends Opponent {
 	@Override
 	public boolean egg(Direction dir) {
 		if (gotpower() && !shooting) {
-
 			currentAction = Action.SHOT;
 			resetAnim();
-
 			shooting = true;
-
 			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();
-
 			if (player_x > m_coord.X()) {
 				turn(Direction.E);
 			} else {
@@ -113,7 +109,7 @@ public class FlyingOpponent extends Opponent {
 			m_imageElapsed = 0;
 			m_imageIndex ++;
 			if (!gotpower()) {
-				if (m_imageIndex == indiceAction.get(currentAction).length) {
+				if (m_imageIndex >= currentIndex.length) {
 					m_model.getOpponent().remove(this);
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
@@ -123,18 +119,17 @@ public class FlyingOpponent extends Opponent {
 				}
 			}
 			if (shooting) {
-				if (m_imageIndex == indiceAction.get(currentAction).length) {
+				if (m_imageIndex >= currentIndex.length) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
 					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
 							proj.MAGIC_PROJECTILE);
 				}
 			}
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			if (m_imageIndex >= currentIndex.length) {
 				m_imageIndex = 0;
 			}
 		}
-
-		for (int i = 0; i < m_projectiles.size(); i ++) {
+		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).tick(elapsed);
 		}
 	}

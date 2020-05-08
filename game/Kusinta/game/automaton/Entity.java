@@ -36,15 +36,13 @@ public abstract class Entity {
 	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
 	protected Action currentAction = Action.DEFAULT; 
 	
-	protected HashMap<Action, int[]> indiceAction;
+	HashMap<Action, int[]> indiceAction;
 	
 	protected long m_imageTick = 200;
 	protected long m_stepTick = 4;
 	protected long m_imageElapsed;
-	protected long m_stepElapsed;
+	protected int SPEED_WALK_TICK = 4;
 	
-	protected String gal = ".gal";
-	protected String ani = ".ani";
 	protected float ratio;
 
 	public Entity() {
@@ -289,16 +287,11 @@ public abstract class Entity {
 	public void resetAnim() {
 		m_imageIndex = 0;
 		m_imageElapsed = m_imageTick;
+		resetIndexAnimation();
 	}
 	
 	public Image getImage() {
-		int[] indicesAction = indiceAction.get(currentAction);
-		if (indicesAction == null) {
-			currentAction = Action.DEFAULT;
-			indicesAction = indiceAction.get(currentAction);
-			m_imageIndex = 0;
-		}
-		return bImages[indicesAction[m_imageIndex]];
+		return bImages[currentIndex[m_imageIndex]];
 	}
 	
 	public void resetIndexAnimation() {

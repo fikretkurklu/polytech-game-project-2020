@@ -22,7 +22,7 @@ public class MagicProjectile extends Projectile {
 		super(projectileAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
 		m_height = SIZE;
-		m_width =  (int)(m_height * ratio);
+		m_width = (int) (m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
 		setSpeed(4);
@@ -53,15 +53,12 @@ public class MagicProjectile extends Projectile {
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;
-			m_imageIndex ++;
-			
+			m_imageIndex++;
+
 			if (m_State == State.OK_STATE) {
 				m_imageIndex = 0;
-			} else if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			} else if (m_imageIndex >= currentIndex.length) {
 				m_shooter.removeProjectile(this);
-			}
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
-				m_imageIndex = 0;
 			}
 		}
 
@@ -71,23 +68,23 @@ public class MagicProjectile extends Projectile {
 	public boolean cell(Direction dir, Category cat) {
 		boolean b = super.cell(dir, cat);
 		if (b) {
-			if (cat == Category.O) {
-				m_State = State.HIT_STATE;
-				currentAction = Action.DEATH;
-				return true;
-			}
 			if (cat == Category.P) {
-				m_State = State.HIT_STATE;
 				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
 				collidingWith.loseLife(m_strength - tmpPlayerResistance);
-				currentAction = Action.DEATH;
-				return true;
 			}
-			currentAction = Action.DEFAULT;
-			m_State = State.OK_STATE;
 		}
 		return b;
+	}
+
+	@Override
+	public boolean explode() {
+		if (m_State == State.OK_STATE) {
+			m_State = State.HIT_STATE;
+			currentAction = Action.DEATH;
+			resetAnim();
+		}
+		return true;
 	}
 
 }

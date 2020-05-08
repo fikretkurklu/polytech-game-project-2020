@@ -35,7 +35,7 @@ public class WalkingOpponent extends Opponent {
 		X_MOVE = 2;
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
-		
+
 		shooting = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
@@ -47,7 +47,7 @@ public class WalkingOpponent extends Opponent {
 		setMoney(100);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
-		
+		resetAnim();
 
 	}
 
@@ -77,7 +77,7 @@ public class WalkingOpponent extends Opponent {
 		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-		
+
 		gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 
 	}
@@ -91,7 +91,7 @@ public class WalkingOpponent extends Opponent {
 			m_imageElapsed = 0;
 			m_imageIndex++;
 			if (!gotpower()) {
-				if (m_imageIndex >= indiceAction.get(currentAction).length - 1) {
+				if (m_imageIndex >= currentIndex.length) {
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
 					c.setMoney(m_money);
@@ -99,7 +99,7 @@ public class WalkingOpponent extends Opponent {
 					m_model.getOpponent().remove(this);
 				}
 			}
-			if (m_imageIndex >= indiceAction.get(currentAction).length) {
+			if (m_imageIndex >= currentIndex.length) {
 				m_imageIndex = 0;
 			}
 		}
@@ -136,42 +136,39 @@ public class WalkingOpponent extends Opponent {
 			}
 
 		}
-
 		return c;
 	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (m_model.actualMode == Model.mode.ROOM) {
-			if (m_model.getPlayer().gotpower()) {
-				int xPlayer = m_model.getPlayer().getCoord().X();
-				int yPlayer = m_model.getPlayer().getCoord().Y();
-				if (yPlayer >= hitBox.y
-						&& yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
-					if (dir == Direction.E) {
-						if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
-							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-							for (int i = 0; i < 10; i++) {
-								if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
-									return false;
-								}
+		if (m_model.getPlayer().gotpower()) {
+			int xPlayer = m_model.getPlayer().getCoord().X();
+			int yPlayer = m_model.getPlayer().getCoord().Y();
+			if (yPlayer >= hitBox.y && yPlayer - m_model.getPlayer().getHeight() / 2 <= hitBox.y + hitBox.height) {
+				if (dir == Direction.E) {
+					if (xPlayer > hitBox.x + hitBox.width && xPlayer < hitBox.x + hitBox.width / 2 + 500) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
+								return false;
 							}
-							return true;
 						}
-					} else if (dir == Direction.W) {
-						if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
-							int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
-							for (int i = 0; i < 10; i++) {
-								if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
-									return false;
-								}
+						return true;
+					}
+				} else if (dir == Direction.W) {
+					if (xPlayer > hitBox.x + hitBox.width / 2 - 500 && xPlayer < hitBox.x + 1) {
+						int intervalle = Math.abs((xPlayer - m_coord.X()) / 10);
+						for (int i = 0; i < 10; i++) {
+							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
+								return false;
 							}
-							return true;
 						}
+						return true;
 					}
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -188,17 +185,10 @@ public class WalkingOpponent extends Opponent {
 	@Override
 	public boolean wizz(Direction dir) {
 		if (!shooting) {
+			currentAction = Action.SHOT;
+			shooting = true;
 			resetAnim();
 		}
-		currentAction = Action.SHOT;
-		shooting = true;
-		return true;
-	}
-
-	@Override
-	public boolean explode() {
-		currentAction = Action.DEATH;
-		setLife(0);
 		return true;
 	}
 
