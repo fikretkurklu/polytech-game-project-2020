@@ -45,6 +45,7 @@ public abstract class Button {
 	public void setFgImage(Image img) {
 		try {
 			fgImg = img;
+			fgImg = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			fgImgDrawned = null;
