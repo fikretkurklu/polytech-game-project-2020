@@ -31,6 +31,7 @@ public abstract class Entity {
 	
 	protected Image[] bImages;
 	protected int m_imageIndex;
+	protected int[] currentIndex;
 	
 	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
 	protected Action currentAction = Action.DEFAULT; 
@@ -299,5 +300,14 @@ public abstract class Entity {
 			m_imageIndex = 0;
 		}
 		return bImages[indicesAction[m_imageIndex]];
+	}
+	
+	public void resetIndexAnimation() {
+		currentIndex = indiceAction.get(currentAction);
+		if(currentIndex == null) {
+			currentAction = Action.DEFAULT;
+			currentIndex = indiceAction.get(currentAction);
+		}
+		m_imageIndex = 0;
 	}
 }
