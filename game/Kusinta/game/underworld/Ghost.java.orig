@@ -32,7 +32,7 @@ public class Ghost extends Entity {
 	
 	boolean leftOrientation;
 	boolean isAttacking = false, isFollowing = false, isLure, isBuffed;
-	int m_range = 200, m_size = SIZE;
+	int m_range = 200, m_size = SIZE;;
 
 	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images,
 			HashMap<Action, int[]> hmAction) {
@@ -357,7 +357,7 @@ public class Ghost extends Entity {
 	public boolean hit(Direction dir) {
 		if (!isLure)
 			getPlayer().getDamage();
-//		boolean flag = false;
+		boolean flag = false;
 		isAttacking = true;
 		currentAction = Action.SHOT;
 		resetAnim();
@@ -415,7 +415,11 @@ public class Ghost extends Entity {
 	}
 
 	public boolean gotstuff() {
+<<<<<<< Updated upstream
 		boolean res = !getPlayer().invicible && !getPlayer().hidden;
+=======
+		boolean res = m_model.m_underworld.playerCreated && /*!getPlayer().escapedOrDead &&*/ !getPlayer().hidden;
+>>>>>>> Stashed changes
 		if (!res) {
 			quitAttackMode();
 		}

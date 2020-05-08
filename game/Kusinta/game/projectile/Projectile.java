@@ -7,7 +7,6 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import game.Coord;
 import player.Character;
 
