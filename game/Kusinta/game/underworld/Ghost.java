@@ -12,7 +12,6 @@ import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -30,24 +29,27 @@ public class Ghost extends Entity {
 
 	int SPEED_WALK_TICK = 4;
 
-	Coord m_coord;
 	Model m_model;
 	Direction m_direction;
 
-	int m_width = SIZE, m_height = SIZE;
+	
 	boolean leftOrientation, movingUp, movingDown, move;
 	boolean isAttacking = false, isFollowing = false, isLure, isBuffed;
 	int m_range = 200, m_size = SIZE;;
-	Rectangle m_hitbox;
+	Rectangle hitBox;
 
-	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images, HashMap<Action, int[]> hmAction) {
+	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images,
+			HashMap<Action, int[]> hmAction) {
 		super(automaton, images, hmAction);
 		currentAction = Action.DEFAULT;
+		m_width = SIZE;
+		m_height = SIZE;
 		m_model = model;
 		m_coord = new Coord(coord);
 		m_direction = dir;
-		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
+		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		resetAnim();
+		X_MOVE = 2;
 	}
 
 	public void buff() {
@@ -55,7 +57,7 @@ public class Ghost extends Entity {
 			m_range = m_range + 50;
 		if (!isBuffed) {
 			m_size = (int) (1.5 * m_size);
-			m_hitbox.setSize(m_size, m_size);
+			hitBox.setSize(m_size, m_size);
 			m_width = m_size;
 			m_height = m_size;
 		}
@@ -152,15 +154,21 @@ public class Ghost extends Entity {
 			break;
 		}
 		if (flag)
-			m_hitbox.setLocation(m_coord.X(), m_coord.Y());
+			hitBox.setLocation(m_coord.X(), m_coord.Y());
 		return flag;
 	}
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
 		Coord tmpCoord;
-		quitAttackMode();
+//		quitAttackMode();
 		int d = 0;
+		if (cat == Category.G) {
+			int x = m_coord.X();
+			int y = m_coord.Y();
+			return ((x + m_width < 0) || (y + m_height < 0) || (x > Underworld.BORDERX) || (y > Underworld.BORDERY));
+		}
+		
 		if (cat == Category.A || cat == Category.C) {
 			Coord playerCoord = null;
 			if (cat == Category.A) {
@@ -195,19 +203,16 @@ public class Ghost extends Entity {
 				d = m_coord.X() - playerCoord.X();
 				return (playerCoord.Y() == m_coord.Y()) && (d > 0 && d <= m_range);
 			case Direction.NEs:
-				d = distance(playerCoord, m_coord); 
+				d = distance(playerCoord, m_coord);
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
 			case Direction.SEs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				d = distance(playerCoord, m_coord);
 				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() > m_coord.X()) && (d <= m_range);
 			case Direction.SWs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				d = distance(playerCoord, m_coord);
 				return (playerCoord.Y() > m_coord.Y()) && (playerCoord.X() < m_coord.X()) && (d <= m_range);
 			case Direction.NWs:
-				d = (int) Math.sqrt((playerCoord.X() - m_coord.X()) * (playerCoord.X() - m_coord.X())
-						+ (playerCoord.Y() - m_coord.Y()) * (playerCoord.Y() - m_coord.Y()));
+				d = distance(playerCoord, m_coord);
 				return (playerCoord.Y() < m_coord.Y()) && (playerCoord.X() < m_coord.X()) && (d <= m_range);
 			}
 		}
@@ -216,23 +221,21 @@ public class Ghost extends Entity {
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
-		Coord block, playerBlock, tmpCoord;
+		Coord tmpCoord;
 		Coord coord = null;
+		Rectangle playerHitBox = null;
+		int xHB, yHB, widthHB, heightHB;
 		if (cat == Category.O) {
 			isFollowing = false;
 			if (dir == Direction.F) {
 				switch (m_direction.toString()) {
 				case Direction.Ns:
-//					block = getBlockCoord(m_coord.X(), m_coord.Y() - SIZE);
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
 				case Direction.Ss:
-//					block = getBlockCoord(m_coord.X(), m_coord.Y() + SIZE);
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y() + m_size);
 				case Direction.Ws:
-//					block = getBlockCoord(m_coord.X() - SIZE, m_coord.Y());
 					return m_model.m_underworld.isBlocked(m_coord.X(), m_coord.Y());
 				case Direction.Es:
-//					block = getBlockCoord(m_coord.X() + SIZE, m_coord.Y());
 					return m_model.m_underworld.isBlocked(m_coord.X() + m_size, m_coord.Y());
 				default:
 					return false;
@@ -240,12 +243,14 @@ public class Ghost extends Entity {
 
 			}
 		} else if (cat == Category.A) {
+			playerHitBox = getPlayer().getHitBox();
 			coord = getPlayer().getCoord();
 			isLure = false;
 		} else if (cat == Category.C) {
 			if (getPlayer().lureActive()) {
 				isLure = true;
 				coord = getPlayer().getProjectiles().get(0).getCoord();
+				playerHitBox = new Rectangle(coord.X(), coord.Y(), SIZE, SIZE);
 				int min = distance(m_coord, coord);
 				Iterator<Projectile> it = getPlayer().getProjectiles().iterator();
 				int d;
@@ -255,59 +260,49 @@ public class Ghost extends Entity {
 					if (d <= min) {
 						min = d;
 						coord = tmpCoord;
+						playerHitBox = new Rectangle(coord.X(), coord.Y(), SIZE, SIZE);
 					}
 				}
 			} else
 				return false;
 		}
 		// Modifier egalités de coord pour garder une distance
-//		switch (dir.toString()) {
-//		case Direction.Ns:
-//			block = getBlockCoord(m_coord.X(), m_coord.Y() - m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.Ss:
-//			block = getBlockCoord(m_coord.X(), m_coord.Y() + m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.Es:
-//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y());
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
-//		case Direction.Ws:
-//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y());
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50;
-//		case Direction.NEs:
-//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() - m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.NWs:
-//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() - m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.SEs:
-//			block = getBlockCoord(m_coord.X() + m_size, m_coord.Y() + m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.SWs:
-//			block = getBlockCoord(m_coord.X() - m_size, m_coord.Y() + m_size);
-//			playerBlock = getBlockCoord(coord.X(), coord.Y());
-//			return block.isEqual(playerBlock) && Math.abs(coord.X() - m_coord.X()) <= 50
-//					&& Math.abs(coord.Y() - m_coord.Y()) <= 50;
-//		case Direction.Hs:
-//			return Math.abs(m_coord.X() - coord.X()) <= 5 && Math.abs(m_coord.Y() - coord.Y()) <= 5;
-//		// return coord.isEqual(m_coord);
-//		}
+		switch (dir.toString()) {
+		case Direction.Hs:
+			xHB = hitBox.x;
+			yHB = hitBox.y;
+			widthHB = hitBox.width;
+			heightHB = hitBox.height;
+			if (playerHitBox.contains(xHB, yHB) || playerHitBox.contains(xHB + widthHB / 2, yHB)
+					|| playerHitBox.contains(xHB + widthHB, yHB)
+					|| playerHitBox.contains(xHB + widthHB, yHB + heightHB / 2)
+					|| playerHitBox.contains(xHB + widthHB, yHB + heightHB)
+					|| playerHitBox.contains(xHB + widthHB / 2, yHB + heightHB)
+					|| playerHitBox.contains(xHB, yHB + heightHB)
+					|| playerHitBox.contains(xHB, yHB + heightHB / 2)
+					|| playerHitBox.contains(xHB + widthHB / 2, yHB)) {
+				return true;
+			}
+		}
 		return false;
+	}
+	
+	public boolean jump(Direction dir) {
+		int x = m_coord.X();
+		int y = m_coord.Y();
+		if (x < 0) {
+			m_coord.setX(Underworld.BORDERX);
+		} else if (y < 0) {
+			m_coord.setY(Underworld.BORDERY);
+		} else if (x > Underworld.BORDERX) {
+			m_coord.setX(0 - m_width);
+		} else {
+			m_coord.setY(0 - m_height);
+		}
+		return true;
 	}
 
 	public boolean PopOrWizz(Direction dir, Coord coord) {
-//		int d = (int) Math.sqrt((coord.X() - m_coord.X()) * (coord.X() - m_coord.X())
-//				+ (coord.Y() - m_coord.Y()) * (coord.Y() - m_coord.Y()));
 		isFollowing = true;
 		boolean flag = false;
 		switch (dir.toString()) {
@@ -359,7 +354,7 @@ public class Ghost extends Entity {
 			break;
 		}
 		if (flag)
-			m_hitbox.setLocation(m_coord.X(), m_coord.Y());
+			hitBox.setLocation(m_coord.X(), m_coord.Y());
 		return flag;
 	}
 
@@ -368,6 +363,8 @@ public class Ghost extends Entity {
 			getPlayer().getDamage();
 		boolean flag = false;
 		isAttacking = true;
+		currentAction = Action.SHOT;
+		resetAnim();
 //		isFollowing = false;
 		switch (dir.toString()) {
 		case Direction.Ws:
@@ -424,23 +421,21 @@ public class Ghost extends Entity {
 	}
 
 	public void quitAttackMode() {
-		if (isAttacking || isFollowing) {
-			isFollowing = false;
-			isAttacking = false;
+		if (isAttacking) {
+			currentAction = Action.DEFAULT;
 			resetAnim();
 			m_direction = dirs[(int) (Math.random() * 4)];
+			isAttacking = false;
 		}
 	}
 
 	public void paint(Graphics g) {
-		Image img;
-		img = getImage();
 		if (leftOrientation)
-			g.drawImage(img, m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
+			g.drawImage(getImage(), m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
 		else
-			g.drawImage(img, m_coord.X(), m_coord.Y(), m_size, m_size, null);
+			g.drawImage(getImage(), m_coord.X(), m_coord.Y(), m_size, m_size, null);
 		g.setColor(Color.blue);
-		g.drawRect(m_hitbox.x, m_hitbox.y, m_width, m_height);
+		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 
 	}
 
@@ -450,13 +445,12 @@ public class Ghost extends Entity {
 			m_imageElapsed = 0;
 			m_imageIndex++;
 			if (isAttacking) {
-				currentAction = Action.SHOT;
-
-			} else {
-				currentAction = Action.DEFAULT;
+				if (m_imageIndex >= currentIndex.length) {
+					quitAttackMode();
+				}
 			}
 			if (m_imageIndex >= currentIndex.length) {
-				resetAnim();
+				m_imageIndex = 0;
 			}
 		}
 		m_stepElapsed += elapsed;
