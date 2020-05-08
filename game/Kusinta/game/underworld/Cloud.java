@@ -19,8 +19,8 @@ import environnement.Element;
 public class Cloud extends Entity{
 	
 	boolean outScreen; // Indique si le nuage n'est plus visible à l'écran
-//	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
-//	long m_timeElapsed = 0;
+	boolean move; // Booléen qui permet un mouvement de 1 pixel du nuage par seconde
+	long m_timeElapsed = 0;
 	
 	public static final int SIZE = 2 * Element.SIZE;
 
@@ -34,7 +34,7 @@ public class Cloud extends Entity{
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), m_width, m_height);
 		m_model = model;
 		outScreen = false;
-//		move = false;
+		move = false;
 	}
 	
 	@Override
@@ -61,20 +61,20 @@ public class Cloud extends Entity{
 		hitBox.setLocation(Underworld.BORDERX, m_coord.Y());
 		setCurrentState(m_automaton.getInitialState());
 		outScreen = false;
-//		move = false;
+		move = false;
 		m_stepElapsed = 0;
-//		timeElapsed = 0;
+		m_timeElapsed = 0;
 	}
 	
 	@Override
 	public boolean move(Direction dir) {
-//		if (move) {
-//			move = false;
+		if (move) {
+			move = false;
 			m_coord.translateX(-1);
 			hitBox.translate(-1, 0);
 			return true;
-//		}
-//		return false;
+		}
+		return false;
 	}
 
 	
@@ -85,11 +85,11 @@ public class Cloud extends Entity{
 	}
 	
 	public void tick(long elapsed) {
-//			m_timeElapsed += elapsed;
-//		    if (m_timeElapsed > 10) {
-//		      m_timeElapsed = 0;
-//		      move = true;
-//		    }
+			m_timeElapsed += elapsed;
+		    if (m_timeElapsed > 10) {
+		      m_timeElapsed = 0;
+		      move = true;
+		    }
 		    m_stepElapsed += elapsed;
 			if (m_stepElapsed > m_stepTick) {
 				m_stepElapsed -= m_stepTick;

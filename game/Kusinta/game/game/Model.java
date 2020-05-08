@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Color;
 
+
 import java.awt.Graphics;
 
 import java.io.IOException;
@@ -16,7 +17,6 @@ import opponent.*;
 import hud.HUD;
 import player.Player;
 import room.Room;
-import underworld.PlayerSoul;
 import underworld.Underworld;
 import village.Village;
 import player.Character;
@@ -102,8 +102,7 @@ public class Model {
 			m_village = null;
 			break;
 		case UNDERWORLD:
-			m_underworld.setPlayer((PlayerSoul) m_factory.newEntity(Type.PlayerSoul, Direction.E,
-					m_underworld.getStartCoord(), this, 0, null));
+			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
 			m_village = new Village(m_width, m_height, this, (Player) m_player);

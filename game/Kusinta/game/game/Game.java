@@ -21,17 +21,14 @@ d * Copyright (C) 2020  Pr. Olivier Gruber
 package game;
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
 import entityFactory.Factory;
 import game.graphics.View;
 
