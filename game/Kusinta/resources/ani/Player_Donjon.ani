@@ -1,4 +1,4 @@
-sprite_sheet = "resources/Player/spritePlayer.png"
+sprite_sheet = resources/Player/spritePlayer.png
 18;7
 MOVE = 8;9;10;11;12;13
 JUMP = 15;16;17;22;23
