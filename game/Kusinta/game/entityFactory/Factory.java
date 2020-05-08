@@ -138,7 +138,8 @@ public class Factory {
 				return new MagicProjectile(automatons.get(Type.MagicProjectile), coord, angle, shooter, dir,
 						images.get(Type.MagicProjectile), actions.get(Type.MagicProjectile));
 			case Ghost:
-				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, images.get(Type.Ghost));
+				return new Ghost(dir, coord, automatons.get(Type.Ghost), model, images.get(Type.Ghost),
+						actions.get(Type.Ghost));
 			case Coin:
 				return new Coin(automatons.get(Type.Coin), coord, model, images.get(Type.Coin), actions.get(Type.Coin));
 			case Lure:

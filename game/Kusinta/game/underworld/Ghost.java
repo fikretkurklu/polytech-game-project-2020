@@ -5,12 +5,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import environnement.Element;
 import game.Coord;
 import game.Model;
@@ -38,10 +40,11 @@ public class Ghost extends Entity {
 	int m_range = 200, m_size = SIZE;;
 	Rectangle m_hitbox;
 
-	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images) {
-		super(automaton);
+	public Ghost(Direction dir, Coord coord, Automaton automaton, Model model, Image[] images, HashMap<Action, int[]> hmAction) {
+		super(automaton, images, hmAction);
+		currentAction = Action.DEFAULT;
 		m_model = model;
-		m_coord = coord;
+		m_coord = new Coord(coord);
 		m_direction = dir;
 		m_hitbox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
 		resetAnim();
