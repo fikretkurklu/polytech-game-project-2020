@@ -14,7 +14,6 @@ public class BigStatPotion extends Consumable {
 
 	public BigStatPotion() throws Exception {
 		super();
-		setImagePath();
 		statTable.put(Stats.Price, 100);
 		statChoice = (int) (Math.random() * 3);
 	}
@@ -45,16 +44,6 @@ public class BigStatPotion extends Consumable {
 			statTable.put(Stats.AttackSpeed, -30);
 		}
 
-	}
-
-	@Override
-	public void setImagePath() {
-		imagePath = "resources/Equipment/Potion/Green Potion 3.png";
-	}
-
-	@Override
-	public String getImagePath() {
-		return imagePath;
 	}
 
 	@Override

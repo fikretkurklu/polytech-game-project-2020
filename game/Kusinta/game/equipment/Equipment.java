@@ -1,5 +1,6 @@
 package equipment;
 
+import java.awt.Image;
 import java.util.HashMap;
 
 import equipment.EquipmentManager.Stuff;
@@ -9,7 +10,7 @@ public abstract class Equipment {
 
 	// This HashMap is used to contain the bonus that the equipment will give
 	protected HashMap<Stats, Integer> statTable;
-	protected String imagePath;
+	protected Image imageEquip;
 	
 	/*
 	 * The equipment is built by randomly picking a rarity The rarity will affect
@@ -88,19 +89,12 @@ public abstract class Equipment {
 	}
 	
 	/*
-	 * This method is used to set the imagePath to the equipment imagePath
-	 * 
-	 */
-	
-	public abstract void setImagePath();
-	
-	/*
 	 * This method is used to get the imagePath of the equipment
 	 * 
 	 */
 	
-	public String getImagePath() {
-		return imagePath;
+	public Image getImage() {
+		return imageEquip;
 	}
 	
 	public abstract Stuff toStuff();
