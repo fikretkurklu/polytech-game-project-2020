@@ -18,20 +18,20 @@ import player.Character;
 
 public class Arrow extends Projectile {
 
-	public static final int SIZE = (int) ((float) Element.SIZE / (float) 2);
+	public static final int SIZE = (int) (Element.SIZE);
 
 	public Arrow(Automaton arrowAutomaton, Coord c, double angle, Character shooter, Direction direction,
 			Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(arrowAutomaton, c, angle, shooter, direction, bImages, indiceAction);
 
-		m_height = SIZE;
-		m_width = (int) (m_height * ratio);
+		m_height = (int)(SIZE / ratio);
+		m_width = SIZE;
 		if (m_direction == Direction.E) {
-			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(-m_angle) * 1.5),
-					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle)), 10, 10);
+			hitBox = new Rectangle((int) (m_coord.X() + (m_width / 2) * Math.cos(-m_angle) * 0.7),
+					(int) (m_coord.Y() - (m_width / 2) * Math.sin(m_angle) * 0.7), 10, 10);
 		} else {
-			hitBox = new Rectangle((int) ((m_coord.X() - (m_width / 2) * Math.cos(m_angle) * 1.3)),
-					(int) ((m_coord.Y() - (m_width / 2) * Math.sin(m_angle))), 10, 10);
+			hitBox = new Rectangle((int) ((m_coord.X() - (m_width / 2) * Math.cos(m_angle))),
+					(int) ((m_coord.Y() - (m_width / 2) * Math.sin(m_angle) * 0.7)), 10, 10);
 		}
 
 	}
@@ -44,22 +44,19 @@ public class Arrow extends Projectile {
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 		Image image = getImage();
 		
-		int w = (int) (m_width * 1.5);
-		int h = (int) (m_height / 1.5);
 		if (m_direction == Direction.E) {
 			bg.rotate(-m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, -10, h / 4, w, h, null);
+			bg.drawImage(image, 0 , 0, m_width, m_height, null);
+			
 		} else {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, w, h / 4, -w, h, null);
+			bg.drawImage(image, m_width , 0, -m_width, m_height, null);
 		}
-
 		bg.dispose();
 
 		if (now - getDeadTime() > 1000 && getState().equals(State.HIT_STATE)) {
 			setAlpha(this.getAlpha() * 0.7f);
 		}
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 	}
 
 	public float getAlpha() {

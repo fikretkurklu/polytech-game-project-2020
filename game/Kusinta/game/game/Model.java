@@ -73,7 +73,7 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -117,7 +117,7 @@ public class Model {
 
 	public void start() throws Exception {
 		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
-		m_underworld = new Underworld(m_factory, m_width, m_height, this);
+		//m_underworld = new Underworld(m_factory, m_width, m_height, this);
 
 	}
 
@@ -163,26 +163,26 @@ public class Model {
 	}
 
 	public void tick(long elapsed) {
-//		elapsed = Math.min(10, elapsed);
-//		if (actualMode == mode.ROOM) {
-//			m_player.tick(elapsed);
-//			if (m_key != null) {
-//				m_key.tick(elapsed);
-//			}
-//			if (m_bossKey != null) {
-//				m_bossKey.tick(elapsed);
-//			}
-//			for (Opponent op : m_opponents) {
-//				op.tick(elapsed);
-//			}
-//			for (Coin coin : m_coins) {
-//				coin.tick(elapsed);
-//			}
-//			m_room.tick(elapsed);
-//		}
-//		m_hud.tick(elapsed);
+		elapsed = Math.min(10, elapsed);
+		if (actualMode == mode.ROOM) {
+			m_player.tick(elapsed);
+			if (m_key != null) {
+				m_key.tick(elapsed);
+			}
+			if (m_bossKey != null) {
+				m_bossKey.tick(elapsed);
+			}
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+			for (Coin coin : m_coins) {
+				coin.tick(elapsed);
+			}
+			m_room.tick(elapsed);
+		}
+		m_hud.tick(elapsed);
 
-		m_underworld.tick(elapsed);
+	//	m_underworld.tick(elapsed);
 	}
 
 	public void paint(Graphics g, int width, int height) {
