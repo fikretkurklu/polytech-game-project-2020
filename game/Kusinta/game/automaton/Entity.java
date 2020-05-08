@@ -150,7 +150,7 @@ public abstract class Entity {
 			switch (dir.toString()) {
 			case Direction.Hs:
 				if (cat == Category.P) {
-					Rectangle playerHitBox = getM_model().getPlayer().getHitBox();
+					Rectangle playerHitBox = m_model.getPlayer().getHitBox();
 					int xHB = hitBox.x;
 					int yHB = hitBox.y;
 					int widthHB = hitBox.width;
@@ -171,7 +171,7 @@ public abstract class Entity {
 							|| m_model.m_room.isBlocked(x, hitBox.y)
 							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));
 				} else if (cat == Category.A) {
-					LinkedList<Opponent> opponents = getM_model().getOpponent();
+					LinkedList<Opponent> opponents = m_model.getOpponent();
 					for (Opponent op : opponents) {
 						if (op.getHitBox().contains(hitBox.x, hitBox.y)
 								|| op.getHitBox().contains(hitBox.x, hitBox.y)) {
@@ -280,10 +280,6 @@ public abstract class Entity {
 		}
 	}
 
-	public Model getM_model() {
-		return m_model;
-	}
-
 	public void setM_model(Model m_model) {
 		this.m_model = m_model;
 	}
@@ -295,7 +291,7 @@ public abstract class Entity {
 	
 	public Image getImage() {
 		int[] indicesAction = indiceAction.get(currentAction);
-		if(indicesAction == null) {
+		if (indicesAction == null) {
 			currentAction = Action.DEFAULT;
 			indicesAction = indiceAction.get(currentAction);
 			m_imageIndex = 0;

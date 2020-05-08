@@ -85,7 +85,7 @@ public class Player extends Character {
 	@Override
 	public boolean pop(Direction dir) {
 		reset();
-		getM_model().switchEnv(mode.VILLAGE);
+		m_model.switchEnv(mode.VILLAGE);
 		return true;
 	}
 
@@ -111,14 +111,14 @@ public class Player extends Character {
 
 	private void checkDoor() {
 		boolean door;
-		Door d = getM_model().m_room.getDoor();
+		Door d = m_model.m_room.getDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;
 		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
 		if (door && m_key != false) {
-			d.setM_model(getM_model());
+			d.setM_model(m_model);
 			d.activate();
 		}
 	}
@@ -145,13 +145,13 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 			m_imageIndex += 1;
 			if (!gotpower()) {
-				if (m_imageIndex == indiceAction.get(Action.DEATH).length && getM_model().getDiametre() == 0) {
-					getM_model().setDiametre(1);
+				if (m_imageIndex == indiceAction.get(Action.DEATH).length && m_model.getDiametre() == 0) {
+					m_model.setDiametre(1);
 				}
 			} else {
 				if (shooting) {
 					if (m_imageIndex >= indiceAction.get(currentAction).length - 1) {
-						super.shoot(getM_model().m_mouseCoord.X(), getM_model().m_mouseCoord.Y(), proj.ARROW);
+						super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
 					}
 				}
 				if (!shooting && !falling && !isMoving()) {
@@ -167,7 +167,7 @@ public class Player extends Character {
 		if (m_moveElapsed > SPEED_WALK_TICK) {
 			m_moveElapsed -= SPEED_WALK_TICK;
 			if (shooting) {
-				if (getM_model().m_mouseCoord.X() > m_coord.X()) {
+				if (m_model.m_mouseCoord.X() > m_coord.X()) {
 					turn(Direction.E);
 				} else {
 					turn(Direction.W);

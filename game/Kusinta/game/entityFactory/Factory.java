@@ -58,7 +58,7 @@ public class Factory {
 		actions.put(Type.WalkingOpponent, m_IL.getActions(Avatars[1]));
 		actions.put(Type.FlyingOpponent, m_IL.getActions(Avatars[2]));
 		actions.put(Type.MagicProjectile, m_IL.getActions(Avatars[3]));
-		actions.put(Type.Player, m_IL.getActions(Avatars[4]));
+		actions.put(Type.Player, m_IL.getActions(Avatars[2]));
 		actions.put(Type.PlayerSoul, m_IL.getActions(Avatars[5]));
 		actions.put(Type.Ghost, m_IL.getActions(Avatars[6]));
 		actions.put(Type.Lure, m_IL.getActions(Avatars[7]));
@@ -77,7 +77,7 @@ public class Factory {
 		images.put(Type.WalkingOpponent, m_IL.getImages(Avatars[1]));
 		images.put(Type.FlyingOpponent, m_IL.getImages(Avatars[2]));
 		images.put(Type.MagicProjectile, m_IL.getImages(Avatars[3]));
-		images.put(Type.Player, m_IL.getImages(Avatars[4]));
+		images.put(Type.Player, m_IL.getImages(Avatars[2]));
 		images.put(Type.PlayerSoul, m_IL.getImages(Avatars[5]));
 		images.put(Type.Ghost, m_IL.getImages(Avatars[6]));
 		images.put(Type.Lure, m_IL.getImages(Avatars[7]));

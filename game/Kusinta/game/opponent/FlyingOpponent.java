@@ -55,7 +55,7 @@ public class FlyingOpponent extends Opponent {
 
 			shooting = true;
 
-			Coord playerCoord = getM_model().getPlayer().getCoord();
+			Coord playerCoord = m_model.getPlayer().getCoord();
 			int player_x = playerCoord.X();
 
 			if (player_x > m_coord.X()) {
@@ -114,18 +114,18 @@ public class FlyingOpponent extends Opponent {
 			m_imageIndex ++;
 			if (!gotpower()) {
 				if (m_imageIndex == indiceAction.get(currentAction).length) {
-					getM_model().getOpponent().remove(this);
+					m_model.getOpponent().remove(this);
 					dropKey();
-					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, getM_model(), 0, null);
+					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
 					c.setMoney(m_money);
-					getM_model().addCoin(c);
+					m_model.addCoin(c);
 
 				}
 			}
 			if (shooting) {
 				if (m_imageIndex == indiceAction.get(currentAction).length) {
-					Coord playerCoord = getM_model().getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - getM_model().getPlayer().getHeight() / 2,
+					Coord playerCoord = m_model.getPlayer().getCoord();
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
 							proj.MAGIC_PROJECTILE);
 				}
 			}
@@ -141,13 +141,13 @@ public class FlyingOpponent extends Opponent {
 
 	@Override
 	public boolean closest(Category cat, Direction dir) {
-		if (getM_model().actualMode == Model.mode.ROOM) {
-			boolean d = getM_model().getPlayer().gotpower();
+		if (m_model.actualMode == Model.mode.ROOM) {
+			boolean d = m_model.getPlayer().gotpower();
 			if (d) {
 
-				Coord playerCoord = getM_model().getPlayer().getCoord();
+				Coord playerCoord = m_model.getPlayer().getCoord();
 				int player_x = playerCoord.X();
-				int player_y = playerCoord.Y() - getM_model().getPlayer().getHeight() / 2;
+				int player_y = playerCoord.Y() - m_model.getPlayer().getHeight() / 2;
 				int x = player_x - m_coord.X();
 				int y = (m_coord.Y() - m_height / 2) - player_y;
 
@@ -172,7 +172,7 @@ public class FlyingOpponent extends Opponent {
 						} else {
 							checkX = (int) (m_coord.X() - i * Math.cos(angle));
 						}
-						if (getM_model().m_room.isBlocked(checkX, checkY)) {
+						if (m_model.m_room.isBlocked(checkX, checkY)) {
 							return false;
 						}
 						i += 40;
