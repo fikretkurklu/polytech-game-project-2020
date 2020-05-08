@@ -152,9 +152,14 @@ public class Player extends Character {
 			m_imageElapsed = 0;
 			m_imageIndex ++;
 			if (!gotpower()) {
-				if (m_imageIndex >= currentIndex.length && m_model.getDiametre() == 0) {
-					m_model.setDiametre(1);
+				if (m_imageIndex >= currentIndex.length) {
+					if ( m_model.getDiametre() == 0) {
+						m_model.setDiametre(1);	
+					}
+					m_imageIndex = currentIndex.length - 1;
+					
 				}
+				
 			} else {
 				if (shooting) {
 					if (m_imageIndex >= currentIndex.length) {
@@ -167,10 +172,11 @@ public class Player extends Character {
 						resetAnim();
 					}
 				}
+				if (m_imageIndex >= currentIndex.length) {
+					m_imageIndex = 0;
+				}
 			}
-			if (m_imageIndex >= currentIndex.length) {
-				m_imageIndex = 0;
-			}
+			
 		}
 		m_moveElapsed += elapsed;
 		if (m_moveElapsed > m_stepTick) {
@@ -231,7 +237,8 @@ public class Player extends Character {
 
 	@Override
 	public boolean explode() {
-		if (!gotpower()) {
+		if (currentAction != Action.DEATH) {
+			currentAction = Action.DEATH;
 			resetAnim();
 		}
 		return true;

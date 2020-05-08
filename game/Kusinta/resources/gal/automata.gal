@@ -1,6 +1,6 @@
 Player_Donjon(Init){	
   * (Init)      
-  | ! GotPower() ? Explode () : ()     
+  | !GotPower() ? Explode () : ()     
   | Key(SPACE) ? Egg() : (Doing)
   | Key(z) ? Jump: (Doing)
   | Key(q) & !Cell(W, O) ? Move(W) : (Init)
@@ -86,12 +86,13 @@ Demon (East) {
   | Cell(W, P) ? Wizz() : (West)
   | Closest(P, W) ? Pop(W) : (West)
   | True ? Move(W) : (West)
-
 *(ME)
+  | Cell(E, P) ? Wizz() : (East)
  | Cell(E, O) ? Turn(W) : (West)
  | True ? Move(E) : (East)
 
  *(MW)
+  | Cell(W, P) ? Wizz() : (West)
  | Cell(W, O) ? Turn(E) : (ES)
  | True ? Move(W) : (West)
  }
