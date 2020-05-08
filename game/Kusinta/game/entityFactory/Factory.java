@@ -150,12 +150,12 @@ public class Factory {
 				return null;
 			case Fragment:
 				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment),
-						actions.get(Type.Fragment);
+						actions.get(Type.Fragment));
 			case Gate:
 				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate),
 						actions.get(Type.Gate)); 
 			case Cloud:
-				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud)[0],
+				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
 						actions.get(Type.Cloud));
 			}
 		} catch (Exception e) {

@@ -41,6 +41,7 @@ public abstract class Entity {
 	protected long m_imageTick = 200;
 	protected long m_stepTick = 4;
 	protected long m_imageElapsed;
+	protected long m_stepElapsed;
 	
 	protected String gal = ".gal";
 	protected String ani = ".ani";
