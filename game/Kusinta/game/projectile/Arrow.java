@@ -74,6 +74,9 @@ public class Arrow extends Projectile {
 		m_alpha = alpha;
 		if (alpha <= 0.05) {
 			((Player) m_shooter).removeProjectile(this);
+			if(collidingWith != null) {
+				((Opponent)collidingWith).getCollidedWith().remove(this);
+			}
 		}
 	}
 

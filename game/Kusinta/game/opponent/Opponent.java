@@ -1,5 +1,8 @@
 package opponent;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Direction;
@@ -13,16 +16,19 @@ public abstract class Opponent extends Character {
 
 	protected static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	protected Arrow collidedWith;
-	
+	protected LinkedList<Arrow> collidedWith;
+
 	int SPEED_WALK_TICK = 4;
 	long m_moveElapsed;
-	
-	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength) throws IOException {
+
+
+	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
+			int resistance, int strength) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength);
 
 		m_key = false;
+		
+		collidedWith = new LinkedList<Arrow>();
 
 	}
 
@@ -39,7 +45,7 @@ public abstract class Opponent extends Character {
 	}
 
 	public void setCollidedWith(Arrow a) {
-		collidedWith = a;
+		collidedWith.add(a);
 	}
 
 	public void setKey(boolean k) {
@@ -50,9 +56,11 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					getM_model().setKey(new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
+					getM_model().setKey(
+							new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
 				} else if (m_bossKey == true) {
-					getM_model().setBossKey(new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
+					getM_model().setBossKey(
+							new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -60,10 +68,10 @@ public abstract class Opponent extends Character {
 			setKey(false);
 		}
 	}
-	
+
 	public boolean move(Direction dir) {
 		if (gotpower()) {
-			
+
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 			if (!shooting)
@@ -71,11 +79,17 @@ public abstract class Opponent extends Character {
 
 			super.move(dir);
 
-			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+			for (Arrow a : collidedWith) {
+				if (a != null) {
+					a.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+				}
 			}
 		}
 		return true;
+	}
+
+	public LinkedList<Arrow> getCollidedWith() {
+		return collidedWith;
 	}
 
 }
