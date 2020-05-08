@@ -22,9 +22,12 @@ public class Fragment extends Entity{
 	
 	public Fragment(Automaton automaton, Coord coord, Model model, Image[] images, HashMap<Action, int[]> hmActions) {
 		super(automaton, images, hmActions);
+		currentAction = Action.DEFAULT;
+		resetAnim();
 		m_model = model;
 		m_width = FragmentSIZE;
 		m_height = FragmentSIZE;
+		m_coord = new Coord(coord);
 		hitBox = new Rectangle(m_coord.X() - (int)(Element.SIZE/1.5), m_coord.Y() - (int)(Element.SIZE/1.5), Element.SIZE * 2, Element.SIZE * 2);
 	}
 	
@@ -61,5 +64,10 @@ public class Fragment extends Entity{
 	    	  m_imageIndex = 0;
 	      }
 	    }
+	    m_stepElapsed += elapsed;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed -= m_stepTick;
+			m_automaton.step(this);
+		}
 	}
 }

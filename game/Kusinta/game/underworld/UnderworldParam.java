@@ -1,10 +1,10 @@
 package underworld;
 
 public interface UnderworldParam {
-	String backgroundFile = "resources/Underworld/Background/Sky.png";
+	String backgroundFile = "resources/Underworld/Sky.png";
 	String mapFile = "resources/Underworld/Sample/map6.sample";
 	int nbAmbiance = 1;
-	String[] cloudImage = {"resources/Underworld/Clouds/Cloud.png", "resources/Underworld/Clouds/CloudLeftUp.png", "resources/Underworld/Clouds/CloudRightUp.png","resources/Underworld/Clouds/CloudLeftDown.png","resources/Underworld/Clouds/CloudRightDown.png"};
+	String[] cloudImage = {"resources/Underworld/Cloud.png", "resources/Underworld/CloudLeftUp.png", "resources/Underworld/CloudRightUp.png","resources/Underworld/CloudLeftDown.png","resources/Underworld/CloudRightDown.png"};
 	String[] playerSoulImage = {"resources/Underworld/PlayerSoul/PS1.png", "resources/Underworld/PlayerSoul/PS2.png", "resources/Underworld/PlayerSoul/PS3.png", "resources/Underworld/PlayerSoul/PS4.png"};
 	String[] playerSoulEscapeImage = {"resources/Underworld/PlayerSoul/PSE1.png", "resources/Underworld/PlayerSoul/PSE2.png", "resources/Underworld/PlayerSoul/PSE3.png", "resources/Underworld/PlayerSoul/PSE4.png"};
 	String[] lureApparitionImage = {"resources/Underworld/Lure/spirit-recruit-0.png", "resources/Underworld/Lure/spirit-recruit-1.png", "resources/Underworld/Lure/spirit-recruit-2.png", "resources/Underworld/Lure/spirit-recruit-3.png",

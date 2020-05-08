@@ -41,7 +41,7 @@ public abstract class Entity {
 	protected long m_imageTick = 200;
 	protected long m_stepTick = 4;
 	protected long m_imageElapsed;
-	protected int SPEED_WALK_TICK = 4;
+	protected long m_stepElapsed;
 	
 	protected float ratio;
 
@@ -57,6 +57,7 @@ public abstract class Entity {
 		
 		m_automaton = automaton;
 		resetAnim();
+		m_stepElapsed = m_stepTick;
 		ratio = ((float) bImages[0].getWidth(null)) / (float) (bImages[0].getHeight(null));
 	}
 	
@@ -289,21 +290,16 @@ public abstract class Entity {
 	}
 	
 	public void resetAnim() {
-		m_imageIndex = 0;
-		m_imageElapsed = m_imageTick;
-		resetIndexAnimation();
-	}
-	
-	public Image getImage() {
-		return bImages[currentIndex[m_imageIndex]];
-	}
-	
-	public void resetIndexAnimation() {
 		currentIndex = indiceAction.get(currentAction);
 		if(currentIndex == null) {
 			currentAction = Action.DEFAULT;
 			currentIndex = indiceAction.get(currentAction);
 		}
 		m_imageIndex = 0;
+		m_imageElapsed = m_imageTick;
+	}
+	
+	public Image getImage() {
+		return bImages[currentIndex[m_imageIndex]];
 	}
 }

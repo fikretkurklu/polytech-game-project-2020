@@ -31,7 +31,7 @@ public class Lure extends Projectile {
 			HashMap<Action, int[]> hmActions) {
 		super(projectileAutomaton, c, 0, shooter, dir, images, hmActions);
 		currentAction = Action.MOVE;
-		resetIndexAnimation();
+		resetAnim();
 		m_model = model;
 		delay = MAX_DELAY;
 		m_imageElapsed = 0;
@@ -53,7 +53,7 @@ public class Lure extends Projectile {
 	public boolean explode() {
 		elapsedBoolean = true;
 		currentAction = Action.MOVE;
-		resetIndexAnimation();
+		resetAnim();
 		m_imageIndex = currentIndex.length - 1;
 		return true;
 	}
@@ -79,7 +79,7 @@ public class Lure extends Projectile {
 					m_imageIndex++;
 					if (m_imageIndex >= currentIndex.length) {
 						currentAction = Action.DEFAULT;
-						resetIndexAnimation();
+						resetAnim();
 					}
 				}
 				break;
@@ -87,9 +87,9 @@ public class Lure extends Projectile {
 				break;
 			}
 			m_stepElapsed += elapsed;
-			if (m_stepElapsed > STEP_TICK) {
+			if (m_stepElapsed > m_stepTick) {
 				delay -= PERIOD;
-				m_stepElapsed -= STEP_TICK;
+				m_stepElapsed -= m_stepTick;
 				m_automaton.step(this);
 			}
 		}

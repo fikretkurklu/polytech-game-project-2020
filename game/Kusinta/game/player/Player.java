@@ -168,8 +168,8 @@ public class Player extends Character {
 			}
 		}
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		if (m_moveElapsed > m_stepTick) {
+			m_moveElapsed -= m_stepTick;
 			if (shooting) {
 				if (m_model.m_mouseCoord.X() > m_coord.X()) {
 					turn(Direction.E);
