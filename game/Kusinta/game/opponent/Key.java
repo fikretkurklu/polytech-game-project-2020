@@ -19,12 +19,15 @@ public abstract class Key extends Entity {
 
 	private static final double G = 9.81;
 
+	Image m_image;
 	public Model m_model;
 
+	int m_width, m_height;
 
 	protected boolean falling;
 	long m_time;
 	private int y_gravity;
+	int position, aller;
 
 	public Key(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(automaton, bImages, indiceAction);
@@ -34,6 +37,11 @@ public abstract class Key extends Entity {
 
 		m_time = 0;
 		falling = false;
+
+		position = 0;
+		aller = 1;
+
+		hitBox = new Rectangle(m_coord.X() - 15, m_coord.Y() - 30, 30, 30);
 	}
 
 	@Override
@@ -55,14 +63,24 @@ public abstract class Key extends Entity {
 		Image image;
 		image = getImage();
 
-		g.drawImage(image, m_coord.X(), m_coord.Y() - h, -w, h, null);
+		if (!falling) {
+			if (position >= 10) {
+				aller = -1;
+			} else if (position <= 0) {
+				aller = 1;
+			}
+			position = (position + aller);
+		}
+
+		g.drawImage(image, m_coord.X(), m_coord.Y() - h + position, -w, h, null);
 	}
+
 
 	public void tick(long elapsed) {
 		m_automaton.step(this);
 		
 		if (elapsed < 10) {
-			if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5)) {
+			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5) || m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
 
 				if (!falling) {
 					y_gravity = m_coord.Y();
@@ -74,10 +92,18 @@ public abstract class Key extends Entity {
 				if (m_time >= 10)
 					gravity(m_time);
 			} else if (falling) {
-				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
-				m_coord.setY(topBlock - 5);
+				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
+				hitBox.translate(0, -(m_coord.Y() - topBlock));
+				m_coord.setY(topBlock);
 				m_time = 0;
 				falling = false;
+			}
+			if (!falling) {
+				if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+					int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
+					hitBox.translate(0, -(m_coord.Y() - blockTop));
+					m_coord.setY(blockTop);
+				}
 			}
 		}
 	}
@@ -85,6 +111,7 @@ public abstract class Key extends Entity {
 	private void gravity(long t) {
 
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
+		hitBox.translate(0, -(m_coord.Y() - newY));
 		m_coord.setY(newY);
 	}
 

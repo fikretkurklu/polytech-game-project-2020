@@ -72,7 +72,10 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
 		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
@@ -163,8 +166,12 @@ public class Model {
 
 	public void tick(long elapsed) {
 		elapsed = Math.min(10, elapsed);
+<<<<<<< HEAD
+		if (actualMode == mode.ROOM) {
+=======
 		switch(actualMode) {
 		case ROOM:
+>>>>>>> master
 			m_player.tick(elapsed);
 			if (m_key != null) {
 				m_key.tick(elapsed);
@@ -172,6 +179,11 @@ public class Model {
 			if (m_bossKey != null) {
 				m_bossKey.tick(elapsed);
 			}
+<<<<<<< HEAD
+			for (Opponent op : m_opponents) {
+				op.tick(elapsed);
+			}
+=======
 			
 			for (Opponent op : m_opponents) {
 				op.tick(elapsed);
@@ -183,10 +195,17 @@ public class Model {
 					}
 				}
 			}
+>>>>>>> master
 			for (Coin coin : m_coins) {
 				coin.tick(elapsed);
 			}
 			m_room.tick(elapsed);
+<<<<<<< HEAD
+		}
+		m_hud.tick(elapsed);
+
+	//	m_underworld.tick(elapsed);
+=======
 			m_hud.tick(elapsed);
 			break;
 		case UNDERWORLD:
@@ -196,6 +215,7 @@ public class Model {
 			m_hud.tick(elapsed);
 			break;
 		}
+>>>>>>> master
 	}
 
 	public void paint(Graphics g, int width, int height) {

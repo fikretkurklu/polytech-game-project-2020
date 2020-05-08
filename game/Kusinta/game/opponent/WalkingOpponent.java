@@ -14,6 +14,7 @@ import environnement.Element;
 import game.Coord;
 import game.Game;
 import game.Model;
+import player.Character;
 
 public class WalkingOpponent extends Opponent {
 
@@ -21,6 +22,8 @@ public class WalkingOpponent extends Opponent {
 	int AttackStrength;
 
 	int hHitBox, wHitBox;
+	
+	boolean isDead;
 
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
@@ -37,8 +40,11 @@ public class WalkingOpponent extends Opponent {
 		m_width = (int) (m_height * ratio);
 
 		shooting = false;
+		
+		isDead = false;
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
+
 
 		wHitBox = (int) (m_width * 0.7);
 		hHitBox = (int) (m_height * 0.8);
@@ -87,7 +93,7 @@ public class WalkingOpponent extends Opponent {
 		super.tick(elapsed);
 
 		m_imageElapsed += elapsed;
-		if (m_imageElapsed > 200) {
+		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
 			m_imageIndex++;
 			if (!gotpower()) {
@@ -96,12 +102,13 @@ public class WalkingOpponent extends Opponent {
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
 					c.setMoney(m_money);
 					m_model.addCoin(c);
-					m_model.getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 				}
 			}
 			if (m_imageIndex >= currentIndex.length) {
 				m_imageIndex = 0;
 			}
+
 		}
 	}
 
@@ -136,6 +143,7 @@ public class WalkingOpponent extends Opponent {
 			}
 
 		}
+
 		return c;
 	}
 
@@ -152,6 +160,7 @@ public class WalkingOpponent extends Opponent {
 							if (!m_model.m_room.isBlocked(m_coord.X() + i * intervalle, m_coord.Y() + 1)) {
 								return false;
 							}
+	
 						}
 						return true;
 					}
@@ -162,13 +171,13 @@ public class WalkingOpponent extends Opponent {
 							if (!m_model.m_room.isBlocked(m_coord.X() - i * intervalle, m_coord.Y() + 1)) {
 								return false;
 							}
+					
 						}
 						return true;
 					}
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -189,6 +198,18 @@ public class WalkingOpponent extends Opponent {
 			shooting = true;
 			resetAnim();
 		}
+		shooting = true;
+		return true;
+	}
+
+	@Override
+	public boolean explode() {
+		if (!isDead) {
+			currentAction = Action.DEATH;
+			resetAnim();
+			isDead = true;
+		}
+		setLife(0);
 		return true;
 	}
 

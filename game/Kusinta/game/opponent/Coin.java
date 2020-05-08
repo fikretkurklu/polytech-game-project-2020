@@ -43,6 +43,8 @@ public class Coin extends Entity {
 		position = 10;
 		aller = -1;
 		m_model = model;
+		
+		hitBox = new Rectangle(m_coord.X() - 15, m_coord.Y() - 30, 30, 30);
 	}
 	 
 	public void setMoney(int money) {
@@ -100,7 +102,7 @@ public class Coin extends Entity {
 		m_automaton.step(this);
 
 		if (elapsed < 10) {
-			if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5)) {
+			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5) || m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
 
 				if (!falling) {
 					y_gravity = m_coord.Y();
@@ -112,16 +114,25 @@ public class Coin extends Entity {
 				if (m_time >= 10)
 					gravity(m_time);
 			} else if (falling) {
-				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
-				m_coord.setY(topBlock - 5);
+				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
+				hitBox.translate(0, -(m_coord.Y() - topBlock));
+				m_coord.setY(topBlock);
 				m_time = 0;
 				falling = false;
+			}
+			if (!falling) {
+				if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+					int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
+					hitBox.translate(0, -(m_coord.Y() - blockTop));
+					m_coord.setY(blockTop);
+				}
 			}
 		}
 	}
 
 	private void gravity(long t) {
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
+		hitBox.translate(0, -(m_coord.Y() - newY));
 		m_coord.setY(newY);
 	}
 

@@ -1,5 +1,4 @@
 package player;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -17,6 +16,7 @@ import environnement.Element;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
+
 
 	boolean invincible, paintInvincible;
 	long m_invincibleElapsed;
@@ -37,7 +37,12 @@ public class Player extends Character {
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
 
+		
 		X_MOVE = 2;
+
+		reset();
+		setMoney(0);
+
 		m_bossKey = null;
 	}
 
