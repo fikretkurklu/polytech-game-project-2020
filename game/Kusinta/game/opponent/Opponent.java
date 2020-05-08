@@ -50,9 +50,9 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					getM_model().setKey(new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
+					getM_model().setKey(new NormalKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
 				} else if (m_bossKey == true) {
-					getM_model().setBossKey(new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y(), getM_model()));
+					getM_model().setBossKey(new BossKey(getM_model().keyDropAutomaton, m_coord.X(), m_coord.Y() - 5, getM_model()));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

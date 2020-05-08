@@ -23,6 +23,8 @@ public abstract class Key extends Entity {
 
 	int m_width, m_height;
 
+	int position, aller;
+
 	protected boolean falling;
 	long m_time;
 	private int y_gravity;
@@ -39,6 +41,11 @@ public abstract class Key extends Entity {
 
 		m_time = 0;
 		falling = false;
+
+		position = 0;
+		aller = 1;
+
+		hitBox = new Rectangle(m_coord.X() - 15, m_coord.Y() - 30, 30, 30);
 	}
 
 	@Override
@@ -58,26 +65,32 @@ public abstract class Key extends Entity {
 		int w = m_width / 4;
 		int h = m_height / 4;
 
-		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h, -w, h, null);
+		if (!falling) {
+			if (position >= 10) {
+				aller = -1;
+			} else if (position <= 0) {
+				aller = 1;
+			}
+			position = (position + aller);
+		}
+
+		g.drawImage(m_image, m_coord.X(), m_coord.Y() - h + position, -w, h, null);
 	}
 
-	/*public Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		Image image;
-		if (imageFile.exists()) {
-			image = ImageIO.read(imageFile);
-			image = image.getScaledInstance(SIZE, SIZE, 0);
-			return image;
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
-		}
-	}*/
+	/*
+	 * public Image loadImage(String path) throws Exception { File imageFile = new
+	 * File(path); Image image; if (imageFile.exists()) { image =
+	 * ImageIO.read(imageFile); image = image.getScaledInstance(SIZE, SIZE, 0);
+	 * return image; } else { throw new
+	 * Exception("Error while loading image: path = " + path); } }
+	 */
 
 	public void tick(long elapsed) {
 		m_automaton.step(this);
-		
+
 		if (elapsed < 10) {
-			if (!m_model.m_room.isBlocked(m_coord.X(), m_coord.Y() + 5)) {
+			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5)
+					|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
 
 				if (!falling) {
 					y_gravity = m_coord.Y();
@@ -94,12 +107,20 @@ public abstract class Key extends Entity {
 				m_time = 0;
 				falling = false;
 			}
+			if (!falling) {
+				if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
+					int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
+					hitBox.translate(0, -(m_coord.Y() - blockTop));
+					m_coord.setY(blockTop);
+				}
+			}
 		}
 	}
 
 	private void gravity(long t) {
 
 		int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005)) + y_gravity;
+		hitBox.translate(0, -(m_coord.Y() - newY));
 		m_coord.setY(newY);
 	}
 
