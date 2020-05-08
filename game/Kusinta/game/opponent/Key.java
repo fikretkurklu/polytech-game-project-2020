@@ -89,8 +89,7 @@ public abstract class Key extends Entity {
 		m_automaton.step(this);
 
 		if (elapsed < 10) {
-			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5)
-					|| m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
+			if (!(m_model.m_room.isBlocked(hitBox.x, m_coord.Y() + 5) || m_model.m_room.isBlocked(hitBox.x + hitBox.width, m_coord.Y() + 5))) {
 
 				if (!falling) {
 					y_gravity = m_coord.Y();
@@ -102,14 +101,15 @@ public abstract class Key extends Entity {
 				if (m_time >= 10)
 					gravity(m_time);
 			} else if (falling) {
-				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
-				m_coord.setY(topBlock - 5);
+				int topBlock = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
+				hitBox.translate(0, -(m_coord.Y() - topBlock));
+				m_coord.setY(topBlock);
 				m_time = 0;
 				falling = false;
 			}
 			if (!falling) {
 				if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
-					int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6);
+					int blockTop = m_model.m_room.blockTop(m_coord.X(), m_coord.Y() + 6) - 5;
 					hitBox.translate(0, -(m_coord.Y() - blockTop));
 					m_coord.setY(blockTop);
 				}
