@@ -30,8 +30,8 @@ public abstract class Opponent extends Character {
 	@Override
 	public void tick(long elapsed) {
 		m_moveElapsed += elapsed;
-		if (m_moveElapsed > SPEED_WALK_TICK) {
-			m_moveElapsed -= SPEED_WALK_TICK;
+		if (m_moveElapsed > m_stepTick) {
+			m_moveElapsed -= m_stepTick;
 			m_automaton.step(this);
 		}
 		if (this instanceof WalkingOpponent) {
