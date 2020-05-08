@@ -70,6 +70,7 @@ public abstract class Character extends Entity {
 
 		m_key = false;
 
+
 		collidingWith = null;
 
 		m_equipments = new HashMap<>();

@@ -26,26 +26,15 @@ public class PlayerSoul extends Character {
 
 	long m_lureGenerationElapsed;
 	long m_dashTimer;
-	long m_lureTimer;
 
 	int nbLure = 0;
 	int fragmentsPicked = 0;
 	boolean leftOrientation;
 
-	public static final int NORMAL = 1;
-	public static final int DASH = 2;
-	public static final int ESCAPE = 3;
-	public static final int ESCAPED = 4;
-	public static final int DAMAGE = 5;
-	public static final int DEAD = 6;
-	public static final int HIDDEN = 7;
-
-	int animationMode;
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
-	boolean hidden, escape, escaped, escapedOrDead, invicible, outScreen;
+	boolean hidden, escape, escaped, invicible;
 	boolean dashAvailable, lureAvailable;
-	Lure lure;
 
 	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model,
 			HashMap<Action, int[]> hmAction) throws IOException {
@@ -53,14 +42,12 @@ public class PlayerSoul extends Character {
 		m_width = SIZE;
 		m_height = SIZE;
 		m_dashTimer = 0;
-		outScreen = false;
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
 		invicible = true;
 		hidden = false;
 		escape = false;
-		escapedOrDead = false;
 		currentAction = Action.JUMP;
 		resetAnim();
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
@@ -321,8 +308,6 @@ public class PlayerSoul extends Character {
 				m_projectiles.get(i).paint(g);
 			}
 		}
-		if (hidden)
-			return;
 		int x = m_coord.X();
 		int y = m_coord.Y();
 		if (leftOrientation)
@@ -344,7 +329,6 @@ public class PlayerSoul extends Character {
 			case DEATH:
 				m_imageIndex++;
 				if (m_imageIndex >= currentIndex.length) {
-					escapedOrDead = true;
 					Game.game.gameOver = true;
 				}
 				return;
@@ -352,7 +336,6 @@ public class PlayerSoul extends Character {
 				if (escaped) {
 					m_imageIndex--;
 					if (m_imageIndex <= 0) {
-						escapedOrDead = true;
 						m_model.switchEnv(mode.VILLAGE);
 					}
 				} else {

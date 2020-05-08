@@ -2,6 +2,7 @@ package opponent;
 import java.awt.Image;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import automaton.Automaton;
 import automaton.Direction;
@@ -17,14 +18,14 @@ public abstract class Opponent extends Character {
 
 	protected static final int SIZE = (int) (1.5 * Element.SIZE);
 
-	protected Arrow collidedWith;
-	
+	protected LinkedList<Arrow> collidedWith;
+
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
 			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
-		m_key = true;
-
+		m_key = false;
+		collidedWith = new LinkedList<Arrow>();
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public abstract class Opponent extends Character {
 	}
 
 	public void setCollidedWith(Arrow a) {
-		collidedWith = a;
+		collidedWith.add(a);
 	}
 
 	public void setKey(boolean k) {
@@ -74,11 +75,17 @@ public abstract class Opponent extends Character {
 
 			super.move(dir);
 
-			if (collidedWith != null) {
-				collidedWith.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+			for (Arrow a : collidedWith) {
+				if (a != null) {
+					a.getCoord().translate(m_coord.X() - m_x, m_coord.Y() - m_y);
+				}
 			}
 		}
 		return true;
+	}
+
+	public LinkedList<Arrow> getCollidedWith() {
+		return collidedWith;
 	}
 
 }
