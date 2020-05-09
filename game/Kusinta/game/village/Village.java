@@ -2,6 +2,8 @@ package village;
 
 import java.awt.Graphics;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
 import game.Model;
 import game.Model.mode;
 import player.Player;
@@ -56,7 +58,7 @@ public class Village {
 		return false;
 	}
 
-	public void paint(Graphics g, int w, int h) {
+	public void paint(Graphics g, int w, int h) {		
 		resized(w, h);
 		menuPanel.paint(g);
 		switch (env) {
@@ -79,6 +81,7 @@ public class Village {
 			villagePanel.paint(g);
 			break;
 		}
+		
 
 	}
 

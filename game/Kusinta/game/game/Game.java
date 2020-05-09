@@ -127,15 +127,15 @@ public class Game {
 		m_frame.setVisible(true);
 	}
 	
-	public void setupGame() {
+	public void setupGame() {		
+		m_frame.getContentPane().removeAll();
+		m_frame.getContentPane().repaint();
 		try {
 			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			System.out.println("Test");
 			e.printStackTrace();
 		}
-		m_frame.getContentPane().removeAll();
-		m_frame.getContentPane().repaint();
 		m_frame.setLayout(new BorderLayout());
 		m_frame.add(m_view, BorderLayout.CENTER);
 
@@ -185,7 +185,7 @@ public class Game {
 	void tick(long elapsed) {
 		if (!gameOver) {
 			m_model.tick(elapsed);
-
+/*
 			// Update every second
 			// the text on top of the frame: tick and fps
 			m_textElapsed += elapsed;
@@ -199,7 +199,7 @@ public class Game {
 					txt += " ";
 				txt = txt + fps + " fps   ";
 				m_text.setText(txt);
-			}
+			}*/
 		}
 	}
 
