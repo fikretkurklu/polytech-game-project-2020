@@ -56,6 +56,7 @@ public class Room {
 		decorFreq = (int) (Math.random() * 10) + 5;
 		FOTable = new LinkedList<Coord>();
 		WOTable = new LinkedList<Coord>();
+		bossCoord = new Coord();
 		EIF = new ElementImageFactory();
 		StaticDecorAutomaton = Game.m_factory.m_AL.getAutomaton("Decor");
 		BlockAutomaton =Game.m_factory.m_AL.getAutomaton("Block");
@@ -138,8 +139,10 @@ public class Room {
 			FOTable.add(coord);
 			break;
 		case "ES_B" :
-			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			bossCoord = coord;
+			System.out.println(coord.X());
+			System.out.println(coord.Y());
+			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		default :
 			throw new Exception("Code room err: " + code);

@@ -174,6 +174,9 @@ public class Model {
 
 	public void setBossRoom() throws IOException {
 		m_roomGenerator.bossRoomGenerator();
+		if (m_room.getBossCoord()==null) {
+			System.out.println("Wrong coordinate");
+		}
 		Boss m = (Boss) Game.m_factory.newEntity(Type.Boss, Direction.E, m_room.getBossCoord(), this, 0, null);
 	}
 

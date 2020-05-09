@@ -1270,6 +1270,8 @@ public class RoomGenerator {
 					System.out.print(" L ");
 				} else if (m_elementTable[i][j].contentEquals("IW")) {
 					System.out.print(" X ");
+				} else if (m_elementTable[i][j].contentEquals("ES_B")) {
+					System.out.print(" B ");
 				} else {
 					System.out.print(" : ");
 				}
