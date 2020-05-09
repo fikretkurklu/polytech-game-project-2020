@@ -172,6 +172,10 @@ public class Model {
 	public void setBossRoom() throws Exception {
 		m_roomGenerator.bossRoomGenerator();
 		m_room = new Room(m_width, m_height);
+		this.m_player.setCoord(m_room.getStartCoord());
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+		
 		if (m_room.getBossCoord() == null) {
 			System.out.println("Wrong coordinate");
 		}
