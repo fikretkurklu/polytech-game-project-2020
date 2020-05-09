@@ -56,9 +56,7 @@ public class EquipmentManager {
 		}
 	}
 
-	public Consumable newConsumable() throws Exception {
-		Conso[] conso = Conso.values();
-		Conso consumable = conso[(int) (Math.random() * (conso.length))];
+	public Consumable newConsumable(Conso consumable) throws Exception {
 		switch (consumable) {
 		case SmallHealthPotion :
 			System.out.println("HealthPotion created");

@@ -13,7 +13,9 @@ import automaton.Entity;
 import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
+import equipment.EquipmentManager.Conso;
 import equipment.EquipmentManager.Stuff;
+import equipment.SmallHealthPotion;
 import equipment.Stat.Stats;
 import game.Controller;
 import game.Coord;
@@ -53,6 +55,8 @@ public abstract class Character extends Entity {
 
 	protected boolean shooting;
 
+	LinkedList<SmallHealthPotion> smallConsumables;
+
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
 			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
 		super(automaton, bImages, indiceAction);
@@ -70,10 +74,11 @@ public abstract class Character extends Entity {
 
 		m_key = false;
 
-
 		collidingWith = null;
 
 		m_equipments = new HashMap<>();
+
+		smallConsumables = new LinkedList<SmallHealthPotion>();
 
 		Stuff[] stuffTable = Stuff.values();
 
@@ -143,11 +148,18 @@ public abstract class Character extends Entity {
 
 	public void loseLife(int l) {
 		int damage = l - m_currentStatMap.get(CurrentStat.Resistance);
-		if (damage <= 0 ) {
+		if (damage <= 0) {
 			damage = 1;
 		}
 		System.out.println(damage);
 		m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - damage));
+	}
+
+	public void winLife(int l) {
+		int add = (m_currentStatMap.get(CurrentStat.Life) + l);
+		if (add > m_currentStatMap.get(CurrentStat.MaxLife))
+			add = m_currentStatMap.get(CurrentStat.MaxLife);
+		m_currentStatMap.put(CurrentStat.Life, add);
 	}
 
 	@Override
@@ -182,7 +194,7 @@ public abstract class Character extends Entity {
 	public void setEquipment(HashMap<EquipmentManager.Stuff, Equipment> equip) {
 		m_equipments = equip;
 	}
-	
+
 	@Override
 	public boolean jump(Direction dir) { // sauter
 		if (!falling) {
@@ -191,7 +203,7 @@ public abstract class Character extends Entity {
 			falling = true;
 			m_time = m_ratio_y;
 			gravity(m_time);
-			if(shooting) {
+			if (shooting) {
 				int tmp = m_imageIndex;
 				currentAction = Action.SHOTMOVE;
 				resetAnim();
@@ -222,7 +234,7 @@ public abstract class Character extends Entity {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			if (currentAction != Action.DEFAULT && !shooting) {
+			if (currentAction != Action.DEFAULT && !shooting && gotpower()) {
 				currentAction = Action.DEFAULT;
 				resetAnim();
 			}
@@ -248,7 +260,7 @@ public abstract class Character extends Entity {
 				t = (long) 0.1;
 				m_time = t;
 			}
-			if(!jumping && !shooting) {
+			if (!jumping && !shooting) {
 				currentAction = Action.FALLING;
 				resetAnim();
 			}
@@ -380,8 +392,14 @@ public abstract class Character extends Entity {
 			return m_model.aPressed;
 		} else if (keyCode == Controller.K_E) {
 			return m_model.ePressed;
-		} else if (keyCode == Controller.K_V)
+		} else if (keyCode == Controller.K_V) {
 			return m_model.vPressed;
+		} else if (keyCode == Controller.K_X) {
+			return m_model.xPressed;
+		} else if (keyCode == Controller.K_C) {
+			return m_model.cPressed;
+		}
+
 		return false;
 	}
 

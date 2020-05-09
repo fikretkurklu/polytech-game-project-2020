@@ -40,7 +40,7 @@ public class Model {
 
 	public AutomaticRoomGenerator m_roomGenerator;
 
-	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
+	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed, xPressed, cPressed;
 
 	public Room m_room;
 	public Underworld m_underworld;
@@ -131,6 +131,8 @@ public class Model {
 		ePressed = false;
 		vPressed = false;
 		sPressed = false;
+		xPressed = false;
+		cPressed = false;
 		switch (m) {
 		case ROOM:
 			m_village = null;
@@ -406,6 +408,12 @@ public class Model {
 			break;
 		case Controller.K_S:
 			sPressed = pressed;
+			break;
+		case Controller.K_X:
+			xPressed = pressed;
+			break;
+		case Controller.K_C:
+			cPressed = pressed;
 			break;
 		}
 
