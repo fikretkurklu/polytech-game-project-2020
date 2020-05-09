@@ -21,7 +21,7 @@ public class Jin extends Opponent {
 
 	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 5*Model.difficultyLevel, 5*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000+100*Model.difficultyLevel, 5*Model.difficultyLevel, 10*Model.difficultyLevel, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;

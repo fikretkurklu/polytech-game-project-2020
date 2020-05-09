@@ -124,6 +124,7 @@ public class Model {
 	
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
+		setBossRoom();
 		m_room = new Room(m_width, m_height);
 		
 		resetPlayer();
@@ -206,6 +207,10 @@ public class Model {
 		m_roomGenerator.AutomaticGeneration();
 	}
 
+	public void setBossRoom() throws IOException {
+		m_roomGenerator.bossRoomGenerator();
+	}
+	
 	public void setCenterScreenPlayer() {
 		switch (actualMode) {
 		case ROOM:
