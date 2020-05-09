@@ -38,6 +38,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import entityFactory.Factory;
+import entityFactory.ImageLoader;
 import entityFactory.Factory.Type;
 import game.graphics.View;
 

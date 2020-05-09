@@ -2,7 +2,6 @@ package opponent;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -23,7 +22,7 @@ public abstract class Opponent extends Character {
 	protected LinkedList<Arrow> collidedWith;
 
 	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
 		m_key = true;

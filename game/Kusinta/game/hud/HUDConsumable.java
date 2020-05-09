@@ -3,7 +3,7 @@ package hud;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import game.ImageLoader;
+import entityFactory.ImageLoader;
 import player.Player;
 
 public class HUDConsumable {

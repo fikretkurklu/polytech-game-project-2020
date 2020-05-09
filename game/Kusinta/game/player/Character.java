@@ -3,7 +3,6 @@ package player;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -61,7 +60,7 @@ public abstract class Character extends Entity {
 
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction){
 		super(automaton, bImages, indiceAction);
 
 		setStat(attackSpeed, maxLife, resistance, strength);

@@ -4,9 +4,9 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import automaton.Automaton;
+import entityFactory.ImageLoader;
 import environnement.Decor;
 import game.Coord;
-import game.ImageLoader;
 
 public class Door extends Decor {
 

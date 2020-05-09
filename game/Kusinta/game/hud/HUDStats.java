@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import game.ImageLoader;
+import entityFactory.ImageLoader;
 import player.Player;
 import player.Character.CurrentStat;
 

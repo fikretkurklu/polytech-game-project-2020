@@ -1,4 +1,4 @@
-sprite_sheet = resources/oppenent/small_dragon/smallDragon.png
+sprite_sheet = resources/oppenent/small_dragon/small_dragon.png
 2;8
 DEATH = 3;4;5;6
 SHOT = 0;1;2

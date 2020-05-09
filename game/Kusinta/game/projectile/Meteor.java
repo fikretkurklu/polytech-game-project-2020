@@ -1,6 +1,5 @@
 package projectile;
 
-import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -46,10 +45,6 @@ public class Meteor extends Projectile {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
 			bg.drawImage(image, m_width , 0, -m_width, m_height, null);
 		}
-		bg.dispose();
-
-
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		bg.dispose();
 
 	}

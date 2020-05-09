@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 
+import entityFactory.ImageLoader;
 import game.Coord;
-import game.ImageLoader;
 import player.Player;
 
 public class HUDCoin {

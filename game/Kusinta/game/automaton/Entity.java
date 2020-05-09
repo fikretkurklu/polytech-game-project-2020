@@ -52,7 +52,6 @@ public abstract class Entity {
 	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
 		bImages = img;
 		indiceAction = hmActions;
-		
 		m_state = automaton.getInitialState();
 		
 		m_automaton = automaton;

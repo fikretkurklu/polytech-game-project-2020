@@ -81,6 +81,23 @@ Jin (East) {
   | !Cell(W, O)? Move(W) : (West) 
 }
 
+SmallDragon (East) {
+*(East)
+  | ! GotPower() ? Explode() : ()  
+  | Cell(E, O) ? Turn(W) : (West)      
+  | Cell(H, P) ? Power : (East)  
+  | Closest(P, E) ? Egg(E) : (East)
+  | Closest(P, W) ? Egg(W) : (East)
+  | !Cell(E, O) ? Move(E) : (East) 
+ *(West)     
+  | ! GotPower() ? Explode() : ()  
+  | Cell(W, O) ? Turn(E) : (East)
+  | Cell(H, P) ? Power : (West)  
+  | Closest(P, E) ? Egg(E) : (West)
+  | Closest(P, W) ? Egg(W) : (West)
+  | !Cell(W, O)? Move(W) : (West) 
+}
+
 
 Demon (East) {
 *(East)
