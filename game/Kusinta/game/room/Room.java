@@ -44,6 +44,7 @@ public class Room {
 	//Concernant la position des ennemis dans la room
 	LinkedList<Coord> FOTable;
 	LinkedList<Coord> WOTable;
+	Coord bossCoord; 
 
 	public Room(int width, int height) throws Exception {
 		m_width = width;
@@ -116,6 +117,9 @@ public class Room {
 			newDecor(coord, true);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
+		case "ES_DB" :
+			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
+			break;
 		case "ES_I" :
 			startCoord = new Coord(coord);
 			startCoord.translate(Decor.SIZE / 2, Decor.SIZE);
@@ -135,7 +139,7 @@ public class Room {
 			break;
 		case "ES_B" :
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
-			//Create boss here
+			bossCoord = coord;
 			break;
 		default :
 			throw new Exception("Code room err: " + code);
