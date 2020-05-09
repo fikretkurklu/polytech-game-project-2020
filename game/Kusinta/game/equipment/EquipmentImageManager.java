@@ -21,8 +21,8 @@ public class EquipmentImageManager {
 			Image imgGrieves = ImageLoader.loadImage("resources/Equipment/Stuff/Iron Boot.png");
 			Image imgBow = ImageLoader.loadImage("resources/Equipment/Stuff/Bow.png");
 			Image imgBelt = ImageLoader.loadImage("resources/Equipment/Stuff/Belt.png");
-			Image imgSPotion = ImageLoader.loadImage("resources/Equipment/Potoin/Green Potion.png");
-			Image imgBPotion = ImageLoader.loadImage("resources/Equipment/Potoin/Red Potion.png");
+			Image imgSPotion = ImageLoader.loadImage("resources/Equipment/Potion/Green Potion.png");
+			Image imgBPotion = ImageLoader.loadImage("resources/Equipment/Potion/Red Potion.png");
 			PotionImage.put(Conso.BigHealthPotion, imgBPotion);
 			PotionImage.put(Conso.SmallHealthPotion, imgSPotion);
 			StuffImage.put(Stuff.Armor, imgArmor);
