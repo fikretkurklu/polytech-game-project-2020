@@ -14,19 +14,17 @@ import game.Coord;
 import game.Game;
 import game.Model;
 
-public class Demon extends Opponent {
+public class Medusa extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	int AttackStrength;
 
-	int hHitBox, wHitBox;
-
 	boolean isDead;
 
-	public Demon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+	public Medusa(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 80*Model.difficultyLevel, 80*Model.difficultyLevel, 2000, 8*Model.difficultyLevel, 40*Model.difficultyLevel, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -43,11 +41,8 @@ public class Demon extends Opponent {
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
-		wHitBox = (int) (m_width * 0.7);
-		hHitBox = (int) (m_height * 0.8);
-
-		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
-		setMoney(50 + 50*Model.difficultyLevel);
+		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height - 1);
+		setMoney(80 + 80*Model.difficultyLevel);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
 		resetAnim();
@@ -200,21 +195,21 @@ public class Demon extends Opponent {
 
 	public void attackHitBox() {
 		if (m_direction == Direction.E) {
-			hitBox.setBounds(hitBox.x, hitBox.y, (int) (1.3 * wHitBox), hHitBox);
+			hitBox.setBounds(hitBox.x, hitBox.y, (int) (1.3 * m_width), m_height);
 		} else {
-			int newW = (int) (1.3 * wHitBox);
+			int newW = (int) (1.3 * m_width);
 			int newX = hitBox.x + hitBox.width - newW;
-			hitBox.setBounds(newX, hitBox.y, newW, hHitBox);
+			hitBox.setBounds(newX, hitBox.y, newW, m_height);
 		}
 		hitBox.height -= 1;
 	}
 
 	public void basicHitBox() {
 		if (m_direction == Direction.W) {
-			int newX = hitBox.x + hitBox.width - wHitBox;
-			hitBox.setBounds(newX, hitBox.y, wHitBox, hHitBox);
+			int newX = hitBox.x + hitBox.width - m_width;
+			hitBox.setBounds(newX, hitBox.y, m_width, m_height);
 		} else {
-			hitBox.setBounds(hitBox.x, hitBox.y, wHitBox, hHitBox);
+			hitBox.setBounds(hitBox.x, hitBox.y, m_width, m_height);
 		}
 		hitBox.height -= 1;
 	}

@@ -31,12 +31,12 @@ public class Factory {
 	ImageLibrary m_IL;
 
 	public static enum Type {
-		Arrow, BossKey, Cloud, Coin, Demon, Fragment, Gate, Ghost, Jin, Lure, MagicProjectile, NormalKey, Player,
+		Arrow, BossKey, Cloud, Coin, Demon, Fragment, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa, NormalKey, Player,
 		PlayerSoul
 	};
 
 	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul",
-			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" }; // Nom des fichiers
+			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" , "Medusa"}; // Nom des fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
@@ -68,6 +68,7 @@ public class Factory {
 		actions.put(Type.Fragment, m_IL.getActions(Avatars[11]));
 		actions.put(Type.Gate, m_IL.getActions(Avatars[12]));
 		actions.put(Type.Cloud, m_IL.getActions(Avatars[13]));
+		actions.put(Type.Medusa, m_IL.getActions(Avatars[14]));
 	}
 
 	private void fillImages() {
@@ -84,6 +85,7 @@ public class Factory {
 		images.put(Type.Fragment, m_IL.getImages(Avatars[11]));
 		images.put(Type.Gate, m_IL.getImages(Avatars[12]));
 		images.put(Type.Cloud, m_IL.getImages(Avatars[13]));
+		images.put(Type.Medusa, m_IL.getImages(Avatars[14]));
 	}
 
 	private void fillAutomaton() throws Exception {
@@ -101,6 +103,7 @@ public class Factory {
 		automatons.put(Type.Fragment, m_AL.getAutomaton(Avatars[11]));
 		automatons.put(Type.Gate, m_AL.getAutomaton(Avatars[12]));
 		automatons.put(Type.Cloud, m_AL.getAutomaton(Avatars[13]));
+		automatons.put(Type.Medusa, m_AL.getAutomaton(Avatars[14]));
 	}
 
 	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle,
@@ -147,6 +150,9 @@ public class Factory {
 			case Cloud:
 				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
 						actions.get(Type.Cloud));
+			case Medusa:
+				return new Cloud(automatons.get(Type.Medusa), coord, model, images.get(Type.Medusa),
+						actions.get(Type.Medusa));
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());

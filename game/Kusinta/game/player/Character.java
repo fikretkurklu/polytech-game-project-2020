@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
