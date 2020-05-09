@@ -67,7 +67,6 @@ public class Model {
 		m_factory = factory;
 		m_opponentsToDelete = new LinkedList<Opponent>();
 
-		setRoom();
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 		int HUD_w = m_width / 3;
@@ -198,13 +197,9 @@ public class Model {
 	}
 
 	public void start() throws Exception {
+		m_roomGenerator = new AutomaticRoomGenerator();
 		m_room = new Room(m_width, m_height);
 		m_underworld = new Underworld(m_factory, m_width, m_height, this);
-	}
-
-	public void setRoom() throws IOException {
-		m_roomGenerator = new AutomaticRoomGenerator();
-		m_roomGenerator.AutomaticGeneration();
 	}
 
 	public void setBossRoom() throws IOException {
