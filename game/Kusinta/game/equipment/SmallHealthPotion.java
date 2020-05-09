@@ -13,9 +13,8 @@ public class SmallHealthPotion extends Consumable {
 	 * 
 	 */
 	
-	public SmallHealthPotion(Image img) throws Exception {
+	public SmallHealthPotion() throws Exception {
 		super();
-		imageEquip = img;
 		statTable.put(Stats.Price, 50);
 		setModification();
 	}

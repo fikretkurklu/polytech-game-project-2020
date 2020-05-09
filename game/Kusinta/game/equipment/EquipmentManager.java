@@ -11,11 +11,11 @@ public class EquipmentManager {
 	};
 
 	EquipmentImageManager imgManager;
-	
+
 	public EquipmentManager() {
 		imgManager = new EquipmentImageManager();
 	}
-	
+
 	public Equipment newEquipment() throws Exception {
 		Stuff[] equipmentTable = Stuff.values();
 		Stuff equipment = equipmentTable[(int) (Math.random() * (equipmentTable.length))];
@@ -41,7 +41,7 @@ public class EquipmentManager {
 			helmet.applyMultiplier();
 			return helmet;
 		case Bow:
-			if ((int)(Math.random() * 2) == 0) {
+			if ((int) (Math.random() * 2) == 0) {
 				LongBow bow = new LongBow(imgManager.StuffImage.get(Stuff.Bow));
 				bow.applyMultiplier();
 				return bow;
@@ -58,16 +58,20 @@ public class EquipmentManager {
 
 	public Consumable newConsumable(Conso consumable) throws Exception {
 		switch (consumable) {
-		case SmallHealthPotion :
+		case SmallHealthPotion:
 			System.out.println("HealthPotion created");
-			return new SmallHealthPotion(imgManager.PotionImage.get(Conso.SmallHealthPotion));
-		case BigHealthPotion :
+			SmallHealthPotion sp = new SmallHealthPotion();
+			sp.setImage(imgManager.PotionImage.get(Conso.SmallHealthPotion));
+			return sp;
+		case BigHealthPotion:
 			System.out.println("BigHealthPotion created");
-			return new BigHealthPotion(imgManager.PotionImage.get(Conso.BigHealthPotion));
-		case SmallStatPotion :
+			BigHealthPotion bp = new BigHealthPotion();
+			bp.setImage(imgManager.PotionImage.get(Conso.BigHealthPotion));
+			return bp;
+		case SmallStatPotion:
 			System.out.println("StatPotion created");
 			return new SmallStatPotion();
-		case BigStatPotion :
+		case BigStatPotion:
 			System.out.println("BigStatPotion created");
 			return new BigStatPotion();
 		default:
