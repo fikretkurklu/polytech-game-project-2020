@@ -76,7 +76,6 @@ public class Boss extends Opponent {
 		}
 
 		super.paint(g);
-
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

@@ -139,9 +139,8 @@ public class Room {
 			FOTable.add(coord);
 			break;
 		case "ES_B" :
-			bossCoord = coord;
-			System.out.println(coord.X());
-			System.out.println(coord.Y());
+			bossCoord = new Coord(coord);
+			bossCoord.translate(Decor.SIZE / 2, Decor.SIZE);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		default :
