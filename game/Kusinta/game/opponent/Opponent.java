@@ -26,7 +26,7 @@ public abstract class Opponent extends Character {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
 		m_key = false;
-		m_bossKey = true;
+		m_bossKey = false;
 		collidedWith = new LinkedList<Arrow>();
 	}
 

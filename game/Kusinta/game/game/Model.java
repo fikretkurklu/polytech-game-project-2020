@@ -46,11 +46,14 @@ public class Model {
 	LinkedList<Opponent> m_opponents;
 	private LinkedList<Opponent> m_opponentsToDelete;
 	LinkedList<Coin> m_coins;
+	private LinkedList<Coin> m_coinToDelete;
 
 	public HUD m_hud;
 
 	public Key m_key;
 	public BossKey m_bossKey;
+	public int bossKeydroprate;
+	
 	public Coin m_coin;
 	float diametre;
 	Factory m_factory;
@@ -61,13 +64,14 @@ public class Model {
 		m_height = h;
 		m_factory = factory;
 		m_opponentsToDelete = new LinkedList<Opponent>();
-
+		setM_coinToDelete(new LinkedList<Coin>());
 		start();
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
 		difficultyLevel = 1;
+		bossKeydroprate = 0;
 		opponentCreator();
 
 		switchEnv(mode.VILLAGE);
@@ -81,15 +85,19 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
-
+		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
 		resetPlayer();
-
+		m_player.m_currentStatMap.put(CurrentStat.Life, life);
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
+		m_opponentsToDelete = new LinkedList<Opponent>();
+		setM_coinToDelete(new LinkedList<Coin>());
+		
 		opponentCreator();
 
 		difficultyLevel++;
+		bossKeydroprate += 10;
 	}
 
 	public void resetPlayer() {
@@ -106,11 +114,15 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
+		m_opponentsToDelete = new LinkedList<Opponent>();
+		setM_coinToDelete(new LinkedList<Coin>());
+		
 		resetPlayer();
 
 		opponentCreator();
 
 		difficultyLevel = 1;
+		bossKeydroprate = 0;
 	}
 
 	public void switchEnv(mode m) {
@@ -147,6 +159,8 @@ public class Model {
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
+			m_player.setKey(false);
+			m_player.setBossKey(false);
 			m_village.reset();
 			break;
 		case GAMEOVER:
@@ -175,7 +189,8 @@ public class Model {
 		this.m_player.setCoord(m_room.getStartCoord());
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
+		m_opponentsToDelete = new LinkedList<Opponent>();
+		setM_coinToDelete(new LinkedList<Coin>());
 		if (m_room.getBossCoord() == null) {
 			System.out.println("Wrong coordinate");
 		}
@@ -250,6 +265,13 @@ public class Model {
 			}
 			for (Coin coin : m_coins) {
 				coin.tick(elapsed);
+			}
+			if (getM_coinToDelete() != null) {
+				for (Coin coin : getM_coinToDelete()) {
+					if (coin != null) {
+						m_coins.remove(coin);
+					}
+				}
 			}
 			m_room.tick(elapsed);
 			m_hud.tick(elapsed);
@@ -391,12 +413,16 @@ public class Model {
 		}
 
 		int randomKey = (int) (Math.random() * m_opponents.size());
-		int randomBossKey = (int) (Math.random() * m_opponents.size());
-		while (randomBossKey == randomKey) {
-			randomBossKey = (int) (Math.random() * m_opponents.size());
+		int randomDrop = (int) (Math.random()*100);
+		if (randomDrop < bossKeydroprate) {
+			int randomBossKey = (int) (Math.random() * m_opponents.size());
+			while (randomBossKey == randomKey) {
+				randomBossKey = (int) (Math.random() * m_opponents.size());
+			}
+			m_opponents.get(randomBossKey).setBossKey(true);
 		}
 		m_opponents.get(randomKey).setKey(true);
-		m_opponents.get(randomBossKey).setBossKey(true);
+
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {
@@ -441,5 +467,13 @@ public class Model {
 
 	public void setM_opponentsToDelete(LinkedList<Opponent> m_opponentsToDelete) {
 		this.m_opponentsToDelete = m_opponentsToDelete;
+	}
+
+	public LinkedList<Coin> getM_coinToDelete() {
+		return m_coinToDelete;
+	}
+
+	public void setM_coinToDelete(LinkedList<Coin> m_coinToDelete) {
+		this.m_coinToDelete = m_coinToDelete;
 	}
 }
