@@ -78,7 +78,7 @@ public class Model {
 		difficultyLevel = 1;
 		opponentCreator();
 
-		switchEnv(mode.UNDERWORLD);
+		switchEnv(mode.VILLAGE);
 		setCenterScreenPlayer();
 		diametre = 0;
 
@@ -122,7 +122,7 @@ public class Model {
 	}
 
 	public void switchEnv(mode m) {
-		actualMode = m;
+		
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -159,6 +159,7 @@ public class Model {
 		case GAMEOVER:
 			break;
 		}
+		actualMode = m;
 
 	}
 
