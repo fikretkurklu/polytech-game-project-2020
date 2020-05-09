@@ -24,6 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -41,9 +42,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import entityFactory.Factory;
+import entityFactory.Factory.Type;
 import game.graphics.View;
 
-public class Game implements ActionListener{
+public class Game {
 
 	public static Game game;
 	public static Factory m_factory;
@@ -64,25 +66,23 @@ public class Game implements ActionListener{
 	Sound m_music;
 	Image gameOverImage;
 	public boolean gameOver;
-	
-	JList typeList;
-	JList automatonList;
-	JList animationList;
+
+	JList<Type> typeList;
+	JList<String> automatonList;
+	JList<String> animationList;
 
 	Game() throws Exception {
 		m_factory = new Factory();
-        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        m_controller = new Controller(this);
-        m_view = new View(m_controller);
-        m_model = new Model(m_view, d.width, d.height, m_factory);
-        // creating frame
-        m_frame = m_view.createFrame(d);
-        gameOver = false;
-        gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
-        setupFrame();
-        
-        
-    }
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		m_controller = new Controller(this);
+		m_view = new View(m_controller);
+		// creating frame
+		m_frame = m_view.createFrame(d);
+		gameOver = false;
+		gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
+		setupFrame();
+
+	}
 
 	/*
 	 * Then it lays out the frame, with a border layout, adding a label to the north
@@ -92,39 +92,61 @@ public class Game implements ActionListener{
 
 		m_frame.setTitle("Game");
 		m_frame.setLayout(new BorderLayout());
+		// m_frame.add(m_view, BorderLayout.CENTER);
+		JPanel panel = new JPanel(new BorderLayout(2, 2));
+		panel.add(new JLabel("Entity"), BorderLayout.NORTH);
+		typeList = new JList<Type>(Factory.Type.values());
+		panel.add(typeList, BorderLayout.CENTER);
+		m_frame.add(panel, BorderLayout.WEST);
 
-		//m_frame.add(m_view, BorderLayout.CENTER);
+		JPanel panel2 = new JPanel(new BorderLayout(2, 2));
+		panel2.add(new JLabel("Automaton"), BorderLayout.NORTH);
+		automatonList = new JList<String>(Factory.Avatars);
+		panel2.add(automatonList, BorderLayout.CENTER);
+		m_frame.add(panel2, BorderLayout.EAST);
 
-		JPanel panel = new JPanel(new BorderLayout(2,2));
-		typeList = new JList(Factory.Type.values());
-		panel.add(typeList);
-		m_frame.add(panel, BorderLayout.LINE_START);
-
-		JPanel panel2 = new JPanel(new BorderLayout(2,2));
-		automatonList = new JList(Factory.Avatars);
-		panel2.add(automatonList);
-		m_frame.add(panel2, BorderLayout.LINE_END);
-		
-		JPanel panel3 = new JPanel(new BorderLayout(2,2));
-		animationList = new JList(Factory.Avatars);
-		panel3.add(animationList);
+		JPanel panel3 = new JPanel(new BorderLayout(2, 2));
+		panel3.add(new JLabel("Animation"), BorderLayout.NORTH);
+		animationList = new JList<String>(Factory.Avatars);
+		panel3.add(animationList, BorderLayout.CENTER);
 		m_frame.add(panel3, BorderLayout.CENTER);
+
+		JPanel buttonPanel = new JPanel(new BorderLayout(2, 2));
+		JButton btn = new JButton("OK");
+		btn.addActionListener(new MyActionListenerOK(m_factory, m_frame, typeList, automatonList, animationList));
+		buttonPanel.add(btn, BorderLayout.WEST);
+
+		btn = new JButton("Valider");
+		btn.addActionListener(new MyActionListenerValidate(this));
+		buttonPanel.add(btn, BorderLayout.EAST);
 		
-		JButton btn = new JButton("Valider");
-		btn.addActionListener(this);
-		m_frame.add(btn, BorderLayout.PAGE_END);
-		
-		
-		m_text = new JLabel();
-		m_text.setText("Tick: 0ms FPS=0");
-		m_frame.add(m_text, BorderLayout.NORTH);
+		m_frame.add(buttonPanel, BorderLayout.SOUTH);
 
 		// center the window on the screen
 		m_frame.setLocationRelativeTo(null);
 
 		m_frame.setUndecorated(true);
-		
+
 		// make the vindow visible
+		m_frame.setVisible(true);
+	}
+	
+	public void setupGame() {
+		try {
+			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		m_frame.getContentPane().removeAll();
+		m_frame.getContentPane().repaint();
+		m_frame.setLayout(new BorderLayout());
+		m_frame.add(m_view, BorderLayout.CENTER);
+
+		m_text = new JLabel();
+		m_text.setText("Tick: 0ms FPS=0");
+		m_frame.add(m_text, BorderLayout.NORTH);
+
 		m_frame.setVisible(true);
 	}
 
@@ -167,7 +189,7 @@ public class Game implements ActionListener{
 	void tick(long elapsed) {
 		if (!gameOver) {
 			m_model.tick(elapsed);
-	
+
 			// Update every second
 			// the text on top of the frame: tick and fps
 			m_textElapsed += elapsed;
@@ -175,7 +197,7 @@ public class Game implements ActionListener{
 				m_textElapsed = 0;
 				float period = m_view.getTickPeriod();
 				int fps = m_view.getFPS();
-	
+
 				String txt = "Tick=" + period + "ms";
 				while (txt.length() < 15)
 					txt += " ";
@@ -199,37 +221,52 @@ public class Game implements ActionListener{
 			g.fillRect(0, 0, width, height);
 			// paint
 			m_model.paint(g, width, height);
-		}else {
-			g.drawImage(gameOverImage, 0, 0, width, height,null);
+		} else {
+			g.drawImage(gameOverImage, 0, 0, width, height, null);
 		}
 	}
+}
 
-	@Override
+class MyActionListenerOK implements ActionListener {
+
+	JFrame m_frame;
+	Factory m_factory;
+	JList<Type> typeList;
+	JList<String> automatonList;
+	JList<String> animationList;
+
+	public MyActionListenerOK(Factory factory, JFrame frame, JList<Type> typeList, JList<String> automatonList,
+			JList<String> animationList) {
+		m_factory = factory;
+		m_frame = frame;
+		this.typeList = typeList;
+		this.automatonList = automatonList;
+		this.animationList = animationList;
+
+	}
+
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Type: " + typeList.getSelectedValue());
-		System.out.println("Automaton: " + automatonList.getSelectedValue());
-		System.out.println("Animation: " + animationList.getSelectedValue());
-		
-		m_factory.changeAnimation(Factory.Type.valueOf(typeList.getSelectedValue().toString()), animationList.getSelectedValue().toString());
+		m_factory.changeAnimation(Factory.Type.valueOf(typeList.getSelectedValue().toString()),
+				animationList.getSelectedValue().toString());
 		try {
-			m_factory.changeAutomaton(Factory.Type.valueOf(typeList.getSelectedValue().toString()), automatonList.getSelectedValue().toString());
+			m_factory.changeAutomaton(Factory.Type.valueOf(typeList.getSelectedValue().toString()),
+					automatonList.getSelectedValue().toString());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		m_frame.getContentPane().removeAll();
-		m_frame.getContentPane().repaint();
-		
-		m_frame.setLayout(new BorderLayout());
-		m_frame.add(m_view, BorderLayout.CENTER);
-		
-		m_text = new JLabel();
-		m_text.setText("Tick: 0ms FPS=0");
-		m_frame.add(m_text, BorderLayout.NORTH);
-		
-		m_frame.setVisible(true);
+	}
+}
+
+class MyActionListenerValidate implements ActionListener {
+
+	Game g;
+
+	public MyActionListenerValidate(Game game) {
+		g = game;
 	}
 
+	public void actionPerformed(ActionEvent e) {
+		g.setupGame();
+	}
 }
