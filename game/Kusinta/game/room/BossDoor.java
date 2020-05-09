@@ -31,7 +31,6 @@ public class BossDoor extends Decor {
 	@Override
 	public boolean activate() {
 		try {
-			System.out.println("Acivation");
 			m_model.setBossRoom();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

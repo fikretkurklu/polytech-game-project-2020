@@ -53,7 +53,6 @@ public abstract class Opponent extends Character {
 	public void dropKey() {
 		if (m_key != false) {
 			try {
-				System.out.println("Check du drop de la key");
 				if (m_key == true) {
 					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0	, null);
 					m_model.setKey(k);
@@ -63,7 +62,6 @@ public abstract class Opponent extends Character {
 			}
 			setKey(false);
 		}  else if (m_bossKey == true) {
-			System.out.println("keycreation");
 			BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, m_model, 0, null);
 			m_model.setBossKey(k);
 		}
