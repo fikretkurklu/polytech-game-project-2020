@@ -34,6 +34,7 @@ public class Model {
 	public Coord m_mouseCoord;
 
 	public Character m_player;
+	public Character m_playerSave;
 	View m_view;
 
 	public mode actualMode;
@@ -90,19 +91,11 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
-		int maxLife = m_player.m_currentStatMap.get(CurrentStat.MaxLife);
-		int strength = m_player.m_currentStatMap.get(CurrentStat.Strength);
-		int resistance = m_player.m_currentStatMap.get(CurrentStat.Resistance);
-		int attackSpeed = m_player.m_currentStatMap.get(CurrentStat.Attackspeed);
 		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
-		int money = m_player.getMoney();
-		HashMap<EquipmentManager.Stuff, Equipment> equip = m_player.getEquipment();
-		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		m_player.setCurrentStat(attackSpeed, maxLife, life, resistance, strength);
-		m_player.setEquipment(equip);
-		m_player.setMoney(money);
-		this.m_player.setCoord(m_room.getStartCoord());
 
+		resetPlayer();
+		m_player.setLife(life);
+		
 		int HUD_w = m_width / 3;
 		int HUD_h = HUD_w / 5;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -115,8 +108,36 @@ public class Model {
 		difficultyLevel ++;
 	}
 	
-	public void toDongeon() {
+	public void resetPlayer() {
+		int maxLife = m_player.m_currentStatMap.get(CurrentStat.MaxLife);
+		int strength = m_player.m_currentStatMap.get(CurrentStat.Strength);
+		int resistance = m_player.m_currentStatMap.get(CurrentStat.Resistance);
+		int attackSpeed = m_player.m_currentStatMap.get(CurrentStat.Attackspeed);
+		int money = m_player.getMoney();
+		HashMap<EquipmentManager.Stuff, Equipment> equip = m_player.getEquipment();
+		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
+		m_player.setCurrentStat(attackSpeed, maxLife, maxLife, resistance, strength);
+		m_player.setEquipment(equip);
+		m_player.setMoney(money);
+		this.m_player.setCoord(m_room.getStartCoord());
+	}
+	
+	public void toDongeon() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_width, m_height);
 		
+		resetPlayer();
+
+		int HUD_w = m_width / 3;
+		int HUD_h = HUD_w / 5;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+
+		opponentCreator();
+		
+		difficultyLevel = 1;
 	}
 
 	public void switchEnv(mode m) {
@@ -132,8 +153,37 @@ public class Model {
 		switch (m) {
 		case ROOM:
 			m_village = null;
+			switch(actualMode) {
+			case UNDERWORLD :
+				m_village = null;
+				m_player = m_playerSave;
+				int life = m_player.m_currentStatMap.get(CurrentStat.MaxLife);
+				resetPlayer();
+				int HUD_w = m_width / 3;
+				int HUD_h = HUD_w / 5;
+				try {
+					m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if (m_player == null) {
+					System.out.println("Erreur sauvegarde player");
+				} else {
+					m_player.setLife(life);
+				}
+				break;
+			case VILLAGE :
+				try {
+					toDongeon();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			break;
 		case UNDERWORLD:
+			m_playerSave = m_player;
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
