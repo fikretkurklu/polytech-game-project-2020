@@ -26,7 +26,8 @@ public class MagicProjectile extends Projectile {
 		m_width = (int) (m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
-		setSpeed(4);
+		m_stepTick = 4;
+		setSpeed(10);
 		
 
 	}
@@ -51,7 +52,7 @@ public class MagicProjectile extends Projectile {
 	}
 
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		super.tick(elapsed);
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;

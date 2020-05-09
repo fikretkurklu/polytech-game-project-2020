@@ -25,8 +25,8 @@ public class Meteor extends Projectile {
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - SIZE / 5, m_coord.Y() - SIZE / 10, SIZE/2, SIZE/2);
-
-		setSpeed(4);
+		m_stepTick = 4;
+		setSpeed(12);
 
 	}
 
@@ -49,7 +49,7 @@ public class Meteor extends Projectile {
 	}
 
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		super.tick(elapsed);
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > 200) {
 			m_imageElapsed = 0;

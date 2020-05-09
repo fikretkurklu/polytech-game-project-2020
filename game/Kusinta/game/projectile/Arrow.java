@@ -33,6 +33,8 @@ public class Arrow extends Projectile {
 			hitBox = new Rectangle((int) ((m_coord.X() - (m_width / 2) * Math.cos(m_angle))),
 					(int) ((m_coord.Y() - (m_width / 2) * Math.sin(m_angle) * 0.7)), 10, 10);
 		}
+		setSpeed(12);
+		m_stepTick = 4;
 	}
 
 	public void paint(Graphics g) {

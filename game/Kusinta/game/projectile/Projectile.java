@@ -25,8 +25,6 @@ public abstract class Projectile extends Entity {
 	protected double m_angle;
 	protected Direction m_direction;
 
-	int moving;
-
 	protected State m_State;
 
 	protected Character m_shooter;
@@ -47,8 +45,6 @@ public abstract class Projectile extends Entity {
 		m_State = State.OK_STATE;
 		m_alpha = 1f;
 		m_dead_time = 0;
-		moving = 0;
-		X_MOVE = 9;
 
 	}
 
@@ -56,20 +52,22 @@ public abstract class Projectile extends Entity {
 	public boolean move(Direction dir) {
 		int tmpX = m_coord.X();
 		int tmpY = m_coord.Y();
-		if (moving == 0) {
-			if (m_direction == Direction.E) {
-				m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int) (-X_MOVE * Math.sin(m_angle)));
-			} else {
-				m_coord.translate((int) (-X_MOVE * Math.cos(m_angle)), (int) (-X_MOVE * Math.sin(m_angle)));
-			}
-			hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
+		if (m_direction == Direction.E) {
+			m_coord.translate((int) (X_MOVE * Math.cos(m_angle)), (int) (-X_MOVE * Math.sin(m_angle)));
+		} else {
+			m_coord.translate((int) (-X_MOVE * Math.cos(m_angle)), (int) (-X_MOVE * Math.sin(m_angle)));
 		}
-		moving = (moving + 1) % 3;
+		hitBox.translate(m_coord.X() - tmpX, m_coord.Y() - tmpY);
 		return true;
+
 	}
 
 	public void tick(long elapsed) {
-		m_automaton.step(this);
+		m_stepElapsed += elapsed;
+		if (m_stepElapsed > m_stepTick) {
+			m_stepElapsed = 0;
+			m_automaton.step(this);
+		}
 	}
 
 	public long getDeadTime() {

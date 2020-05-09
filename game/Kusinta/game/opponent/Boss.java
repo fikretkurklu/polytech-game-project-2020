@@ -76,6 +76,7 @@ public class Boss extends Opponent {
 		}
 
 		super.paint(g);
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
@@ -102,7 +103,7 @@ public class Boss extends Opponent {
 			if (shooting) {
 				if (m_imageIndex >= currentIndex.length) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 4,
 							proj.METEOR);
 				}
 			}
