@@ -1,5 +1,5 @@
 sprite_sheet = resources/oppenent/boss/animation.png
-4;27
+5;27
 DEATH = 35;36;37;38;39
 SHOT = 27;28;29;30;31;32;33;34
 MOVE = 45;46;47;48;49;50;51;52;53
