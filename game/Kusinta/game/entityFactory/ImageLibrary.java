@@ -110,7 +110,7 @@ public class ImageLibrary {
 			actionsIndex.put(avatar, hmActions);
 			f.close();
 		} catch (Exception e) {
-			System.out.println("Error parser Image");
+			System.out.println("Error parser Image " + avatar);
 		}
 
 	}

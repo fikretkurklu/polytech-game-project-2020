@@ -51,7 +51,7 @@ public class AutomatonLibrary {
 		if (automaton != null) {
 			return automaton;
 		}else {
-			throw new Exception("Error : automaton not found !");
+			throw new Exception("Error : automaton not found !: " + name);
 		}
 			
 	}
