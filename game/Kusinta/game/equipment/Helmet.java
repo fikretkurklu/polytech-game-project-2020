@@ -11,7 +11,7 @@ public class Helmet extends Equipment{
 		super();
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
-		statTable.put(Stats.Price, 100+50*rarity);
+		statTable.put(Stats.Price, 150+150*rarity);
 		statTable.put(Stats.Health, 10);
 		statTable.put(Stats.Resistance, 10);
 		statTable.put(Stats.Strengh, 5);

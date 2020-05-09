@@ -42,6 +42,8 @@ public class HUDConsumable {
 		nbBPot = m_player.getBigConsumables().size();
 		if (m_player.getKey()) {
 			Key = Game.m_factory.getImage(Type.NormalKey)[0];
+		} else if (m_player.getBossKey()) {
+			Key = Game.m_factory.getImage(Type.BossKey)[0];
 		}
 	}
 

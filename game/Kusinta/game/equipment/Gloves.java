@@ -10,7 +10,7 @@ public class Gloves extends Equipment{
 	public Gloves(Image img) throws Exception {
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
-		statTable.put(Stats.Price, 100+rarity*25);
+		statTable.put(Stats.Price, 100+rarity*100);
 		statTable.put(Stats.Strengh, 10);
 		statTable.put(Stats.Resistance, 5);
 	}

@@ -15,9 +15,9 @@ public class ShortBow extends Bow {
 		super();
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
-		statTable.put(Stats.Price, 200+100*rarity);
+		statTable.put(Stats.Price, 400+200*rarity);
 		statTable.put(Stats.Strengh, 5);
-		statTable.put(Stats.AttackSpeed, 1200);
+		statTable.put(Stats.AttackSpeed, 600);
 		
 	}
 	

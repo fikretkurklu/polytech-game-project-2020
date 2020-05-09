@@ -74,6 +74,7 @@ public abstract class Character extends Entity {
 		setM_model(model);
 
 		m_key = false;
+		m_bossKey = false;
 
 		collidingWith = null;
 
