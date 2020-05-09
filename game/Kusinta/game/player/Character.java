@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
+import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
@@ -211,6 +212,10 @@ public abstract class Character extends Entity {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
+			if (currentAction != Action.DEFAULT) {
+				currentAction = Action.DEFAULT;
+				resetAnim();
+			}
 		}
 		if (!falling) {
 			if (m_model.m_room.isBlocked(m_coord.X(), m_coord.Y())) {
@@ -222,6 +227,10 @@ public abstract class Character extends Entity {
 	}
 
 	private void gravity(long t) {
+		if(!jumping) {
+			currentAction = Action.FALLING;
+			resetAnim();
+		}
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {

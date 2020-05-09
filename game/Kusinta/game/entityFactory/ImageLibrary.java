@@ -96,6 +96,14 @@ public class ImageLibrary {
 					}
 					hmActions.put(Action.DEFAULT, indexAnimations);
 					break;
+				case "FALLING":
+					splitedIndexAnimations = splitedLines[1].split(";");
+					indexAnimations = new int[splitedIndexAnimations.length];
+					for (int i = 0; i < splitedIndexAnimations.length; i++) {
+						indexAnimations[i] = Integer.valueOf(splitedIndexAnimations[i]);
+					}
+					hmActions.put(Action.FALLING, indexAnimations);
+					break;
 				}
 				line = f.readLine();
 			}
