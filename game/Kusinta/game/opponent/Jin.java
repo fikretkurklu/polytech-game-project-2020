@@ -20,7 +20,7 @@ public class Jin extends Opponent {
 
 	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 5*Model.difficultyLevel, 5*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000+100*Model.difficultyLevel, 5*Model.difficultyLevel, 10*Model.difficultyLevel, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
@@ -98,7 +98,7 @@ public class Jin extends Opponent {
 			m_imageIndex ++;
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
-					m_model.getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
 					c.setMoney(m_money);

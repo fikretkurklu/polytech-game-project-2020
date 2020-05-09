@@ -1711,6 +1711,8 @@ public class RoomGenerator {
 	}
 
 	public static void main(String[] args) throws IOException {
+		AutomaticRoomGenerator autoroom = new AutomaticRoomGenerator();
+		autoroom.bossRoomGenerator();
 		Menu();
 	}
 
