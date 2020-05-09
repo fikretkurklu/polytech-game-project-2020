@@ -69,7 +69,6 @@ public class Medusa extends Opponent {
 	@Override
 	public void tick(long elapsed) {
 		super.tick(elapsed);
-
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;

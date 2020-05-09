@@ -9,6 +9,7 @@ import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
 import game.Model;
+import opponent.Boss;
 import opponent.BossKey;
 import opponent.Coin;
 import opponent.Jin;
@@ -18,6 +19,7 @@ import opponent.Demon;
 import player.Player;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+import projectile.Meteor;
 import underworld.Cloud;
 import underworld.Fragment;
 import underworld.Gate;
@@ -32,19 +34,20 @@ public class Factory {
 	ImageLibrary m_IL;
 
 	public static enum Type {
-		Arrow, Boss, BossKey, Cloud, Coin, Demon, Fragment, FireAttack, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa, NormalKey,
-		Player, PlayerSoul
+		Arrow, Boss, BossKey, Cloud, Coin, Demon, Fragment, FireAttack, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa,
+		NormalKey, Player, PlayerSoul
 	};
 
 	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul",
-			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud", "Medusa", "Boss", "FireAttack"}; // Nom des
-																												// fichiers
+			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud", "Medusa", "Boss",
+			"FireAttack" }; // Nom des
+	// fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
 	HashMap<Type, HashMap<Action, int[]>> actions;
 
-	public Factory() throws Exception {
+	public Factory() {
 		m_AL = new AutomatonLibrary();
 		m_IL = new ImageLibrary();
 		automatons = new HashMap<Factory.Type, Automaton>();
@@ -94,7 +97,7 @@ public class Factory {
 		images.put(Type.FireAttack, m_IL.getImages(Avatars[16]));
 	}
 
-	private void fillAutomaton() throws Exception {
+	private void fillAutomaton() {
 		automatons.put(Type.Arrow, m_AL.getAutomaton(Avatars[0]));
 		automatons.put(Type.Demon, m_AL.getAutomaton(Avatars[1]));
 		automatons.put(Type.Jin, m_AL.getAutomaton(Avatars[2]));
@@ -162,9 +165,11 @@ public class Factory {
 				return new Medusa(automatons.get(Type.Medusa), coord, dir, model, images.get(Type.Medusa),
 						actions.get(Type.Medusa));
 			case Boss:
-				return null;
+				return new Boss(automatons.get(Type.Boss), coord, dir, model, images.get(Type.Boss),
+						actions.get(Type.Boss));
 			case FireAttack:
-				return null;
+				return new Meteor(automatons.get(Type.FireAttack), coord, angle, shooter, dir,
+						images.get(Type.FireAttack), actions.get(Type.FireAttack));
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());

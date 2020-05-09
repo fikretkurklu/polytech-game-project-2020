@@ -185,7 +185,7 @@ public class Game {
 	void tick(long elapsed) {
 		if (!gameOver) {
 			m_model.tick(elapsed);
-/*
+
 			// Update every second
 			// the text on top of the frame: tick and fps
 			m_textElapsed += elapsed;
@@ -199,7 +199,7 @@ public class Game {
 					txt += " ";
 				txt = txt + fps + " fps   ";
 				m_text.setText(txt);
-			}*/
+			}
 		}
 	}
 

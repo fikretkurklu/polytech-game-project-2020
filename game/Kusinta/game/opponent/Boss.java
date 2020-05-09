@@ -8,36 +8,33 @@ import java.util.HashMap;
 import automaton.Automaton;
 import automaton.Category;
 import automaton.Direction;
-import entityFactory.Factory.Type;
 import game.Coord;
-import game.Game;
 import game.Model;
 import projectile.Projectile.proj;
 
 public class Boss extends Opponent {
 
 	int m_imageElapsed;
+	int hitBoxPadding;
 
 	public Boss(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100 * Model.difficultyLevel, 100 * Model.difficultyLevel, 1000,
-				5 * Model.difficultyLevel, 5 * Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 10000, 500, 4000, 200, 300, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
 
-		m_height = SIZE;
+		X_MOVE = 8;
+
+		m_height = SIZE * 2;
+		hitBoxPadding = m_height / 10;
 		m_width = (int) (m_height * ratio);
+		hitBox = new Rectangle(C.X() - m_width / 2 + hitBoxPadding, C.Y() - m_height + hitBoxPadding,
+				m_width - 2 * hitBoxPadding, m_height - 2 * hitBoxPadding);
 
-		int w = (int) (m_width / 1.7);
-		int h = (int) (m_height / 1.3);
-
-		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
-		setMoney(100 + 50 * Model.difficultyLevel);
-		m_moveElapsed = 0;
-
-		X_MOVE = 2;
+		currentAction = Action.MOVE;
+		resetAnim();
 
 	}
 
@@ -101,18 +98,13 @@ public class Boss extends Opponent {
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
 					m_model.getOpponent().remove(this);
-					dropKey();
-					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
-					c.setMoney(m_money);
-					m_model.addCoin(c);
-
 				}
 			}
 			if (shooting) {
 				if (m_imageIndex >= currentIndex.length) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
 					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
-							proj.MAGIC_PROJECTILE);
+							proj.METEOR);
 				}
 			}
 			if (m_imageIndex >= currentIndex.length) {

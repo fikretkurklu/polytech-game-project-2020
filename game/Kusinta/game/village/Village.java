@@ -2,8 +2,6 @@ package village;
 
 import java.awt.Graphics;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import game.Model;
 import game.Model.mode;
 import player.Player;
