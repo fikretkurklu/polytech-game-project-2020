@@ -1,0 +1,6 @@
+sprite_sheet = resources/oppenent/demon/smallDragon.png
+2;8
+DEATH = 3;4;5;6
+SHOT = 0;1;2
+MOVE = 12;13;14;15
+DEFAULT = 9;10;11
