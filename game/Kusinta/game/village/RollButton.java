@@ -4,7 +4,7 @@ import player.Player;
 
 public class RollButton extends Button {
 
-	private final String BG = "resources/Village/HUD/RollB.png";
+	private final String BG = "resources/Village/RollB.png";
 	Panel m_panel;
 	Player m_player;
 	private int PRICE = 50;

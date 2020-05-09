@@ -57,7 +57,7 @@ Ghost (State0){
   |True ? Move : (State0)
 	*(State1)
   | !GotStuff ? : (State0) 
-  |Closest(G,H) ? Jump : (State1)  
+  | Closest(G,H) ? Jump : (State1)  
   | Cell(H, A) ? Hit(H): (State1)
   | Cell(H, C) ? Hit(S): (State1)
   | Closest(C, NE) ? Wizz(NE): (State1)

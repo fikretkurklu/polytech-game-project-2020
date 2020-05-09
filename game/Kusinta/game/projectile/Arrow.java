@@ -44,13 +44,16 @@ public class Arrow extends Projectile {
 		bg.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getAlpha()));
 		Image image = getImage();
 		
+		int h  = (int)(m_height * 2);
+		int r = (int)(0.5 * m_height);
+		
 		if (m_direction == Direction.E) {
 			bg.rotate(-m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, 0 , 0, m_width, m_height, null);
+			bg.drawImage(image, 0 , -r, m_width, h, null);
 			
 		} else {
 			bg.rotate(m_angle, m_width / 2, m_height / 2);
-			bg.drawImage(image, m_width , 0, -m_width, m_height, null);
+			bg.drawImage(image, m_width , -r, -m_width, h, null);
 		}
 		bg.dispose();
 

@@ -171,7 +171,7 @@ public abstract class Entity {
 						return true;
 					}
 				} else if (cat == Category.O) {
-					x = hitBox.x + hitBox.width + X_MOVE;
+					x = hitBox.x + hitBox.width;
 					return (m_model.m_room.isBlocked(x, hitBox.y + hitBox.height / 2)
 							|| m_model.m_room.isBlocked(x, hitBox.y)
 							|| m_model.m_room.isBlocked(x, hitBox.y + hitBox.height));

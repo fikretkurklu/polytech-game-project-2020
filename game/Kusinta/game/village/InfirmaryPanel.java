@@ -3,7 +3,7 @@ package village;
 import player.Player;
 
 public class InfirmaryPanel extends Panel {
-	public final String BG = "resources/Village/HUD/infirmaryBG.jpg";
+	public final String BG = "resources/Village/infirmaryBG.jpg";
 	public InfirmaryPanel(int x, int y, int w, int h, Player p) {
 		super(x, y, w, h, p);
 		int Scroll_w = w / Scroll.WIDTH_RATIO;

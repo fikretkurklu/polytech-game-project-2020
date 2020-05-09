@@ -65,7 +65,7 @@ public class Model {
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 		int HUD_w = m_width / 3;
-		int HUD_h = m_height / 8;
+		int HUD_h = HUD_w / 5;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 
 		m_opponents = new LinkedList<Opponent>();
@@ -83,7 +83,7 @@ public class Model {
 
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
-		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
+		m_room = new Room(m_width, m_height);
 		this.m_player.setCoord(m_room.getStartCoord());
 	}
 
@@ -115,9 +115,8 @@ public class Model {
 	}
 
 	public void start() throws Exception {
-		m_room = new Room(Game.m_factory.m_AL, m_width, m_height);
-		//m_underworld = new Underworld(m_factory, m_width, m_height, this);
-
+		m_room = new Room(m_width, m_height);
+		m_underworld = new Underworld(m_factory, m_width, m_height, this);
 	}
 
 	public void setRoom() throws IOException {

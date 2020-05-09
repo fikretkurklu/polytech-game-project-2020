@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -61,6 +62,7 @@ public class Game implements ActionListener{
 	Controller m_controller;
 	Model m_model;
 	Sound m_music;
+	Image gameOverImage;
 	public boolean gameOver;
 	
 	JList typeList;
@@ -76,6 +78,7 @@ public class Game implements ActionListener{
         // creating frame
         m_frame = m_view.createFrame(d);
         gameOver = false;
+        gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
         setupFrame();
         
         
@@ -187,17 +190,17 @@ public class Game implements ActionListener{
 	 * called from the GameCanvasListener, called from the GameCanvas.
 	 */
 	void paint(Graphics g) {
+		int width = m_view.getWidth();
+		int height = m_view.getHeight();
 		if (!gameOver) {
 			// get the size of the canvas
-			int width = m_view.getWidth();
-			int height = m_view.getHeight();
-	
 			// erase background
 			g.setColor(Color.gray);
 			g.fillRect(0, 0, width, height);
-	
 			// paint
 			m_model.paint(g, width, height);
+		}else {
+			g.drawImage(gameOverImage, 0, 0, width, height,null);
 		}
 	}
 

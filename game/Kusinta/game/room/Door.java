@@ -12,11 +12,14 @@ public class Door extends Decor {
 
 	int m_width, m_height;
 
-	public Door(Coord coord, DoorImageManager DImageManager, Room room, Automaton automaton) throws Exception {
+	public Door(Coord coord, Room room, Automaton automaton) throws Exception {
 		super(false, false, true, coord, room, automaton);
-		String path = DImageManager.get("");
-		if (path != null) {
-			__image = ImageLoader.loadImage(path, SIZE);
+		String image_path = "resources/Room/decors/Door1.png";
+		try {
+			__image = ImageLoader.loadImage(image_path, SIZE);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		m_width = (int) (__image.getWidth(null) * 1.5);
 		m_height = (int) (__image.getHeight(null) * 1.5);
@@ -39,7 +42,6 @@ public class Door extends Decor {
 
 	@Override
 	public void tick(long elapsed) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -51,7 +53,6 @@ public class Door extends Decor {
 			int x = m_hitBox.x + ratioX;
 			int y = m_hitBox.y + m_hitBox.height - h;
 			g.drawImage(__image, x, y, w, h, null);
-//			g.drawRect(m_hitBox.x, m_hitBox.y, m_hitBox.width, m_hitBox.height);
 		}
 
 	}

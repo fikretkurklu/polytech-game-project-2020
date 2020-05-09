@@ -53,7 +53,7 @@ public class HUDStats {
 	}
 
 	public void paint(Graphics g) {
-		g.drawImage(bg, m_x, m_y, null);
+		g.drawImage(bg, m_x, m_y, m_width, m_height, null);
 		g.setColor(BG_COLOR);
 		int i = 0;
 		for (String l : statsDrawned) {

@@ -9,7 +9,7 @@ public class EquipementButton extends Button {
 	Player m_player;
 	Equipment m_equipement;
 	EquipementScroll scroll;
-	private final String EmptyImg = "resources/Village/HUD/EmptyCase.png";
+	private final String EmptyImg = "resources/Village/EmptyCase.png";
 
 	public EquipementButton(int x, int y, int w, int h, Player p, EquipementScroll scroll) {
 		super(x, y, w, h);
@@ -22,7 +22,7 @@ public class EquipementButton extends Button {
 	
 	public void setEquipement(Equipment equipement) {
 		m_equipement = equipement;
-		setFgImage(equipement.getImagePath());
+		setFgImage(equipement.getImage());
 	}
 	
 	@Override

@@ -76,14 +76,18 @@ public class ImageLoader {
 	 * @return the method return an Image variable which contains the image loaded
 	 * @throws Exception when an error occur when trying to load the image
 	 */
-	public static Image loadImage(String path) throws Exception {
-		File imageFile = new File(path);
-		
-		if (imageFile.exists()) {
-			return ImageIO.read(imageFile);
-		} else {
-			throw new Exception("Error while loading image: path = " + path);
+	public static Image loadImage(String path){
+		try {
+			File imageFile = new File(path);
+			if (imageFile.exists()) {
+				return ImageIO.read(imageFile);
+			} 
+			return null;
+		} catch (IOException e) {
+			System.out.println("Error while loading image: path = " + path);
+			return null;
 		}
+		
 		
 		
 	}
