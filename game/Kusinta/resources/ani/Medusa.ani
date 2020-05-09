@@ -1,4 +1,4 @@
-sprite_sheet = resources/oppenent/demon/medusa.png
+sprite_sheet = resources/oppenent/medusa/medusa.png
 3;7
 DEATH = 6;7;8;9;10;11
 SHOT = 0;1;2;3;4;5

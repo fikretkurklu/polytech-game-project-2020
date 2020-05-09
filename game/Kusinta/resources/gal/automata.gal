@@ -90,6 +90,10 @@ Demon (East) {
   | Cell(E, P) ? Wizz() : (East)
  | Cell(E, O) ? Turn(W) : (West)
  | True ? Move(E) : (East)
+  *(MW)
+  | Cell(W, P) ? Wizz() : (West)
+ | Cell(W, O) ? Turn(E) : (ES)
+ | True ? Move(W) : (West)
  
  }
  Medusa (East) {

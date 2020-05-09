@@ -12,6 +12,7 @@ import game.Model;
 import opponent.BossKey;
 import opponent.Coin;
 import opponent.Jin;
+import opponent.Medusa;
 import opponent.NormalKey;
 import opponent.Demon;
 import player.Player;
@@ -151,7 +152,7 @@ public class Factory {
 				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
 						actions.get(Type.Cloud));
 			case Medusa:
-				return new Cloud(automatons.get(Type.Medusa), coord, model, images.get(Type.Medusa),
+				return new Medusa(automatons.get(Type.Medusa), coord, dir, model, images.get(Type.Medusa),
 						actions.get(Type.Medusa));
 			}
 		} catch (Exception e) {

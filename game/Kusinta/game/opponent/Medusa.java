@@ -16,7 +16,7 @@ import game.Model;
 
 public class Medusa extends Opponent {
 
-	public static final int SIZE = (int) (1.5 * Element.SIZE);
+	public static final int SIZE = (int) (Element.SIZE);
 	int AttackStrength;
 
 	boolean isDead;

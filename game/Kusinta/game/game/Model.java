@@ -342,7 +342,7 @@ public class Model {
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				int WOtype = (int)(Math.random() * 2) ;
+				int WOtype = (int)(Math.random() * 2) + 1 ;
 				switch (WOtype) {
 				case 1:
 					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
