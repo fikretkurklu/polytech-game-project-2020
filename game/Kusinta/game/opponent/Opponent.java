@@ -14,7 +14,6 @@ import game.Coord;
 import game.Game;
 import game.Model;
 import player.Character;
-import player.Character.CurrentStat;
 import projectile.Arrow;
 
 public abstract class Opponent extends Character {

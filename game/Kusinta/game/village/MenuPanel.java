@@ -1,9 +1,5 @@
 package village;
 
-import java.awt.Image;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import game.ImageLoader;
 import player.Player;

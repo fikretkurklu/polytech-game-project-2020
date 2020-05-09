@@ -397,9 +397,21 @@ public class Model {
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				Demon wo = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
-						coord, this, 0, null);
-				m_opponents.add(wo);
+				int WOtype = (int)(Math.random() * 2) + 1 ;
+				switch (WOtype) {
+				case 1:
+					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
+							coord, this, 0, null);
+					m_opponents.add(d);
+					break;
+				case 2:
+					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E,
+							coord, this, 0, null);
+					m_opponents.add(m);
+					break;
+				default:
+					break;
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creating oppenant");

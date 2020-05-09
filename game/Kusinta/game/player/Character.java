@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
-import automaton.Entity.Action;
 import entityFactory.Factory.Type;
 import equipment.Equipment;
 import equipment.EquipmentManager;
@@ -262,7 +261,6 @@ public abstract class Character extends Entity {
 
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
 			hitBox.translate(0, -(m_coord.Y() - newY));
-			//m_model.m_mouseCoord.translateY(-(m_coord.Y() - newY));
 			m_coord.setY(newY);
 		} else {
 			m_time = 0;
