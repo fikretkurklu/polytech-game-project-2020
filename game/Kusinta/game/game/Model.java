@@ -3,14 +3,11 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import automaton.Direction;
 import entityFactory.Factory;
 import entityFactory.Factory.Type;
 import environnement.Element;
-import equipment.Equipment;
-import equipment.EquipmentManager;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
@@ -148,6 +145,8 @@ public class Model {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			default:
+				break;
 			}
 			break;
 		case UNDERWORLD:

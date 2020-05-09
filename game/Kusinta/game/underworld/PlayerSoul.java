@@ -26,33 +26,31 @@ public class PlayerSoul extends Character {
 	public static final int MAX_LURE = 2;
 
 	long m_lureGenerationElapsed;
-	long m_dashTimer;
+	long m_dashElapsed;
 	long m_invincibleElapsed;
 
 	int nbLure = 0;
 	int fragmentsPicked = 0;
-	boolean leftOrientation;
-
+	
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
 	boolean hidden, escape, escaped, invincible, dead, paint;
 	boolean dashAvailable, lureAvailable;
+	boolean leftOrientation;
 
 	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model,
 			HashMap<Action, int[]> hmAction) throws IOException {
 		super(automaton, c, dir, model, 100, 100, 0, 0, 0, images, hmAction);
 		m_width = SIZE;
 		m_height = SIZE;
-		m_dashTimer = 0;
-		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
 		invincible = true;
-		m_invincibleElapsed = 0;
 		paint = false;
 		hidden = false;
 		escape = false;
 		dead = false;
+		leftOrientation = false;
 		currentAction = Action.JUMP;
 		resetAnim();
 		hitBox = new Rectangle(m_coord.X(), m_coord.Y(), SIZE, SIZE);
@@ -60,6 +58,7 @@ public class PlayerSoul extends Character {
 		m_dashPaint = m_width;
 		m_lifePaint = m_width;
 		m_lurePaint = m_width;
+		m_invincibleElapsed = 0;
 	}
 
 	public boolean lureActive() {
@@ -301,6 +300,7 @@ public class PlayerSoul extends Character {
 			m_dashPaint = 0;
 			dashAvailable = false;
 			currentAction = Action.JUMP;
+			m_dashElapsed = 0;
 			resetAnim();
 			return true;
 		}
@@ -434,11 +434,11 @@ public class PlayerSoul extends Character {
 				}
 			}
 			if (!dashAvailable) {
-				m_dashTimer += elapsed;
-				m_dashPaint = (int) ((m_width * m_dashTimer) / 2000);
-				if (m_dashTimer > 2000) {
+				m_dashElapsed += elapsed;
+				m_dashPaint = (int) ((m_width * m_dashElapsed) / 2000);
+				if (m_dashElapsed > 2000) {
 					dashAvailable = true;
-					m_dashTimer = 0;
+					m_dashElapsed = 0;
 					m_dashPaint = m_width;
 				}
 				
