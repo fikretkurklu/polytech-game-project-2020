@@ -109,7 +109,7 @@ public class Jin extends Opponent {
 			if (shooting) {
 				if (m_imageIndex >= currentIndex.length) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 4,
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight()/2,
 							proj.MAGIC_PROJECTILE);
 				}
 			}
