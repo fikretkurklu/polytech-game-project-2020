@@ -1244,8 +1244,8 @@ public class AutomaticRoomGenerator {
 		changeBlock(7 + 3, 19 + 3, "OW_N");
 		changeBlock(7 + 3, 2 + 3, "OW_N");
 
-		changeBlock(14 + 3, 6 + 3, "ES_WO");
-		changeBlock(14 + 3, 9 + 3, "ES_WO");
+		changeBlock(16 + 3, 6 + 3, "ES_WO");
+		changeBlock(16 + 3, 9 + 3, "ES_WO");
 
 		changeBlock(4 + 3, 8 + 3, "ES_B");
 

@@ -9,7 +9,6 @@ import automaton.*;
 import game.Coord;
 import game.Model;
 import game.Model.mode;
-import opponent.BossKey;
 import projectile.Projectile.proj;
 import room.BossDoor;
 import room.Door;
@@ -52,8 +51,8 @@ public class Player extends Character {
 		currentAction = Action.DEFAULT;
 	}
 
-	@Override 
-	public void setCoord(Coord coord){
+	@Override
+	public void setCoord(Coord coord) {
 		m_coord = coord;
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -61,7 +60,7 @@ public class Player extends Character {
 		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10,
 				m_height - 16);
 	}
-	
+
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping && !falling) {
@@ -125,32 +124,36 @@ public class Player extends Character {
 		}
 		return false;
 	}
-	
+
 	private void checkDoor() {
 		boolean door;
 		Door d = m_model.m_room.getDoor();
-		Rectangle h = d.getHitBox();
-		int y1 = hitBox.y + 3 * hitBox.height / 4;
-		int y2 = hitBox.y + hitBox.height / 4;
-		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
-				|| h.contains(hitBox.x + hitBox.width, y2);
-		if (door && m_key != false) {
-			d.setM_model(m_model);
-			d.activate();
+		if (d != null) {
+			Rectangle h = d.getHitBox();
+			int y1 = hitBox.y + 3 * hitBox.height / 4;
+			int y2 = hitBox.y + hitBox.height / 4;
+			door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
+					|| h.contains(hitBox.x + hitBox.width, y2);
+			if (door && m_key != false) {
+				d.setM_model(m_model);
+				d.activate();
+			}
 		}
 	}
-	
+
 	private void checkBossDoor() {
 		boolean door;
 		BossDoor d = m_model.m_room.getBossDoor();
-		Rectangle h = d.getHitBox();
-		int y1 = hitBox.y + 3 * hitBox.height / 4;
-		int y2 = hitBox.y + hitBox.height / 4;
-		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
-				|| h.contains(hitBox.x + hitBox.width, y2);
-		if (door && m_bossKey != false) {
-			d.setM_model(m_model);
-			d.activate();
+		if (d != null) {
+			Rectangle h = d.getHitBox();
+			int y1 = hitBox.y + 3 * hitBox.height / 4;
+			int y2 = hitBox.y + hitBox.height / 4;
+			door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
+					|| h.contains(hitBox.x + hitBox.width, y2);
+			if (door && m_bossKey != false) {
+				d.setM_model(m_model);
+				d.activate();
+			}
 		}
 	}
 
