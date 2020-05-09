@@ -367,21 +367,19 @@ public class Model {
 		try {
 			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 			for (int i = 0; i < coordFO.length; i++) {
-				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord, this, 0, null);
+				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coordFO[i], this, 0, null);
 				m_opponents.add(fo);
 			}
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
-				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
 				int WOtype = (int) (Math.random() * 2) + 1;
 				switch (WOtype) {
 				case 1:
-					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E, coord, this, 0, null);
+					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E, coordWO[i], this, 0, null);
 					m_opponents.add(d);
 					break;
 				case 2:
-					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E, coord, this, 0, null);
+					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E, coordWO[i], this, 0, null);
 					m_opponents.add(m);
 					break;
 				default:

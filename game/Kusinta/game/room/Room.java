@@ -132,16 +132,20 @@ public class Room {
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_WO" :
+			Coord coordWO = new Coord(coord);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
-			WOTable.add(coord);
+			coordWO.translate(Element.SIZE/2, Element.SIZE);
+			WOTable.add(coordWO);
 			break;
 		case "ES_FO" :
+			Coord coordFO = new Coord(coord);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
-			FOTable.add(coord);
+			coordFO.translate(Element.SIZE/2, Element.SIZE);
+			FOTable.add(coordFO);
 			break;
 		case "ES_B" :
 			bossCoord = new Coord(coord);
-			bossCoord.translate(Decor.SIZE / 2, Decor.SIZE);
+			bossCoord.translate(Element.SIZE / 2, Element.SIZE);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		default :
