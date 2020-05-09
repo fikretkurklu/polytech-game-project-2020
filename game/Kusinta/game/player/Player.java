@@ -25,7 +25,7 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 0, 0, bImages, hmActions);
+		super(automaton, C, dir, model, 100, 100, 1000, 50, 0, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -270,7 +270,7 @@ public class Player extends Character {
 		if (!invincible) {
 			invincible = true;
 			paintInvincible = true;
-			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
+			super.loseLife(l);
 		}
 	}
 

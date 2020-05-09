@@ -29,12 +29,11 @@ public class Model {
 	};
 
 	public static int difficultyLevel;
-	
+
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
 	public Character m_player;
-	public Character m_playerSave;
 	View m_view;
 
 	public mode actualMode;
@@ -70,7 +69,6 @@ public class Model {
 		setRoom();
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		m_playerSave = m_player;
 		int HUD_w = m_width / 3;
 		int HUD_h = HUD_w / 5;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -99,33 +97,34 @@ public class Model {
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		
-		difficultyLevel ++;
+
+		difficultyLevel++;
 	}
-	
+
 	public void resetPlayer() {
 		this.m_player.setLife(m_player.m_currentStatMap.get(CurrentStat.MaxLife));
 		this.m_player.setCoord(m_room.getStartCoord());
 		((Player) this.m_player).reset();
 		this.m_player.resetAnim();
 	}
-	
+
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		setBossRoom();
 		m_room = new Room(m_width, m_height);
-		
+
 		resetPlayer();
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		
+
 		difficultyLevel = 1;
 	}
 
 	public void switchEnv(mode m) {
+		actualMode = m;
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -134,27 +133,13 @@ public class Model {
 		ePressed = false;
 		vPressed = false;
 		sPressed = false;
-
 		switch (m) {
 		case ROOM:
 			m_village = null;
-			switch(actualMode) {
-			case UNDERWORLD :
-				m_village = null;
-				m_player = m_playerSave;
-				resetPlayer();
-				break;
-			case VILLAGE :
-				try {
-					toDongeon();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			diametre = 0;
+			resetPlayer();
 			break;
 		case UNDERWORLD:
-			m_playerSave = m_player;
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
@@ -163,7 +148,6 @@ public class Model {
 		case GAMEOVER:
 			break;
 		}
-		actualMode = m;
 
 	}
 
@@ -180,7 +164,7 @@ public class Model {
 	public void setBossRoom() throws IOException {
 		m_roomGenerator.bossRoomGenerator();
 	}
-	
+
 	public void setCenterScreenPlayer() {
 		switch (actualMode) {
 		case ROOM:
@@ -219,7 +203,7 @@ public class Model {
 
 	public void tick(long elapsed) {
 		elapsed = Math.min(10, elapsed);
-		switch(actualMode) {
+		switch (actualMode) {
 		case ROOM:
 			m_player.tick(elapsed);
 			if (m_key != null) {
@@ -228,12 +212,12 @@ public class Model {
 			if (m_bossKey != null) {
 				m_bossKey.tick(elapsed);
 			}
-			
+
 			for (Opponent op : m_opponents) {
 				op.tick(elapsed);
 			}
 			if (m_opponentsToDelete != null) {
-				for(Opponent op : m_opponentsToDelete) {
+				for (Opponent op : m_opponentsToDelete) {
 					if (op != null) {
 						m_opponents.remove(op);
 					}
@@ -360,23 +344,20 @@ public class Model {
 			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 			for (int i = 0; i < coordFO.length; i++) {
 				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord,
-						this, 0, null);
+				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord, this, 0, null);
 				m_opponents.add(fo);
 			}
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				int WOtype = (int)(Math.random() * 2) + 1 ;
+				int WOtype = (int) (Math.random() * 2) + 1;
 				switch (WOtype) {
 				case 1:
-					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
-							coord, this, 0, null);
+					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E, coord, this, 0, null);
 					m_opponents.add(d);
 					break;
 				case 2:
-					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E,
-							coord, this, 0, null);
+					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E, coord, this, 0, null);
 					m_opponents.add(m);
 					break;
 				default:
@@ -387,10 +368,10 @@ public class Model {
 			System.out.println("Error while creating oppenant");
 		}
 
-		int randomKey = (int) (Math.random()*m_opponents.size());
-		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		int randomKey = (int) (Math.random() * m_opponents.size());
+		int randomBossKey = (int) (Math.random() * m_opponents.size());
 		while (randomBossKey == randomKey) {
-			randomBossKey = (int) (Math.random()*m_opponents.size());
+			randomBossKey = (int) (Math.random() * m_opponents.size());
 		}
 		m_opponents.get(randomKey).setKey(true);
 		m_opponents.get(randomBossKey).setBossKey(true);
