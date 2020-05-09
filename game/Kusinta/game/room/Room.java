@@ -60,7 +60,6 @@ public class Room {
 		BlockAutomaton =Game.m_factory.m_AL.getAutomaton("Block");
 		
 		BufferedReader f;
-
 		roomFile = "resources/Room/Sample/room1.sample";
 		f = new BufferedReader(new FileReader(new File(roomFile)));
 		String[] firstLine = f.readLine().split(":");
@@ -133,6 +132,10 @@ public class Room {
 		case "ES_FO" :
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			FOTable.add(coord);
+			break;
+		case "ES_B" :
+			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
+			//Create boss here
 			break;
 		default :
 			throw new Exception("Code room err: " + code);
