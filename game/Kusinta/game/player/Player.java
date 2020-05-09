@@ -11,6 +11,7 @@ import game.Model;
 import game.Model.mode;
 import opponent.BossKey;
 import projectile.Projectile.proj;
+import room.BossDoor;
 import room.Door;
 import environnement.Element;
 
@@ -20,8 +21,6 @@ public class Player extends Character {
 
 	boolean invincible, paintInvincible;
 	long m_invincibleElapsed;
-
-	protected BossKey m_bossKey;
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
@@ -41,8 +40,6 @@ public class Player extends Character {
 
 		reset();
 		setMoney(0);
-
-		m_bossKey = null;
 	}
 
 	public void reset() {
@@ -110,6 +107,7 @@ public class Player extends Character {
 
 	public boolean pick(Direction dir) {
 		checkDoor();
+		checkBossDoor();
 		return true;
 	}
 
@@ -127,10 +125,24 @@ public class Player extends Character {
 		}
 		return false;
 	}
-
+	
 	private void checkDoor() {
 		boolean door;
 		Door d = m_model.m_room.getDoor();
+		Rectangle h = d.getHitBox();
+		int y1 = hitBox.y + 3 * hitBox.height / 4;
+		int y2 = hitBox.y + hitBox.height / 4;
+		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
+				|| h.contains(hitBox.x + hitBox.width, y2);
+		if (door && m_key != false) {
+			d.setM_model(m_model);
+			d.activate();
+		}
+	}
+	
+	private void checkBossDoor() {
+		boolean door;
+		BossDoor d = m_model.m_room.getBossDoor();
 		Rectangle h = d.getHitBox();
 		int y1 = hitBox.y + 3 * hitBox.height / 4;
 		int y2 = hitBox.y + hitBox.height / 4;

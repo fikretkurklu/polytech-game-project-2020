@@ -29,8 +29,10 @@ public abstract class Key extends Entity {
 	public Key(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction)
 			throws Exception {
 		super(automaton, bImages, indiceAction);
-
+		System.out.println("Holy it's the coord");
 		m_coord = new Coord(c);
+		System.out.println(m_coord.X());
+		System.out.println(m_coord.Y());
 		m_model = model;
 
 		m_time = 0;

@@ -937,7 +937,7 @@ public class AutomaticRoomGenerator {
 		changeBlock(3 + row, 3 + col, "ES_WO");
 		AddDoor(3 + row, 1 + col);
 	}
-	
+
 	public void doorBoss1(int row, int col) {
 		AddPlatformHard(7 + row, 0 + col, 3, 10);
 		changeBlock(6 + row, 3 + col, "ES_WO");
@@ -1066,6 +1066,19 @@ public class AutomaticRoomGenerator {
 			initialDoorCol = (int) (Math.random() * (col));
 		}
 
+		int initialBossDoorRow = (int) (Math.random() * (row));
+		int initialBossDoorCol = (int) (Math.random() * (col));
+		while (initialBossDoorCol == leftElevatorCol || initialBossDoorCol == rightElevatorCol
+				|| initialBossDoorCol == midElevatorCol
+				|| (initialBossDoorCol == initialPositionCol && initialBossDoorRow == initialPositionRow)
+				|| (initialBossDoorCol == initialPositionCol - 1 && initialBossDoorRow == initialPositionRow)
+				|| (initialBossDoorCol == initialPositionCol + 1 && initialBossDoorRow == initialPositionRow)
+				|| (initialBossDoorCol == initialPositionCol && initialBossDoorRow == initialPositionRow - 1)
+				|| (initialBossDoorCol == initialPositionCol && initialBossDoorRow == initialPositionRow + 1)
+				|| (initialBossDoorCol == initialDoorCol) || (initialBossDoorRow == initialDoorRow)) {
+			initialBossDoorRow = (int) (Math.random() * (row));
+			initialBossDoorCol = (int) (Math.random() * (col));
+		}
 		this.emptyMapGenerator();
 		for (int i = row - 1; i >= 0; i -= 1) {
 			for (int j = col - 1; j >= 0; j -= 1) {
@@ -1119,6 +1132,28 @@ public class AutomaticRoomGenerator {
 						break;
 					case (6):
 						this.door6(i * 10 + 3, j * 10 + 3);
+						break;
+					}
+				} else if (j == initialBossDoorCol && i == initialBossDoorRow) {
+					int randomDoor = (int) (Math.random() * 6) + 1;
+					switch (randomDoor) {
+					case (1):
+						this.doorBoss1(i * 10 + 3, j * 10 + 3);
+						break;
+					case (2):
+						this.doorBoss2(i * 10 + 3, j * 10 + 3);
+						break;
+					case (3):
+						this.doorBoss3(i * 10 + 3, j * 10 + 3);
+						break;
+					case (4):
+						this.doorBoss4(i * 10 + 3, j * 10 + 3);
+						break;
+					case (5):
+						this.doorBoss5(i * 10 + 3, j * 10 + 3);
+						break;
+					case (6):
+						this.doorBoss6(i * 10 + 3, j * 10 + 3);
 						break;
 					}
 				} else if (j == initialPositionCol && i == initialPositionRow) {
@@ -1197,14 +1232,14 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(3 + 15, -1 + 3, 2, 5);
 		AddPlatformHard(3 + 14, -1 + 3, 2, 5);
 		AddPlatformHard(3 + 13, -1 + 3, 2, 4);
-		AddPlatformHard(3 +	12, -1 + 3, 2, 3);
+		AddPlatformHard(3 + 12, -1 + 3, 2, 3);
 		AddPlatformHard(3 + 11, -1 + 3, 2, 2);
 
 		changeBlock(9 + 3, 9 + 3, "OW_N");
 		changeBlock(9 + 3, 12 + 3, "OW_N");
 		changeBlock(8 + 3, 16 + 3, "OW_N");
 		changeBlock(8 + 3, 5 + 3, "OW_N");
-		changeBlock(8 + 3, 1 + 3 , "OW_N");
+		changeBlock(8 + 3, 1 + 3, "OW_N");
 		changeBlock(8 + 3, 20 + 3, "OW_N");
 		changeBlock(7 + 3, 19 + 3, "OW_N");
 		changeBlock(7 + 3, 2 + 3, "OW_N");

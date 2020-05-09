@@ -102,10 +102,10 @@ public class Model {
 
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_width, m_height);
+		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
-		setBossRoom();
 		
 
 		resetPlayer();
@@ -175,12 +175,16 @@ public class Model {
 	public void setBossRoom() throws Exception {
 		m_roomGenerator.bossRoomGenerator();
 		m_room = new Room(m_width, m_height);
-		if (m_room.getBossCoord()==null) {
-			System.out.println("Wrong coordinate");
-		}
-		m_room = new Room(m_width, m_height);
+		
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+
 		Boss m = (Boss) Game.m_factory.newEntity(Type.Boss, Direction.E, m_room.getBossCoord(), this, 0, null);
 		m_opponents.add(m);
+		
+		resetPlayer();
+
+		opponentCreator();
 	}
 
 	public void setCenterScreenPlayer() {

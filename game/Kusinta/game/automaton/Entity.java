@@ -52,9 +52,9 @@ public abstract class Entity {
 	public Entity(Automaton automaton, Image[] img, HashMap<Action, int[]> hmActions ) {
 		bImages = img;
 		indiceAction = hmActions;
-		
+		System.out.println("Entity Constructor");
 		m_state = automaton.getInitialState();
-		
+		System.out.println("Automaton");
 		m_automaton = automaton;
 		resetAnim();
 		m_stepElapsed = m_stepTick;

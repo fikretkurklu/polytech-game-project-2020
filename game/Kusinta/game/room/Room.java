@@ -115,10 +115,11 @@ public class Room {
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_D" :
-			newDecor(coord, true);
+			newDecor(coord, 1);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_DB" :
+			newDecor(coord, 2);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_I" :
@@ -127,7 +128,7 @@ public class Room {
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_T" :
-			newDecor(coord, false);
+			newDecor(coord, 0);
 			Grow(false, new EmptySpace(coord, EIF.getImage(TypeBG.ES)));
 			break;
 		case "ES_WO" :
@@ -166,11 +167,17 @@ public class Room {
 	 * la fréquence d'appartition du décor. le boolean isDoor permet de spécifier
 	 * que l'ont veut creer une porte.
 	 */
-	public void newDecor(Coord coord, boolean isDoor) throws Exception {
-		if (isDoor) {
+	public void newDecor(Coord coord, int isDoor) throws Exception {
+		if (isDoor == 1) {
 			Decor[] tmp_decor = new Decor[m_decor.length + 1];
 			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
 			tmp_decor[m_decor.length] = new Door(new Coord(coord), this, StaticDecorAutomaton);
+
+			m_decor = tmp_decor;
+		} else if (isDoor == 2) {
+			Decor[] tmp_decor = new Decor[m_decor.length + 1];
+			System.arraycopy(m_decor, 0, tmp_decor, 0, m_decor.length);
+			tmp_decor[m_decor.length] = new BossDoor(new Coord(coord), this, StaticDecorAutomaton);
 
 			m_decor = tmp_decor;
 		} else {
@@ -309,6 +316,15 @@ public class Room {
 		for (int i = 0; i< m_decor.length; i++) {
 			if(m_decor[i] instanceof Door) {
 				return (Door) m_decor[i];
+			}
+		}
+		return null;
+	}
+	
+	public BossDoor getBossDoor() {
+		for (int i = 0; i< m_decor.length; i++) {
+			if(m_decor[i] instanceof BossDoor) {
+				return (BossDoor) m_decor[i];
 			}
 		}
 		return null;
