@@ -52,8 +52,19 @@ public class Player extends Character {
 		shooting = false;
 		invincible = true;
 		paintInvincible = true;
+		currentAction = Action.DEFAULT;
 	}
 
+	@Override 
+	public void setCoord(Coord coord){
+		m_coord = coord;
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10,
+				m_height - 16);
+	}
+	
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping && !falling) {

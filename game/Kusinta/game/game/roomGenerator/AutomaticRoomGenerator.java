@@ -937,6 +937,67 @@ public class AutomaticRoomGenerator {
 		changeBlock(3 + row, 3 + col, "ES_WO");
 		AddDoor(3 + row, 1 + col);
 	}
+	
+	public void doorBoss1(int row, int col) {
+		AddPlatformHard(7 + row, 0 + col, 3, 10);
+		changeBlock(6 + row, 3 + col, "ES_WO");
+		changeBlock(6 + row, 7 + col, "ES_WO");
+		changeBlock(6 + row, 5 + col, "ES_DB");
+	}
+
+	public void doorBoss2(int row, int col) {
+		AddPlatformHard(7 + row, 0 + col, 3, 2);
+		AddPlatformHard(6 + row, 3 + col, 3, 2);
+		AddPlatformHard(7 + row, 6 + col, 3, 4);
+		changeBlock(4 + row, 6 + col, "ES_FO");
+		changeBlock(6 + row, 7 + col, "ES_WO");
+		changeBlock(5 + row, 3 + col, "ES_DB");
+	}
+
+	public void doorBoss3(int row, int col) {
+		AddPlatformHard(8 + row, 0 + col, 2, 3);
+		AddPlatformHard(8 + row, 7 + col, 2, 3);
+		AddPlatformHard(6 + row, 3 + col, 3, 4);
+		AddPlatformHard(3 + row, 0 + col, 2, 2);
+		AddPlatformHard(3 + row, 8 + col, 2, 2);
+		changeBlock(4 + row, 4 + col, "ES_FO");
+		changeBlock(4 + row, 5 + col, "ES_WO");
+		changeBlock(5 + row, 5 + col, "ES_DB");
+	}
+
+	public void doorBoss4(int row, int col) {
+		AddPlatformHard(8 + row, 0 + col, 2, 2);
+		AddPlatformHard(8 + row, 8 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(6 + row, 2 + col, 2, 2);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(5 + row, 3 + col, 2, 4);
+		changeBlock(2 + row, 7 + col, "ES_FO");
+		changeBlock(4 + row, 5 + col, "ES_WO");
+		changeBlock(4 + row, 4 + col, "ES_DB");
+	}
+
+	public void doorBoss5(int row, int col) {
+		AddPlatformHard(8 + row, 2 + col, 2, 6);
+		AddPlatformHard(7 + row, 1 + col, 2, 2);
+		AddPlatformHard(7 + row, 7 + col, 2, 2);
+		AddPlatformHard(5 + row, 0 + col, 3, 2);
+		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(3 + row, 3 + col, 2, 4);
+		changeBlock(2 + row, 4 + col, "ES_FO");
+		changeBlock(7 + row, 5 + col, "ES_WO");
+		changeBlock(7 + row, 4 + col, "ES_DB");
+	}
+
+	public void doorBoss6(int row, int col) {
+		AddPlatformHard(8 + row, 0 + col, 2, 10);
+		AddPlatformHard(6 + row, 6 + col, 2, 2);
+		AddPlatformHard(4 + row, 1 + col, 2, 4);
+		changeBlock(7 + row, 2 + col, "ES_WO");
+		changeBlock(3 + row, 3 + col, "ES_WO");
+		changeBlock(3 + row, 1 + col, "ES_DB");
+	}
 
 	/*
 	 * 
