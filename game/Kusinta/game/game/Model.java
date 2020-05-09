@@ -78,7 +78,7 @@ public class Model {
 		difficultyLevel = 1;
 		opponentCreator();
 
-		switchEnv(mode.VILLAGE);
+		switchEnv(mode.UNDERWORLD);
 		setCenterScreenPlayer();
 		diametre = 0;
 

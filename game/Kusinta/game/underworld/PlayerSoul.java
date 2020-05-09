@@ -27,6 +27,7 @@ public class PlayerSoul extends Character {
 
 	long m_lureGenerationElapsed;
 	long m_dashTimer;
+	long m_invincibleElapsed;
 
 	int nbLure = 0;
 	int fragmentsPicked = 0;
@@ -34,7 +35,7 @@ public class PlayerSoul extends Character {
 
 	int m_lifePaint, m_dashPaint, m_lurePaint;
 
-	boolean hidden, escape, escaped, invicible, dead;
+	boolean hidden, escape, escaped, invincible, dead, paint;
 	boolean dashAvailable, lureAvailable;
 
 	public PlayerSoul(Automaton automaton, Coord c, Direction dir, Image[] images, Model model,
@@ -46,7 +47,9 @@ public class PlayerSoul extends Character {
 		leftOrientation = false;
 		dashAvailable = true;
 		lureAvailable = true;
-		invicible = true;
+		invincible = true;
+		m_invincibleElapsed = 0;
+		paint = false;
 		hidden = false;
 		escape = false;
 		dead = false;
@@ -102,42 +105,75 @@ public class PlayerSoul extends Character {
 		return (fragmentsPicked == m_model.m_underworld.MAX_FRAGMENTS);
 	}
 
-	public static int DISTANCE = 2;
-	public static final int NORMALSPEED = 2;
-	public static final int DASHSPEED = 4;
+	public static int DISTANCE = 3;
+	public static final int NORMALSPEED = 3;
+	public static final int DASHSPEED = 5;
 
 	@Override
 	public boolean cell(Direction dir, Category cat) {
 		switch (dir.toString()) {
 		case Direction.Ns:
-			int xUp = hitBox.x + (SIZE / 2);
-			if (m_model.m_underworld.isBlocked(xUp, hitBox.y)) {
-				m_coord.setY(m_model.m_underworld.blockCoord(xUp, hitBox.y).Y() + Element.SIZE);
+			if  ((m_model.m_underworld.isBlocked(hitBox.x, hitBox.y)) || (m_model.m_underworld.isBlocked(hitBox.x + m_width, hitBox.y))) {
 				DISTANCE = NORMALSPEED;
+				int yMiddle = hitBox.y + (m_height/2);
+				if ((m_model.dPressed) && (!m_model.m_underworld.isBlocked(hitBox.x + m_width, yMiddle))) {
+					m_coord.translateX(DISTANCE);
+				} else if ((m_model.qPressed) && (!m_model.m_underworld.isBlocked(hitBox.x, yMiddle))) {
+					m_coord.translateX(-DISTANCE);
+				} else if (!m_model.m_underworld.isBlocked(hitBox.x + m_width/2, hitBox.y)) {
+					m_coord.translateY(-DISTANCE);
+				}
+				hitBox.setLocation(m_coord.X(), m_coord.Y());
 				return true;
 			}
 			return false;
 		case Direction.Ss:
-			int xDown = hitBox.x + (SIZE / 2);
-			if (m_model.m_underworld.isBlocked(xDown, hitBox.y + SIZE)) {
-				m_coord.setY(m_model.m_underworld.blockCoord(xDown, hitBox.y + SIZE).Y() - Element.SIZE);
+			if  ((m_model.m_underworld.isBlocked(hitBox.x, hitBox.y + m_height)) ||
+			(m_model.m_underworld.isBlocked(hitBox.x + m_width, hitBox.y + m_height))) {
 				DISTANCE = NORMALSPEED;
+				int yMiddle = hitBox.y + (m_height/2);
+				if ((m_model.dPressed) && (!m_model.m_underworld.isBlocked(hitBox.x + m_width, yMiddle))) {
+					m_coord.translateX(DISTANCE);
+				} else if ((m_model.qPressed) && (!m_model.m_underworld.isBlocked(hitBox.x, yMiddle))) {
+					m_coord.translateX(-DISTANCE);
+					
+				} else if (!m_model.m_underworld.isBlocked(hitBox.x + m_width/2, hitBox.y + m_height)) {
+					m_coord.translateY(DISTANCE);
+				}
+				hitBox.setLocation(m_coord.X(), m_coord.Y());
 				return true;
 			}
 			return false;
 		case Direction.Es:
-			int yRight = hitBox.y + (SIZE / 2);
-			if (m_model.m_underworld.isBlocked(hitBox.x + SIZE, yRight)) {
-				m_coord.setX(m_model.m_underworld.blockCoord(hitBox.x + SIZE, yRight).X() - Element.SIZE);
+			if ((m_model.m_underworld.isBlocked(hitBox.x + m_width, hitBox.y)) ||
+			(m_model.m_underworld.isBlocked(hitBox.x + m_width, hitBox.y + m_height))) {
 				DISTANCE = NORMALSPEED;
+				int xMiddle = hitBox.x + (m_width/2);
+				if ((m_model.zPressed) && (!m_model.m_underworld.isBlocked(xMiddle, hitBox.y))) {
+					m_coord.translateY(-DISTANCE);
+				} else if ((m_model.sPressed) && (!m_model.m_underworld.isBlocked(xMiddle, hitBox.y + m_height))) {
+					m_coord.translateY(DISTANCE);
+				} else if (!m_model.m_underworld.isBlocked(hitBox.x + m_width, hitBox.y + m_height/2)) {
+					m_coord.translateX(DISTANCE);
+				}
+				hitBox.setLocation(m_coord.X(), m_coord.Y());
 				return true;
 			}
 			return false;
 		case Direction.Ws:
 			int yLeft = hitBox.y + (SIZE / 2);
-			if (m_model.m_underworld.isBlocked(hitBox.x, yLeft)) {
-				m_coord.setX(m_model.m_underworld.blockCoord(hitBox.x, yLeft).X() + Element.SIZE);
+			if ((m_model.m_underworld.isBlocked(hitBox.x, yLeft)) || (m_model.m_underworld.isBlocked(hitBox.x, hitBox.y)) ||
+			(m_model.m_underworld.isBlocked(hitBox.x, hitBox.y + m_height))) {
 				DISTANCE = NORMALSPEED;
+				int xMiddle = hitBox.x + (m_width/2);
+				if ((m_model.zPressed) && (!m_model.m_underworld.isBlocked(xMiddle, hitBox.y))) {
+					m_coord.translateY(-DISTANCE);
+				} else if ((m_model.sPressed) && (!m_model.m_underworld.isBlocked(xMiddle, hitBox.y + m_height))) {
+					m_coord.translateY(DISTANCE);
+				} else if (!m_model.m_underworld.isBlocked(hitBox.x, hitBox.y + m_height/2)) {
+					m_coord.translateX(-DISTANCE);
+				}
+				hitBox.setLocation(m_coord.X(), m_coord.Y());
 				return true;
 			}
 			return false;
@@ -304,9 +340,11 @@ public class PlayerSoul extends Character {
 	}
 
 	public void getDamage() {
-		if (!invicible)
+		if (!invincible)
 			loseLife(20);
 			m_lifePaint = (int) ((m_width * getLife()) / 100);
+			invincible = true;
+			m_invincibleElapsed = 0;
 	}
 
 	public static final int HEALTHHEIGHT = SIZE / 8;
@@ -319,10 +357,15 @@ public class PlayerSoul extends Character {
 		}
 		int x = m_coord.X();
 		int y = m_coord.Y();
-		if (leftOrientation)
-			g.drawImage(bImages[currentIndex[m_imageIndex]], x + SIZE, y, -SIZE, SIZE, null);
-		else
-			g.drawImage(bImages[currentIndex[m_imageIndex]], x, y, null);
+		if ((paint) || (dead)) {
+			if (leftOrientation)
+				g.drawImage(bImages[currentIndex[m_imageIndex]], x + SIZE, y, -SIZE, SIZE, null);
+			else
+				g.drawImage(bImages[currentIndex[m_imageIndex]], x, y, null);
+		}
+		if (invincible) {
+			paint = !paint;
+		}
 		if (!dead) {
 			g.setColor(Color.green);
 			g.fillRect(m_coord.X(), m_coord.Y() - 2 * HEALTHHEIGHT, m_lifePaint, HEALTHHEIGHT);
@@ -365,9 +408,6 @@ public class PlayerSoul extends Character {
 							currentAction = Action.DEFAULT;
 							resetAnim();
 							DISTANCE = NORMALSPEED;
-							if (invicible) {
-								invicible = false;
-							}
 						}
 					}
 				}
@@ -386,10 +426,17 @@ public class PlayerSoul extends Character {
 		m_stepElapsed += elapsed;
 		if (m_stepElapsed > m_stepTick) {
 			m_stepElapsed -= m_stepTick;
+			if (invincible) {
+				m_invincibleElapsed += elapsed;
+				if (m_invincibleElapsed > 500) {
+					invincible = false;
+					paint = true;
+				}
+			}
 			if (!dashAvailable) {
 				m_dashTimer += elapsed;
-				m_dashPaint = (int) ((m_width * m_dashTimer) / 3000);
-				if (m_dashTimer > 3000) {
+				m_dashPaint = (int) ((m_width * m_dashTimer) / 2000);
+				if (m_dashTimer > 2000) {
 					dashAvailable = true;
 					m_dashTimer = 0;
 					m_dashPaint = m_width;
@@ -398,8 +445,8 @@ public class PlayerSoul extends Character {
 			}
 			if (!lureAvailable) {
 				m_lureGenerationElapsed += elapsed;
-				m_lurePaint = (int) ((m_width * m_lureGenerationElapsed) / 1000);
-				if (m_lureGenerationElapsed > 1000) {
+				m_lurePaint = (int) ((m_width * m_lureGenerationElapsed) / 500);
+				if (m_lureGenerationElapsed > 500) {
 					lureAvailable = true;
 					m_lureGenerationElapsed = 0;
 					m_lurePaint = m_width;
