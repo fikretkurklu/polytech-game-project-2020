@@ -161,6 +161,7 @@ public class Model {
 
 	public void start() throws Exception {
 		m_roomGenerator = new AutomaticRoomGenerator();
+		m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
 		m_underworld = new Underworld(m_factory, m_width, m_height, this);
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
