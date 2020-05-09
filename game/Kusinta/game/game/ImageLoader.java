@@ -8,8 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import environnement.Element;
-import underworld.Ghost;
-import underworld.UnderworldParam;
+
 
 public class ImageLoader {
 
