@@ -3,7 +3,9 @@ package hud;
 import java.awt.Graphics;
 import java.awt.Image;
 
-import game.ImageLoader;
+import entityFactory.Factory.Type;
+import entityFactory.ImageLoader;
+import game.Game;
 import player.Player;
 
 public class HUDConsumable {
@@ -11,6 +13,7 @@ public class HUDConsumable {
 	Player m_player;
 	Image SmallPot;
 	Image BigPot;
+	Image Key;
 	int Pot_x, Pot_y, Pot_w, Pot_h;
 
 	long updateElpased;
@@ -37,6 +40,9 @@ public class HUDConsumable {
 	public void updateConsommable() {
 		nbSPot = m_player.getSmallConsumables().size();
 		nbBPot = m_player.getBigConsumables().size();
+		if (m_player.getKey()) {
+			Key = Game.m_factory.getImage(Type.NormalKey)[0];
+		}
 	}
 
 	public void tick(long elapsed) {
@@ -52,6 +58,9 @@ public class HUDConsumable {
 		g.drawString("x" + nbSPot, Pot_x + Pot_w, Pot_y + (3 * Pot_h) / 4);
 		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), Pot_w, Pot_h, null);
 		g.drawString("x" + nbBPot, Pot_x + Pot_w, Pot_y + (7 * Pot_h) / 4);
+		if (Key != null) {
+			g.drawImage(Key, Pot_x + Pot_w * 2, Pot_h, Pot_w, Pot_h, null);
+		}
 
 	}
 }

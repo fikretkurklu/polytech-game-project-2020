@@ -33,8 +33,6 @@ public class Arrow extends Projectile {
 			hitBox = new Rectangle((int) ((m_coord.X() - (m_width / 2) * Math.cos(m_angle))),
 					(int) ((m_coord.Y() - (m_width / 2) * Math.sin(m_angle) * 0.7)), 10, 10);
 		}
-
-		m_strength = 20;
 	}
 
 	public void paint(Graphics g) {
@@ -82,7 +80,7 @@ public class Arrow extends Projectile {
 		if (b) {
 			if (cat == Category.A) {
 				int tmpPlayerStrength = m_shooter.m_currentStatMap.get(Character.CurrentStat.Strength);
-				collidingWith.loseLife(m_strength + tmpPlayerStrength);
+				collidingWith.loseLife(tmpPlayerStrength);
 				((Opponent) collidingWith).setCollidedWith(this);
 			}
 		}

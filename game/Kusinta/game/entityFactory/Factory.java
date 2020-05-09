@@ -14,6 +14,7 @@ import opponent.BossKey;
 import opponent.Coin;
 import opponent.Jin;
 import opponent.Medusa;
+import opponent.MiniDragon;
 import opponent.NormalKey;
 import opponent.Demon;
 import player.Player;
@@ -35,12 +36,12 @@ public class Factory {
 
 	public static enum Type {
 		Arrow, Boss, BossKey, Cloud, Coin, Demon, Fragment, FireAttack, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa,
-		NormalKey, Player, PlayerSoul
+		NormalKey, Player, PlayerSoul, SmallDragon
 	};
 
 	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul",
 			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud", "Medusa", "Boss",
-			"FireAttack" }; // Nom des
+			"FireAttack", "SmallDragon" }; // Nom des
 	// fichiers
 
 	HashMap<Type, Automaton> automatons;
@@ -76,6 +77,7 @@ public class Factory {
 		actions.put(Type.Medusa, m_IL.getActions(Avatars[14]));
 		actions.put(Type.Boss, m_IL.getActions(Avatars[15]));
 		actions.put(Type.FireAttack, m_IL.getActions(Avatars[16]));
+		actions.put(Type.SmallDragon, m_IL.getActions(Avatars[17]));
 	}
 
 	private void fillImages() {
@@ -95,6 +97,7 @@ public class Factory {
 		images.put(Type.Medusa, m_IL.getImages(Avatars[14]));
 		images.put(Type.Boss, m_IL.getImages(Avatars[15]));
 		images.put(Type.FireAttack, m_IL.getImages(Avatars[16]));
+		images.put(Type.SmallDragon, m_IL.getImages(Avatars[17]));
 	}
 
 	private void fillAutomaton() {
@@ -115,6 +118,7 @@ public class Factory {
 		automatons.put(Type.Medusa, m_AL.getAutomaton(Avatars[14]));
 		automatons.put(Type.Boss, m_AL.getAutomaton(Avatars[15]));
 		automatons.put(Type.FireAttack, m_AL.getAutomaton(Avatars[16]));
+		automatons.put(Type.SmallDragon, m_AL.getAutomaton(Avatars[17]));
 	}
 
 	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle,
@@ -170,11 +174,15 @@ public class Factory {
 			case FireAttack:
 				return new Meteor(automatons.get(Type.FireAttack), coord, angle, shooter, dir,
 						images.get(Type.FireAttack), actions.get(Type.FireAttack));
+			case SmallDragon:
+				return new MiniDragon(automatons.get(Type.SmallDragon), coord, dir, model, images.get(Type.SmallDragon),
+						actions.get(Type.SmallDragon));
+			default:
+				break;
 			}
 		} catch (Exception e) {
-			System.out.println("Error while creatin : " + type.toString());
+			System.out.println("Error while creating : " + type.toString() + e.getMessage());
 		}
-
 		return null;
 
 	}
@@ -186,6 +194,10 @@ public class Factory {
 	public void changeAnimation(Type type, String string) {
 		images.put(type, m_IL.getImages(string));
 		actions.put(type, m_IL.getActions(string));
+	}
+	
+	public Image[] getImage(Type t) {
+		return images.get(t);
 	}
 
 }

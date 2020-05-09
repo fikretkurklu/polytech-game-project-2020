@@ -1,9 +1,9 @@
 package room;
 
 import automaton.Automaton;
+import entityFactory.ImageLoader;
 import environnement.Decor;
 import game.Coord;
-import game.ImageLoader;
 
 public class Library extends Decor {
 	public Library(Coord coord, Room room, Automaton automaton) {

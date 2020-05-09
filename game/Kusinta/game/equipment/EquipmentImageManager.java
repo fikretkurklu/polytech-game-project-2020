@@ -2,7 +2,8 @@ package equipment;
 
 import java.awt.Image;
 import java.util.HashMap;
-import game.ImageLoader;
+
+import entityFactory.ImageLoader;
 import equipment.EquipmentManager.Conso;
 import equipment.EquipmentManager.Stuff;
 

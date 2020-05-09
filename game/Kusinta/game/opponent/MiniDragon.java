@@ -12,29 +12,26 @@ import game.Coord;
 import game.Model;
 import projectile.Projectile.proj;
 
-public class Boss extends Opponent {
+public class MiniDragon extends Opponent {
 
 	int m_imageElapsed;
-	int hitBoxPadding;
 
-	public Boss(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
-			HashMap<Action, int[]> indiceAction) throws Exception {
-
-		super(automaton, C, dir, model, 10000, 10000, 4000, 200, 300, bImages, indiceAction);
+	public MiniDragon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+		super(automaton, C, dir, model, 1000, 1000, 1000, 5000, 60, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
 
-		X_MOVE = 8;
-
-		m_height = SIZE * 2;
-		hitBoxPadding = m_height / 10;
+		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
-		hitBox = new Rectangle(C.X() - m_width / 2 + hitBoxPadding, C.Y() - m_height + hitBoxPadding,
-				m_width - 2 * hitBoxPadding, m_height - 2 * hitBoxPadding);
+		
+		int w = (int) (m_width / 1.7);
+		int h = (int) (m_height / 1.3);
 
-		currentAction = Action.MOVE;
-		resetAnim();
+		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
+		m_moveElapsed = 0;
+		m_stepTick = 2;
+		X_MOVE = 1;
 
 	}
 
@@ -68,15 +65,16 @@ public class Boss extends Opponent {
 		Image img;
 
 		img = getImage();
-
+		
 		if (m_direction == Direction.E) {
 			g.drawImage(img, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
 			g.drawImage(img, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
-
+		
 		super.paint(g);
-		for (int i = 0; i < m_projectiles.size(); i++) {
+		
+		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
 		}
 	}
@@ -93,10 +91,10 @@ public class Boss extends Opponent {
 		}
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-			m_imageIndex++;
+			m_imageIndex ++;
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
-					m_model.getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 				}
 			}
 			if (shooting) {
@@ -129,7 +127,7 @@ public class Boss extends Opponent {
 
 				int distance = (int) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
-				if (distance <= 800) {
+				if (distance <= 400) {
 
 					double r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
 					double angle = (float) Math.asin(Math.abs(y) / r);
@@ -175,5 +173,7 @@ public class Boss extends Opponent {
 			}
 		}
 		return b;
+
+
 	}
 }

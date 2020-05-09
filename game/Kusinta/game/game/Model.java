@@ -63,7 +63,6 @@ public class Model {
 		m_opponentsToDelete = new LinkedList<Opponent>();
 
 		start();
-		
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
@@ -106,10 +105,8 @@ public class Model {
 		
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
-		
 
 		resetPlayer();
-
 
 		opponentCreator();
 
@@ -117,7 +114,7 @@ public class Model {
 	}
 
 	public void switchEnv(mode m) {
-		
+
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -130,12 +127,12 @@ public class Model {
 		cPressed = false;
 		switch (m) {
 		case ROOM:
-			switch(actualMode) {
-			case UNDERWORLD :
+			switch (actualMode) {
+			case UNDERWORLD:
 				m_village = null;
 				resetPlayer();
 				break;
-			case VILLAGE :
+			case VILLAGE:
 				try {
 					toDongeon();
 				} catch (Exception e) {
@@ -165,7 +162,7 @@ public class Model {
 		m_room = new Room(m_width, m_height);
 		m_underworld = new Underworld(m_factory, m_width, m_height, this);
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		
+
 		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		int HUD_w = m_width * 2 / 5;
 		int HUD_h = HUD_w / 6;
@@ -175,16 +172,18 @@ public class Model {
 	public void setBossRoom() throws Exception {
 		m_roomGenerator.bossRoomGenerator();
 		m_room = new Room(m_width, m_height);
-		
-		m_opponents = new LinkedList<Opponent>();
-		m_coins = new LinkedList<Coin>();
-
+		if (m_room.getBossCoord() == null) {
+			System.out.println("Wrong coordinate");
+		}
 		Boss m = (Boss) Game.m_factory.newEntity(Type.Boss, Direction.E, m_room.getBossCoord(), this, 0, null);
 		m_opponents.add(m);
-		
-		resetPlayer();
 
-		opponentCreator();
+		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
+		for (int i = 0; i < coordWO.length; i ++) {
+			Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
+			MiniDragon d = (MiniDragon) Game.m_factory.newEntity(Type.SmallDragon, Direction.E, coord, this, 0, null);
+			m_opponents.add(d);
+		}
 	}
 
 	public void setCenterScreenPlayer() {
@@ -262,7 +261,7 @@ public class Model {
 
 	public void paint(Graphics g, int width, int height) {
 		m_width = width;
-		m_height = height;	
+		m_height = height;
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (actualMode) {

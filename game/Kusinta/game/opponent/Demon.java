@@ -26,7 +26,7 @@ public class Demon extends Opponent {
 	public Demon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 120*Model.difficultyLevel, 120*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);

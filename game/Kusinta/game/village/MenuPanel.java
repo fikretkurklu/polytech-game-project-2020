@@ -1,7 +1,7 @@
 package village;
 
 
-import game.ImageLoader;
+import entityFactory.ImageLoader;
 import player.Player;
 import village.Village.ID_ENV;
 

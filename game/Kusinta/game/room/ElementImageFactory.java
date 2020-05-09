@@ -3,8 +3,8 @@ package room;
 import java.awt.Image;
 import java.util.HashMap;
 
+import entityFactory.ImageLoader;
 import environnement.Element;
-import game.ImageLoader;
 
 public class ElementImageFactory {
 	

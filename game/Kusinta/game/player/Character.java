@@ -3,7 +3,6 @@ package player;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -59,9 +58,8 @@ public abstract class Character extends Entity {
 	LinkedList<SmallHealthPotion> smallConsumables;
 	LinkedList<BigHealthPotion> bigConsumables;
 
-
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
 		super(automaton, bImages, indiceAction);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
@@ -83,7 +81,6 @@ public abstract class Character extends Entity {
 
 		smallConsumables = new LinkedList<SmallHealthPotion>();
 		bigConsumables = new LinkedList<BigHealthPotion>();
-
 
 		Stuff[] stuffTable = Stuff.values();
 
@@ -420,14 +417,21 @@ public abstract class Character extends Entity {
 				currentAction = Action.DEFAULT;
 			}
 			resetAnim();
-			int m_x = m_coord.X();
-			int m_y = hitBox.y + hitBox.height / 2;
+			int m_x = 0;
+			if (m_direction == Direction.E) {
+				m_x = m_coord.X() + hitBox.width / 2;
+			} else {
+				m_x = m_coord.X() - hitBox.width / 2;
+			}
+			int m_y = m_coord.Y() - hitBox.height / 2;
+			int m_y2 = m_coord.Y();
 			Direction direc;
-			float angle;
+			double angle, angle2;
 			double r;
 
 			int x = baseX - m_x;
 			int y = m_y - baseY;
+			int y2 = m_y2 - baseY;
 
 			if (baseX > m_x) {
 				direc = Direction.E;
@@ -436,16 +440,16 @@ public abstract class Character extends Entity {
 			}
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
+			angle = Math.asin((double) y / (double) r);
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y2, 2)));
+			angle2 = Math.asin((double) y2 / (double) r);
+			angle = (angle + angle2) / 2;
 
-			if (baseY > m_y) {
-				angle = -angle;
-			}
 			try {
 				if (direc == Direction.E) {
-					addProjectile(type, new Coord(m_x + hitBox.width / 2, m_y), angle, this, direc);
+					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
 				} else {
-					addProjectile(type, new Coord(m_x - hitBox.width / 2, m_y), angle, this, direc);
+					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -478,12 +482,12 @@ public abstract class Character extends Entity {
 		}
 
 	}
-	
-	public LinkedList<SmallHealthPotion> getSmallConsumables(){
+
+	public LinkedList<SmallHealthPotion> getSmallConsumables() {
 		return smallConsumables;
 	}
-	
-	public LinkedList<BigHealthPotion> getBigConsumables(){
+
+	public LinkedList<BigHealthPotion> getBigConsumables() {
 		return bigConsumables;
 	}
 

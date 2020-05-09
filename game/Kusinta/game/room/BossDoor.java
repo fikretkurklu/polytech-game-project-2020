@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import automaton.Automaton;
 import environnement.Decor;
 import game.Coord;
-import game.ImageLoader;
+import entityFactory.ImageLoader;
 
 public class BossDoor extends Decor {
 

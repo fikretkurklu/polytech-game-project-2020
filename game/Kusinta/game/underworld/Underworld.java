@@ -15,9 +15,9 @@ import java.util.LinkedList;
 import automaton.Automaton;
 import automaton.Direction;
 import entityFactory.Factory;
+import entityFactory.ImageLoader;
 import entityFactory.Factory.Type;
 import game.Coord;
-import game.ImageLoader;
 import game.Model;
 import environnement.Element;
 
