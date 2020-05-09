@@ -1,4 +1,5 @@
 package player;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -16,7 +17,6 @@ import environnement.Element;
 public class Player extends Character {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
-
 
 	boolean invincible, paintInvincible;
 	long m_invincibleElapsed;
@@ -37,7 +37,6 @@ public class Player extends Character {
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
 
-		
 		X_MOVE = 2;
 
 		reset();
@@ -57,7 +56,7 @@ public class Player extends Character {
 
 	@Override
 	public boolean move(Direction dir) { // bouger
-		if (!shooting && !jumping) {
+		if (!shooting && !jumping && !falling) {
 			if (currentAction != Action.MOVE) {
 				currentAction = Action.MOVE;
 				resetAnim();
@@ -150,20 +149,26 @@ public class Player extends Character {
 
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-			m_imageIndex ++;
+			m_imageIndex++;
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
-					if ( m_model.getDiametre() == 0) {
-						m_model.setDiametre(1);	
+					if (m_model.getDiametre() == 0) {
+						m_model.setDiametre(1);
 					}
 					m_imageIndex = currentIndex.length - 1;
-					
+
 				}
-				
+
 			} else {
 				if (shooting) {
 					if (m_imageIndex >= currentIndex.length) {
 						super.shoot(m_model.m_mouseCoord.X(), m_model.m_mouseCoord.Y(), proj.ARROW);
+					}
+				}
+				if (currentAction == Action.JUMP) {
+					if (m_imageIndex >= currentIndex.length) {
+						currentAction = Action.FALLING;
+						resetAnim();
 					}
 				}
 				if (!shooting && !falling && !isMoving()) {
@@ -176,7 +181,7 @@ public class Player extends Character {
 					m_imageIndex = 0;
 				}
 			}
-			
+
 		}
 		m_moveElapsed += elapsed;
 		if (m_moveElapsed > m_stepTick) {
@@ -229,7 +234,7 @@ public class Player extends Character {
 			}
 			paintInvincible = !paintInvincible;
 		}
-		//g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		// g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}

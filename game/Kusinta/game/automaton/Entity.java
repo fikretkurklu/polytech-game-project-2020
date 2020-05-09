@@ -33,7 +33,7 @@ public abstract class Entity {
 	protected int m_imageIndex;
 	protected int[] currentIndex;
 	
-	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE};
+	public static enum Action {MOVE, JUMP, SHOT, DEATH, DEFAULT, SHOTMOVE, FALLING};
 	protected Action currentAction = Action.DEFAULT; 
 	
 	HashMap<Action, int[]> indiceAction;
