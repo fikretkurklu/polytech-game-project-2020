@@ -1,5 +1,6 @@
 package equipment;
 
+import java.awt.Image;
 
 public abstract class Consumable extends Equipment {
 	
@@ -58,6 +59,10 @@ public abstract class Consumable extends Equipment {
 	 */
 	
 	public abstract void resetModification();
+	
+	public void setImage(Image image) {
+		imageEquip = image;
+	}
 		
 
 }

@@ -87,9 +87,6 @@ public class ImageLoader {
 			System.out.println("Error while loading image: path = " + path);
 			return null;
 		}
-		
-		
-		
 	}
 	
 	/**

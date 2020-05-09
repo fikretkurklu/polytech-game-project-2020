@@ -64,10 +64,7 @@ public class Model {
 		m_opponentsToDelete = new LinkedList<Opponent>();
 
 		start();
-		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		int HUD_w = m_width / 3;
-		int HUD_h = HUD_w / 5;
-		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
@@ -119,7 +116,7 @@ public class Model {
 	}
 
 	public void switchEnv(mode m) {
-		actualMode = m;
+		
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -132,7 +129,6 @@ public class Model {
 		cPressed = false;
 		switch (m) {
 		case ROOM:
-			m_village = null;
 			switch(actualMode) {
 			case UNDERWORLD :
 				m_village = null;
@@ -153,11 +149,12 @@ public class Model {
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
-			m_village = new Village(m_width, m_height, this, (Player) m_player);
+			m_village.reset();
 			break;
 		case GAMEOVER:
 			break;
 		}
+		actualMode = m;
 
 	}
 
@@ -165,6 +162,12 @@ public class Model {
 		m_roomGenerator = new AutomaticRoomGenerator();
 		m_room = new Room(m_width, m_height);
 		m_underworld = new Underworld(m_factory, m_width, m_height, this);
+		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
+		
+		m_village = new Village(m_width, m_height, this, (Player) m_player);
+		int HUD_w = m_width * 2 / 5;
+		int HUD_h = HUD_w / 6;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
 	}
 
 	public void setBossRoom() throws IOException {

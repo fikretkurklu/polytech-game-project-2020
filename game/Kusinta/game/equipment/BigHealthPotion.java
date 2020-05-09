@@ -2,6 +2,7 @@ package equipment;
 
 import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
+import player.Character;
 
 public class BigHealthPotion extends Consumable {
 
@@ -13,6 +14,7 @@ public class BigHealthPotion extends Consumable {
 	public BigHealthPotion() throws Exception {
 		super();
 		statTable.put(Stats.Price, 100);
+		setModification();
 	}
 
 	@Override
@@ -29,6 +31,11 @@ public class BigHealthPotion extends Consumable {
 	public Stuff toStuff() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void useOn(Character c) {
+		int l = (statTable.get(Stats.Health)).intValue();
+		c.winLife(l);
 	}
 	
 }

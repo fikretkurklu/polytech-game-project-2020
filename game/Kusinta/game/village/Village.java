@@ -140,4 +140,8 @@ public class Village {
 	public static void leaveVillage() throws Exception {
 		m_model.switchEnv(mode.ROOM);
 	}
+	
+	public void reset() {
+		weaponPanel.drawEquipement();
+	}
 }

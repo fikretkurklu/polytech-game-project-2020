@@ -12,11 +12,14 @@ public abstract class Button {
 	Image bgImgDrawned;
 	Image fgImgDrawned;
 	int m_width, m_height, m_x, m_y;
+	int decalageX, decalageY;
 	private static double RATIO_BG_FG = 0.8;
 
 	public Button(int x, int y, int w, int h) {
 		m_width = w;
 		m_height = h;
+		decalageX = (int) (0.1 * m_width);
+		decalageY = (int) (0.1 * m_height);
 		m_x = x;
 		m_y = y;
 
@@ -27,7 +30,8 @@ public abstract class Button {
 			g.drawImage(bgImgDrawned, m_x, m_y, null);
 		}
 		if (fgImgDrawned != null) {
-			g.drawImage(fgImgDrawned, m_x + (int)(m_width * (1-RATIO_BG_FG) / 2), (int)(m_y + m_height * (1-RATIO_BG_FG) / 2), null);
+			g.drawImage(fgImgDrawned, m_x + (int) (m_width * (1 - RATIO_BG_FG) / 2),
+					(int) (m_y + m_height * (1 - RATIO_BG_FG) / 2), null);
 		}
 	}
 
@@ -45,14 +49,15 @@ public abstract class Button {
 	public void setFgImage(Image img) {
 		try {
 			fgImg = img;
-			fgImg = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
-			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
+			fgImg = fgImg.getScaledInstance((int) (m_width * RATIO_BG_FG), (int) (m_height * RATIO_BG_FG),
+					java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int) (m_width * RATIO_BG_FG), (int) (m_height * RATIO_BG_FG),
+					java.awt.Image.SCALE_SMOOTH);
 		} catch (Exception e) {
 			fgImgDrawned = null;
 			fgImg = null;
 		}
 	}
-	
 
 	public void resized(double ratio_w, double ratio_h) {
 		m_width *= ratio_w;
@@ -60,7 +65,8 @@ public abstract class Button {
 		m_x *= ratio_w;
 		m_y *= ratio_h;
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int) (m_width * RATIO_BG_FG), (int) (m_height * RATIO_BG_FG),
+					java.awt.Image.SCALE_SMOOTH);
 		}
 		if (bgImg != null) {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
@@ -75,27 +81,31 @@ public abstract class Button {
 		}
 	}
 
-
 	public void growImg() {
 		m_width = (int) (m_width * 1.2);
 		m_height = (int) (m_height * 1.2);
+		m_x -= decalageX;
+		m_y -= decalageY;
 		if (bgImg != null) {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int) (m_width * RATIO_BG_FG), (int) (m_height * RATIO_BG_FG),
+					java.awt.Image.SCALE_SMOOTH);
 		}
-
 	}
 
 	public void reduceImg() {
 		m_width = (int) (m_width / 1.2);
 		m_height = (int) (m_height / 1.2);
+		m_x += decalageX;
+		m_y += decalageY;
 		if (bgImg != null) {
 			bgImgDrawned = bgImg.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 		}
 		if (fgImg != null) {
-			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
+			fgImgDrawned = fgImg.getScaledInstance((int) (m_width * RATIO_BG_FG), (int) (m_height * RATIO_BG_FG),
+					java.awt.Image.SCALE_SMOOTH);
 		}
 
 	}

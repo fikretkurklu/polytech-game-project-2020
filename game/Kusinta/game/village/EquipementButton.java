@@ -1,6 +1,9 @@
 package village;
 
+import equipment.BigHealthPotion;
+import equipment.Consumable;
 import equipment.Equipment;
+import equipment.SmallHealthPotion;
 import equipment.Stat.Stats;
 import player.Player;
 
@@ -17,29 +20,35 @@ public class EquipementButton extends Button {
 		m_equipement = null;
 		this.scroll = scroll;
 		setBgImage(EmptyImg);
-		
+
 	}
-	
+
 	public void setEquipement(Equipment equipement) {
 		m_equipement = equipement;
 		setFgImage(equipement.getImage());
 	}
-	
+
 	@Override
 	public void action() throws Exception {
 		if (m_equipement != null) {
 			if (m_player.getMoney() >= m_equipement.getModification(Stats.Price)) {
-				Equipment lastEquipement = m_player.addEquipment(m_equipement);
-				if (lastEquipement != null) {
-					m_player.setMoney(lastEquipement.getModification(Stats.Price));
+				if (m_equipement instanceof SmallHealthPotion) {
+					m_player.getSmallConsumables().add(((SmallHealthPotion) m_equipement));
+				} else if (m_equipement instanceof BigHealthPotion) {
+					m_player.getBigConsumables().add(((BigHealthPotion) m_equipement));
+				} else {
+					Equipment lastEquipement = m_player.addEquipment(m_equipement);
+					if (lastEquipement != null) {
+						m_player.setMoney(lastEquipement.getModification(Stats.Price));
+					}
 				}
 
 				m_player.setMoney(-m_equipement.getModification(Stats.Price));
 
+				m_equipement = null;
+				setBgImage(EmptyImg);
+				setFgImage(null);
 			}
-			m_equipement = null;
-			setBgImage(EmptyImg);
-			setFgImage(null);
 		}
 	}
 
