@@ -36,6 +36,8 @@ public class Controller implements GameCanvasListener {
 	public static final int K_E = 101;
 	public static final int K_SPACE = 32;
 	public static final int K_V = 118;
+	public static final int K_C = 99;
+	public static final int K_X = 120;
 
 	Game m_game;
 

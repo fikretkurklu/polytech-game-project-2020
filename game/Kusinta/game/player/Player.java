@@ -52,8 +52,19 @@ public class Player extends Character {
 		shooting = false;
 		invincible = true;
 		paintInvincible = true;
+		currentAction = Action.DEFAULT;
 	}
 
+	@Override 
+	public void setCoord(Coord coord){
+		m_coord = coord;
+		m_height = SIZE;
+		m_width = (int) (m_height * ratio);
+
+		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10,
+				m_height - 16);
+	}
+	
 	@Override
 	public boolean move(Direction dir) { // bouger
 		if (!shooting && !jumping && !falling) {
@@ -68,7 +79,6 @@ public class Player extends Character {
 			turn(dir);
 		}
 		m_model.m_mouseCoord.translate(m_coord.X() - oldX, m_coord.Y() - oldY);
-
 
 		return true;
 	}
@@ -133,10 +143,10 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+
 		int oldY = m_coord.Y();
 		super.tick(elapsed);
 		m_model.m_mouseCoord.translateY(m_coord.Y() - oldY);
-
 
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
@@ -177,7 +187,7 @@ public class Player extends Character {
 						resetAnim();
 					}
 				}
-				if (!shooting && !falling && !isMoving()) {
+				if (!shooting && !falling && !isMoving() && gotpower()) {
 					if (currentAction != Action.DEFAULT) {
 						currentAction = Action.DEFAULT;
 						resetAnim();
@@ -259,13 +269,21 @@ public class Player extends Character {
 		if (!invincible) {
 			invincible = true;
 			paintInvincible = true;
-			m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
+			super.loseLife(l);
 		}
 	}
 
 	public void setInvincibility() {
 		invincible = true;
 		paintInvincible = true;
+	}
+
+	public boolean get() {
+		if (smallConsumables != null && smallConsumables.size() != 0) {
+			smallConsumables.get(0).useOn(this);
+			smallConsumables.remove(0);
+		}
+		return true;
 	}
 
 }
