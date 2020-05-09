@@ -302,4 +302,8 @@ public abstract class Entity {
 	public Image getImage() {
 		return bImages[currentIndex[m_imageIndex]];
 	}
+	
+	public boolean usefulPaint(int x, int y, int width, int height) {
+		return ((m_coord.X() + m_width >= x) && (m_coord.Y() + m_height >= y) && (m_coord.X() <= x + width) && (m_coord.Y() <= y + height));
+	}
 }

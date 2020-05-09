@@ -175,10 +175,6 @@ public class Underworld {
 			return;
 		}
 		g.drawImage(backgroundImage, -x_decalage, -y_decalage, null);
-		g.drawImage(platform1, 344, 1892, null);
-		g.drawImage(platform2, 1892, 1892, null);
-		g.drawImage(platform3, 1290, 1892, null);
-		g.drawImage(platform4, 1806, 602, null);
 		g.drawImage(platform5, 860, 860, null);
 		for (int i = 0; i < m_fragments.length; i++) {
 			m_fragments[i].paint(g);
@@ -187,17 +183,27 @@ public class Underworld {
 		if (m_player.getCoord().Y() - (height/2) <= 860) {
 			g.drawImage(cloudLeftUpImage, 0, 0, null);
 			g.drawImage(cloudRightUpImage, 1720, 0, null);
+			g.drawImage(platform4, 1806, 602, null);
 		}
 		if (m_player.getCoord().Y() + (height/2) >= 1720) {
 			g.drawImage(cloudLeftDownImage, 0, 1720, null);
 			g.drawImage(cloudRightDownImage, 1720, 1720, null);
+			g.drawImage(platform1, 344, 1892, null);
+			g.drawImage(platform2, 1892, 1892, null);
+			g.drawImage(platform3, 1290, 1892, null);
 		}
 		for (int i = 0; i < m_clouds.length; i++) {
-			m_clouds[i].paint(g);
+			if (m_clouds[i].usefulPaint(-x_decalage, -y_decalage, width, height)) {
+				m_clouds[i].paint(g);
+			}
 		}
 		it = m_ghosts.iterator();
+		Ghost ghost;
 		while (it.hasNext()) {
-			it.next().paint(g);
+			ghost = it.next();
+			if (ghost.usefulPaint(-x_decalage, -y_decalage, width, height)) {
+				ghost.paint(g);
+			}
 		}
 		if (gateCreated)
 			m_gate.paint(g);
