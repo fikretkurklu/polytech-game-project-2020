@@ -1212,7 +1212,7 @@ public class AutomaticRoomGenerator {
 		changeBlock(14 + 3, 6 + 3, "ES_WO");
 		changeBlock(14 + 3, 9 + 3, "ES_WO");
 
-		changeBlock(2 + 3, 8 + 3, "ES_B");
+		changeBlock(4 + 3, 8 + 3, "ES_B");
 
 		this.AddCompleteBorder(3);
 		this.verification();

@@ -23,6 +23,7 @@ import game.Game;
 import game.Model;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+import projectile.Meteor;
 import projectile.Projectile;
 import projectile.Projectile.proj;
 import underworld.Lure;
@@ -465,7 +466,9 @@ public abstract class Character extends Entity {
 			m_projectiles.add(proj);
 			break;
 		case METEOR:
-			
+			Meteor met = (Meteor) Game.m_factory.newEntity(Type.FireAttack, direction, c, null, angle, shooter);
+			m_projectiles.add(met);
+			break;
 		case LURE:
 			Lure lure = (Lure) Game.m_factory.newEntity(Type.Lure, direction, c, m_model, 0, shooter);
 			m_projectiles.add(lure);

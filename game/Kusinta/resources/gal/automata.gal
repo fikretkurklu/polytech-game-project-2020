@@ -150,7 +150,7 @@ Coin(Init) {
   | True ? : (Init)
 }
 
-Boss (EW) {
+Boss (East) {
 *(East)
   | ! GotPower() ? Explode() : ()  
   | Cell(E, O) ? Turn(W) : (West)      
