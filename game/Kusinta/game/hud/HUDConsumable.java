@@ -37,7 +37,7 @@ public class HUDConsumable {
 		BigPot = ImageLoader.loadImage("resources/Equipment/Potion/Red Potion.png");
 		Pot_x = x + w / 4;
 		Pot_y = y;
-		Pot_w = w / 4;
+		Pot_w = w / 5;
 		Pot_h = h / 2;
 
 		updateConsommable();

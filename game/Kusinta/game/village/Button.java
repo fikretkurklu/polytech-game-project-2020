@@ -85,7 +85,6 @@ public abstract class Button {
 		if (fgImg != null) {
 			fgImgDrawned = fgImg.getScaledInstance((int)(m_width * RATIO_BG_FG), (int)(m_height*RATIO_BG_FG), java.awt.Image.SCALE_SMOOTH);
 		}
-
 	}
 
 	public void reduceImg() {
