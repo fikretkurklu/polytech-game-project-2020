@@ -15,10 +15,7 @@ public class SmallHealthPotion extends Consumable {
 	public SmallHealthPotion() throws Exception {
 		super();
 		statTable.put(Stats.Price, 50);
-	}
-
-System.out.println
-	
+	}	
 
 	public void useOn(Character c) {
 		int l = (statTable.get(Stats.Health)).intValue();
