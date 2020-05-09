@@ -29,7 +29,7 @@ public class Model {
 	};
 
 	public static int difficultyLevel;
-	
+
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
@@ -66,7 +66,6 @@ public class Model {
 		m_factory = factory;
 		m_opponentsToDelete = new LinkedList<Opponent>();
 
-		setRoom();
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 		int HUD_w = m_width / 3;
@@ -90,36 +89,40 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
-		int maxLife = m_player.m_currentStatMap.get(CurrentStat.MaxLife);
-		int strength = m_player.m_currentStatMap.get(CurrentStat.Strength);
-		int resistance = m_player.m_currentStatMap.get(CurrentStat.Resistance);
-		int attackSpeed = m_player.m_currentStatMap.get(CurrentStat.Attackspeed);
-		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
-		int money = m_player.getMoney();
-		HashMap<EquipmentManager.Stuff, Equipment> equip = m_player.getEquipment();
-		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		m_player.setCurrentStat(attackSpeed, maxLife, life, resistance, strength);
-		m_player.setEquipment(equip);
-		m_player.setMoney(money);
-		this.m_player.setCoord(m_room.getStartCoord());
 
-		int HUD_w = m_width / 3;
-		int HUD_h = HUD_w / 5;
-		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+		resetPlayer();
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
 		opponentCreator();
-		
-		difficultyLevel ++;
+
+		difficultyLevel++;
 	}
-	
-	public void toDongeon() {
-		
+
+	public void resetPlayer() {
+		this.m_player.setLife(m_player.m_currentStatMap.get(CurrentStat.MaxLife));
+		this.m_player.setCoord(m_room.getStartCoord());
+		((Player) this.m_player).reset();
+		this.m_player.resetAnim();
+	}
+
+	public void toDongeon() throws Exception {
+		this.m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_width, m_height);
+
+		resetPlayer();
+
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+
+		opponentCreator();
+
+		difficultyLevel = 1;
 	}
 
 	public void switchEnv(mode m) {
+		actualMode = m;
 		qPressed = false;
 		zPressed = false;
 		dPressed = false;
@@ -130,10 +133,22 @@ public class Model {
 		sPressed = false;
 		xPressed = false;
 		cPressed = false;
-
 		switch (m) {
 		case ROOM:
 			m_village = null;
+			switch(actualMode) {
+			case UNDERWORLD :
+				m_village = null;
+				resetPlayer();
+				break;
+			case VILLAGE :
+				try {
+					toDongeon();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			break;
 		case UNDERWORLD:
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
@@ -144,18 +159,17 @@ public class Model {
 		case GAMEOVER:
 			break;
 		}
-		actualMode = m;
 
 	}
 
 	public void start() throws Exception {
+		m_roomGenerator = new AutomaticRoomGenerator();
 		m_room = new Room(m_width, m_height);
 		m_underworld = new Underworld(m_factory, m_width, m_height, this);
 	}
 
-	public void setRoom() throws IOException {
-		m_roomGenerator = new AutomaticRoomGenerator();
-		m_roomGenerator.AutomaticGeneration();
+	public void setBossRoom() throws IOException {
+		m_roomGenerator.bossRoomGenerator();
 	}
 
 	public void setCenterScreenPlayer() {
@@ -196,7 +210,7 @@ public class Model {
 
 	public void tick(long elapsed) {
 		elapsed = Math.min(10, elapsed);
-		switch(actualMode) {
+		switch (actualMode) {
 		case ROOM:
 			m_player.tick(elapsed);
 			if (m_key != null) {
@@ -205,12 +219,12 @@ public class Model {
 			if (m_bossKey != null) {
 				m_bossKey.tick(elapsed);
 			}
-			
+
 			for (Opponent op : m_opponents) {
 				op.tick(elapsed);
 			}
 			if (m_opponentsToDelete != null) {
-				for(Opponent op : m_opponentsToDelete) {
+				for (Opponent op : m_opponentsToDelete) {
 					if (op != null) {
 						m_opponents.remove(op);
 					}
@@ -232,9 +246,8 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
-
 		m_width = width;
-		m_height = height;
+		m_height = height;	
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (actualMode) {
@@ -337,23 +350,20 @@ public class Model {
 			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 			for (int i = 0; i < coordFO.length; i++) {
 				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord,
-						this, 0, null);
+				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord, this, 0, null);
 				m_opponents.add(fo);
 			}
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				int WOtype = (int)(Math.random() * 2) + 1 ;
+				int WOtype = (int) (Math.random() * 2) + 1;
 				switch (WOtype) {
 				case 1:
-					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
-							coord, this, 0, null);
+					Demon d = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E, coord, this, 0, null);
 					m_opponents.add(d);
 					break;
 				case 2:
-					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E,
-							coord, this, 0, null);
+					Medusa m = (Medusa) Game.m_factory.newEntity(Type.Medusa, Direction.E, coord, this, 0, null);
 					m_opponents.add(m);
 					break;
 				default:
@@ -364,10 +374,10 @@ public class Model {
 			System.out.println("Error while creating oppenant");
 		}
 
-		int randomKey = (int) (Math.random()*m_opponents.size());
-		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		int randomKey = (int) (Math.random() * m_opponents.size());
+		int randomBossKey = (int) (Math.random() * m_opponents.size());
 		while (randomBossKey == randomKey) {
-			randomBossKey = (int) (Math.random()*m_opponents.size());
+			randomBossKey = (int) (Math.random() * m_opponents.size());
 		}
 		m_opponents.get(randomKey).setKey(true);
 		m_opponents.get(randomBossKey).setBossKey(true);

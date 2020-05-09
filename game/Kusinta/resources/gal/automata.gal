@@ -1,6 +1,6 @@
 Player_Donjon(Init){	
   * (Init)      
-  | !GotPower() ? Explode () : ()     
+  | !GotPower() ? Explode () : (Init)     
   | Key(SPACE) ? Egg() : (Doing)
   | Key(z) ? Jump: (Doing)
   | Key(q) & !Cell(W, O) ? Move(W) : (Init)
@@ -12,7 +12,7 @@ Player_Donjon(Init){
   | Key(a) ? Pick() : (Init)
   
   * (Doing)       
-  | ! GotPower() ? Explode () : ()  
+  | ! GotPower() ? Explode () : (Init)  
   | Key(q) & !Cell(W, O) ? Move(W) : (Init)
   | Key(d) & !Cell(E, O)? Move(E) : (Init)
   | Key(s) ? Wizz()  : (Init)          
