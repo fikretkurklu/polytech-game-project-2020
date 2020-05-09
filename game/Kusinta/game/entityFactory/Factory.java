@@ -195,5 +195,9 @@ public class Factory {
 		images.put(type, m_IL.getImages(string));
 		actions.put(type, m_IL.getActions(string));
 	}
+	
+	public Image[] getImage(Type t) {
+		return images.get(t);
+	}
 
 }

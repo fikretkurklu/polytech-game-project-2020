@@ -58,9 +58,8 @@ public abstract class Character extends Entity {
 	LinkedList<SmallHealthPotion> smallConsumables;
 	LinkedList<BigHealthPotion> bigConsumables;
 
-
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
-			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction){
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
 		super(automaton, bImages, indiceAction);
 
 		setStat(attackSpeed, maxLife, resistance, strength);
@@ -82,7 +81,6 @@ public abstract class Character extends Entity {
 
 		smallConsumables = new LinkedList<SmallHealthPotion>();
 		bigConsumables = new LinkedList<BigHealthPotion>();
-
 
 		Stuff[] stuffTable = Stuff.values();
 
@@ -442,10 +440,11 @@ public abstract class Character extends Entity {
 			}
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = Math.asin((double)y / (double)r);
+			angle = Math.asin((double) y / (double) r);
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y2, 2)));
-			angle2 = Math.asin((double)y2 / (double)r);
-			angle = Math.max(angle, angle2);
+			angle2 = Math.asin((double) y2 / (double) r);
+			angle = (angle + angle2) / 2;
+
 			try {
 				if (direc == Direction.E) {
 					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
@@ -483,12 +482,12 @@ public abstract class Character extends Entity {
 		}
 
 	}
-	
-	public LinkedList<SmallHealthPotion> getSmallConsumables(){
+
+	public LinkedList<SmallHealthPotion> getSmallConsumables() {
 		return smallConsumables;
 	}
-	
-	public LinkedList<BigHealthPotion> getBigConsumables(){
+
+	public LinkedList<BigHealthPotion> getBigConsumables() {
 		return bigConsumables;
 	}
 

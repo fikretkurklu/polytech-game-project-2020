@@ -12,6 +12,7 @@ import automaton.Direction;
 import environnement.Element;
 import game.Coord;
 import player.Character;
+import player.Character.CurrentStat;
 
 public class MagicProjectile extends Projectile {
 
@@ -27,7 +28,6 @@ public class MagicProjectile extends Projectile {
 
 		setSpeed(4);
 		
-		m_strength = 15;
 
 	}
 
@@ -73,7 +73,7 @@ public class MagicProjectile extends Projectile {
 			if (cat == Category.P) {
 				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
-				m_model.getPlayer().loseLife(m_strength - tmpPlayerResistance);
+				m_model.getPlayer().loseLife(m_shooter.getStat(CurrentStat.Strength) - tmpPlayerResistance);
 			}
 		}
 		return b;

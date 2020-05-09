@@ -25,7 +25,7 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 0, 0, bImages, hmActions);
+		super(automaton, C, dir, model, 100, 100, 1000, 5, 20, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);

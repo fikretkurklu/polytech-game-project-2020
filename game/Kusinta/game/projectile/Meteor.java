@@ -12,6 +12,7 @@ import automaton.Direction;
 import environnement.Element;
 import game.Coord;
 import player.Character;
+import player.Character.CurrentStat;
 
 public class Meteor extends Projectile {
 
@@ -25,9 +26,7 @@ public class Meteor extends Projectile {
 		m_width = (int) (m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - SIZE / 5, m_coord.Y() - SIZE / 10, SIZE/2, SIZE/2);
 
-		setSpeed(8);
-		
-		m_strength = 15;
+		setSpeed(4);
 
 	}
 
@@ -72,7 +71,7 @@ public class Meteor extends Projectile {
 			if (cat == Category.P) {
 				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
-				collidingWith.loseLife(m_strength - tmpPlayerResistance);
+				collidingWith.loseLife(m_shooter.getStat(CurrentStat.Strength) - tmpPlayerResistance);
 			}
 		}
 		return b;
