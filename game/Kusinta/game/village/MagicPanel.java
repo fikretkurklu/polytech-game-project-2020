@@ -2,7 +2,6 @@ package village;
 
 import equipment.EquipmentManager;
 import equipment.EquipmentManager.Conso;
-import equipment.SmallHealthPotion;
 import player.Player;
 
 public class MagicPanel extends Panel {
@@ -22,7 +21,6 @@ public class MagicPanel extends Panel {
 		m_EquipemenScroll = new EquipementScroll(w / 3, (int) (Scroll_h * 1.5), w / 3, h / 3);
 		EM = new EquipmentManager();
 
-		add(new RollButton(m_width / 10, m_height / 10, m_width / 8, m_width / 8, this, p));
 		createButton();
 		drawConsumable();
 
@@ -44,8 +42,8 @@ public class MagicPanel extends Panel {
 
 	public void drawConsumable() {
 		try {
-			((EquipementButton) (m_elem.get(1))).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
-			((EquipementButton) (m_elem.get(2))).setEquipement(EM.newConsumable(Conso.BigHealthPotion));
+			((EquipementButton) (m_elem.get(0))).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
+			((EquipementButton) (m_elem.get(1))).setEquipement(EM.newConsumable(Conso.BigHealthPotion));
 
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block

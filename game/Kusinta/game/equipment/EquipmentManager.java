@@ -59,21 +59,13 @@ public class EquipmentManager {
 	public Consumable newConsumable(Conso consumable) throws Exception {
 		switch (consumable) {
 		case SmallHealthPotion:
-			System.out.println("HealthPotion created");
 			SmallHealthPotion sp = new SmallHealthPotion();
 			sp.setImage(imgManager.PotionImage.get(Conso.SmallHealthPotion));
 			return sp;
 		case BigHealthPotion:
-			System.out.println("BigHealthPotion created");
 			BigHealthPotion bp = new BigHealthPotion();
 			bp.setImage(imgManager.PotionImage.get(Conso.BigHealthPotion));
 			return bp;
-		case SmallStatPotion:
-			System.out.println("StatPotion created");
-			return new SmallStatPotion();
-		case BigStatPotion:
-			System.out.println("BigStatPotion created");
-			return new BigStatPotion();
 		default:
 			System.out.println("This consumable doesn't exist");
 			return null;

@@ -1,6 +1,5 @@
 package equipment;
 
-import java.awt.Image;
 
 import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;

@@ -19,8 +19,8 @@ public class HUD {
 		m_height = h;
 		m_player = p;
 		m_font = new HUDFont(0, 0, w/3, h, p);
-		m_stats = new HUDStats(m_font.m_width, 0, w/3, h, p);
-		m_conso = new HUDConsumable(m_stats.m_x + m_stats.m_width, y, w/3, h, p);
+		m_stats = new HUDStats(m_font.m_width, 0, w*4/9, h, p);
+		m_conso = new HUDConsumable(m_stats.m_x + m_stats.m_width, y, w*2/9, h, p);
 	}
 
 	public void tick(long elapsed) {

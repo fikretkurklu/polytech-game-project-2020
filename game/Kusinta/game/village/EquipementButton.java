@@ -1,7 +1,6 @@
 package village;
 
 import equipment.BigHealthPotion;
-import equipment.Consumable;
 import equipment.Equipment;
 import equipment.SmallHealthPotion;
 import equipment.Stat.Stats;
@@ -42,12 +41,7 @@ public class EquipementButton extends Button {
 						m_player.setMoney(lastEquipement.getModification(Stats.Price));
 					}
 				}
-
 				m_player.setMoney(-m_equipement.getModification(Stats.Price));
-
-				m_equipement = null;
-				setBgImage(EmptyImg);
-				setFgImage(null);
 			}
 		}
 	}
