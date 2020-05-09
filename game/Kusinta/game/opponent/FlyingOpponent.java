@@ -21,7 +21,7 @@ public class FlyingOpponent extends Opponent {
 
 	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
+		super(automaton, C, dir, model, 100, 100, 1000, 5, 5, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;

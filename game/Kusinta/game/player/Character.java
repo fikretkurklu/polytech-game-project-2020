@@ -142,7 +142,11 @@ public abstract class Character extends Entity {
 	}
 
 	public void loseLife(int l) {
-		m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - l));
+		int damage = l - m_currentStatMap.get(CurrentStat.Resistance);
+		if (damage <= 0 ) {
+			damage = 1;
+		}
+		m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - damage));
 	}
 
 	@Override

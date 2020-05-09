@@ -49,7 +49,7 @@ public abstract class Projectile extends Entity {
 		m_alpha = 1f;
 		m_dead_time = 0;
 		moving = 0;
-		m_strength = 15;
+		m_strength = 0;
 		X_MOVE = 9;
 
 	}
