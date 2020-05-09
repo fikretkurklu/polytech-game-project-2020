@@ -67,22 +67,8 @@ public class Demon extends Opponent {
 		} else {
 			gp.drawImage(image, m_coord.X() + (2 * w) / 5, m_coord.Y() - (decalage), -w, h, null);
 		}
-		gp.setColor(Color.DARK_GRAY);
-		gp.fillRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
-			gp.setColor(Color.GREEN);
-		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
-			gp.setColor(Color.ORANGE);
-		} else {
-			gp.setColor(Color.RED);
-		}
-
-		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
-		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
-		gp.setColor(Color.LIGHT_GRAY);
-		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-
-		// gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
+		super.paint(gp);
 
 	}
 
