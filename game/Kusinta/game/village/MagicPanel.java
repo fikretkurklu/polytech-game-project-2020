@@ -9,7 +9,7 @@ public class MagicPanel extends Panel {
 	
 	private String IMAGE_MAGIC_SHOP = "resources/Village/magicShopBG.jpg";
 	EquipmentManager EM;
-	private final int NB_MAX_CONSUMABLE = 14;
+	private final int NB_MAX_CONSUMABLE = 2;
 	
 	public MagicPanel(int x, int y, int w, int h, Player p) {
 		super(x, y, w, h, p);
@@ -46,6 +46,12 @@ public class MagicPanel extends Panel {
 	}
 
 	public void drawConsumable() {
+		try {
+//			((EquipementButton)m_elem.get(0)).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		for (Button e : m_elem) {
 			if (e instanceof EquipementButton) {
 				try {

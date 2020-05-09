@@ -60,10 +60,10 @@ public class EquipmentManager {
 		switch (consumable) {
 		case SmallHealthPotion :
 			System.out.println("HealthPotion created");
-			return new SmallHealthPotion();
+			return new SmallHealthPotion(imgManager.PotionImage.get(Conso.SmallHealthPotion));
 		case BigHealthPotion :
 			System.out.println("BigHealthPotion created");
-			return new BigHealthPotion();
+			return new BigHealthPotion(imgManager.PotionImage.get(Conso.BigHealthPotion));
 		case SmallStatPotion :
 			System.out.println("StatPotion created");
 			return new SmallStatPotion();

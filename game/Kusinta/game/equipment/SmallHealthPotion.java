@@ -1,5 +1,7 @@
 package equipment;
 
+import java.awt.Image;
+
 import equipment.EquipmentManager.Stuff;
 import equipment.Stat.Stats;
 import player.Character;
@@ -11,8 +13,9 @@ public class SmallHealthPotion extends Consumable {
 	 * 
 	 */
 	
-	public SmallHealthPotion() throws Exception {
+	public SmallHealthPotion(Image img) throws Exception {
 		super();
+		imageEquip = img;
 		statTable.put(Stats.Price, 50);
 		setModification();
 	}
