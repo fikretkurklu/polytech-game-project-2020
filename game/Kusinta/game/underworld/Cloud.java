@@ -81,7 +81,6 @@ public class Cloud extends Entity{
 	public void paint(Graphics g) {
 		g.drawImage(bImages[0], m_coord.X(), m_coord.Y(), null);
 		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 	}
 	
 	public void tick(long elapsed) {

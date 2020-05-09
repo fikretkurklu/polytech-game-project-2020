@@ -37,9 +37,6 @@ public abstract class Opponent extends Character {
 			m_moveElapsed -= m_stepTick;
 			m_automaton.step(this);
 		}
-		if (this instanceof Demon) {
-			super.tick(elapsed);
-		}
 	}
 
 	public void setCollidedWith(Arrow a) {

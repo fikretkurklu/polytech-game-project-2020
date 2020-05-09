@@ -484,6 +484,9 @@ public abstract class Character extends Entity {
 		}
 
 	}
+	public void setSpeed(int speed) {
+		X_MOVE = speed;
+	}
 
 	public LinkedList<SmallHealthPotion> getSmallConsumables() {
 		return smallConsumables;

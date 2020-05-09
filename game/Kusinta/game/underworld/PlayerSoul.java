@@ -373,7 +373,6 @@ public class PlayerSoul extends Character {
 			g.fillRect(m_coord.X(), m_coord.Y() - (int) (3.5 * HEALTHHEIGHT), m_lurePaint, HEALTHHEIGHT);
 			g.setColor(Color.blue);
 			g.fillRect(m_coord.X(), m_coord.Y() - 5 * HEALTHHEIGHT, m_dashPaint, HEALTHHEIGHT);
-			g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
 		}
 	}
 

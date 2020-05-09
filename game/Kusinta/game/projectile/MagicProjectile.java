@@ -26,7 +26,7 @@ public class MagicProjectile extends Projectile {
 		m_width = (int) (m_height * ratio);
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
-		m_stepTick = 4;
+		m_stepTick = 5;
 		setSpeed(10);
 		
 

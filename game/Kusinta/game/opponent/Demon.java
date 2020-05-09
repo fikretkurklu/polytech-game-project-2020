@@ -13,6 +13,7 @@ import environnement.Element;
 import game.Coord;
 import game.Game;
 import game.Model;
+import player.Character;
 
 public class Demon extends Opponent {
 
@@ -33,7 +34,7 @@ public class Demon extends Opponent {
 		}
 		m_coord.setY(m_model.m_room.blockTop(m_coord.X(), m_coord.Y()));
 
-		X_MOVE = 2;
+		setSpeed(2);
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
@@ -43,8 +44,8 @@ public class Demon extends Opponent {
 
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
-		wHitBox = (int) (m_width * 0.7);
-		hHitBox = (int) (m_height * 0.8);
+		wHitBox = (int) (m_width * 0.8);
+		hHitBox = (int)(m_height * 0.9);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
 		setMoney(50 + 50*Model.difficultyLevel);
@@ -57,14 +58,13 @@ public class Demon extends Opponent {
 	@Override
 	public void paint(Graphics gp) {
 		Image image = getImage();
-		int w = m_width * 2;
-		int h = m_height * 2;
-		int decalage = (int) (((float) 3 / (float) 4) * h);
+		int w = m_width;
+		int h = m_height;
 
 		if (m_direction == Direction.E) {
-			gp.drawImage(image, m_coord.X() - (2 * w) / 5, m_coord.Y() - (decalage), w, h, null);
+			gp.drawImage(image, m_coord.X() - w / 2, m_coord.Y() - h, w, h, null);
 		} else {
-			gp.drawImage(image, m_coord.X() + (2 * w) / 5, m_coord.Y() - (decalage), -w, h, null);
+			gp.drawImage(image, m_coord.X() + w / 2, m_coord.Y() - h, -w, h, null);
 		}
 		
 		super.paint(gp);
@@ -74,7 +74,6 @@ public class Demon extends Opponent {
 	@Override
 	public void tick(long elapsed) {
 		super.tick(elapsed);
-
 		m_imageElapsed += elapsed;
 		if (m_imageElapsed > m_imageTick) {
 			m_imageElapsed = 0;
