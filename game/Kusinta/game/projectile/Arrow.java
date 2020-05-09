@@ -34,6 +34,7 @@ public class Arrow extends Projectile {
 					(int) ((m_coord.Y() - (m_width / 2) * Math.sin(m_angle) * 0.7)), 10, 10);
 		}
 
+		m_strength = 20;
 	}
 
 	public void paint(Graphics g) {

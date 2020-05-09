@@ -26,6 +26,8 @@ public class MagicProjectile extends Projectile {
 		hitBox = new Rectangle(m_coord.X() - 5, m_coord.Y() - 5, 10, 10);
 
 		setSpeed(4);
+		
+		m_strength = 15;
 
 	}
 
