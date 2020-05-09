@@ -15,7 +15,7 @@ import game.Coord;
 import game.Game;
 import game.Model;
 
-public class WalkingOpponent extends Opponent {
+public class Demon extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	int AttackStrength;
@@ -24,7 +24,7 @@ public class WalkingOpponent extends Opponent {
 
 	boolean isDead;
 
-	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+	public Demon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);

@@ -15,11 +15,11 @@ import game.Game;
 import game.Model;
 import projectile.Projectile.proj;
 
-public class FlyingOpponent extends Opponent {
+public class Jin extends Opponent {
 
 	int m_imageElapsed;
 
-	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
 		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
 

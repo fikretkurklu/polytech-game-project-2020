@@ -11,9 +11,9 @@ import game.Coord;
 import game.Model;
 import opponent.BossKey;
 import opponent.Coin;
-import opponent.FlyingOpponent;
+import opponent.Jin;
 import opponent.NormalKey;
-import opponent.WalkingOpponent;
+import opponent.Demon;
 import player.Player;
 import projectile.Arrow;
 import projectile.MagicProjectile;
@@ -31,12 +31,12 @@ public class Factory {
 	ImageLibrary m_IL;
 
 	public static enum Type {
-		Player, PlayerSoul, Lure, NormalKey, BossKey, Coin, Fragment, WalkingOpponent, FlyingOpponent, Arrow,
-		MagicProjectile, Meteor, Ghost, Gate, Cloud
+		Arrow, BossKey, Cloud, Coin, Demon, Fragment, Gate, Ghost, Jin, Lure, MagicProjectile, NormalKey, Player,
+		PlayerSoul
 	};
 
-	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul", "Ghost", "Lure",
-			"KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" }; // Nom des fichiers
+	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul",
+			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" }; // Nom des fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
@@ -47,7 +47,7 @@ public class Factory {
 		m_IL = new ImageLibrary();
 		automatons = new HashMap<Factory.Type, Automaton>();
 		images = new HashMap<Factory.Type, Image[]>();
-		actions = new HashMap<Factory.Type, HashMap<Action,int[]>>();
+		actions = new HashMap<Factory.Type, HashMap<Action, int[]>>();
 		fillAutomaton();
 		fillImages();
 		fillActions();
@@ -55,8 +55,8 @@ public class Factory {
 
 	private void fillActions() {
 		actions.put(Type.Arrow, m_IL.getActions(Avatars[0]));
-		actions.put(Type.WalkingOpponent, m_IL.getActions(Avatars[1]));
-		actions.put(Type.FlyingOpponent, m_IL.getActions(Avatars[2]));
+		actions.put(Type.Demon, m_IL.getActions(Avatars[1]));
+		actions.put(Type.Jin, m_IL.getActions(Avatars[2]));
 		actions.put(Type.MagicProjectile, m_IL.getActions(Avatars[3]));
 		actions.put(Type.Player, m_IL.getActions(Avatars[4]));
 		actions.put(Type.PlayerSoul, m_IL.getActions(Avatars[5]));
@@ -68,14 +68,12 @@ public class Factory {
 		actions.put(Type.Fragment, m_IL.getActions(Avatars[11]));
 		actions.put(Type.Gate, m_IL.getActions(Avatars[12]));
 		actions.put(Type.Cloud, m_IL.getActions(Avatars[13]));
-//		actions.put(Type.Meteor, m_IL.getActions("Meteor"));
-//		actions.put(Type.Fragment, m_IL.getActions("Fragment"));
 	}
 
 	private void fillImages() {
 		images.put(Type.Arrow, m_IL.getImages(Avatars[0]));
-		images.put(Type.WalkingOpponent, m_IL.getImages(Avatars[1]));
-		images.put(Type.FlyingOpponent, m_IL.getImages(Avatars[2]));
+		images.put(Type.Demon, m_IL.getImages(Avatars[1]));
+		images.put(Type.Jin, m_IL.getImages(Avatars[2]));
 		images.put(Type.MagicProjectile, m_IL.getImages(Avatars[3]));
 		images.put(Type.Player, m_IL.getImages(Avatars[4]));
 		images.put(Type.PlayerSoul, m_IL.getImages(Avatars[5]));
@@ -86,14 +84,12 @@ public class Factory {
 		images.put(Type.Fragment, m_IL.getImages(Avatars[11]));
 		images.put(Type.Gate, m_IL.getImages(Avatars[12]));
 		images.put(Type.Cloud, m_IL.getImages(Avatars[13]));
-//		images.put(Type.Meteor, m_IL.getImages("Meteor"));
-//		images.put(Type.Fragment, m_IL.getImages("Fragment"));
 	}
 
 	private void fillAutomaton() throws Exception {
 		automatons.put(Type.Arrow, m_AL.getAutomaton(Avatars[0]));
-		automatons.put(Type.WalkingOpponent, m_AL.getAutomaton(Avatars[1]));
-		automatons.put(Type.FlyingOpponent, m_AL.getAutomaton(Avatars[2]));
+		automatons.put(Type.Demon, m_AL.getAutomaton(Avatars[1]));
+		automatons.put(Type.Jin, m_AL.getAutomaton(Avatars[2]));
 		automatons.put(Type.MagicProjectile, m_AL.getAutomaton(Avatars[3]));
 		automatons.put(Type.Player, m_AL.getAutomaton(Avatars[4]));
 		automatons.put(Type.PlayerSoul, m_AL.getAutomaton(Avatars[5]));
@@ -105,8 +101,6 @@ public class Factory {
 		automatons.put(Type.Fragment, m_AL.getAutomaton(Avatars[11]));
 		automatons.put(Type.Gate, m_AL.getAutomaton(Avatars[12]));
 		automatons.put(Type.Cloud, m_AL.getAutomaton(Avatars[13]));
-		//automatons.put(Type.Meteor, m_AL.getAutomaton("Meteor"));
-		//automatons.put(Type.Fragment, m_AL.getAutomaton("Fragment"));
 	}
 
 	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle,
@@ -117,7 +111,7 @@ public class Factory {
 				return new Player(automatons.get(Type.Player), coord, dir, model, images.get(Type.Player),
 						actions.get(Type.Player));
 			case PlayerSoul:
-				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, images.get(Type.PlayerSoul), model, 
+				return new PlayerSoul(automatons.get(Type.PlayerSoul), coord, dir, images.get(Type.PlayerSoul), model,
 						actions.get(Type.PlayerSoul));
 			case NormalKey:
 				return new NormalKey(automatons.get(Type.NormalKey), coord, model, images.get(Type.NormalKey),
@@ -125,12 +119,12 @@ public class Factory {
 			case BossKey:
 				return new BossKey(automatons.get(Type.BossKey), coord, model, images.get(Type.BossKey),
 						actions.get(Type.BossKey));
-			case WalkingOpponent:
-				return new WalkingOpponent(automatons.get(Type.WalkingOpponent), coord, dir, model,
-						images.get(Type.WalkingOpponent), actions.get(Type.WalkingOpponent));
-			case FlyingOpponent:
-				return new FlyingOpponent(automatons.get(Type.FlyingOpponent), coord, dir, model,
-						images.get(Type.FlyingOpponent), actions.get(Type.FlyingOpponent));
+			case Demon:
+				return new Demon(automatons.get(Type.Demon), coord, dir, model, images.get(Type.Demon),
+						actions.get(Type.Demon));
+			case Jin:
+				return new Jin(automatons.get(Type.Jin), coord, dir, model, images.get(Type.Jin),
+						actions.get(Type.Jin));
 			case Arrow:
 				return new Arrow(automatons.get(Type.Arrow), coord, angle, shooter, dir, images.get(Type.Arrow),
 						actions.get(Type.Arrow));
@@ -145,15 +139,11 @@ public class Factory {
 			case Lure:
 				return new Lure(automatons.get(Type.Lure), coord, shooter, dir, images.get(Type.Lure), model,
 						actions.get(Type.Lure));
-			case Meteor:
-				System.out.println("temporaire");
-				return null;
 			case Fragment:
 				return new Fragment(automatons.get(Type.Fragment), coord, model, images.get(Type.Fragment),
 						actions.get(Type.Fragment));
 			case Gate:
-				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate),
-						actions.get(Type.Gate)); 
+				return new Gate(automatons.get(Type.Gate), coord, model, images.get(Type.Gate), actions.get(Type.Gate));
 			case Cloud:
 				return new Cloud(automatons.get(Type.Cloud), coord, model, images.get(Type.Cloud),
 						actions.get(Type.Cloud));

@@ -303,14 +303,14 @@ public class Model {
 			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 			for (int i = 0; i < coordFO.length; i++) {
 				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-				FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord,
+				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord,
 						this, 0, null);
 				m_opponents.add(fo);
 			}
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E,
+				Demon wo = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
 						coord, this, 0, null);
 				m_opponents.add(wo);
 			}
