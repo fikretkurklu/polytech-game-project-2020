@@ -104,7 +104,7 @@ public class Player extends Character {
 	public boolean egg(Direction dir) { // tir
 		if (!shooting) {
 			shooting = true;
-			if (isMoving()) {
+			if (isMoving() || falling) {
 				currentAction = Action.SHOTMOVE;
 			} else {
 				currentAction = Action.SHOT;

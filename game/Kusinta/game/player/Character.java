@@ -183,6 +183,12 @@ public abstract class Character extends Entity {
 			falling = true;
 			m_time = m_ratio_y;
 			gravity(m_time);
+			if(shooting) {
+				int tmp = m_imageIndex;
+				currentAction = Action.SHOTMOVE;
+				resetAnim();
+				m_imageIndex = tmp;
+			}
 		}
 
 		return true;
@@ -208,7 +214,7 @@ public abstract class Character extends Entity {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			if (currentAction != Action.DEFAULT) {
+			if (currentAction != Action.DEFAULT && !shooting) {
 				currentAction = Action.DEFAULT;
 				resetAnim();
 			}
@@ -223,10 +229,6 @@ public abstract class Character extends Entity {
 	}
 
 	private void gravity(long t) {
-		if(!jumping) {
-			currentAction = Action.FALLING;
-			resetAnim();
-		}
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
@@ -237,6 +239,10 @@ public abstract class Character extends Entity {
 				jumping = false;
 				t = (long) 0.1;
 				m_time = t;
+			}
+			if(!jumping && !shooting) {
+				currentAction = Action.FALLING;
+				resetAnim();
 			}
 
 			double C;
@@ -379,7 +385,7 @@ public abstract class Character extends Entity {
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
-			if (jumping) {
+			if (jumping || falling) {
 				currentAction = Action.JUMP;
 			} else {
 				currentAction = Action.DEFAULT;
