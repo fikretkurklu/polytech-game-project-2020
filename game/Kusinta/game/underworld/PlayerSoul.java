@@ -350,6 +350,7 @@ public class PlayerSoul extends Character {
 					m_imageIndex--;
 					if (m_imageIndex <= 0) {
 						m_model.switchEnv(mode.ROOM);
+						return;
 					}
 				} else {
 					m_imageIndex++;
