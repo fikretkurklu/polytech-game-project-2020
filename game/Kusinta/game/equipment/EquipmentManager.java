@@ -51,7 +51,6 @@ public class EquipmentManager {
 				return bow;
 			}
 		default:
-			System.out.println("The current equipment is not part of the equipment list");
 			return null;
 		}
 	}
@@ -67,7 +66,6 @@ public class EquipmentManager {
 			bp.setImage(imgManager.PotionImage.get(Conso.BigHealthPotion));
 			return bp;
 		default:
-			System.out.println("This consumable doesn't exist");
 			return null;
 		}
 	}

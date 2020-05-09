@@ -163,7 +163,6 @@ public class ImageLibrary {
 			}
 		} catch (IOException e) {
 			System.out.println("Error loading Image : " + filename);
-			e.printStackTrace();
 		}
 		return null;
 	}

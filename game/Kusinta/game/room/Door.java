@@ -30,7 +30,6 @@ public class Door extends Decor {
 
 	@Override
 	public boolean activate() {
-		System.out.println("Activate");
 		try {
 			m_model.switchToNextRoom();
 		} catch (Exception e) {

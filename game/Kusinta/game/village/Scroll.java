@@ -31,12 +31,9 @@ public class Scroll {
 		labelPos.translate(m_x, m_y);
 		setImage();
 	}
-	@SuppressWarnings("unused")
 	public void setImage() {
 		try {
 			File f = new File(IMG_PATH);
-			if (f == null)
-				System.out.println("Erreur while loading image at : "+ IMG_PATH);
 			m_img = ImageIO.read(f);
 			m_img = m_img.getScaledInstance(m_width, m_height, java.awt.Image.SCALE_SMOOTH);
 			

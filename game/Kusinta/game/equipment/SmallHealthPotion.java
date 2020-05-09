@@ -15,27 +15,22 @@ public class SmallHealthPotion extends Consumable {
 	public SmallHealthPotion() throws Exception {
 		super();
 		statTable.put(Stats.Price, 50);
-		setModification();
 	}
 
-	@Override
-	public void setModification() {
-		statTable.put(Stats.Health,20);
-	}
-
-	@Override
-	public void resetModification() {
-		statTable.put(Stats.Health, -20);
-	}
+System.out.println
 	
-	@Override
-	public Stuff toStuff() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public void useOn(Character c) {
 		int l = (statTable.get(Stats.Health)).intValue();
 		c.winLife(l);
+	}
+
+
+
+
+	@Override
+	public Stuff toStuff() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
