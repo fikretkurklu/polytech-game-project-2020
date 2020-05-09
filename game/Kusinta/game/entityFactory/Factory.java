@@ -89,6 +89,7 @@ public class Factory {
 		images.put(Type.PlayerSoul, m_IL.getImages(Avatars[5]));
 		images.put(Type.Ghost, m_IL.getImages(Avatars[6]));
 		images.put(Type.Lure, m_IL.getImages(Avatars[7]));
+		images.put(Type.BossKey, m_IL.getImages(Avatars[8]));
 		images.put(Type.Coin, m_IL.getImages(Avatars[9]));
 		images.put(Type.NormalKey, m_IL.getImages(Avatars[10]));
 		images.put(Type.Fragment, m_IL.getImages(Avatars[11]));

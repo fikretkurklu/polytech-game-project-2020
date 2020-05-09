@@ -24,7 +24,7 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 5, 20, bImages, hmActions);
+		super(automaton, C, dir, model, 100, 100, 1000, 1000, 200, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
@@ -148,7 +148,7 @@ public class Player extends Character {
 		int y2 = hitBox.y + hitBox.height / 4;
 		door = h.contains(hitBox.x, y1) || h.contains(hitBox.x + hitBox.width, y1) || h.contains(hitBox.x, y2)
 				|| h.contains(hitBox.x + hitBox.width, y2);
-		if (door && m_key != false) {
+		if (door && m_bossKey != false) {
 			d.setM_model(m_model);
 			d.activate();
 		}
