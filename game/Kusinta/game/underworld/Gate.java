@@ -38,7 +38,6 @@ public class Gate extends Entity {
 	public void paint(Graphics g) {
 		g.drawImage(bImages[currentIndex[m_imageIndex]], m_coord.X(), m_coord.Y(), null);
 		g.setColor(Color.blue);
-		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
 	}
 
 	public boolean contains(Rectangle hitBox) {

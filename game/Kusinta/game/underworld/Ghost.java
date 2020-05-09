@@ -358,9 +358,6 @@ public class Ghost extends Entity {
 			g.drawImage(getImage(), m_coord.X() + m_size, m_coord.Y(), -m_size, m_size, null);
 		else
 			g.drawImage(getImage(), m_coord.X(), m_coord.Y(), m_size, m_size, null);
-//		g.setColor(Color.blue);
-//		g.drawRect(hitBox.x, hitBox.y, m_width, m_height);
-
 	}
 
 	public void tick(long elapsed) {
