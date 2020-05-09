@@ -24,7 +24,7 @@ public abstract class Opponent extends Character {
 			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
-		m_key = false;
+		m_key = true;
 		collidedWith = new LinkedList<Arrow>();
 	}
 

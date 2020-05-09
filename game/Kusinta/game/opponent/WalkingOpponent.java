@@ -27,7 +27,7 @@ public class WalkingOpponent extends Opponent {
 	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 10, 5, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -48,7 +48,7 @@ public class WalkingOpponent extends Opponent {
 		hHitBox = (int) (m_height * 0.8);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
-		setMoney(100);
+		setMoney(50 + 50*Model.difficultyLevel);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
 		resetAnim();
