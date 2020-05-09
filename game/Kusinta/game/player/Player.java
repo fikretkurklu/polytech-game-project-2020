@@ -23,19 +23,18 @@ public class Player extends Character {
 
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
-		super(automaton, C, dir, model, 100, 100, 1000, 5, 20, bImages, hmActions);
+		super(automaton, C, dir, model, 100, 100, 1000, 5000, 2000, bImages, hmActions);
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
 		hitBox = new Rectangle(m_coord.X() - (m_width / 4) + 5, m_coord.Y() - (m_height - 15), m_width / 2 - 10,
 				m_height - 16);
-
-		m_imageElapsed = 0;
 		m_moveElapsed = 0;
 		m_invincibleElapsed = 0;
+		m_stepTick = 5;
 
-		X_MOVE = 2;
+		setSpeed(3);;
 
 		reset();
 		setMoney(0);
@@ -49,6 +48,7 @@ public class Player extends Character {
 		invincible = true;
 		paintInvincible = true;
 		currentAction = Action.DEFAULT;
+		resetAnim();
 	}
 
 	@Override

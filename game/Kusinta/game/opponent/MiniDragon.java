@@ -24,14 +24,11 @@ public class MiniDragon extends Opponent {
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
-		
-		int w = (int) (m_width / 1.7);
-		int h = (int) (m_height / 1.3);
 
-		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
+		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height - 1);
 		m_moveElapsed = 0;
-		m_stepTick = 2;
-		X_MOVE = 1;
+		m_stepTick = 4;
+		setSpeed(2);
 
 	}
 
@@ -73,7 +70,7 @@ public class MiniDragon extends Opponent {
 		}
 		
 		super.paint(g);
-		
+		g.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height - 1);
 		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
 		}
