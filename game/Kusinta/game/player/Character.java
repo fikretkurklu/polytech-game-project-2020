@@ -146,6 +146,7 @@ public abstract class Character extends Entity {
 		if (damage <= 0 ) {
 			damage = 1;
 		}
+		System.out.println(damage);
 		m_currentStatMap.put(CurrentStat.Life, (m_currentStatMap.get(CurrentStat.Life) - damage));
 	}
 

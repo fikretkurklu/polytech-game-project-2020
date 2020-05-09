@@ -34,7 +34,6 @@ public class Model {
 	public Coord m_mouseCoord;
 
 	public Character m_player;
-	public Character m_playerSave;
 	View m_view;
 
 	public mode actualMode;
@@ -70,7 +69,6 @@ public class Model {
 		setRoom();
 		start();
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
-		m_playerSave = m_player;
 		int HUD_w = m_width / 3;
 		int HUD_h = HUD_w / 5;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
@@ -112,7 +110,6 @@ public class Model {
 	
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
-		setBossRoom();
 		m_room = new Room(m_width, m_height);
 		
 		resetPlayer();
@@ -141,7 +138,6 @@ public class Model {
 			switch(actualMode) {
 			case UNDERWORLD :
 				m_village = null;
-				m_player = m_playerSave;
 				resetPlayer();
 				break;
 			case VILLAGE :
@@ -154,7 +150,6 @@ public class Model {
 			}
 			break;
 		case UNDERWORLD:
-			m_playerSave = m_player;
 			m_underworld.reset(40); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
@@ -255,9 +250,8 @@ public class Model {
 	}
 
 	public void paint(Graphics g, int width, int height) {
-
 		m_width = width;
-		m_height = height;
+		m_height = height;	
 		setCenterScreenPlayer();
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (actualMode) {

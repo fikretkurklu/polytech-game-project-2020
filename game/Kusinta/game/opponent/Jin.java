@@ -98,7 +98,7 @@ public class Jin extends Opponent {
 			m_imageIndex ++;
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
-					m_model.getOpponent().remove(this);
+					m_model.getM_opponentsToDelete().add(this);
 					dropKey();
 					Coin c = (Coin) Game.m_factory.newEntity(Type.Coin, null, m_coord, m_model, 0, null);
 					c.setMoney(m_money);
