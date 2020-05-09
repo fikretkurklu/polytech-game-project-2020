@@ -33,15 +33,20 @@ public class EquipementButton extends Button {
 			if (m_player.getMoney() >= m_equipement.getModification(Stats.Price)) {
 				if (m_equipement instanceof SmallHealthPotion) {
 					m_player.getSmallConsumables().add(((SmallHealthPotion) m_equipement));
+					m_player.setMoney(-m_equipement.getModification(Stats.Price));
 				} else if (m_equipement instanceof BigHealthPotion) {
 					m_player.getBigConsumables().add(((BigHealthPotion) m_equipement));
+					m_player.setMoney(-m_equipement.getModification(Stats.Price));
 				} else {
 					Equipment lastEquipement = m_player.addEquipment(m_equipement);
 					if (lastEquipement != null) {
 						m_player.setMoney(lastEquipement.getModification(Stats.Price));
 					}
+					m_player.setMoney(-m_equipement.getModification(Stats.Price));
+					m_equipement = null;
+					setFgImage(null);
 				}
-				m_player.setMoney(-m_equipement.getModification(Stats.Price));
+				
 			}
 		}
 	}
