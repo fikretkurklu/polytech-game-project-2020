@@ -12,7 +12,6 @@ public class BossKey extends Key{
 
 	public BossKey(Automaton automaton, Coord c, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 		super(automaton, c, model, bImages, indiceAction);
-
 	}
 	
 	@Override

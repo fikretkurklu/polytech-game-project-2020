@@ -9,6 +9,7 @@ import automaton.Direction;
 import automaton.Entity;
 import game.Coord;
 import game.Model;
+import opponent.Boss;
 import opponent.BossKey;
 import opponent.Coin;
 import opponent.Jin;
@@ -18,6 +19,7 @@ import opponent.Demon;
 import player.Player;
 import projectile.Arrow;
 import projectile.MagicProjectile;
+import projectile.Meteor;
 import underworld.Cloud;
 import underworld.Fragment;
 import underworld.Gate;
@@ -32,18 +34,20 @@ public class Factory {
 	ImageLibrary m_IL;
 
 	public static enum Type {
-		Arrow, BossKey, Cloud, Coin, Demon, Fragment, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa, NormalKey, Player,
-		PlayerSoul
+		Arrow, Boss, BossKey, Cloud, Coin, Demon, Fragment, FireAttack, Gate, Ghost, Jin, Lure, MagicProjectile, Medusa,
+		NormalKey, Player, PlayerSoul
 	};
 
 	public static String Avatars[] = { "Arrow", "Demon", "Jin", "MagicProjectile", "Player_Donjon", "PlayerSoul",
-			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud" , "Medusa"}; // Nom des fichiers
+			"Ghost", "Lure", "KeyBoss", "Coin", "KeyNormal", "Fragment", "Gate", "Cloud", "Medusa", "Boss",
+			"FireAttack" }; // Nom des
+	// fichiers
 
 	HashMap<Type, Automaton> automatons;
 	HashMap<Type, Image[]> images;
 	HashMap<Type, HashMap<Action, int[]>> actions;
 
-	public Factory() throws Exception {
+	public Factory() {
 		m_AL = new AutomatonLibrary();
 		m_IL = new ImageLibrary();
 		automatons = new HashMap<Factory.Type, Automaton>();
@@ -70,6 +74,8 @@ public class Factory {
 		actions.put(Type.Gate, m_IL.getActions(Avatars[12]));
 		actions.put(Type.Cloud, m_IL.getActions(Avatars[13]));
 		actions.put(Type.Medusa, m_IL.getActions(Avatars[14]));
+		actions.put(Type.Boss, m_IL.getActions(Avatars[15]));
+		actions.put(Type.FireAttack, m_IL.getActions(Avatars[16]));
 	}
 
 	private void fillImages() {
@@ -87,9 +93,11 @@ public class Factory {
 		images.put(Type.Gate, m_IL.getImages(Avatars[12]));
 		images.put(Type.Cloud, m_IL.getImages(Avatars[13]));
 		images.put(Type.Medusa, m_IL.getImages(Avatars[14]));
+		images.put(Type.Boss, m_IL.getImages(Avatars[15]));
+		images.put(Type.FireAttack, m_IL.getImages(Avatars[16]));
 	}
 
-	private void fillAutomaton() throws Exception {
+	private void fillAutomaton() {
 		automatons.put(Type.Arrow, m_AL.getAutomaton(Avatars[0]));
 		automatons.put(Type.Demon, m_AL.getAutomaton(Avatars[1]));
 		automatons.put(Type.Jin, m_AL.getAutomaton(Avatars[2]));
@@ -105,6 +113,8 @@ public class Factory {
 		automatons.put(Type.Gate, m_AL.getAutomaton(Avatars[12]));
 		automatons.put(Type.Cloud, m_AL.getAutomaton(Avatars[13]));
 		automatons.put(Type.Medusa, m_AL.getAutomaton(Avatars[14]));
+		automatons.put(Type.Boss, m_AL.getAutomaton(Avatars[15]));
+		automatons.put(Type.FireAttack, m_AL.getAutomaton(Avatars[16]));
 	}
 
 	public Entity newEntity(Type type, Direction dir, Coord coord, Model model, double angle,
@@ -154,6 +164,12 @@ public class Factory {
 			case Medusa:
 				return new Medusa(automatons.get(Type.Medusa), coord, dir, model, images.get(Type.Medusa),
 						actions.get(Type.Medusa));
+			case Boss:
+				return new Boss(automatons.get(Type.Boss), coord, dir, model, images.get(Type.Boss),
+						actions.get(Type.Boss));
+			case FireAttack:
+				return new Meteor(automatons.get(Type.FireAttack), coord, angle, shooter, dir,
+						images.get(Type.FireAttack), actions.get(Type.FireAttack));
 			}
 		} catch (Exception e) {
 			System.out.println("Error while creatin : " + type.toString());

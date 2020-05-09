@@ -46,13 +46,17 @@ public class AutomatonLibrary {
 		}		
 	}
 	
-	public Automaton getAutomaton(String name) throws Exception{
-		Automaton automaton = mapAutomaton.get(name);
-		if (automaton != null) {
-			return automaton;
-		}else {
-			throw new Exception("Error : automaton not found !");
+	public Automaton getAutomaton(String name){
+		try {
+			Automaton automaton = mapAutomaton.get(name);
+			if (automaton != null) {
+				return automaton;
+			}
+		} catch (Exception e) {
+			System.out.println("Error : automaton not found !: " + name);
 		}
+		return null;
+		
 			
 	}
 

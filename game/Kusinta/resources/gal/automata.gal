@@ -50,6 +50,13 @@ MagicProjectile (Init) {
   | True ? Move : (Init)
 }
 
+FireAttack (Init) {
+  *(Init)
+  | Cell(H,P) ? Explode() : ()
+  | Cell(H,O) ? Explode () : ()
+  | True ? Move : (Init)
+}
+
 Decor (Inactif) {                
   *(Inactif) 
   | True ? : (Inactif)
@@ -147,16 +154,16 @@ Boss (EW) {
   | MyDir(S) & Cell(S, O) ? Turn(E) / Turn(W) : (EW)
   | Cell(H, P) ? Power : (NS)  
   | ! GotPower() ? Explode() : ()   
-  | Closest(P, E) ? Hit(E) : (NS)
-  | Closest(P, W) ? Hit(W) : (NS)
+  | Closest(P, E) ? Egg(E) : (NS)
+  | Closest(P, W) ? Egg(W) : (NS)
   | True ? Move() : (NS) 
  *(EW)
   | MyDir(E) & Cell(E, O) ? Turn(N) / Turn(S) : (NS)
   | MyDir(W) & Cell(W, O) ? Turn(N) / Turn(S) : (NS)
   | Cell(H, P) ? Power : (EW)  
   | ! GotPower() ? Explode() : ()   
-  | Closest(P, E) ? Hit(E) : (EW)
-  | Closest(P, W) ? Hit(W) : (EW)
+  | Closest(P, E) ? Egg(E) : (EW)
+  | Closest(P, W) ? Egg(W) : (EW)
   | True ? Move() : (EW) 
 }
 

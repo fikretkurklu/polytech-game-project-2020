@@ -56,7 +56,7 @@ public class Village {
 		return false;
 	}
 
-	public void paint(Graphics g, int w, int h) {
+	public void paint(Graphics g, int w, int h) {		
 		resized(w, h);
 		menuPanel.paint(g);
 		switch (env) {
@@ -79,6 +79,7 @@ public class Village {
 			villagePanel.paint(g);
 			break;
 		}
+		
 
 	}
 
