@@ -47,45 +47,43 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-//		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
-//		System.out.println("   modifiers=" + e.getModifiersEx());
-//		System.out.println("   buttons=" + e.getButton());
-		System.out.println("Mouse clicked: (" + e.getX() + "," + e.getY() + ")");
-		System.out.println("   modifiers=" + e.getModifiersEx());
-		System.out.println("   buttons=" + e.getButton());
-		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
-			m_game.m_model.m_village.Clicked();
+		if (m_game.m_model != null) {
+			if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
+				m_game.m_model.m_village.Clicked();
+			}
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		switch(m_game.m_model.actualMode) {
-		case ROOM:
-			m_game.m_model.setPressed((int) ' ', true);
-			break;
-		case UNDERWORLD:
-			m_game.m_model.setPressed((int) 'v', true);
-			break;
-		default:
-			break;
+		if (m_game.m_model != null) {
+			switch (m_game.m_model.actualMode) {
+			case ROOM:
+				m_game.m_model.setPressed( K_SPACE, true);
+				break;
+			case UNDERWORLD:
+				m_game.m_model.setPressed( K_V, true);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		switch(m_game.m_model.actualMode) {
-		case ROOM:
-			m_game.m_model.setPressed((int) ' ', false);
-			break;
-		case UNDERWORLD:
-			m_game.m_model.setPressed((int) 'v', false);
-			break;
-		default:
-			break;
+		if (m_game.m_model != null) {
+			switch (m_game.m_model.actualMode) {
+			case ROOM:
+				m_game.m_model.setPressed( K_SPACE, false);
+				break;
+			case UNDERWORLD:
+				m_game.m_model.setPressed( K_V, false);
+				break;
+			default:
+				break;
+			}
 		}
-		
-
 	}
 
 	@Override
@@ -114,9 +112,11 @@ public class Controller implements GameCanvasListener {
 //		System.out.println("Mouse moved: (" + e.getX() + "," + e.getY() + ")");
 //		System.out.println("   modifiers=" + e.getModifiersEx());
 //		System.out.println("   buttons=" + e.getButton());
-		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
-		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
-			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
+		if (m_game.m_model != null) {
+			m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
+			if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
+				m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
+			}
 		}
 	}
 

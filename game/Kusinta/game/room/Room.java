@@ -44,7 +44,7 @@ public class Room {
 	//Concernant la position des ennemis dans la room
 	LinkedList<Coord> FOTable;
 	LinkedList<Coord> WOTable;
-	Coord bossCoord; 
+	protected Coord bossCoord; 
 
 	public Room(int width, int height) throws Exception {
 		m_width = width;
@@ -314,5 +314,9 @@ public class Room {
 
 	public int blockTop(Coord c) {
 		return blockTop(c.X(), c.Y());
+	}
+	
+	public Coord getBossCoord() {
+		return bossCoord;
 	}
 }

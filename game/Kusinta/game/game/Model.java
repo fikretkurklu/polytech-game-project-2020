@@ -106,6 +106,7 @@ public class Model {
 
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
+		setBossRoom();
 		m_room = new Room(m_width, m_height);
 
 		resetPlayer();
@@ -167,6 +168,7 @@ public class Model {
 
 	public void setBossRoom() throws IOException {
 		m_roomGenerator.bossRoomGenerator();
+		Boss m = (Boss) Game.m_factory.newEntity(Type.Boss, Direction.E, m_room.getBossCoord(), this, 0, null);
 	}
 
 	public void setCenterScreenPlayer() {
