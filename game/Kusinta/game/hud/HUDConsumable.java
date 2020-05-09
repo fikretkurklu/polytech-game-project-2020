@@ -20,9 +20,11 @@ public class HUDConsumable {
 	Image SmallPot;
 	Image BigPot;
 	int Pot_x, Pot_y, Pot_w, Pot_h;
-	
+
 	long updateElpased;
 	long statsElapsed;
+
+	int nbSPot, nbBPot;
 
 	public HUDConsumable(int x, int y, int w, int h, Player p) throws Exception {
 		m_x = x;
@@ -31,18 +33,19 @@ public class HUDConsumable {
 		m_height = h;
 		m_player = p;
 		bg = ImageLoader.loadImage(BG, m_width, m_height);
-		SmallPot = new SmallHealthPotion().getImage();
-		BigPot = new BigHealthPotion().getImage();
-		Pot_x = 0;
-		Pot_y = 0;
-		Pot_w = w/4;
-		Pot_h = h/2;
-		
+		SmallPot = ImageLoader.loadImage("resources/Equipment/Potion/Green Potion.png");
+		BigPot = ImageLoader.loadImage("resources/Equipment/Potion/Red Potion.png");
+		Pot_x = x + w / 4;
+		Pot_y = y;
+		Pot_w = w / 4;
+		Pot_h = h / 2;
+
 		updateConsommable();
 	}
 
 	public void updateConsommable() {
-
+		nbSPot = m_player.getSmallConsumables().size();
+		nbBPot = m_player.getBigConsumables().size();
 	}
 
 	public void tick(long elapsed) {
@@ -57,6 +60,9 @@ public class HUDConsumable {
 		g.drawImage(bg, m_x, m_y, null);
 		g.setColor(BG_COLOR);
 		g.drawImage(SmallPot, Pot_x, Pot_y, Pot_w, Pot_h, null);
-		g.drawImage(BigPot, Pot_x + 2 * Pot_w, Pot_y, Pot_w, Pot_h, null);
+		g.drawString("x" + nbSPot, Pot_x + Pot_w, Pot_y + (3 * Pot_h) / 4);
+		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), Pot_w, Pot_h, null);
+		g.drawString("x" + nbBPot, Pot_x + Pot_w, Pot_y + (7 * Pot_h) / 4);
+
 	}
 }

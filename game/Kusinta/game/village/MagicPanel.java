@@ -47,20 +47,12 @@ public class MagicPanel extends Panel {
 
 	public void drawConsumable() {
 		try {
-//			((EquipementButton)m_elem.get(0)).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
+			((EquipementButton)(m_elem.get(1))).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
+			((EquipementButton)(m_elem.get(2))).setEquipement(EM.newConsumable(Conso.BigHealthPotion));
+			
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		}
-		for (Button e : m_elem) {
-			if (e instanceof EquipementButton) {
-				try {
-					((EquipementButton) e).setEquipement(EM.newConsumable(Conso.SmallHealthPotion));
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
 		}
 	}
 }

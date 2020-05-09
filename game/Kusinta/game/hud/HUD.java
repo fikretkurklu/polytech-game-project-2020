@@ -26,6 +26,7 @@ public class HUD {
 	public void tick(long elapsed) {
 		m_font.tick(elapsed);
 		m_stats.tick(elapsed);
+		m_conso.tick(elapsed);
 	}
 
 	public void paint(Graphics g) {
