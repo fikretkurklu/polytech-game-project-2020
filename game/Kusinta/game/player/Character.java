@@ -420,10 +420,15 @@ public abstract class Character extends Entity {
 				currentAction = Action.DEFAULT;
 			}
 			resetAnim();
-			int m_x = m_coord.X();
-			int m_y = hitBox.y + hitBox.height / 2;
+			int m_x = 0;
+			if (m_direction == Direction.E) {
+				m_x = m_coord.X() + hitBox.width / 2;
+			} else {
+				m_x = m_coord.X() - hitBox.width / 2;
+			}
+			int m_y = m_coord.Y() - hitBox.height / 2;
 			Direction direc;
-			float angle;
+			double angle;
 			double r;
 
 			int x = baseX - m_x;
@@ -436,16 +441,12 @@ public abstract class Character extends Entity {
 			}
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-			angle = (float) Math.asin(Math.abs(y) / r);
-
-			if (baseY > m_y) {
-				angle = -angle;
-			}
+			angle = Math.asin((double)y / (double)r);
 			try {
 				if (direc == Direction.E) {
-					addProjectile(type, new Coord(m_x + hitBox.width / 2, m_y), angle, this, direc);
+					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
 				} else {
-					addProjectile(type, new Coord(m_x - hitBox.width / 2, m_y), angle, this, direc);
+					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
