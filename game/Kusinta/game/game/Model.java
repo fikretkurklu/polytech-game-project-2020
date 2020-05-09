@@ -104,8 +104,10 @@ public class Model {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
+		m_roomGenerator.AutomaticGeneration();
+		m_room = new Room(m_width, m_height);
 		
-		setBossRoom();
+		//setBossRoom();
 		
 
 		resetPlayer();

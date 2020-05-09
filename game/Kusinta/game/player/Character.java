@@ -427,12 +427,14 @@ public abstract class Character extends Entity {
 				m_x = m_coord.X() - hitBox.width / 2;
 			}
 			int m_y = m_coord.Y() - hitBox.height / 2;
+			int m_y2 = m_coord.Y();
 			Direction direc;
-			double angle;
+			double angle, angle2;
 			double r;
 
 			int x = baseX - m_x;
 			int y = m_y - baseY;
+			int y2 = m_y2 - baseY;
 
 			if (baseX > m_x) {
 				direc = Direction.E;
@@ -442,6 +444,9 @@ public abstract class Character extends Entity {
 
 			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
 			angle = Math.asin((double)y / (double)r);
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y2, 2)));
+			angle2 = Math.asin((double)y2 / (double)r);
+			angle = Math.max(angle, angle2);
 			try {
 				if (direc == Direction.E) {
 					addProjectile(type, new Coord(m_x, m_y), angle, this, direc);
