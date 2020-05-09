@@ -62,10 +62,13 @@ public class Player extends Character {
 				resetAnim();
 			}
 		}
+		int oldX = m_coord.X(), oldY = m_coord.Y();
 		super.move(dir);
 		if (dir != m_direction && !shooting) {
 			turn(dir);
 		}
+		m_model.m_mouseCoord.translate(m_coord.X() - oldX, m_coord.Y() - oldY);
+
 
 		return true;
 	}
@@ -104,7 +107,7 @@ public class Player extends Character {
 	public boolean egg(Direction dir) { // tir
 		if (!shooting) {
 			shooting = true;
-			if (isMoving()) {
+			if (isMoving() || falling) {
 				currentAction = Action.SHOTMOVE;
 			} else {
 				currentAction = Action.SHOT;
@@ -130,7 +133,10 @@ public class Player extends Character {
 	}
 
 	public void tick(long elapsed) {
+		int oldY = m_coord.Y();
 		super.tick(elapsed);
+		m_model.m_mouseCoord.translateY(m_coord.Y() - oldY);
+
 
 		if (invincible) {
 			m_invincibleElapsed += elapsed;

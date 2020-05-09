@@ -191,6 +191,12 @@ public abstract class Character extends Entity {
 			falling = true;
 			m_time = m_ratio_y;
 			gravity(m_time);
+			if(shooting) {
+				int tmp = m_imageIndex;
+				currentAction = Action.SHOTMOVE;
+				resetAnim();
+				m_imageIndex = tmp;
+			}
 		}
 
 		return true;
@@ -216,7 +222,7 @@ public abstract class Character extends Entity {
 			m_coord.setY(topBlock);
 			falling = false;
 			jumping = false;
-			if (currentAction != Action.DEFAULT) {
+			if (currentAction != Action.DEFAULT && !shooting) {
 				currentAction = Action.DEFAULT;
 				resetAnim();
 			}
@@ -231,10 +237,6 @@ public abstract class Character extends Entity {
 	}
 
 	private void gravity(long t) {
-		if(!jumping) {
-			currentAction = Action.FALLING;
-			resetAnim();
-		}
 		if (falling) {
 			if (checkBlock(m_coord.X(), hitBox.y) || checkBlock((hitBox.x + hitBox.width) - 2, hitBox.y)
 					|| checkBlock(hitBox.x + 2, hitBox.y)) {
@@ -246,6 +248,10 @@ public abstract class Character extends Entity {
 				t = (long) 0.1;
 				m_time = t;
 			}
+			if(!jumping && !shooting) {
+				currentAction = Action.FALLING;
+				resetAnim();
+			}
 
 			double C;
 			if (jumping) {
@@ -256,6 +262,7 @@ public abstract class Character extends Entity {
 
 			int newY = (int) ((0.5 * G * Math.pow(t, 2) * 0.0005 - C * t)) + y_gravity;
 			hitBox.translate(0, -(m_coord.Y() - newY));
+			//m_model.m_mouseCoord.translateY(-(m_coord.Y() - newY));
 			m_coord.setY(newY);
 		} else {
 			m_time = 0;
@@ -386,7 +393,7 @@ public abstract class Character extends Entity {
 	public void shoot(int baseX, int baseY, proj type) {
 		if (shooting) {
 			shooting = false;
-			if (jumping) {
+			if (jumping || falling) {
 				currentAction = Action.JUMP;
 			} else {
 				currentAction = Action.DEFAULT;

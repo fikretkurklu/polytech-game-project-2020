@@ -16,7 +16,7 @@ public class ElementImageFactory {
 	public enum TypeBG { OWN, OWS, OWE, OWW, OWNE, OWNW, OWSE, OWSW, IW, ES}
 	
 	public ElementImageFactory() throws Exception {
-		ambiance = (int) (Math.random() * 2 + 1);
+		ambiance = (int) (Math.random() * 3 + 1);
 		hmImage = new HashMap<ElementImageFactory.TypeBG, Image>();
 		loadHashMap();
 	}

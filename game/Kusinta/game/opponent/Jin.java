@@ -15,11 +15,11 @@ import game.Game;
 import game.Model;
 import projectile.Projectile.proj;
 
-public class FlyingOpponent extends Opponent {
+public class Jin extends Opponent {
 
 	int m_imageElapsed;
 
-	public FlyingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
 		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 5*Model.difficultyLevel, 5*Model.difficultyLevel, bImages, indiceAction);
 
@@ -76,19 +76,8 @@ public class FlyingOpponent extends Opponent {
 		} else {
 			g.drawImage(img, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
-		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
-			g.setColor(Color.GREEN);
-		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
-			g.setColor(Color.ORANGE);
-		} else {
-			g.setColor(Color.RED);
-		}
-		float w = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
-		g.fillRect(hitBox.x, hitBox.y - 10, (int) w, 10);
-		g.setColor(Color.LIGHT_GRAY);
-		g.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
+		
+		super.paint(g);
 		
 		for (int i = 0; i < m_projectiles.size(); i ++) {
 			m_projectiles.get(i).paint(g);
