@@ -3,11 +3,14 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import automaton.Direction;
 import entityFactory.Factory;
 import entityFactory.Factory.Type;
 import environnement.Element;
+import equipment.Equipment;
+import equipment.EquipmentManager;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
@@ -17,6 +20,7 @@ import room.Room;
 import underworld.Underworld;
 import village.Village;
 import player.Character;
+import player.Character.CurrentStat;
 
 public class Model {
 
@@ -24,6 +28,8 @@ public class Model {
 		VILLAGE, ROOM, UNDERWORLD, GAMEOVER
 	};
 
+	public static int difficultyLevel;
+	
 	int m_x, m_y, m_width, m_height, x_decalage, y_decalage;
 	public Coord m_mouseCoord;
 
@@ -33,7 +39,6 @@ public class Model {
 	public mode actualMode;
 
 	public AutomaticRoomGenerator m_roomGenerator;
-	public int difficultyLevel;
 
 	public boolean qPressed, zPressed, dPressed, espPressed, aPressed, ePressed, vPressed, sPressed;
 
@@ -71,6 +76,7 @@ public class Model {
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
+		difficultyLevel = 1;
 		opponentCreator();
 
 		switchEnv(mode.VILLAGE);
@@ -84,7 +90,33 @@ public class Model {
 	public void switchToNextRoom() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
+		int maxLife = m_player.m_currentStatMap.get(CurrentStat.MaxLife);
+		int strength = m_player.m_currentStatMap.get(CurrentStat.Strength);
+		int resistance = m_player.m_currentStatMap.get(CurrentStat.Resistance);
+		int attackSpeed = m_player.m_currentStatMap.get(CurrentStat.Attackspeed);
+		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
+		int money = m_player.getMoney();
+		HashMap<EquipmentManager.Stuff, Equipment> equip = m_player.getEquipment();
+		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
+		m_player.setCurrentStat(attackSpeed, maxLife, life, resistance, strength);
+		m_player.setEquipment(equip);
+		m_player.setMoney(money);
 		this.m_player.setCoord(m_room.getStartCoord());
+
+		int HUD_w = m_width / 3;
+		int HUD_h = HUD_w / 5;
+		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player);
+
+		m_opponents = new LinkedList<Opponent>();
+		m_coins = new LinkedList<Coin>();
+
+		opponentCreator();
+		
+		difficultyLevel ++;
+	}
+	
+	public void toDongeon() {
+		
 	}
 
 	public void switchEnv(mode m) {
@@ -303,14 +335,14 @@ public class Model {
 			Coord[] coordFO = this.m_room.getFlyingOpponentCoord();
 			for (int i = 0; i < coordFO.length; i++) {
 				Coord coord = new Coord(coordFO[i].X() + Element.SIZE / 2, coordFO[i].Y() + Element.SIZE);
-				FlyingOpponent fo = (FlyingOpponent) Game.m_factory.newEntity(Type.FlyingOpponent, Direction.E, coord,
+				Jin fo = (Jin) Game.m_factory.newEntity(Type.Jin, Direction.E, coord,
 						this, 0, null);
 				m_opponents.add(fo);
 			}
 			Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
 			for (int i = 0; i < coordWO.length; i++) {
 				Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
-				WalkingOpponent wo = (WalkingOpponent) Game.m_factory.newEntity(Type.WalkingOpponent, Direction.E,
+				Demon wo = (Demon) Game.m_factory.newEntity(Type.Demon, Direction.E,
 						coord, this, 0, null);
 				m_opponents.add(wo);
 			}
@@ -318,13 +350,13 @@ public class Model {
 			System.out.println("Error while creating oppenant");
 		}
 
-		// int randomKey = (int) (Math.random()*m_opponents.size());
-		// int randomBossKey = (int) (Math.random()*m_opponents.size());
-		// while (randomBossKey == randomKey) {
-		// randomBossKey = (int) (Math.random()*m_opponents.size());
-		// }
-		// m_opponents.get(randomKey).setKey(true);
-		// m_opponents.get(randomBossKey).setBossKey(true);
+		int randomKey = (int) (Math.random()*m_opponents.size());
+		int randomBossKey = (int) (Math.random()*m_opponents.size());
+		while (randomBossKey == randomKey) {
+			randomBossKey = (int) (Math.random()*m_opponents.size());
+		}
+		m_opponents.get(randomKey).setKey(true);
+		m_opponents.get(randomBossKey).setBossKey(true);
 	}
 
 	public void setPressed(int keyCode, boolean pressed) {

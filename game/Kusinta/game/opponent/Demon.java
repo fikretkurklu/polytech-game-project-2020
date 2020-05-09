@@ -15,7 +15,7 @@ import game.Coord;
 import game.Game;
 import game.Model;
 
-public class WalkingOpponent extends Opponent {
+public class Demon extends Opponent {
 
 	public static final int SIZE = (int) (1.5 * Element.SIZE);
 	int AttackStrength;
@@ -24,10 +24,10 @@ public class WalkingOpponent extends Opponent {
 
 	boolean isDead;
 
-	public WalkingOpponent(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+	public Demon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100, 100, 1000, 100, 5, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -48,7 +48,7 @@ public class WalkingOpponent extends Opponent {
 		hHitBox = (int) (m_height * 0.8);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
-		setMoney(100);
+		setMoney(50 + 50*Model.difficultyLevel);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
 		resetAnim();
@@ -67,22 +67,8 @@ public class WalkingOpponent extends Opponent {
 		} else {
 			gp.drawImage(image, m_coord.X() + (2 * w) / 5, m_coord.Y() - (decalage), -w, h, null);
 		}
-		gp.setColor(Color.DARK_GRAY);
-		gp.fillRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-		if ((m_currentStatMap.get(CurrentStat.Life)) > 50) {
-			gp.setColor(Color.GREEN);
-		} else if ((m_currentStatMap.get(CurrentStat.Life)) > 25) {
-			gp.setColor(Color.ORANGE);
-		} else {
-			gp.setColor(Color.RED);
-		}
-
-		float wi = wHitBox * ((float) (m_currentStatMap.get(CurrentStat.Life)) / 100);
-		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
-		gp.setColor(Color.LIGHT_GRAY);
-		gp.drawRect(hitBox.x, hitBox.y - 10, wHitBox, 10);
-
-		// gp.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+		
+		super.paint(gp);
 
 	}
 
