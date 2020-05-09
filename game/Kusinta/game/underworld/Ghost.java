@@ -394,7 +394,7 @@ public class Ghost extends Entity {
 	}
 
 	public boolean gotstuff() {
-		boolean res = !getPlayer().invicible && !getPlayer().hidden;
+		boolean res = !getPlayer().invincible && !getPlayer().hidden;
 		if (!res) {
 			quitAttackMode();
 		}

@@ -286,4 +286,12 @@ public class Player extends Character {
 		return true;
 	}
 
+	public boolean store() {
+		if (bigConsumables != null && bigConsumables.size() != 0) {
+			bigConsumables.get(0).useOn(this);
+			bigConsumables.remove(0);
+		}
+		return true;
+	}
+
 }

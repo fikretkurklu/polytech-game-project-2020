@@ -11,9 +11,9 @@ import automaton.Automaton;
 import automaton.Direction;
 import automaton.Entity;
 import entityFactory.Factory.Type;
+import equipment.BigHealthPotion;
 import equipment.Equipment;
 import equipment.EquipmentManager;
-import equipment.EquipmentManager.Conso;
 import equipment.EquipmentManager.Stuff;
 import equipment.SmallHealthPotion;
 import equipment.Stat.Stats;
@@ -56,6 +56,8 @@ public abstract class Character extends Entity {
 	protected boolean shooting;
 
 	LinkedList<SmallHealthPotion> smallConsumables;
+	LinkedList<BigHealthPotion> bigConsumables;
+
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
 			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) throws IOException {
@@ -79,6 +81,8 @@ public abstract class Character extends Entity {
 		m_equipments = new HashMap<>();
 
 		smallConsumables = new LinkedList<SmallHealthPotion>();
+		bigConsumables = new LinkedList<BigHealthPotion>();
+
 
 		Stuff[] stuffTable = Stuff.values();
 
@@ -470,6 +474,14 @@ public abstract class Character extends Entity {
 			break;
 		}
 
+	}
+	
+	public LinkedList<SmallHealthPotion> getSmallConsumables(){
+		return smallConsumables;
+	}
+	
+	public LinkedList<BigHealthPotion> getBigConsumables(){
+		return bigConsumables;
 	}
 
 }
