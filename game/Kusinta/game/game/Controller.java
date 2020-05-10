@@ -54,7 +54,7 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		switch(m_game.m_model.actualMode) {
+		switch (m_game.m_model.actualMode) {
 		case ROOM:
 			m_game.m_model.setPressed((int) ' ', true);
 			break;
@@ -68,7 +68,7 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		switch(m_game.m_model.actualMode) {
+		switch (m_game.m_model.actualMode) {
 		case ROOM:
 			m_game.m_model.setPressed((int) ' ', false);
 			break;
@@ -78,7 +78,6 @@ public class Controller implements GameCanvasListener {
 		default:
 			break;
 		}
-		
 
 	}
 
@@ -96,9 +95,11 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
-		if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
-			m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
+		if (m_game.m_model != null) {
+			m_game.m_model.setMouseCoord(new Coord(e.getX(), e.getY()));
+			if (m_game.m_model.actualMode == Model.mode.VILLAGE) {
+				m_game.m_model.m_village.mouseMoved(e.getX(), e.getY());
+			}
 		}
 	}
 
@@ -130,8 +131,8 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void windowOpened() {
-		//m_game.loadMusic("Village");
-		//m_game.m_view.setTimer(6000);
+		// m_game.loadMusic("Village");
+		// m_game.m_view.setTimer(6000);
 	}
 
 	@Override
@@ -143,7 +144,7 @@ public class Controller implements GameCanvasListener {
 	@Override
 	public void endOfPlay(String name) {
 		if (!m_expired) { // only reload if it was a forced reload by timer
-			switch(m_game.m_model.actualMode) {
+			switch (m_game.m_model.actualMode) {
 			case VILLAGE:
 				m_game.loadMusic("Village");
 				break;
@@ -161,29 +162,19 @@ public class Controller implements GameCanvasListener {
 			}
 		}
 		m_expired = false;
-		
+
 	}
 
 	@Override
 	public void expired() {
 		// will force a change of music, after 6s of play
 		m_expired = true;
-		/*switch(m_game.m_model.actualMode) {
-		case VILLAGE:
-			m_game.loadMusic("Village");
-			break;
-		case ROOM:
-			m_game.loadMusic("Donjon");
-			break;
-		case UNDERWORLD:
-			m_game.loadMusic("Underworld");
-			break;
-		case GAMEOVER:
-			m_game.loadMusic("GameOver");
-			break;
-		default:
-			break;
-		}*/
+		/*
+		 * switch(m_game.m_model.actualMode) { case VILLAGE:
+		 * m_game.loadMusic("Village"); break; case ROOM: m_game.loadMusic("Donjon");
+		 * break; case UNDERWORLD: m_game.loadMusic("Underworld"); break; case GAMEOVER:
+		 * m_game.loadMusic("GameOver"); break; default: break; }
+		 */
 	}
 
 }

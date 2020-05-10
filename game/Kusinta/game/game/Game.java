@@ -82,6 +82,7 @@ public class Game {
 		gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
 		setupFrame();
 
+		m_musicName = "";
 	}
 
 	/*
@@ -118,7 +119,7 @@ public class Game {
 		btn = new JButton("Valider");
 		btn.addActionListener(new MyActionListenerValidate(this));
 		buttonPanel.add(btn, BorderLayout.EAST);
-		
+
 		m_frame.add(buttonPanel, BorderLayout.SOUTH);
 
 		// center the window on the screen
@@ -129,12 +130,10 @@ public class Game {
 		// make the vindow visible
 		m_frame.doLayout();
 		m_frame.setVisible(true);
-		
-		
-		
+
 	}
-	
-	public void setupGame() {		
+
+	public void setupGame() {
 		m_frame.getContentPane().removeAll();
 		m_frame.getContentPane().repaint();
 		try {
@@ -151,7 +150,7 @@ public class Game {
 		m_frame.add(m_text, BorderLayout.NORTH);
 
 		m_frame.setVisible(true);
-		
+
 	}
 
 	/*
@@ -167,19 +166,20 @@ public class Game {
 	String m_musicName;
 
 	void loadMusic(String musicName) {
-		m_view.stop(m_musicName);
-		m_musicName = musicName;
-		String filename = "resources/" + m_musicName + ".ogg";
-		try {
-			File file = new File(filename);
-			FileInputStream fis = new FileInputStream(file);
-			m_view.play(m_musicName, fis, -1);
-		} catch (Throwable th) {
-			th.printStackTrace(System.err);
-			System.exit(-1);
+		if (m_musicName!= null && !m_musicName.equals(musicName)) {
+			m_view.stop(m_musicName);
+			m_musicName = musicName;
+			String filename = "resources/" + m_musicName + ".ogg";
+			try {
+				File file = new File(filename);
+				FileInputStream fis = new FileInputStream(file);
+				m_view.play(m_musicName, fis, -1);
+			} catch (Throwable th) {
+				th.printStackTrace(System.err);
+				System.exit(-1);
+			}
 		}
 	}
-
 
 	private long m_textElapsed;
 
