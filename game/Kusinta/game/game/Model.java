@@ -94,9 +94,10 @@ public class Model {
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
 		
+		difficultyLevel++;
 		opponentCreator();
 
-		difficultyLevel++;
+		
 		bossKeydroprate += 10;
 	}
 
