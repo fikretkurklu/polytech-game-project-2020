@@ -18,6 +18,7 @@ public class HUDConsumable {
 	Image SmallPot;
 	Image BigPot;
 	Image Key;
+	Image BossKey;
 	int Pot_x, Pot_y, Pot_w, Pot_h;
 
 	long updateElpased;
@@ -34,7 +35,7 @@ public class HUDConsumable {
 		m_player = p;
 		SmallPot = ImageLoader.loadImage("resources/Equipment/Potion/Green Potion.png");
 		BigPot = ImageLoader.loadImage("resources/Equipment/Potion/Red Potion.png");
-		Pot_x = x + w / 4;
+		Pot_x = m_x;
 		Pot_y = y;
 		Pot_w = w / 5;
 		Pot_h = h / 2;
@@ -47,8 +48,13 @@ public class HUDConsumable {
 		nbBPot = m_player.getBigConsumables().size();
 		if (m_player.getKey()) {
 			Key = Game.m_factory.getImage(Type.NormalKey)[0];
-		} else if (m_player.getBossKey()) {
-			Key = Game.m_factory.getImage(Type.BossKey)[0];
+		} else {
+			Key = null;
+		}
+		if (m_player.getBossKey()) {
+			BossKey = Game.m_factory.getImage(Type.BossKey)[0];
+		} else {
+			BossKey = null;
 		}
 	}
 
@@ -71,7 +77,10 @@ public class HUDConsumable {
 		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), 2 * Pot_w, Pot_h, null);
 		g.drawString("x" + nbBPot, Pot_x + 2 * Pot_w, Pot_y + (7 * Pot_h) / 4);
 		if (Key != null) {
-			g.drawImage(Key, Pot_x + Pot_w * 2, Pot_h, Pot_w, Pot_h, null);
+			g.drawImage(Key, Pot_x + Pot_w * 3, 0, Pot_w, Pot_h, null);
+		} 
+		if ( BossKey != null) {
+			g.drawImage(BossKey, Pot_x + Pot_w * 3, Pot_h, Pot_w, Pot_h, null);
 		}
 	}
 }

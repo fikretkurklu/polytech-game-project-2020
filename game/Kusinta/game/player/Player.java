@@ -49,6 +49,7 @@ public class Player extends Character {
 		paintInvincible = true;
 		currentAction = Action.DEFAULT;
 		resetAnim();
+
 	}
 
 	@Override

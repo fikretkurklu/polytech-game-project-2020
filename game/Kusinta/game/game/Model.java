@@ -95,7 +95,6 @@ public class Model {
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
-		EnemyCount = 0;
 
 		difficultyLevel++;
 		opponentCreator();
@@ -143,6 +142,7 @@ public class Model {
 		case ROOM:
 			switch (actualMode) {
 			case UNDERWORLD:
+				m_player.setMoney(-m_player.getMoney()/2);
 				resetPlayer();
 				break;
 			case VILLAGE:
@@ -161,6 +161,7 @@ public class Model {
 		case VILLAGE:
 			m_player.setKey(false);
 			m_player.setBossKey(false);
+			
 			m_village.reset();
 			break;
 		case GAMEOVER:
@@ -318,6 +319,7 @@ public class Model {
 				int y = (int) ((m_player.getCoord().Y() + y_decalage) - (diametre / 2));
 				g.fillOval(x, y, (int) diametre, (int) diametre);
 				if (diametre >= m_view.getWidth() * 1.5) {
+					diametre = 1;
 					switchEnv(mode.UNDERWORLD);
 				}
 				diametre *= 1.5;
