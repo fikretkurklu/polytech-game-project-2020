@@ -21,12 +21,12 @@ public class Boss extends Opponent {
 	public Boss(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 10000, 10000, 4000, 420, 780, bImages, indiceAction);
+		super(automaton, C, dir, model, 10000, 1000, 4000, 420, 780, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
 
-		X_MOVE = 8;
+		X_MOVE = 4;
 
 		m_height = SIZE * 2;
 		hitBoxPadding = m_height / 10;

@@ -26,7 +26,12 @@ public class Demon extends Opponent {
 	public Demon(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model,
+				(int) (50 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()),
+				(int) (50 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()), 1000,
+				(int) (10 * Model.difficultyLevel),
+				(int) (8 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()), bImages,
+				indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -44,10 +49,10 @@ public class Demon extends Opponent {
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
 		wHitBox = (int) (m_width * 0.8);
-		hHitBox = (int)(m_height * 0.9);
+		hHitBox = (int) (m_height * 0.9);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
-		int money = (int)(100/((float)(m_model.m_player.getGoldGenerationMultiplier()/Model.difficultyLevel)));
+		int money = (int) (100 / ((float) (m_model.m_player.getGoldGenerationMultiplier() / Model.difficultyLevel)));
 		setMoney(money);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
@@ -66,7 +71,7 @@ public class Demon extends Opponent {
 		} else {
 			gp.drawImage(image, m_coord.X() + w / 2, m_coord.Y() - h, -w, h, null);
 		}
-		
+
 		super.paint(gp);
 
 	}

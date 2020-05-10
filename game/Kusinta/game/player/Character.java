@@ -310,7 +310,7 @@ public abstract class Character extends Entity {
 		m_currentStatMap.put(CurrentStat.Strength, m_defaultStatMap.get(Stats.Strengh));
 		m_currentStatMap.put(CurrentStat.MaxLife, m_defaultStatMap.get(Stats.Health));
 		m_currentStatMap.put(CurrentStat.Life, m_defaultStatMap.get(Stats.Health));
-
+		goldGenerationMultiplier = 0;
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
 			if (tmpEquipment != null) {

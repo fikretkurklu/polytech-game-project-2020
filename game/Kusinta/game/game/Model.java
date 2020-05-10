@@ -111,8 +111,8 @@ public class Model {
 		setM_coinToDelete(new LinkedList<Coin>());
 
 		difficultyLevel++;
-		opponentCreator();
 		bossKeydroprate += 10;
+		opponentCreator();
 	}
 
 	public void resetPlayer() {
@@ -130,14 +130,13 @@ public class Model {
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
-		EnemyCount = 0;
-
+		EnemyCount = 0; 
 		resetPlayer();
+		difficultyLevel = 1;
+		bossKeydroprate = 0;
 
 		opponentCreator();
 
-		difficultyLevel = 1;
-		bossKeydroprate = 0;
 	}
 
 	public void switchEnv(mode m) {

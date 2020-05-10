@@ -18,21 +18,28 @@ public class Jin extends Opponent {
 
 	int m_imageElapsed;
 
-	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
+	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
+			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000+100*Model.difficultyLevel, 10*Model.difficultyLevel, 10 + 20*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model,
+				(int) (50 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()),
+				(int) (50 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()),
+				1000 + 100 * Model.difficultyLevel, 10 * Model.difficultyLevel,
+				10 + (int) (13 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()), bImages,
+				indiceAction);
 
+		System.out.println(model.m_player.getGoldGenerationMultiplier());
 		m_imageElapsed = 0;
 		shooting = false;
 
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
-		
+
 		int w = (int) (m_width / 1.7);
 		int h = (int) (m_height / 1.3);
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
-		int money = (int)(140/((float)(m_model.m_player.getGoldGenerationMultiplier()/Model.difficultyLevel)));
+		int money = (int) (140 / ((float) (m_model.m_player.getGoldGenerationMultiplier() / Model.difficultyLevel)));
 		setMoney(money);
 		m_moveElapsed = 0;
 
@@ -70,16 +77,16 @@ public class Jin extends Opponent {
 		Image img;
 
 		img = getImage();
-		
+
 		if (m_direction == Direction.E) {
 			g.drawImage(img, m_coord.X() - (m_width / 2), m_coord.Y() - m_height, m_width, m_height, null);
 		} else {
 			g.drawImage(img, m_coord.X() + (m_width / 2), m_coord.Y() - m_height, -m_width, m_height, null);
 		}
-		
+
 		super.paint(g);
-		
-		for (int i = 0; i < m_projectiles.size(); i ++) {
+
+		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
 	}
@@ -96,7 +103,7 @@ public class Jin extends Opponent {
 		}
 		if (m_imageElapsed > attackspeed) {
 			m_imageElapsed = 0;
-			m_imageIndex ++;
+			m_imageIndex++;
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
 					m_model.getM_opponentsToDelete().add(this);
@@ -110,7 +117,7 @@ public class Jin extends Opponent {
 			if (shooting) {
 				if (m_imageIndex >= currentIndex.length) {
 					Coord playerCoord = m_model.getPlayer().getCoord();
-					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight()/2,
+					super.shoot(playerCoord.X(), playerCoord.Y() - m_model.getPlayer().getHeight() / 2,
 							proj.MAGIC_PROJECTILE);
 				}
 			}
@@ -183,7 +190,6 @@ public class Jin extends Opponent {
 			}
 		}
 		return b;
-
 
 	}
 }

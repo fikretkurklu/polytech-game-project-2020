@@ -37,7 +37,7 @@ public class Player extends Character {
 		setSpeed(3);;
 
 		reset();
-		setMoney(2000);
+		setMoney(400000);
 	}
 
 	public void reset() {

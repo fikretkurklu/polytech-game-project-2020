@@ -24,7 +24,12 @@ public class Medusa extends Opponent {
 	public Medusa(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 80*Model.difficultyLevel, 80*Model.difficultyLevel, 2000, 8*Model.difficultyLevel, 20 + 20 * Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model,
+				(int) (80 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()/2),
+				(int) (80 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()/2), 2000,
+				(int) (9 * Model.difficultyLevel),
+				20 + (int) (10 * Model.difficultyLevel * model.m_player.getGoldGenerationMultiplier()), bImages,
+				indiceAction);
 
 		while (!m_model.m_room.isBlocked(m_coord)) {
 			m_coord.translateY(40);
@@ -42,7 +47,7 @@ public class Medusa extends Opponent {
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 3 / 2;
 
 		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height - 1);
-		int money = (int)(160/((float)(m_model.m_player.getGoldGenerationMultiplier()/Model.difficultyLevel)));
+		int money = (int) (160 / ((float) (m_model.m_player.getGoldGenerationMultiplier() / Model.difficultyLevel)));
 		setMoney(money);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
@@ -62,7 +67,7 @@ public class Medusa extends Opponent {
 		} else {
 			gp.drawImage(image, m_coord.X() + (2 * w) / 5, m_coord.Y() - (decalage), -w, h, null);
 		}
-		
+
 		super.paint(gp);
 
 	}
