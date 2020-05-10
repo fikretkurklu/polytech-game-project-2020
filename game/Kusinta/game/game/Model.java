@@ -161,6 +161,7 @@ public class Model {
 		case VILLAGE:
 			m_player.setKey(false);
 			m_player.setBossKey(false);
+			
 			m_village.reset();
 			break;
 		case GAMEOVER:
