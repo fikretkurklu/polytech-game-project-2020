@@ -42,7 +42,7 @@ public class Medusa extends Opponent {
 		AttackStrength = m_currentStatMap.get(CurrentStat.Strength) * 2;
 
 		hitBox = new Rectangle(m_coord.X() - m_width / 2, m_coord.Y() - m_height, m_width, m_height - 1);
-		setMoney(80 + 80*Model.difficultyLevel);
+		setMoney(160);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
 		resetAnim();

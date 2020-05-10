@@ -47,6 +47,8 @@ public class Model {
 	private LinkedList<Opponent> m_opponentsToDelete;
 	LinkedList<Coin> m_coins;
 	private LinkedList<Coin> m_coinToDelete;
+	protected int EnemyCount;
+	protected int RemainingEnemy;
 
 	public HUD m_hud;
 
@@ -69,6 +71,7 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
+		EnemyCount = 0;
 
 		difficultyLevel = 1;
 		bossKeydroprate = 0;
@@ -93,11 +96,10 @@ public class Model {
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
+		EnemyCount = 0;
 		
 		difficultyLevel++;
 		opponentCreator();
-
-		
 		bossKeydroprate += 10;
 	}
 
@@ -105,7 +107,6 @@ public class Model {
 		this.m_player.setLife(m_player.m_currentStatMap.get(CurrentStat.MaxLife));
 		this.m_player.setCoord(m_room.getStartCoord());
 		((Player) this.m_player).reset();
-		this.m_player.resetAnim();
 	}
 
 	public void toDongeon() throws Exception {
@@ -148,7 +149,7 @@ public class Model {
 				try {
 					toDongeon();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					System.out.println("Test");
 					e.printStackTrace();
 				}
 			default:
@@ -270,6 +271,7 @@ public class Model {
 				for (Coin coin : getM_coinToDelete()) {
 					if (coin != null) {
 						m_coins.remove(coin);
+						EnemyCount++;
 					}
 				}
 			}

@@ -72,9 +72,8 @@ public class MagicProjectile extends Projectile {
 		boolean b = super.cell(dir, cat);
 		if (b) {
 			if (cat == Category.P) {
-				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
-				m_model.getPlayer().loseLife(m_shooter.getStat(CurrentStat.Strength) - tmpPlayerResistance);
+				m_model.getPlayer().loseLife(m_shooter.getStat(CurrentStat.Strength));
 			}
 		}
 		return b;

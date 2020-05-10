@@ -20,7 +20,8 @@ public class Player extends Character {
 
 	boolean invincible, paintInvincible;
 	long m_invincibleElapsed;
-
+	long lastConsumableUsed;
+	long consumableTick = 2000;
 	public Player(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> hmActions) throws Exception {
 		super(automaton, C, dir, model, 100, 100, 1000, 5, 20, bImages, hmActions);
@@ -52,7 +53,7 @@ public class Player extends Character {
 
 	@Override
 	public void setCoord(Coord coord) {
-		m_coord = coord;
+		m_coord = new Coord(coord);
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
@@ -161,6 +162,10 @@ public class Player extends Character {
 		int oldY = m_coord.Y();
 		super.tick(elapsed);
 		m_model.m_mouseCoord.translateY(m_coord.Y() - oldY);
+		lastConsumableUsed += elapsed;
+		if (lastConsumableUsed > consumableTick) {
+			lastConsumableUsed = consumableTick;
+		}
 
 		if (invincible) {
 			m_invincibleElapsed += elapsed;
@@ -293,7 +298,8 @@ public class Player extends Character {
 	}
 
 	public boolean get() {
-		if (smallConsumables != null && smallConsumables.size() != 0) {
+		if (lastConsumableUsed>= consumableTick && smallConsumables != null && smallConsumables.size() != 0) {
+			lastConsumableUsed=0;
 			smallConsumables.get(0).useOn(this);
 			smallConsumables.remove(0);
 		}
@@ -301,7 +307,8 @@ public class Player extends Character {
 	}
 
 	public boolean store() {
-		if (bigConsumables != null && bigConsumables.size() != 0) {
+		if (lastConsumableUsed>= consumableTick && bigConsumables != null && bigConsumables.size() != 0) {
+			lastConsumableUsed= 0;
 			bigConsumables.get(0).useOn(this);
 			bigConsumables.remove(0);
 		}
