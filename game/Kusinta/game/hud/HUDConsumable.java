@@ -1,15 +1,19 @@
 package hud;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
 import entityFactory.Factory.Type;
 import entityFactory.ImageLoader;
 import game.Game;
+import game.Model;
+import game.Model.mode;
 import player.Player;
 
 public class HUDConsumable {
 	int m_x, m_y, m_width, m_height;
+	Model m_model;
 	Player m_player;
 	Image SmallPot;
 	Image BigPot;
@@ -21,7 +25,8 @@ public class HUDConsumable {
 
 	int nbSPot, nbBPot;
 
-	public HUDConsumable(int x, int y, int w, int h, Player p) throws Exception {
+	public HUDConsumable(int x, int y, int w, int h, Player p, Model model) throws Exception {
+		m_model = model;
 		m_x = x;
 		m_y = y;
 		m_width = w;
@@ -56,10 +61,15 @@ public class HUDConsumable {
 	}
 
 	public void paint(Graphics g) {
-		g.drawImage(SmallPot, Pot_x, Pot_y, Pot_w, Pot_h, null);
-		g.drawString("x" + nbSPot, Pot_x + Pot_w, Pot_y + (3 * Pot_h) / 4);
-		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), Pot_w, Pot_h, null);
-		g.drawString("x" + nbBPot, Pot_x + Pot_w, Pot_y + (7 * Pot_h) / 4);
+		if (m_model.actualMode == mode.VILLAGE) {
+			g.setColor(Color.DARK_GRAY);
+		} else {
+			g.setColor(Color.LIGHT_GRAY);
+		}
+		g.drawImage(SmallPot, Pot_x, Pot_y, 2 * Pot_w, Pot_h, null);
+		g.drawString("x" + nbSPot, Pot_x + 2 * Pot_w, Pot_y + (3 * Pot_h) / 4);
+		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), 2 * Pot_w, Pot_h, null);
+		g.drawString("x" + nbBPot, Pot_x + 2 * Pot_w, Pot_y + (7 * Pot_h) / 4);
 		if (Key != null) {
 			g.drawImage(Key, Pot_x + Pot_w * 2, Pot_h, Pot_w, Pot_h, null);
 		}
