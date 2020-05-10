@@ -274,6 +274,7 @@ public class Player extends Character {
 		for (int i = 0; i < m_projectiles.size(); i++) {
 			m_projectiles.get(i).paint(g);
 		}
+
 	}
 
 	@Override

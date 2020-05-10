@@ -8,7 +8,8 @@ import village.Village.ID_ENV;
 public class MenuPanel extends Panel {
 
 	private String INVENTORY_ICO = "resources/Village/inventory.png";
-	private String ADVENTURE_ICO = "resources/Village/adventure.png";
+	private String ADVENTURE_ICO = "resources/Village/adventure2.png";
+	private String ADVENTURE_BICO = "resources/Village/adventure.png";
 	private String MAGIC_SHOP_ICO = "resources/Village/magicShop.png";
 	private String WEAPON_SHOP_ICO = "resources/Village/weaponShop.png";
 	private String INFIRMARY_ICO = "resources/Village/infirmary.png";
@@ -26,6 +27,7 @@ public class MenuPanel extends Panel {
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.ADVENTURE);
 		b.setFgImage(ImageLoader.loadImage(ADVENTURE_ICO));
+		b.setBigFGImage(ImageLoader.loadImage(ADVENTURE_BICO));
 		b.setBgImage(BG);
 		add(b);
 
