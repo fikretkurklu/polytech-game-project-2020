@@ -11,7 +11,7 @@ public class Village {
 	private double DIVISOR = 0.2;
 
 	public static enum ID_ENV {
-		ADVENTURE, INVENTORY, MAGIC_SHOP, WEAPON_SHOP, INFIRMARY, DEFAULT
+		ADVENTURE, INVENTORY, MAGIC_SHOP, WEAPON_SHOP, DEFAULT
 	}
 
 	int m_width, m_height;
@@ -20,7 +20,6 @@ public class Village {
 	VillagePanel villagePanel;
 	WeaponPanel weaponPanel;
 	MagicPanel magicPanel;
-	InfirmaryPanel infirmaryPanel;
 	static InventoryPanel inventoryPanel;
 
 	Button m_focus;
@@ -36,7 +35,6 @@ public class Village {
 		villagePanel = new VillagePanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		weaponPanel = new WeaponPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		magicPanel = new MagicPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
-		infirmaryPanel = new InfirmaryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		inventoryPanel = new InventoryPanel(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height, p);
 		setEnv(ID_ENV.DEFAULT);
 	}
@@ -48,7 +46,6 @@ public class Village {
 			menuPanel.resized(0, 0, (int) (m_width * DIVISOR), m_height);
 			villagePanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 			weaponPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
-			infirmaryPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 			magicPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 			inventoryPanel.resized(menuPanel.m_width, 0, m_width - menuPanel.m_width, m_height);
 			return true;
@@ -62,9 +59,6 @@ public class Village {
 		switch (env) {
 		case DEFAULT:
 			villagePanel.paint(g);
-			break;
-		case INFIRMARY:
-			infirmaryPanel.paint(g);
 			break;
 		case INVENTORY:
 			inventoryPanel.paint(g);
@@ -91,9 +85,6 @@ public class Village {
 			switch (env) {
 			case DEFAULT:
 				b = villagePanel.mouseMoved(x, y);
-				break;
-			case INFIRMARY:
-				b = infirmaryPanel.mouseMoved(x, y);
 				break;
 			case INVENTORY:
 				b = inventoryPanel.mouseMoved(x, y);
