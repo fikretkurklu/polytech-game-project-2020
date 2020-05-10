@@ -130,8 +130,8 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void windowOpened() {
-		// m_game.loadMusic();
-		// m_game.m_view.setTimer(6000);
+		//m_game.loadMusic("Village");
+		//m_game.m_view.setTimer(6000);
 	}
 
 	@Override
@@ -142,16 +142,48 @@ public class Controller implements GameCanvasListener {
 
 	@Override
 	public void endOfPlay(String name) {
-		if (!m_expired) // only reload if it was a forced reload by timer
-			m_game.loadMusic();
+		if (!m_expired) { // only reload if it was a forced reload by timer
+			switch(m_game.m_model.actualMode) {
+			case VILLAGE:
+				m_game.loadMusic("Village");
+				break;
+			case ROOM:
+				m_game.loadMusic("Donjon");
+				break;
+			case UNDERWORLD:
+				m_game.loadMusic("Underworld");
+				break;
+			case GAMEOVER:
+				m_game.loadMusic("GameOver");
+				break;
+			default:
+				break;
+			}
+		}
 		m_expired = false;
+		
 	}
 
 	@Override
 	public void expired() {
 		// will force a change of music, after 6s of play
 		m_expired = true;
-		m_game.loadMusic();
+		/*switch(m_game.m_model.actualMode) {
+		case VILLAGE:
+			m_game.loadMusic("Village");
+			break;
+		case ROOM:
+			m_game.loadMusic("Donjon");
+			break;
+		case UNDERWORLD:
+			m_game.loadMusic("Underworld");
+			break;
+		case GAMEOVER:
+			m_game.loadMusic("GameOver");
+			break;
+		default:
+			break;
+		}*/
 	}
 
 }

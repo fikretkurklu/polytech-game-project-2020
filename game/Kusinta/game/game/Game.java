@@ -130,13 +130,15 @@ public class Game {
 		m_frame.doLayout();
 		m_frame.setVisible(true);
 		
+		
+		
 	}
 	
 	public void setupGame() {		
 		m_frame.getContentPane().removeAll();
 		m_frame.getContentPane().repaint();
 		try {
-			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory);
+			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory, this);
 		} catch (Exception e) {
 			System.out.println("Test");
 			e.printStackTrace();
@@ -164,11 +166,10 @@ public class Game {
 	 */
 	String m_musicName;
 
-	void loadMusic() {
+	void loadMusic(String musicName) {
 		m_view.stop(m_musicName);
-		m_musicName = m_musicNames[m_musicIndex];
+		m_musicName = musicName;
 		String filename = "resources/" + m_musicName + ".ogg";
-		m_musicIndex = (m_musicIndex + 1) % m_musicNames.length;
 		try {
 			File file = new File(filename);
 			FileInputStream fis = new FileInputStream(file);
@@ -179,8 +180,6 @@ public class Game {
 		}
 	}
 
-	private int m_musicIndex = 0;
-	private String[] m_musicNames = new String[] { "Future-RPG", "Runaway-Food-Truck" };
 
 	private long m_textElapsed;
 
