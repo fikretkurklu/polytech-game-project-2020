@@ -20,7 +20,7 @@ public class Boss extends Opponent {
 	public Boss(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages,
 			HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 10000, 10000, 4000, 200, 300, bImages, indiceAction);
+		super(automaton, C, dir, model, 10000, 10000, 4000, 420, 780, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
@@ -41,6 +41,12 @@ public class Boss extends Opponent {
 	public boolean explode() {
 		currentAction = Action.DEATH;
 		resetAnim();
+		try {
+			m_model.setBossRoom();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 

@@ -69,9 +69,8 @@ public class Meteor extends Projectile {
 		boolean b = super.cell(dir, cat);
 		if (b) {
 			if (cat == Category.P) {
-				int tmpPlayerResistance = m_model.m_player.m_currentStatMap.get(Character.CurrentStat.Resistance);
 				this.setCollidingWith(m_model.getPlayer());
-				collidingWith.loseLife(m_shooter.getStat(CurrentStat.Strength) - tmpPlayerResistance);
+				collidingWith.loseLife(m_shooter.getStat(CurrentStat.Strength));
 			}
 		}
 		return b;

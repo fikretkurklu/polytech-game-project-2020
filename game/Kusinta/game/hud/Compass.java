@@ -38,8 +38,7 @@ public class Compass {
 	}
 
 	public void paint(Graphics g) {
-
-		if (m_player.getKey()) {
+		if (m_player.getKey() && m_model.m_room.getDoor() != null) {
 			Graphics2D bg = (Graphics2D) g.create(m_coord.X() - m_width / 2, m_coord.Y() - m_height / 2, m_width * 2,
 					m_height * 2);
 
@@ -69,17 +68,18 @@ public class Compass {
 		int m_x = m_player.getCoord().X();
 		int m_y = m_player.getCoord().Y();
 		double r;
+		if (d != null) {
+			int x = d.getCoord().X() - m_x;
+			int y = m_y - d.getCoord().Y();
 
-		int x = d.getCoord().X() - m_x;
-		int y = m_y - d.getCoord().Y();
+			if (d.getCoord().X() > m_x) {
+				m_direction = Direction.E;
+			} else {
+				m_direction = Direction.W;
+			}
 
-		if (d.getCoord().X() > m_x) {
-			m_direction = Direction.E;
-		} else {
-			m_direction = Direction.W;
+			r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+			m_angle = Math.asin((double) y / (double) r);
 		}
-
-		r = (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
-		m_angle = Math.asin((double) y / (double) r);
 	}
 }
