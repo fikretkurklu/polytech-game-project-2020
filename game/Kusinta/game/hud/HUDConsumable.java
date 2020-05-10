@@ -8,7 +8,6 @@ import entityFactory.Factory.Type;
 import entityFactory.ImageLoader;
 import game.Game;
 import game.Model;
-import game.Model.mode;
 import player.Player;
 
 public class HUDConsumable {

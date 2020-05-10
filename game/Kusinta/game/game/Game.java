@@ -28,7 +28,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -42,7 +41,6 @@ import entityFactory.Factory;
 import entityFactory.ImageLoader;
 import entityFactory.Factory.Type;
 import game.graphics.View;
-import javafx.scene.input.MouseButton;
 
 public class Game {
 
