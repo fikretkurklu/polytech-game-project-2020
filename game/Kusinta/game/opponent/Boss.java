@@ -10,6 +10,7 @@ import automaton.Category;
 import automaton.Direction;
 import game.Coord;
 import game.Model;
+import game.Model.mode;
 import projectile.Projectile.proj;
 
 public class Boss extends Opponent {
@@ -97,6 +98,7 @@ public class Boss extends Opponent {
 			if (!gotpower()) {
 				if (m_imageIndex >= currentIndex.length) {
 					m_model.getOpponent().remove(this);
+					m_model.actualMode = mode.WIN;
 				}
 			}
 			if (shooting) {

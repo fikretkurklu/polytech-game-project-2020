@@ -2,10 +2,12 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.LinkedList;
 import automaton.Direction;
 import entityFactory.Factory;
 import entityFactory.Factory.Type;
+import entityFactory.ImageLoader;
 import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
@@ -22,7 +24,7 @@ import player.Character.CurrentStat;
 public class Model {
 
 	public static enum mode {
-		VILLAGE, ROOM, UNDERWORLD, GAMEOVER
+		VILLAGE, ROOM, UNDERWORLD, GAMEOVER, WIN
 	};
 
 	public static int difficultyLevel;
@@ -34,6 +36,8 @@ public class Model {
 	View m_view;
 
 	public mode actualMode;
+
+	Image win;
 
 	public AutomaticRoomGenerator m_roomGenerator;
 
@@ -86,8 +90,10 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
-		
-		m_compass = new Compass(new Coord(w/2, 100),0, (Player) m_player,this, Direction.E);
+
+		win = ImageLoader.loadImage("resources/win.png");
+
+		m_compass = new Compass(new Coord(w / 2, 100), 0, (Player) m_player, this, Direction.E);
 	}
 
 	public void switchToNextRoom() throws Exception {
@@ -151,7 +157,7 @@ public class Model {
 			m_game.loadMusic("Donjon");
 			switch (actualMode) {
 			case UNDERWORLD:
-				m_player.setMoney(-m_player.getMoney()/2);
+				m_player.setMoney(-m_player.getMoney() / 2);
 				resetPlayer();
 				break;
 			case VILLAGE:
@@ -307,38 +313,45 @@ public class Model {
 		Graphics gp = g.create(m_x + x_decalage, m_y + y_decalage, m_width - x_decalage, m_height - y_decalage);
 		switch (actualMode) {
 		case ROOM:
-			m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
-			for (Opponent op : m_opponents) {
-				op.paint(gp);
-			}
-
-			if (m_key != null) {
-				m_key.paint(gp);
-			}
-
-			if (m_bossKey != null) {
-				m_bossKey.paint(gp);
-			}
-
-			for (Coin coin : m_coins) {
-				coin.paint(gp);
-			}
-
-			m_player.paint(gp);
-			if (!m_player.gotpower() && diametre > 0) {
-				g.setColor(Color.BLACK);
-				int x = (int) (m_player.getCoord().X() + x_decalage - diametre / 2);
-				int y = (int) ((m_player.getCoord().Y() + y_decalage) - (diametre / 2));
-				g.fillOval(x, y, (int) diametre, (int) diametre);
-				if (diametre >= m_view.getWidth() * 1.5) {
-					diametre = 1;
-					switchEnv(mode.UNDERWORLD);
+			if (actualMode == mode.WIN) {
+				int x = m_x + m_width/2-win.getWidth(null);
+				int y = m_y + m_height/2 - win.getHeight(null);
+				gp.drawImage(win, x, y, win.getWidth(null), win.getHeight(null), null);
+			} else {
+				m_room.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
+				for (Opponent op : m_opponents) {
+					op.paint(gp);
 				}
-				diametre *= 1.5;
+
+				if (m_key != null) {
+					m_key.paint(gp);
+				}
+
+				if (m_bossKey != null) {
+					m_bossKey.paint(gp);
+				}
+
+				for (Coin coin : m_coins) {
+					coin.paint(gp);
+				}
+
+				m_player.paint(gp);
+				if (!m_player.gotpower() && diametre > 0) {
+					g.setColor(Color.BLACK);
+					int x = (int) (m_player.getCoord().X() + x_decalage - diametre / 2);
+					int y = (int) ((m_player.getCoord().Y() + y_decalage) - (diametre / 2));
+					g.fillOval(x, y, (int) diametre, (int) diametre);
+					if (diametre >= m_view.getWidth() * 1.5) {
+						diametre = 1;
+						switchEnv(mode.UNDERWORLD);
+					}
+					diametre *= 1.5;
+				}
+				m_hud.paint(g);
+				m_compass.paint(g);
 			}
-			m_hud.paint(g);
-			m_compass.paint(g);
 			break;
+
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
 			break;
