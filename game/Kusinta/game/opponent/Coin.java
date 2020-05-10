@@ -67,6 +67,7 @@ public class Coin extends Entity {
 
 	@Override
 	public boolean wizz(Direction dir) {
+		System.out.println(m_value);
 		m_model.m_player.setMoney(m_value);
 		m_model.getM_coinToDelete().add(this);
 		return false;

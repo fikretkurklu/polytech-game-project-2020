@@ -48,7 +48,8 @@ public class Demon extends Opponent {
 		hHitBox = (int)(m_height * 0.9);
 
 		hitBox = new Rectangle(m_coord.X() - wHitBox / 2, m_coord.Y() - hHitBox, wHitBox, hHitBox - 1);
-		setMoney(100);
+		int money = (int)(100/((float)(m_model.m_player.getGoldGenerationMultiplier()/Model.difficultyLevel)));
+		setMoney(money);
 		m_moveElapsed = 0;
 		currentAction = Action.MOVE;
 		resetAnim();
