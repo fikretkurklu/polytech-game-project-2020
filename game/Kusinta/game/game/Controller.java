@@ -141,6 +141,10 @@ public class Controller implements GameCanvasListener {
 
 	boolean m_expired;
 
+	public boolean getExpired() {
+		return m_expired;
+	}
+
 	@Override
 	public void endOfPlay(String name) {
 		if (!m_expired) { // only reload if it was a forced reload by timer
@@ -161,6 +165,7 @@ public class Controller implements GameCanvasListener {
 				break;
 			}
 		}
+			System.out.println("ok");
 		m_expired = false;
 
 	}
@@ -169,12 +174,24 @@ public class Controller implements GameCanvasListener {
 	public void expired() {
 		// will force a change of music, after 6s of play
 		m_expired = true;
-		/*
-		 * switch(m_game.m_model.actualMode) { case VILLAGE:
-		 * m_game.loadMusic("Village"); break; case ROOM: m_game.loadMusic("Donjon");
-		 * break; case UNDERWORLD: m_game.loadMusic("Underworld"); break; case GAMEOVER:
-		 * m_game.loadMusic("GameOver"); break; default: break; }
-		 */
+		
+		switch (m_game.m_model.actualMode) {
+		case VILLAGE:
+			m_game.loadMusic("Village");
+			break;
+		case ROOM:
+			m_game.loadMusic("Donjon");
+			break;
+		case UNDERWORLD:
+			m_game.loadMusic("Underworld");
+			break;
+		case GAMEOVER:
+			m_game.loadMusic("GameOver");
+			break;
+		default:
+			break;
+		}
+
 	}
 
 }

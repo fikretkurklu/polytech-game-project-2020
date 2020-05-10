@@ -164,7 +164,7 @@ public class Game {
 	String m_musicName;
 
 	void loadMusic(String musicName) {
-		if (m_musicName!= null && !m_musicName.equals(musicName)) {
+		if (m_musicName!= null && (!m_musicName.equals(musicName) || m_controller.getExpired())) {
 			m_view.stop(m_musicName);
 			m_musicName = musicName;
 			String filename = "resources/" + m_musicName + ".ogg";
