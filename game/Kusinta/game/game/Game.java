@@ -28,6 +28,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 
@@ -75,9 +76,11 @@ public class Game {
 		m_view = new View(m_controller);
 		// creating frame
 		m_frame = m_view.createFrame(d);
+
 		gameOver = false;
 		gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
 		setupFrame();
+		m_frame.setVisible(true);
 
 	}
 
@@ -86,29 +89,28 @@ public class Game {
 	 * and the game canvas to the center.
 	 */
 	private void setupFrame() {
-
 		m_frame.setTitle("Game");
 		m_frame.setLayout(new BorderLayout());
 		// m_frame.add(m_view, BorderLayout.CENTER);
-		JPanel panel = new JPanel(new BorderLayout(2, 2));
+		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JLabel("Entity"), BorderLayout.NORTH);
 		typeList = new JList<Type>(Factory.Type.values());
 		panel.add(typeList, BorderLayout.CENTER);
 		m_frame.add(panel, BorderLayout.WEST);
 
-		JPanel panel2 = new JPanel(new BorderLayout(2, 2));
+		JPanel panel2 = new JPanel(new BorderLayout());
 		panel2.add(new JLabel("Automaton"), BorderLayout.NORTH);
 		automatonList = new JList<String>(Factory.Avatars);
 		panel2.add(automatonList, BorderLayout.CENTER);
 		m_frame.add(panel2, BorderLayout.EAST);
 
-		JPanel panel3 = new JPanel(new BorderLayout(2, 2));
+		JPanel panel3 = new JPanel(new BorderLayout());
 		panel3.add(new JLabel("Animation"), BorderLayout.NORTH);
 		animationList = new JList<String>(Factory.Avatars);
 		panel3.add(animationList, BorderLayout.CENTER);
 		m_frame.add(panel3, BorderLayout.CENTER);
 
-		JPanel buttonPanel = new JPanel(new BorderLayout(2, 2));
+		JPanel buttonPanel = new JPanel(new BorderLayout());
 		JButton btn = new JButton("OK");
 		btn.addActionListener(new MyActionListenerOK(m_factory, m_frame, typeList, automatonList, animationList));
 		buttonPanel.add(btn, BorderLayout.WEST);
@@ -125,7 +127,9 @@ public class Game {
 		m_frame.setUndecorated(true);
 
 		// make the vindow visible
+		m_frame.doLayout();
 		m_frame.setVisible(true);
+		
 	}
 	
 	public void setupGame() {		
@@ -145,6 +149,7 @@ public class Game {
 		m_frame.add(m_text, BorderLayout.NORTH);
 
 		m_frame.setVisible(true);
+		
 	}
 
 	/*
