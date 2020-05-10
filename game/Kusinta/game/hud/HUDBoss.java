@@ -32,7 +32,6 @@ public class HUDBoss {
 	public void paint(Graphics g) {
 		if (m_model.actualMode != mode.VILLAGE) {
 			g.setColor(Color.LIGHT_GRAY);
-
 			g.drawString("Boss Key : " + m_model.bossKeydroprate + "%", x, y);
 			g.drawString("Level Difficulty : " + m_model.difficultyLevel, x, y + m_height / 8);
 			g.drawString("Opponents killed : " + m_model.getEnemyCount(), x, y + m_height / 4);
