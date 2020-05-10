@@ -1,6 +1,8 @@
 package village;
 
 
+import java.awt.Image;
+
 import entityFactory.ImageLoader;
 import player.Player;
 import village.Village.ID_ENV;
@@ -12,6 +14,7 @@ public class MenuPanel extends Panel {
 	private String ADVENTURE_BICO = "resources/Village/adventure.png";
 	private String MAGIC_SHOP_ICO = "resources/Village/magicShop.png";
 	private String WEAPON_SHOP_ICO = "resources/Village/weaponShop.png";
+	private String WEAPON_SHOP_BICO = "resources/Village/weaponShopB.png";
 	private String INFIRMARY_ICO = "resources/Village/infirmary.png";
 	private String BG = "resources/Village/MenuBG.png";
 	
@@ -40,6 +43,7 @@ public class MenuPanel extends Panel {
 		b = new MenuButton((m_width - MenuButtonSizeW) / 2, m_height / 6 * 3 - MenuButtonSizeH / 2, MenuButtonSizeW, MenuButtonSizeH,
 				ID_ENV.WEAPON_SHOP);
 		b.setFgImage(ImageLoader.loadImage(WEAPON_SHOP_ICO));
+		b.setBigFGImage(ImageLoader.loadImage(WEAPON_SHOP_BICO));
 		b.setBgImage(BG);
 		add(b);
 

@@ -14,7 +14,6 @@ public class MenuButton extends Button {
 	public void action() throws Exception {
 		Village.setEnv(ID_CIBLE);
 		if (ID_CIBLE == ID_ENV.ADVENTURE) {
-			this.reduceImg();
 			Village.leaveVillage();
 		}
 
