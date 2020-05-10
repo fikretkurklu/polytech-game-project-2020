@@ -92,6 +92,8 @@ public class Model {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
 		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
+		m_player.setKey(false);
+		m_player.setBossKey(false);
 		resetPlayer();
 		m_player.m_currentStatMap.put(CurrentStat.Life, life);
 		m_opponents = new LinkedList<Opponent>();
@@ -106,8 +108,6 @@ public class Model {
 	}
 
 	public void resetPlayer() {
-		m_player.setKey(false);
-		m_player.setBossKey(false);
 		this.m_player.setLife(m_player.m_currentStatMap.get(CurrentStat.MaxLife));
 		this.m_player.setCoord(m_room.getStartCoord());
 		((Player) this.m_player).reset();
@@ -165,6 +165,8 @@ public class Model {
 			m_underworld.reset(EnemyCount); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
+			m_player.setKey(false);
+			m_player.setBossKey(false);
 			m_village.reset();
 			break;
 		case GAMEOVER:

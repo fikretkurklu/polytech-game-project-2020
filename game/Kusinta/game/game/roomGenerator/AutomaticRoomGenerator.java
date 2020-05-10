@@ -922,7 +922,7 @@ public class AutomaticRoomGenerator {
 		AddPlatformHard(7 + row, 1 + col, 2, 2);
 		AddPlatformHard(7 + row, 7 + col, 2, 2);
 		AddPlatformHard(5 + row, 0 + col, 3, 2);
-		AddPlatformHard(6 + row, 8 + col, 2, 2);
+		AddPlatformHard(5 + row, 8 + col, 3, 2);
 		AddPlatformHard(3 + row, 3 + col, 2, 4);
 		changeBlock(2 + row, 4 + col, "ES_FO");
 		changeBlock(7 + row, 5 + col, "ES_WO");
