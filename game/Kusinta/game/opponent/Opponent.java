@@ -1,4 +1,5 @@
 package opponent;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -21,8 +22,8 @@ public abstract class Opponent extends Character {
 
 	protected LinkedList<Arrow> collidedWith;
 
-	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life,
-			int attackSpeed, int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
+	public Opponent(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
+			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
 		super(automaton, C, dir, model, maxLife, life, attackSpeed, resistance, strength, bImages, indiceAction);
 
 		m_key = false;
@@ -51,22 +52,22 @@ public abstract class Opponent extends Character {
 		if (m_key != false) {
 			try {
 				if (m_key == true) {
-					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0	, null);
+					NormalKey k = (NormalKey) Game.m_factory.newEntity(Type.NormalKey, null, m_coord, m_model, 0, null);
 					m_model.setKey(k);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			setKey(false);
-		}  else if (m_bossKey == true) {
+		} else if (m_bossKey == true) {
 			BossKey k = (BossKey) Game.m_factory.newEntity(Type.BossKey, null, m_coord, m_model, 0, null);
 			m_model.setBossKey(k);
 		}
 	}
-	
+
 	public boolean move(Direction dir) {
 		if (gotpower()) {
-			
+
 			int m_x = m_coord.X();
 			int m_y = m_coord.Y();
 			if (!shooting)
@@ -91,14 +92,19 @@ public abstract class Opponent extends Character {
 		gp.setColor(Color.DARK_GRAY);
 		gp.fillRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
 		if ((m_currentStatMap.get(CurrentStat.Life)) > m_currentStatMap.get(CurrentStat.MaxLife) / 2) {
-			gp.setColor(Color.GREEN);
+			if (m_key || m_bossKey) {
+				gp.setColor(Color.YELLOW);
+			} else {
+				gp.setColor(Color.GREEN);
+			}
 		} else if ((m_currentStatMap.get(CurrentStat.Life)) > m_currentStatMap.get(CurrentStat.MaxLife) / 4) {
 			gp.setColor(Color.ORANGE);
 		} else {
 			gp.setColor(Color.RED);
 		}
 
-		float wi = hitBox.width * ((float) (m_currentStatMap.get(CurrentStat.Life)) / m_currentStatMap.get(CurrentStat.MaxLife));
+		float wi = hitBox.width
+				* ((float) (m_currentStatMap.get(CurrentStat.Life)) / m_currentStatMap.get(CurrentStat.MaxLife));
 		gp.fillRect(hitBox.x, hitBox.y - 10, (int) wi, 10);
 		gp.setColor(Color.LIGHT_GRAY);
 		gp.drawRect(hitBox.x, hitBox.y - 10, hitBox.width, 10);
