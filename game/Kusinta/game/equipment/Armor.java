@@ -12,8 +12,8 @@ public class Armor extends Equipment {
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 100+rarity*400);
-		statTable.put(Stats.Health, 20);
-		statTable.put(Stats.Resistance, 20);
+		statTable.put(Stats.Health, 10 + 10*rarity);
+		statTable.put(Stats.Resistance, 1 + 4*rarity);
 	}
 	
 	

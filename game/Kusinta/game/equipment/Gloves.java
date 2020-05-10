@@ -11,8 +11,8 @@ public class Gloves extends Equipment{
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 0+rarity*250);
-		statTable.put(Stats.Strengh, 10);
-		statTable.put(Stats.Resistance, 5);
+		statTable.put(Stats.Strengh, 1 + 3*rarity);
+		statTable.put(Stats.Resistance, 1 + 4*rarity);
 	}
 
 	@Override

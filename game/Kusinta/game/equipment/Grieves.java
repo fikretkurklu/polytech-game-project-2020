@@ -12,8 +12,8 @@ public class Grieves extends Equipment {
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
 		statTable.put(Stats.Price, 0+250*rarity);
-		statTable.put(Stats.Resistance, 10);
-		statTable.put(Stats.Health, 5);
+		statTable.put(Stats.Resistance, 2 + 5*rarity);
+		statTable.put(Stats.Health, 5 + 5*rarity);
 	}
 	
 	@Override

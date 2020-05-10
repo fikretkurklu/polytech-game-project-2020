@@ -149,7 +149,6 @@ public class Model {
 				try {
 					toDongeon();
 				} catch (Exception e) {
-					System.out.println("Test");
 					e.printStackTrace();
 				}
 			default:
@@ -265,6 +264,7 @@ public class Model {
 					}
 				}
 			}
+			m_opponentsToDelete = new LinkedList<Opponent>();
 			for (Coin coin : m_coins) {
 				coin.tick(elapsed);
 			}
