@@ -148,7 +148,7 @@ public class Model {
 				try {
 					toDongeon();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					System.out.println("Test");
 					e.printStackTrace();
 				}
 			default:
