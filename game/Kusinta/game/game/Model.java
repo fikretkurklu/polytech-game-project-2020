@@ -48,7 +48,6 @@ public class Model {
 	LinkedList<Coin> m_coins;
 	private LinkedList<Coin> m_coinToDelete;
 	protected int EnemyCount;
-	protected int RemainingEnemy;
 
 	public HUD m_hud;
 
@@ -118,6 +117,7 @@ public class Model {
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
+		EnemyCount = 0;
 		
 		resetPlayer();
 
@@ -180,7 +180,7 @@ public class Model {
 
 		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		int HUD_w = m_width * 2 / 5;
-		int HUD_h = HUD_w / 6;
+		int HUD_h = HUD_w / 3;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player, this);
 	}
 
@@ -261,6 +261,7 @@ public class Model {
 				for (Opponent op : m_opponentsToDelete) {
 					if (op != null) {
 						m_opponents.remove(op);
+						EnemyCount++;
 					}
 				}
 			}
@@ -271,7 +272,6 @@ public class Model {
 				for (Coin coin : getM_coinToDelete()) {
 					if (coin != null) {
 						m_coins.remove(coin);
-						EnemyCount++;
 					}
 				}
 			}
