@@ -14,6 +14,7 @@ public class BigHealthPotion extends Consumable {
 	public BigHealthPotion() throws Exception {
 		super();
 		statTable.put(Stats.Price, 100);
+		statTable.put(Stats.Health,50);
 	}
 
 
