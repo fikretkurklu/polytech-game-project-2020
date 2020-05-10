@@ -10,6 +10,7 @@ import environnement.Element;
 import game.graphics.View;
 import game.roomGenerator.AutomaticRoomGenerator;
 import opponent.*;
+import hud.Compass;
 import hud.HUD;
 import player.Player;
 import room.Room;
@@ -58,6 +59,7 @@ public class Model {
 	public Coin m_coin;
 	float diametre;
 	Factory m_factory;
+	Compass m_compass;
 
 	public Model(View view, int w, int h, Factory factory) throws Exception {
 		m_view = view;
@@ -82,6 +84,8 @@ public class Model {
 
 		m_key = null;
 		m_bossKey = null;
+		
+		m_compass = new Compass(new Coord(w/2, 100),0, (Player) m_player,this, Direction.E);
 	}
 
 	public void switchToNextRoom() throws Exception {
@@ -278,6 +282,7 @@ public class Model {
 			}
 			m_room.tick(elapsed);
 			m_hud.tick(elapsed);
+			m_compass.tick(elapsed);
 			break;
 		case UNDERWORLD:
 			m_underworld.tick(elapsed);
@@ -324,6 +329,7 @@ public class Model {
 				diametre *= 1.5;
 			}
 			m_hud.paint(g);
+			m_compass.paint(g);
 			break;
 		case UNDERWORLD:
 			m_underworld.paint(gp, width, height, m_x + x_decalage, m_y + y_decalage);
