@@ -54,7 +54,7 @@ public class Model {
 	public Key m_key;
 	public BossKey m_bossKey;
 	public int bossKeydroprate;
-	
+
 	public Coin m_coin;
 	float diametre;
 	Factory m_factory;
@@ -96,7 +96,7 @@ public class Model {
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
 		EnemyCount = 0;
-		
+
 		difficultyLevel++;
 		opponentCreator();
 		bossKeydroprate += 10;
@@ -111,14 +111,14 @@ public class Model {
 	public void toDongeon() throws Exception {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
-		
+
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
 		EnemyCount = 0;
-		
+
 		resetPlayer();
 
 		opponentCreator();
@@ -180,7 +180,7 @@ public class Model {
 
 		m_village = new Village(m_width, m_height, this, (Player) m_player);
 		int HUD_w = m_width * 2 / 5;
-		int HUD_h = HUD_w / 3;
+		int HUD_h = 2 * HUD_w / 3;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player, this);
 	}
 
@@ -199,7 +199,7 @@ public class Model {
 		m_opponents.add(m);
 
 		Coord[] coordWO = this.m_room.getWalkingOpponentCoord();
-		for (int i = 0; i < coordWO.length; i ++) {
+		for (int i = 0; i < coordWO.length; i++) {
 			Coord coord = new Coord(coordWO[i].X() + Element.SIZE / 2, coordWO[i].Y());
 			MiniDragon d = (MiniDragon) Game.m_factory.newEntity(Type.SmallDragon, Direction.E, coord, this, 0, null);
 			m_opponents.add(d);
@@ -415,7 +415,7 @@ public class Model {
 		}
 
 		int randomKey = (int) (Math.random() * m_opponents.size());
-		int randomDrop = (int) (Math.random()*100);
+		int randomDrop = (int) (Math.random() * 100);
 		if (randomDrop < bossKeydroprate) {
 			int randomBossKey = (int) (Math.random() * m_opponents.size());
 			while (randomBossKey == randomKey) {
@@ -477,5 +477,13 @@ public class Model {
 
 	public void setM_coinToDelete(LinkedList<Coin> m_coinToDelete) {
 		this.m_coinToDelete = m_coinToDelete;
+	}
+
+	public int getEnemyCount() {
+		return EnemyCount;
+	}
+
+	public LinkedList<Opponent> getOpponents() {
+		return m_opponents;
 	}
 }

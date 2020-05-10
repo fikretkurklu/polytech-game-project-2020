@@ -34,7 +34,9 @@ public class HUDBoss {
 			g.setColor(Color.LIGHT_GRAY);
 
 			g.drawString("Boss Key : " + m_model.bossKeydroprate + "%", x, y);
-			g.drawString("Level Difficulty : " + m_model.difficultyLevel, x, y + m_height/4);
+			g.drawString("Level Difficulty : " + m_model.difficultyLevel, x, y + m_height / 8);
+			g.drawString("Opponents killed : " + m_model.getEnemyCount(), x, y + m_height / 4);
+			g.drawString("Opponents left : " + m_model.getOpponents().size(), x, y + (3 * m_height / 8));
 		}
 	}
 }
