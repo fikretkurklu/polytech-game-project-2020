@@ -105,7 +105,6 @@ public class Model {
 		this.m_player.setLife(m_player.m_currentStatMap.get(CurrentStat.MaxLife));
 		this.m_player.setCoord(m_room.getStartCoord());
 		((Player) this.m_player).reset();
-		this.m_player.resetAnim();
 	}
 
 	public void toDongeon() throws Exception {

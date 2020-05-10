@@ -52,7 +52,7 @@ public class Player extends Character {
 
 	@Override
 	public void setCoord(Coord coord) {
-		m_coord = coord;
+		m_coord = new Coord(coord);
 		m_height = SIZE;
 		m_width = (int) (m_height * ratio);
 
