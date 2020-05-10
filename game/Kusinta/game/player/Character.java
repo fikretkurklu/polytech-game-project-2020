@@ -57,6 +57,8 @@ public abstract class Character extends Entity {
 
 	LinkedList<SmallHealthPotion> smallConsumables;
 	LinkedList<BigHealthPotion> bigConsumables;
+	
+	protected float goldGenerationMultiplier;
 
 	public Character(Automaton automaton, Coord C, Direction dir, Model model, int maxLife, int life, int attackSpeed,
 			int resistance, int strength, Image[] bImages, HashMap<Action, int[]> indiceAction) {
@@ -77,6 +79,7 @@ public abstract class Character extends Entity {
 		m_bossKey = false;
 
 		collidingWith = null;
+		goldGenerationMultiplier = 0;
 
 		m_equipments = new HashMap<>();
 
@@ -311,6 +314,7 @@ public abstract class Character extends Entity {
 		for (int i = 0; i < stuffTable.length; i++) {
 			Equipment tmpEquipment = m_equipments.get(stuffTable[i]);
 			if (tmpEquipment != null) {
+				goldGenerationMultiplier += ((float)tmpEquipment.getModification(Stats.Rarity) / 10);
 				int attackSpeed = m_currentStatMap.get(CurrentStat.Attackspeed);
 				int resistance = m_currentStatMap.get(CurrentStat.Resistance);
 				int strength = m_currentStatMap.get(CurrentStat.Strength);
@@ -329,7 +333,12 @@ public abstract class Character extends Entity {
 
 	public void removeEquipment(Equipment equipment) {
 		Stuff stuff = equipment.toStuff();
+		this.goldGenerationMultiplier -= ((float)equipment.getModification(Stats.Rarity) / 10);
 		m_equipments.put(stuff, null);
+	}
+	
+	public float getGoldGenerationMultiplier() {
+		return 1 + goldGenerationMultiplier;
 	}
 
 	public void setStat(int attackspeed, int health, int resistance, int strength) {

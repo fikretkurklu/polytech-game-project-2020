@@ -1,23 +1,15 @@
 package hud;
 
-import java.awt.AlphaComposite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.util.HashMap;
-
-import automaton.Automaton;
-import automaton.Category;
 import automaton.Direction;
 import entityFactory.ImageLoader;
 import environnement.Element;
 import game.Coord;
 import game.Model;
-import opponent.Opponent;
 import player.Player;
 import room.Door;
-import player.Character;
 
 public class Compass {
 

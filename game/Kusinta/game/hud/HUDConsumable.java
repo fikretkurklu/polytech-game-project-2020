@@ -8,7 +8,6 @@ import entityFactory.Factory.Type;
 import entityFactory.ImageLoader;
 import game.Game;
 import game.Model;
-import game.Model.mode;
 import player.Player;
 
 public class HUDConsumable {
@@ -28,7 +27,7 @@ public class HUDConsumable {
 
 	public HUDConsumable(int x, int y, int w, int h, Player p, Model model) throws Exception {
 		m_model = model;
-		m_x = x + w/30;
+		m_x = x + w / 30;
 		m_y = y;
 		m_width = w;
 		m_height = h;
@@ -67,20 +66,16 @@ public class HUDConsumable {
 	}
 
 	public void paint(Graphics g) {
-		if (m_model.actualMode == mode.VILLAGE) {
-			g.setColor(Color.DARK_GRAY);
-		} else {
-			g.setColor(Color.LIGHT_GRAY);
-		}
+		g.setColor(Color.LIGHT_GRAY);
 		g.drawImage(SmallPot, Pot_x, Pot_y, Pot_w, Pot_h, null);
 		g.drawString("x" + nbSPot, Pot_x + Pot_w, Pot_y + (3 * Pot_h) / 4);
 		g.drawImage(BigPot, Pot_x, (int) (Pot_y + Pot_h), Pot_w, Pot_h, null);
 		g.drawString("x" + nbBPot, Pot_x + Pot_w, Pot_y + (7 * Pot_h) / 4);
 		if (Key != null) {
-			g.drawImage(Key, Pot_x + (7 * Pot_w / 4), 0,  Pot_w, Pot_h, null);
+			g.drawImage(Key, Pot_x + (7 * Pot_w / 4), 0, Pot_w, Pot_h, null);
 		}
 		if (BossKey != null) {
-			g.drawImage(BossKey, Pot_x + (7 * Pot_w / 4), Pot_h,  Pot_w, Pot_h, null);
+			g.drawImage(BossKey, Pot_x + (7 * Pot_w / 4), Pot_h, Pot_w, Pot_h, null);
 		}
 	}
 }

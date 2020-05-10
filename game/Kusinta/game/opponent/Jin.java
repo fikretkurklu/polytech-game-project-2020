@@ -32,7 +32,8 @@ public class Jin extends Opponent {
 		int h = (int) (m_height / 1.3);
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
-		setMoney(140);
+		int money = (int)(140/((float)(m_model.m_player.getGoldGenerationMultiplier()/Model.difficultyLevel)));
+		setMoney(money);
 		m_moveElapsed = 0;
 
 		X_MOVE = 2;

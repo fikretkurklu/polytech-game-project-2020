@@ -94,6 +94,8 @@ public class Model {
 		this.m_roomGenerator.AutomaticGeneration();
 		m_room = new Room(m_width, m_height);
 		int life = m_player.m_currentStatMap.get(CurrentStat.Life);
+		m_player.setKey(false);
+		m_player.setBossKey(false);
 		resetPlayer();
 		m_player.m_currentStatMap.put(CurrentStat.Life, life);
 		m_opponents = new LinkedList<Opponent>();
@@ -170,7 +172,6 @@ public class Model {
 			m_game.loadMusic("Village");
 			m_player.setKey(false);
 			m_player.setBossKey(false);
-
 			m_village.reset();
 			break;
 		case GAMEOVER:
