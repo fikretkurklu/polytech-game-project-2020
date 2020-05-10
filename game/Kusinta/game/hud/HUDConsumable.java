@@ -73,6 +73,5 @@ public class HUDConsumable {
 		if (Key != null) {
 			g.drawImage(Key, Pot_x + Pot_w * 2, Pot_h, Pot_w, Pot_h, null);
 		}
-
 	}
 }

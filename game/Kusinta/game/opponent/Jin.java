@@ -20,7 +20,7 @@ public class Jin extends Opponent {
 
 	public Jin(Automaton automaton, Coord C, Direction dir, Model model, Image[] bImages, HashMap<Action, int[]> indiceAction) throws Exception {
 
-		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000+100*Model.difficultyLevel, 10*Model.difficultyLevel, 20*Model.difficultyLevel, bImages, indiceAction);
+		super(automaton, C, dir, model, 100*Model.difficultyLevel, 100*Model.difficultyLevel, 1000+100*Model.difficultyLevel, 10*Model.difficultyLevel, 15 + 20*Model.difficultyLevel, bImages, indiceAction);
 
 		m_imageElapsed = 0;
 		shooting = false;
@@ -32,7 +32,7 @@ public class Jin extends Opponent {
 		int h = (int) (m_height / 1.3);
 
 		hitBox = new Rectangle(m_coord.X() - w / 2, m_coord.Y() - h - 10, w, h);
-		setMoney(100 + 50*Model.difficultyLevel);
+		setMoney(140);
 		m_moveElapsed = 0;
 
 		X_MOVE = 2;
