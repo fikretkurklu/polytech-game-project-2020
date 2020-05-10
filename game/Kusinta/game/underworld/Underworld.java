@@ -23,7 +23,7 @@ import environnement.Element;
 
 public class Underworld {
 	public final static int MAX_CLOUDS = 6;
-	public final static int MAX_GHOSTS = 30;// Nombre de ghosts max
+	public final static int MAX_GHOSTS = 50;// Nombre de ghosts max
 	public final int MAX_FRAGMENTS = 4;
 
 	boolean gateCreated = false;
@@ -299,7 +299,7 @@ public class Underworld {
 
 	public void addGhost() {
 		if (nbGhosts == MAX_GHOSTS) {
-			for (int i = 0; i < 20; i++) { // Remove 20 Ghosts 
+			for (int i = 0; i < 25; i++) { // Remove 25 Ghosts 
 				m_ghosts.removeLast();
 				nbGhosts--;
 			}
@@ -308,11 +308,16 @@ public class Underworld {
 				it.next().buff();
 			}
 		}
-		m_ghosts.add((Ghost)m_factory.newEntity(Type.Ghost, Direction.E, generatePosition(0 , Ghost.SIZE), m_model, 0, null));
+		Direction randDir = Ghost.dirs[(int) (Math.random() * 4)];
+		Ghost tmp = (Ghost)m_factory.newEntity(Type.Ghost, randDir, generatePosition(0 , Ghost.SIZE), m_model, 0, null);
+		if (randDir == Direction.W)
+			tmp.leftOrientation = true;
+		m_ghosts.add(tmp);
 		nbGhosts++;
 	}
 	
 	public void reset(int nbNewGhosts) {
+		nbNewGhosts += 5;
 		m_player = (PlayerSoul) m_factory.newEntity(Type.PlayerSoul, Direction.E, getStartCoord(), m_model, 0, null);
 		generateGhosts(nbNewGhosts);
 		generateClouds(m_clouds);
