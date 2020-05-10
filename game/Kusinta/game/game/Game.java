@@ -80,6 +80,7 @@ public class Game {
 		gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
 		setupFrame();
 
+		m_musicName = "";
 	}
 
 	/*
@@ -116,7 +117,7 @@ public class Game {
 		btn = new JButton("Valider");
 		btn.addActionListener(new MyActionListenerValidate(this));
 		buttonPanel.add(btn, BorderLayout.EAST);
-		
+
 		m_frame.add(buttonPanel, BorderLayout.SOUTH);
 
 		// center the window on the screen
@@ -127,14 +128,14 @@ public class Game {
 		// make the vindow visible
 		m_frame.doLayout();
 		m_frame.setVisible(true);
-		
+
 	}
-	
-	public void setupGame() {		
+
+	public void setupGame() {
 		m_frame.getContentPane().removeAll();
 		m_frame.getContentPane().repaint();
 		try {
-			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory);
+			m_model = new Model(m_view, m_frame.getWidth(), m_frame.getHeight(), m_factory, this);
 		} catch (Exception e) {
 			System.out.println("Test");
 			e.printStackTrace();
@@ -147,7 +148,7 @@ public class Game {
 		m_frame.add(m_text, BorderLayout.NORTH);
 
 		m_frame.setVisible(true);
-		
+
 	}
 
 	/*
@@ -162,23 +163,21 @@ public class Game {
 	 */
 	String m_musicName;
 
-	void loadMusic() {
-		m_view.stop(m_musicName);
-		m_musicName = m_musicNames[m_musicIndex];
-		String filename = "resources/" + m_musicName + ".ogg";
-		m_musicIndex = (m_musicIndex + 1) % m_musicNames.length;
-		try {
-			File file = new File(filename);
-			FileInputStream fis = new FileInputStream(file);
-			m_view.play(m_musicName, fis, -1);
-		} catch (Throwable th) {
-			th.printStackTrace(System.err);
-			System.exit(-1);
+	void loadMusic(String musicName) {
+		if (m_musicName!= null && (!m_musicName.equals(musicName) || m_controller.getExpired())) {
+			m_view.stop(m_musicName);
+			m_musicName = musicName;
+			String filename = "resources/" + m_musicName + ".ogg";
+			try {
+				File file = new File(filename);
+				FileInputStream fis = new FileInputStream(file);
+				m_view.play(m_musicName, fis, -1);
+			} catch (Throwable th) {
+				th.printStackTrace(System.err);
+				System.exit(-1);
+			}
 		}
 	}
-
-	private int m_musicIndex = 0;
-	private String[] m_musicNames = new String[] { "Future-RPG", "Runaway-Food-Truck" };
 
 	private long m_textElapsed;
 

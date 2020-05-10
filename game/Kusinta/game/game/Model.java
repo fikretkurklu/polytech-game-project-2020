@@ -60,12 +60,14 @@ public class Model {
 	float diametre;
 	Factory m_factory;
 	Compass m_compass;
+	Game m_game;
 
-	public Model(View view, int w, int h, Factory factory) throws Exception {
+	public Model(View view, int w, int h, Factory factory, Game game) throws Exception {
 		m_view = view;
 		m_width = w;
 		m_height = h;
 		m_factory = factory;
+		m_game = game;
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
 		start();
@@ -146,6 +148,7 @@ public class Model {
 		cPressed = false;
 		switch (m) {
 		case ROOM:
+			m_game.loadMusic("Donjon");
 			switch (actualMode) {
 			case UNDERWORLD:
 				m_player.setMoney(-m_player.getMoney()/2);
@@ -162,14 +165,17 @@ public class Model {
 			}
 			break;
 		case UNDERWORLD:
+			m_game.loadMusic("Underworld");
 			m_underworld.reset(EnemyCount); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
+			m_game.loadMusic("Village");
 			m_player.setKey(false);
 			m_player.setBossKey(false);
 			m_village.reset();
 			break;
 		case GAMEOVER:
+			m_game.loadMusic("GameOver");
 			break;
 		}
 		actualMode = m;
