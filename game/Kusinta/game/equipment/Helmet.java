@@ -11,10 +11,10 @@ public class Helmet extends Equipment{
 		super();
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
-		statTable.put(Stats.Price, 50+300*rarity);
-		statTable.put(Stats.Health, 10);
-		statTable.put(Stats.Resistance, 10);
-		statTable.put(Stats.Strengh, 5);
+		statTable.put(Stats.Price, 100+300*rarity+200*(rarity-1));
+		statTable.put(Stats.Health, 10 + 5*rarity);
+		statTable.put(Stats.Resistance, 2 + 3*rarity);
+		statTable.put(Stats.Strengh, 1 + 2*rarity);
 	}
 
 	@Override
