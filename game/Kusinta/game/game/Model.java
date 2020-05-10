@@ -156,7 +156,7 @@ public class Model {
 			}
 			break;
 		case UNDERWORLD:
-			m_underworld.reset(40); // Nombre de Ghosts à préciser
+			m_underworld.reset(EnemyCount); // Nombre de Ghosts à préciser
 			break;
 		case VILLAGE:
 			m_player.setKey(false);
