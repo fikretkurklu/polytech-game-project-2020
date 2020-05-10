@@ -141,7 +141,6 @@ public class Model {
 		case ROOM:
 			switch (actualMode) {
 			case UNDERWORLD:
-				m_village = null;
 				resetPlayer();
 				break;
 			case VILLAGE:

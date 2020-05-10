@@ -42,6 +42,7 @@ import entityFactory.Factory;
 import entityFactory.ImageLoader;
 import entityFactory.Factory.Type;
 import game.graphics.View;
+import javafx.scene.input.MouseButton;
 
 public class Game {
 
@@ -80,7 +81,6 @@ public class Game {
 		gameOver = false;
 		gameOverImage = ImageLoader.loadImage("resources/GameOver.png");
 		setupFrame();
-		m_frame.setVisible(true);
 
 	}
 
