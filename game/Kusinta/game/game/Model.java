@@ -47,6 +47,8 @@ public class Model {
 	private LinkedList<Opponent> m_opponentsToDelete;
 	LinkedList<Coin> m_coins;
 	private LinkedList<Coin> m_coinToDelete;
+	protected int EnemyCount;
+	protected int RemainingEnemy;
 
 	public HUD m_hud;
 
@@ -69,6 +71,7 @@ public class Model {
 
 		m_opponents = new LinkedList<Opponent>();
 		m_coins = new LinkedList<Coin>();
+		EnemyCount = 0;
 
 		difficultyLevel = 1;
 		bossKeydroprate = 0;
@@ -93,6 +96,7 @@ public class Model {
 
 		m_opponentsToDelete = new LinkedList<Opponent>();
 		setM_coinToDelete(new LinkedList<Coin>());
+		EnemyCount = 0;
 		
 		difficultyLevel++;
 		opponentCreator();
@@ -269,6 +273,7 @@ public class Model {
 				for (Coin coin : getM_coinToDelete()) {
 					if (coin != null) {
 						m_coins.remove(coin);
+						EnemyCount++;
 					}
 				}
 			}
