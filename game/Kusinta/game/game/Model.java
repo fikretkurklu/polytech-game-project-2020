@@ -179,8 +179,8 @@ public class Model {
 		m_player = (Player) m_factory.newEntity(Type.Player, Direction.E, m_room.getStartCoord(), this, 0, null);
 
 		m_village = new Village(m_width, m_height, this, (Player) m_player);
-		int HUD_w = m_width * 2 / 5;
-		int HUD_h = 2 * HUD_w / 3;
+		int HUD_w = m_width * 4 / 5;
+		int HUD_h = 2 * HUD_w / 6;
 		m_hud = new HUD(0, 0, HUD_w, HUD_h, (Player) m_player, this);
 	}
 

@@ -58,8 +58,8 @@ public abstract class Key extends Entity {
 	}
 
 	public void paint(Graphics g) {
-		int w = m_width / 4;
-		int h = m_height / 4;
+		int w = m_width / 2;
+		int h = m_height / 2;
 		Image image;
 		image = getImage();
 
