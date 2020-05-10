@@ -22,9 +22,9 @@ public class HUD {
 		m_width = w;
 		m_height = h;
 		m_player = p;
-		m_font = new HUDFont(0, 0, w / 3, h / 2, p);
-		m_stats = new HUDStats(m_font.m_width, 0, w * 4 / 9, h / 2, p);
-		m_conso = new HUDConsumable(m_stats.m_x + m_stats.m_width, y, w * 2 / 9, h / 2, p, m_model);
+		m_font = new HUDFont(0, 0, w / 3, h / 4, p);
+		m_stats = new HUDStats(m_font.m_width, 0, w * 4 / 9, h / 4, p);
+		m_conso = new HUDConsumable(m_stats.m_x + m_stats.m_width, y, w * 2 / 9, h / 4, p, m_model);
 		m_hudBoss = new HUDBoss(0, (4 * m_font.m_height / 3), w * 4 / 9, h / 2, p, m_model);
 	}
 
