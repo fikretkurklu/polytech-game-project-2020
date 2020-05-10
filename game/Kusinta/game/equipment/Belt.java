@@ -11,7 +11,7 @@ public class Belt extends Equipment {
 		super();
 		imageEquip = img;
 		int rarity = statTable.get(Stats.Rarity);
-		statTable.put(Stats.Price, 0+rarity*250);
+		statTable.put(Stats.Price, 0+rarity*350);
 		statTable.put(Stats.Health, 2+5*rarity);
 		statTable.put(Stats.Resistance, 1 + 4*rarity);
 		statTable.put(Stats.Strengh, 1 + 2*rarity);
